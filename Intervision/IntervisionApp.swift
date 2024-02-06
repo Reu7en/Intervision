@@ -10,10 +10,11 @@ import SwiftUI
 @main
 struct IntervisionApp: App {
     var body: some Scene {
+        
         @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
         
         WindowGroup {
-            ContentView()
+            MainWindowView()
         }
     }
 }

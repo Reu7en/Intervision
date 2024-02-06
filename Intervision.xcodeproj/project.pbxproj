@@ -15,6 +15,7 @@
 		1B97BEDE2B71C59B007D0BE5 /* BarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEDD2B71C59B007D0BE5 /* BarModel.swift */; };
 		1B97BEE02B71C607007D0BE5 /* ChordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEDF2B71C607007D0BE5 /* ChordModel.swift */; };
 		1B97BEE22B71C617007D0BE5 /* NoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEE12B71C617007D0BE5 /* NoteModel.swift */; };
+		1B97BEE62B71D917007D0BE5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEE52B71D917007D0BE5 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		1B97BEDD2B71C59B007D0BE5 /* BarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarModel.swift; sourceTree = "<group>"; };
 		1B97BEDF2B71C607007D0BE5 /* ChordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChordModel.swift; sourceTree = "<group>"; };
 		1B97BEE12B71C617007D0BE5 /* NoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModel.swift; sourceTree = "<group>"; };
+		1B97BEE52B71D917007D0BE5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				1B97BEE42B71C909007D0BE5 /* Styles */,
 				1B97BECB2B71C167007D0BE5 /* ContentView.swift */,
 				1B97BEC92B71C167007D0BE5 /* IntervisionApp.swift */,
+				1B97BEE52B71D917007D0BE5 /* AppDelegate.swift */,
 				1B97BECD2B71C168007D0BE5 /* Assets.xcassets */,
 				1B97BED22B71C168007D0BE5 /* Intervision.entitlements */,
 				1B97BECF2B71C168007D0BE5 /* Preview Content */,
@@ -195,6 +198,7 @@
 				1B97BEE22B71C617007D0BE5 /* NoteModel.swift in Sources */,
 				1B97BEE02B71C607007D0BE5 /* ChordModel.swift in Sources */,
 				1B97BECC2B71C167007D0BE5 /* ContentView.swift in Sources */,
+				1B97BEE62B71D917007D0BE5 /* AppDelegate.swift in Sources */,
 				1B97BECA2B71C167007D0BE5 /* IntervisionApp.swift in Sources */,
 				1B97BEDE2B71C59B007D0BE5 /* BarModel.swift in Sources */,
 			);

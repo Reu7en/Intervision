@@ -1,0 +1,1 @@
+Intervision is a macOS app developed as part of my final project in university. The project's aim is to design and evaluate new languages for music notation that prioritise intervallic relationships between notes.

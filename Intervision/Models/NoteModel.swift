@@ -12,6 +12,10 @@ struct Note: Identifiable, Equatable {
     var octave: Octave
     var duration: Duration
     var isRest: Bool
+    var isDotted: Bool
+    var durationValue: Double {
+        return isDotted ? self.duration.rawValue * 1.5 : self.duration.rawValue
+    }
 
     // Identifiable
     var id = UUID()
@@ -20,6 +24,11 @@ struct Note: Identifiable, Equatable {
     static func == (lhs: Note, rhs: Note) -> Bool {
         lhs.id == rhs.id
     }
+}
+
+// Functions
+extension Note {
+//    func duration
 }
 
 // Enums
@@ -44,10 +53,12 @@ extension Note {
     }
     
     enum Duration: Double {
+        // Standard
         case whole = 1.0
         case half = 0.5
         case quarter = 0.25
         case eighth = 0.125
         case sixteenth = 0.0625
+        case thirtySecond = 0.03125
     }
 }

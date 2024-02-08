@@ -9,6 +9,7 @@ import Foundation
 
 struct Note: Identifiable, Equatable {
     var pitch: Pitch
+    var accidental: Accidental
     var octave: Octave
     var duration: Duration
     var isRest: Bool
@@ -26,18 +27,14 @@ struct Note: Identifiable, Equatable {
     }
 }
 
-// Functions
-extension Note {
-//    func duration
-}
-
 // Enums
 extension Note {
     enum Pitch: String {
         case C, D, E, F, G, A, B
-        case CSharp = "C#", DSharp = "D#", FSharp = "F#", GSharp = "G#", ASharp = "A#"
-        case DFlat = "D♭", EFlat = "E♭", GFlat = "G♭", AFlat = "A♭", BFlat = "B♭"
-        case ESharp = "E#", BSharp = "B#", CFlat = "C♭", FFlat = "F♭"
+    }
+    
+    enum Accidental {
+        case Sharp, Flat, Natural, None
     }
     
     enum Octave: Int {

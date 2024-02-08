@@ -5,16 +5,11 @@
 //  Created by Reuben on 08/02/2024.
 //
 
-/*
- * Part -> staff, bars
- * Bars -> chords, sig
- * Chords -> notes
- */
 import Foundation
 
 struct Part: Identifiable, Equatable {
     var staff: Staff
-    var bars: [Bar]
+    var bars: [[Bar]]
     
     // Identifiable
     var id = UUID()

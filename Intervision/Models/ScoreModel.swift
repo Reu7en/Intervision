@@ -8,7 +8,7 @@
 import Foundation
 
 struct Score: Identifiable, Equatable {
-    var bars: [Bar]
+    var parts: [Part]
     var tempo: Int
     var keySignature: KeySignature
     

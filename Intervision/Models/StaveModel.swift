@@ -19,19 +19,11 @@ struct Stave: Identifiable, Equatable {
     }
     
     init(rowCount: Int) {
-        self.rows = [Row]()
-        
-        for _ in 0..<rowCount {
-            self.rows.append(Row(isActive: true))
-        }
+        self.rows = (0..<rowCount).map { _ in Row(isActive: true) }
     }
     
     init(rowCount: Int, inactiveRows: Int...) {
-        self.rows = [Row]()
-        
-        for i in 0..<rowCount {
-            self.rows.append(Row(isActive: !inactiveRows.contains(i)))
-        }
+        self.rows = (0..<rowCount).map { Row(isActive: !inactiveRows.contains($0)) }
     }
 }
 

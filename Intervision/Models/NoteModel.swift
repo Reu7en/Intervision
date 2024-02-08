@@ -8,15 +8,18 @@
 import Foundation
 
 struct Note: Identifiable, Equatable {
-    var pitch: Pitch
-    var accidental: Accidental
-    var octave: Octave
+    var pitch: Pitch?
+    var accidental: Accidental?
+    var octave: Octave?
     var duration: Duration
-    var isRest: Bool
-    var isDotted: Bool
     var durationValue: Double {
         return isDotted ? self.duration.rawValue * 1.5 : self.duration.rawValue
     }
+    var dynamic: Dynamic?
+    var graceNotes: [Grace]?
+    var isRest: Bool
+    var isDotted: Bool
+    var hasAccent: Bool
 
     // Identifiable
     var id = UUID()
@@ -34,7 +37,8 @@ extension Note {
     }
     
     enum Accidental {
-        case Sharp, Flat, Natural, None
+        case Sharp, Flat, Natural
+        case DoubleSharp, DoubleFlat
     }
     
     enum Octave: Int {
@@ -50,12 +54,25 @@ extension Note {
     }
     
     enum Duration: Double {
-        // Standard
         case whole = 1.0
         case half = 0.5
         case quarter = 0.25
         case eighth = 0.125
         case sixteenth = 0.0625
         case thirtySecond = 0.03125
+    }
+    
+    enum Dynamic {
+        case Fortississimo
+        case Fortissimo
+        case Forte
+        case MezzoForte
+        case MezzoPiano
+        case Piano
+        case Pianissimo
+        case Pianississimo
+        case CrescendoStart, CrescendoEnd
+        case DecrescendoStart, DecrescendoEnd
+        case Sforzando
     }
 }

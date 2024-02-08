@@ -9,6 +9,7 @@ import Foundation
 
 struct Score: Identifiable, Equatable {
     var parts: [Part]
+    var ties: [Tie]
     
     // Identifiable
     var id = UUID()

@@ -10,6 +10,8 @@ import Foundation
 struct Bar: Identifiable, Equatable {
     var chords: [Chord]
     var tempo: Int
+    var `repeat`: Repeat
+    var volta: Int
     var timeSignature: TimeSignature
     var keySignature: KeySignature
     
@@ -108,5 +110,11 @@ extension Bar {
                 return [(.B, .Flat), (.E, .Flat), (.A, .Flat), (.D, .Flat), (.G, .Flat), (.C, .Flat), (.F, .Flat)]
             }
         }
+    }
+    
+    enum Repeat {
+        case RepeatStart
+        case RepeatEnd
+        case None
     }
 }

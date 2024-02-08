@@ -21,6 +21,8 @@
 		1B97BEE82B726CAA007D0BE5 /* MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEE72B726CAA007D0BE5 /* MainWindowView.swift */; };
 		1B97BEEA2B726CC1007D0BE5 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEE92B726CC1007D0BE5 /* ScoreView.swift */; };
 		1B97BEED2B7279CF007D0BE5 /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEEC2B7279CF007D0BE5 /* PageView.swift */; };
+		1BBC977E2B759767001C953C /* TieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC977D2B759767001C953C /* TieModel.swift */; };
+		1BBC97802B759D8E001C953C /* GraceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC977F2B759D8E001C953C /* GraceModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,8 @@
 		1B97BEE72B726CAA007D0BE5 /* MainWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowView.swift; sourceTree = "<group>"; };
 		1B97BEE92B726CC1007D0BE5 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		1B97BEEC2B7279CF007D0BE5 /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
+		1BBC977D2B759767001C953C /* TieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TieModel.swift; sourceTree = "<group>"; };
+		1BBC977F2B759D8E001C953C /* GraceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraceModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +117,8 @@
 				1B97BEE12B71C617007D0BE5 /* NoteModel.swift */,
 				1B12C9E42B753EBE00DC87DC /* PartModel.swift */,
 				1B12C9E62B75472200DC87DC /* StaveModel.swift */,
+				1BBC977D2B759767001C953C /* TieModel.swift */,
+				1BBC977F2B759D8E001C953C /* GraceModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -217,6 +223,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BBC97802B759D8E001C953C /* GraceModel.swift in Sources */,
 				1B97BEDC2B71C58E007D0BE5 /* ScoreModel.swift in Sources */,
 				1B97BEEA2B726CC1007D0BE5 /* ScoreView.swift in Sources */,
 				1B12C9E72B75472200DC87DC /* StaveModel.swift in Sources */,
@@ -226,6 +233,7 @@
 				1B97BEE02B71C607007D0BE5 /* ChordModel.swift in Sources */,
 				1B97BEE82B726CAA007D0BE5 /* MainWindowView.swift in Sources */,
 				1B97BEE62B71D917007D0BE5 /* AppDelegate.swift in Sources */,
+				1BBC977E2B759767001C953C /* TieModel.swift in Sources */,
 				1B97BECA2B71C167007D0BE5 /* IntervisionApp.swift in Sources */,
 				1B97BEED2B7279CF007D0BE5 /* PageView.swift in Sources */,
 				1B97BEDE2B71C59B007D0BE5 /* BarModel.swift in Sources */,

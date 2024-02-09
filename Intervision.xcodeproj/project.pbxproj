@@ -23,6 +23,7 @@
 		1B97BEED2B7279CF007D0BE5 /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEEC2B7279CF007D0BE5 /* PageView.swift */; };
 		1BBC977E2B759767001C953C /* TieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC977D2B759767001C953C /* TieModel.swift */; };
 		1BBC97802B759D8E001C953C /* GraceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC977F2B759D8E001C953C /* GraceModel.swift */; };
+		1BBC97822B75A6E9001C953C /* QuarterNoteTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC97812B75A6E9001C953C /* QuarterNoteTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		1B97BEEC2B7279CF007D0BE5 /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
 		1BBC977D2B759767001C953C /* TieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TieModel.swift; sourceTree = "<group>"; };
 		1BBC977F2B759D8E001C953C /* GraceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraceModel.swift; sourceTree = "<group>"; };
+		1BBC97812B75A6E9001C953C /* QuarterNoteTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuarterNoteTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				1B97BEEB2B7279C3007D0BE5 /* Score */,
 				1B97BEE72B726CAA007D0BE5 /* MainWindowView.swift */,
 				1B12C9E82B754B4200DC87DC /* StaveTestView.swift */,
+				1BBC97812B75A6E9001C953C /* QuarterNoteTest.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 				1BBC977E2B759767001C953C /* TieModel.swift in Sources */,
 				1B97BECA2B71C167007D0BE5 /* IntervisionApp.swift in Sources */,
 				1B97BEED2B7279CF007D0BE5 /* PageView.swift in Sources */,
+				1BBC97822B75A6E9001C953C /* QuarterNoteTest.swift in Sources */,
 				1B97BEDE2B71C59B007D0BE5 /* BarModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

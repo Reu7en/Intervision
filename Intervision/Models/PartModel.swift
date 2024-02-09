@@ -8,6 +8,8 @@
 import Foundation
 
 struct Part: Identifiable, Equatable {
+    var name: String?
+    var identifier: String?
     var bars: [[Bar]]
     
     // Identifiable

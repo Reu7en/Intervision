@@ -8,7 +8,6 @@
 import Foundation
 
 struct Part: Identifiable, Equatable {
-    var staff: Staff
     var bars: [[Bar]]
     
     // Identifiable
@@ -17,12 +16,5 @@ struct Part: Identifiable, Equatable {
     // Equatable
     static func == (lhs: Part, rhs: Part) -> Bool {
         lhs.id == rhs.id
-    }
-}
-
-// Enums
-extension Part {
-    enum Staff {
-        case Treble, Bass, Grand, Neutral
     }
 }

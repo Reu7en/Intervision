@@ -9,8 +9,10 @@ import Foundation
 
 struct Part: Identifiable, Equatable {
     var name: String?
+    var abbreviation: String?
     var identifier: String?
     var bars: [[Bar]]
+    var ties: [Tie]?
     
     // Identifiable
     var id = UUID()

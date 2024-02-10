@@ -24,15 +24,9 @@ struct PageView: View {
                 .frame(width: width, height: height)
                 .padding()
             
-//            Text("Page \(pageNumber + 1)")
-//                .font(.title)
-//                .foregroundColor(Color.black)
-            
-            VStack {
-                StaveTestView(stave: Binding.constant(Stave(rowCount: 5)))
-            }
-            .frame(width: width, height: height)
-            .padding()
+            Text("Page \(pageNumber + 1)")
+                .font(.title)
+                .foregroundColor(Color.black)
         }
     }
 }

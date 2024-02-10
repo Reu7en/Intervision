@@ -8,8 +8,15 @@
 import SwiftUI
 
 struct MainWindowView: View {
+    
+    @StateObject private var scoreViewModel = ScoreViewModel()
+    
     var body: some View {
         ScoreView()
+            .environmentObject(scoreViewModel)
+            .onAppear {
+                TestLoad.testLoad()
+            }
     }
 }
 

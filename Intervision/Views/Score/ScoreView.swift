@@ -9,8 +9,9 @@ import SwiftUI
 
 struct ScoreView: View {
     
+    @EnvironmentObject private var scoreViewModel: ScoreViewModel
     @State private var zoomLevel: CGFloat = 0.75
-    @State private var pageCount: Int = 3
+    @State private var pageCount: Int = 5
     @State private var contentOffset: CGSize = .zero
     @State private var accumulatedOffset: CGSize = .zero
     
@@ -18,11 +19,22 @@ struct ScoreView: View {
         GeometryReader { geometry in
             ZStack {
                 ScrollView([.horizontal, .vertical]) {
-                    VStack(spacing: 0) {
-                        ForEach(0..<pageCount, id: \.self) { pageNumber in
-                            PageView(geometry: Binding.constant(geometry), zoomLevel: $zoomLevel, pageNumber: pageNumber)
-                                .offset(contentOffset)
+                    if scoreViewModel.viewType == .Vertical {
+                        VStack(spacing: 0) {
+                            ForEach(0..<pageCount, id: \.self) { pageNumber in
+                                PageView(geometry: Binding.constant(geometry), zoomLevel: $zoomLevel, pageNumber: pageNumber)
+                                    .offset(contentOffset)
+                            }
                         }
+                    } else if scoreViewModel.viewType == .Horizontal {
+                        HStack(spacing: 0) {
+                            ForEach(0..<pageCount, id: \.self) { pageNumber in
+                                PageView(geometry: Binding.constant(geometry), zoomLevel: $zoomLevel, pageNumber: pageNumber)
+                                    .offset(contentOffset)
+                            }
+                        }
+                    } else if scoreViewModel.viewType == .VerticalWide {
+                        
                     }
                 }
                 .gesture(DragGesture()
@@ -41,4 +53,5 @@ struct ScoreView: View {
 
 #Preview {
     ScoreView()
+        .environmentObject(ScoreViewModel())
 }

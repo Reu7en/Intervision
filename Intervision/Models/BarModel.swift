@@ -9,10 +9,11 @@ import Foundation
 
 struct Bar: Identifiable, Equatable {
     var chords: [Chord]
-    var tempo: Int
+    var tempo: Tempo
     var clef: Clef
     var timeSignature: TimeSignature
     var `repeat`: Repeat
+    var doubleLine: Bool
     var volta: Int?
     var keySignature: KeySignature
     
@@ -28,8 +29,9 @@ struct Bar: Identifiable, Equatable {
 // Enums
 extension Bar {
     enum Tempo {
-        case common(bpm: Int)
-        case cut(bpm: Int)
+        case half(bpm: Int)
+        case quarter(bpm: Int)
+        case eighth(bpm: Int)
     }
     
     enum Clef {
@@ -39,8 +41,6 @@ extension Bar {
     enum TimeSignature {
         case common
         case cut
-        case threeFour
-        case sixEight
         case custom(beats: Int, noteValue: Int)
     }
     
@@ -121,5 +121,15 @@ extension Bar {
                 return [(.B, .Flat), (.E, .Flat), (.A, .Flat), (.D, .Flat), (.G, .Flat), (.C, .Flat), (.F, .Flat)]
             }
         }
+    }
+}
+
+extension Bar: CustomStringConvertible {
+    var description: String {
+        var description = "Bar: "
+        description += "Chords: \(chords.map { $0.notes.description }.joined(separator: ", "))\n"
+        description += "Key: \(keySignature)\n"
+        description += "Clef: \(clef)"
+        return description
     }
 }

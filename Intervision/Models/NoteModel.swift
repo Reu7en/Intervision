@@ -36,7 +36,7 @@ extension Note {
         case C, D, E, F, G, A, B
     }
     
-    enum Accidental {
+    enum Accidental: String {
         case Sharp, Flat, Natural
         case DoubleSharp, DoubleFlat
     }
@@ -60,6 +60,8 @@ extension Note {
         case eighth = 0.125
         case sixteenth = 0.0625
         case thirtySecond = 0.03125
+        case sixtyFourth = 0.015625
+        case bar = 0.0
     }
     
     enum Dynamic {
@@ -74,5 +76,14 @@ extension Note {
         case CrescendoStart, CrescendoEnd
         case DecrescendoStart, DecrescendoEnd
         case Sforzando
+    }
+}
+
+extension Note: CustomStringConvertible {
+    var description: String {
+        var description = "Note: "
+        description += "\(pitch?.rawValue ?? "")\(accidental?.rawValue ?? "")\(octave?.rawValue ?? -1) "
+        description += "D: \(duration) Dot: \(isDotted) Rest: \(isRest)"
+        return description
     }
 }

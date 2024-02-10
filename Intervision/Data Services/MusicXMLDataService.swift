@@ -113,13 +113,15 @@ struct MusicXMLDataService {
                     var beats: Int = -1
                     var noteValue: Int = -1
                     
-                    for subLine in time[0] {
-                        if subLine.contains("<beats") {
-                            beats = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
-                        }
-                        
-                        if subLine.contains("<beat-type") {
-                            noteValue = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
+                    if time.count > 0 {
+                        for subLine in time[0] {
+                            if subLine.contains("<beats") {
+                                beats = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
+                            }
+                            
+                            if subLine.contains("<beat-type") {
+                                noteValue = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
+                            }
                         }
                     }
                     
@@ -133,13 +135,15 @@ struct MusicXMLDataService {
                     var time: String? = nil
                     var bpm: Int = -1
                     
-                    for subLine in metronome[0] {
-                        if subLine.contains("<beat-unit") {
-                            time = extractContent(fromTag: subLine)
-                        }
-                        
-                        if subLine.contains("<per-minute") {
-                            bpm = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
+                    if metronome.count > 0 {
+                        for subLine in metronome[0] {
+                            if subLine.contains("<beat-unit") {
+                                time = extractContent(fromTag: subLine)
+                            }
+                            
+                            if subLine.contains("<per-minute") {
+                                bpm = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
+                            }
                         }
                     }
                     
@@ -164,10 +168,12 @@ struct MusicXMLDataService {
                     let key = extractContentsBetweenTags(bar, startTag: "<key", endTag: "</key")
                     var fifths: Int? = nil
                     
-                    for subLine in key[0] {
-                        if subLine.contains("<fifths") {
-                            if let fifthsText = extractContent(fromTag: subLine) {
-                                fifths = Int(fifthsText)
+                    if key.count > 0 {
+                        for subLine in key[0] {
+                            if subLine.contains("<fifths") {
+                                if let fifthsText = extractContent(fromTag: subLine) {
+                                    fifths = Int(fifthsText)
+                                }
                             }
                         }
                     }
@@ -253,6 +259,26 @@ struct MusicXMLDataService {
                         clefs.append(Bar.Clef.Bass)
                     }
                 }
+                
+                switch (sign, line) {
+                case ("G", _):
+                    clefs.append(Bar.Clef.Treble)
+                    break
+                case ("F", _):
+                    clefs.append(Bar.Clef.Bass)
+                    break
+                case ("C", "1"):
+                    clefs.append(Bar.Clef.Soprano)
+                    break
+                case ("C", "3"):
+                    clefs.append(Bar.Clef.Alto)
+                    break
+                case ("C", "4"):
+                    clefs.append(Bar.Clef.Tenor)
+                    break
+                default:
+                    break
+                }
             }
             
             if !clefs.isEmpty {
@@ -260,22 +286,26 @@ struct MusicXMLDataService {
             }
         }
         
-        for line in barData[0] {
-            if line.contains("<staves") {
-                let staves = Int(extractContent(fromTag: line) ?? "1") ?? 1
-                currentStaves = staves
-                break
+        if barData.count > 0 {
+            for line in barData[0] {
+                if line.contains("<staves") {
+                    let staves = Int(extractContent(fromTag: line) ?? "1") ?? 1
+                    currentStaves = staves
+                    break
+                }
+                
+                currentStaves = 1
             }
-            
-            currentStaves = 1
         }
         
-        for line in barData[0] {
-            if line.contains("<divisions") {
-                let div = Int(extractContent(fromTag: line) ?? "-1") ?? -1
-                
-                if div != -1 {
-                    currentDivisons = div
+        if barData.count > 0 {
+            for line in barData[0] {
+                if line.contains("<divisions") {
+                    let div = Int(extractContent(fromTag: line) ?? "-1") ?? -1
+                    
+                    if div != -1 {
+                        currentDivisons = div
+                    }
                 }
             }
         }
@@ -284,9 +314,45 @@ struct MusicXMLDataService {
             let notes = extractContentsBetweenTags(bar, startTag: "<note", endTag: "</note")
             var currentBars: [Bar] = []
             var currentStave: Int = 1
+            var currentRepeat: Bar.Repeat? = nil
+            var currentVolta: Int? = nil
+            var hasDoubleBarline: Bool = false
+            
+            for line in bar {
+                if line.contains("<repeat") {
+                    let `repeat` = extractFirstAttributeValue(fromTag: line)
+                    
+                    switch `repeat` {
+                    case "forward":
+                        currentRepeat = Bar.Repeat.RepeatStart
+                        break
+                    case "backward":
+                        currentRepeat = Bar.Repeat.RepeatEnd
+                        break
+                    default:
+                        break
+                    }
+                }
+                
+                if line.contains("<bar-style") {
+                    let barStyle = extractContent(fromTag: line)
+                    
+                    if barStyle == "light-light" {
+                        hasDoubleBarline = true
+                    }
+                }
+                
+                if line.contains("<ending") {
+                    let ending = Int(extractFirstAttributeValue(fromTag: line) ?? "-1") ?? -1
+                    
+                    if ending != -1 {
+                        currentVolta = ending
+                    }
+                }
+            }
             
             for i in 0..<currentStaves {
-                currentBars.append(Bar(chords: [], tempo: currentTempo, clef: currentClefs[i], timeSignature: currentTimeSignature, repeat: Bar.Repeat.None, doubleLine: false, volta: nil, keySignature: currentKeySignature))
+                currentBars.append(Bar(chords: [], tempo: currentTempo, clef: currentClefs[i], timeSignature: currentTimeSignature, repeat: currentRepeat, doubleLine: hasDoubleBarline, volta: currentVolta, keySignature: currentKeySignature))
             }
             
             var chord: Chord = Chord(notes: [])
@@ -299,6 +365,8 @@ struct MusicXMLDataService {
                 var isRest: Bool = false
                 var isDotted: Bool = false
                 var isMeasureRest: Bool = false
+                var hasAccent: Bool = false
+                var timeModification: Note.TimeModification? = nil
                 
                 for line in note {
                     if line.contains("<rest measure=") {
@@ -322,6 +390,32 @@ struct MusicXMLDataService {
                     if line.contains("<dot") {
                         isDotted = true
                     }
+                    
+                    if line.contains("<accent") {
+                        hasAccent = true
+                    }
+                    
+                    if line.contains("<time-modification") {
+                        let timeMod = extractContentsBetweenTags(note, startTag: "<time-modification", endTag: "</time-modification")
+                        var actual: Int = -1
+                        var normal: Int = -1
+                        
+                        if timeMod.count > 0 {
+                            for subLine in timeMod[0] {
+                                if subLine.contains("<actual-notes") {
+                                    actual = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
+                                }
+                                
+                                if subLine.contains("<normal-notes") {
+                                    normal = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
+                                }
+                            }
+                        }
+                        
+                        if actual != -1 && normal != -1 {
+                            timeModification = Note.TimeModification.custom(actual: actual, normal: normal)
+                        }
+                    }
                 }
                 
                 for line in note {
@@ -340,6 +434,9 @@ struct MusicXMLDataService {
                         }
                         
                         switch factor {
+                        case 8:
+                            duration = Note.Duration.breve
+                            break
                         case 4:
                             duration = Note.Duration.whole
                             break
@@ -492,7 +589,7 @@ struct MusicXMLDataService {
                     }
                 } else if !isRest && pitch != nil && octave != nil {
                     if let d = duration {
-                        chord.notes.append(Note(pitch: pitch, accidental: accidental, octave: octave, duration: d, dynamic: nil, graceNotes: nil, isRest: false, isDotted: isDotted, hasAccent: false))
+                        chord.notes.append(Note(pitch: pitch, accidental: accidental, octave: octave, duration: d, dynamic: nil, graceNotes: nil, isRest: false, isDotted: isDotted, hasAccent: hasAccent))
                     }
                 }
                  
@@ -578,7 +675,7 @@ struct MusicXMLDataService {
             partData?[i].bars = bars
         }
         
-        var score: Score = Score(title: title, composer: composer, parts: partData)
+        let score: Score = Score(title: title, composer: composer, parts: partData)
         
         return score
     }

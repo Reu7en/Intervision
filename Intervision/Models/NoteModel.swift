@@ -15,8 +15,10 @@ struct Note: Identifiable, Equatable {
     var durationValue: Double {
         return isDotted ? self.duration.rawValue * 1.5 : self.duration.rawValue
     }
+    var timeModification: TimeModification?
     var dynamic: Dynamic?
     var graceNotes: [Grace]?
+    var tie: Tie?
     var isRest: Bool
     var isDotted: Bool
     var hasAccent: Bool
@@ -54,6 +56,7 @@ extension Note {
     }
     
     enum Duration: Double {
+        case breve = 2.0
         case whole = 1.0
         case half = 0.5
         case quarter = 0.25
@@ -62,6 +65,10 @@ extension Note {
         case thirtySecond = 0.03125
         case sixtyFourth = 0.015625
         case bar = 0.0
+    }
+    
+    enum TimeModification {
+        case custom(actual: Int, normal: Int)
     }
     
     enum Dynamic {
@@ -77,13 +84,18 @@ extension Note {
         case DecrescendoStart, DecrescendoEnd
         case Sforzando
     }
+    
+    enum Tie {
+        case Start
+        case Stop
+    }
 }
 
 extension Note: CustomStringConvertible {
     var description: String {
         var description = "Note: "
-        description += "\(pitch?.rawValue ?? "")\(accidental?.rawValue ?? "")\(octave?.rawValue ?? -1) "
-        description += "D: \(duration) Dot: \(isDotted) Rest: \(isRest)"
+        description += "\(pitch?.rawValue ?? "")\(accidental?.rawValue ?? "")\(octave?.rawValue.description ?? "")"
+        description += " D: \(duration) Dot: \(isDotted) Rest: \(isRest) Accent: \(hasAccent) Tie: \(String(describing: tie))\n"
         return description
     }
 }

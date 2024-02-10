@@ -12,7 +12,6 @@ struct Part: Identifiable, Equatable {
     var abbreviation: String?
     var identifier: String?
     var bars: [[Bar]]
-    var ties: [Tie]?
     
     // Identifiable
     var id = UUID()
@@ -20,5 +19,18 @@ struct Part: Identifiable, Equatable {
     // Equatable
     static func == (lhs: Part, rhs: Part) -> Bool {
         lhs.id == rhs.id
+    }
+}
+
+extension Part: CustomStringConvertible {
+    var description: String {
+        var description = "Part: "
+        description += "\(name ?? "")"
+        
+        for bar in bars {
+            description += "\(bar)\n"
+        }
+        
+        return description
     }
 }

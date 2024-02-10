@@ -12,7 +12,7 @@ struct Bar: Identifiable, Equatable {
     var tempo: Tempo
     var clef: Clef
     var timeSignature: TimeSignature
-    var `repeat`: Repeat
+    var `repeat`: Repeat?
     var doubleLine: Bool
     var volta: Int?
     var keySignature: KeySignature
@@ -35,7 +35,7 @@ extension Bar {
     }
     
     enum Clef {
-        case Treble, Bass, Neutral
+        case Treble, Soprano, Alto, Tenor, Bass, Neutral
     }
     
     enum TimeSignature {
@@ -47,7 +47,6 @@ extension Bar {
     enum Repeat {
         case RepeatStart
         case RepeatEnd
-        case None
     }
     
     enum KeySignature: String {
@@ -126,10 +125,15 @@ extension Bar {
 
 extension Bar: CustomStringConvertible {
     var description: String {
-        var description = "Bar: "
-        description += "Chords: \(chords.map { $0.notes.description }.joined(separator: ", "))\n"
+        var description = "\nBar: "
         description += "Key: \(keySignature)\n"
-        description += "Clef: \(clef)"
+        description += "Clef: \(clef)\n"
+        description += "Tempo: \(tempo)\n"
+        description += "Time: \(timeSignature)\n"
+        description += "Repeat: \(String(describing: `repeat`))\n"
+        description += "Volta: \(volta?.description ?? "")\n"
+        description += "Section End: \(doubleLine)\n"
+        description += "Chords: \(chords.map { $0.notes.description }.joined(separator: ", "))"
         return description
     }
 }

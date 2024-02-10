@@ -22,7 +22,6 @@
 		1B97BEE82B726CAA007D0BE5 /* MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEE72B726CAA007D0BE5 /* MainWindowView.swift */; };
 		1B97BEEA2B726CC1007D0BE5 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEE92B726CC1007D0BE5 /* ScoreView.swift */; };
 		1B97BEED2B7279CF007D0BE5 /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEEC2B7279CF007D0BE5 /* PageView.swift */; };
-		1BBC977E2B759767001C953C /* TieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC977D2B759767001C953C /* TieModel.swift */; };
 		1BBC97802B759D8E001C953C /* GraceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC977F2B759D8E001C953C /* GraceModel.swift */; };
 		1BBC97822B75A6E9001C953C /* QuarterNoteTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC97812B75A6E9001C953C /* QuarterNoteTest.swift */; };
 		1BBC97842B7699EB001C953C /* MusicXMLDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC97832B7699EB001C953C /* MusicXMLDataService.swift */; };
@@ -32,6 +31,8 @@
 		1BBC978D2B76A50D001C953C /* ScoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC978C2B76A50D001C953C /* ScoreViewModel.swift */; };
 		1BBEAE432B76D8F20033FFDA /* ShortTestScore.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1BBEAE422B76D8F20033FFDA /* ShortTestScore.musicxml */; };
 		1BBEAE452B76DCF90033FFDA /* Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1BBEAE442B76DCF90033FFDA /* Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml */; };
+		1BBEAE482B780E720033FFDA /* Advanced_Trio.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1BBEAE462B780E720033FFDA /* Advanced_Trio.musicxml */; };
+		1BBEAE492B780E720033FFDA /* Simpsons_MultiPart.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1BBEAE472B780E720033FFDA /* Simpsons_MultiPart.musicxml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,7 +53,6 @@
 		1B97BEE72B726CAA007D0BE5 /* MainWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowView.swift; sourceTree = "<group>"; };
 		1B97BEE92B726CC1007D0BE5 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		1B97BEEC2B7279CF007D0BE5 /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
-		1BBC977D2B759767001C953C /* TieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TieModel.swift; sourceTree = "<group>"; };
 		1BBC977F2B759D8E001C953C /* GraceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraceModel.swift; sourceTree = "<group>"; };
 		1BBC97812B75A6E9001C953C /* QuarterNoteTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuarterNoteTest.swift; sourceTree = "<group>"; };
 		1BBC97832B7699EB001C953C /* MusicXMLDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicXMLDataService.swift; sourceTree = "<group>"; };
@@ -62,6 +62,8 @@
 		1BBC978C2B76A50D001C953C /* ScoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreViewModel.swift; sourceTree = "<group>"; };
 		1BBEAE422B76D8F20033FFDA /* ShortTestScore.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = ShortTestScore.musicxml; path = ../../../../../Desktop/ShortTestScore.musicxml; sourceTree = "<group>"; };
 		1BBEAE442B76DCF90033FFDA /* Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml; path = ../../../../../Desktop/Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml; sourceTree = "<group>"; };
+		1BBEAE462B780E720033FFDA /* Advanced_Trio.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Advanced_Trio.musicxml; path = ../../../../../Desktop/Advanced_Trio.musicxml; sourceTree = "<group>"; };
+		1BBEAE472B780E720033FFDA /* Simpsons_MultiPart.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Simpsons_MultiPart.musicxml; path = ../../../../../Desktop/Simpsons_MultiPart.musicxml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,7 +139,6 @@
 				1B97BEE12B71C617007D0BE5 /* NoteModel.swift */,
 				1B12C9E42B753EBE00DC87DC /* PartModel.swift */,
 				1B12C9E62B75472200DC87DC /* StaveModel.swift */,
-				1BBC977D2B759767001C953C /* TieModel.swift */,
 				1BBC977F2B759D8E001C953C /* GraceModel.swift */,
 			);
 			path = Models;
@@ -178,6 +179,8 @@
 		1BBC97852B769ACA001C953C /* Test Scores */ = {
 			isa = PBXGroup;
 			children = (
+				1BBEAE462B780E720033FFDA /* Advanced_Trio.musicxml */,
+				1BBEAE472B780E720033FFDA /* Simpsons_MultiPart.musicxml */,
 				1BBEAE442B76DCF90033FFDA /* Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml */,
 				1BBEAE422B76D8F20033FFDA /* ShortTestScore.musicxml */,
 				1B5A4F262B76C479007F16ED /* My_Love_Mine_All_Mine__Mitski_My_Love_Mine_All_Mine.musicxml */,
@@ -247,6 +250,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B5A4F272B76C479007F16ED /* My_Love_Mine_All_Mine__Mitski_My_Love_Mine_All_Mine.musicxml in Resources */,
+				1BBEAE492B780E720033FFDA /* Simpsons_MultiPart.musicxml in Resources */,
+				1BBEAE482B780E720033FFDA /* Advanced_Trio.musicxml in Resources */,
 				1B97BED12B71C168007D0BE5 /* Preview Assets.xcassets in Resources */,
 				1B97BECE2B71C168007D0BE5 /* Assets.xcassets in Resources */,
 				1BBEAE432B76D8F20033FFDA /* ShortTestScore.musicxml in Resources */,
@@ -275,7 +280,6 @@
 				1B97BEE02B71C607007D0BE5 /* ChordModel.swift in Sources */,
 				1B97BEE82B726CAA007D0BE5 /* MainWindowView.swift in Sources */,
 				1B97BEE62B71D917007D0BE5 /* AppDelegate.swift in Sources */,
-				1BBC977E2B759767001C953C /* TieModel.swift in Sources */,
 				1B97BECA2B71C167007D0BE5 /* IntervisionApp.swift in Sources */,
 				1B97BEED2B7279CF007D0BE5 /* PageView.swift in Sources */,
 				1BBC978D2B76A50D001C953C /* ScoreViewModel.swift in Sources */,

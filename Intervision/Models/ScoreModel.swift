@@ -20,3 +20,19 @@ struct Score: Identifiable, Equatable {
         lhs.id == rhs.id
     }
 }
+
+extension Score: CustomStringConvertible {
+    var description: String {
+        var description = "Score: "
+        description += "\(title ?? "")\n"
+        description += "\(composer ?? "")\n"
+        
+        if let p = parts {
+            for part in p {
+                description += "\(part.description)\n"
+            }
+        }
+        
+        return description
+    }
+}

@@ -9,13 +9,30 @@ import Foundation
 
 struct TestLoad {
     static func testLoad() {
-        if let filePath = Bundle.main.path(forResource: "ShortTestScore", ofType: "musicxml") {
+        if let filePath = Bundle.main.path(forResource: "Simpsons_MultiPart", ofType: "musicxml") {
             if let score = MusicXMLDataService.readXML(filePath) {
                 print("Success!")
-                print(score.title)
-                print(score.composer)
-                print(score.parts?.count)
-                print(score.parts)
+                print(score)
+                
+//                var piano: Part? = nil
+//                
+//                if let parts = score.parts {
+//                    for part in parts {
+//                        if let name = part.name {
+//                            if name == "Piano" {
+//                                piano = part
+//                            }
+//                        }
+//                    }
+//                }
+//                
+//                if let p = piano {
+//                    print(p.bars.count)
+//                    print(p.bars[0][0])
+//                    print(p.bars[1][0])
+//                    print(p.bars[1][0])
+//                    print(p.bars[1][1])
+//                }
             }
         } else {
             print("File not found")

@@ -92,12 +92,16 @@ struct MusicXMLDataService {
         return parts
     }
     
+    /*
+     fix timemods, always nil, scope?
+     add dynamics, also should be array incase doubles
+     */
     static func getBars(_ partContents: [String]) -> [[Bar]] {
         var bars: [[Bar]] = []
         
         let barData: [[String]] = extractContentsBetweenTags(partContents, startTag: "<measure number=", endTag: "</measure")
         
-        var currentTempo: Bar.Tempo = Bar.Tempo.quarter(bpm: 0)
+        var currentTempo: Bar.Tempo? = nil
         var currentClefs: [Bar.Clef] = []
         var currentTimeSignature: Bar.TimeSignature = Bar.TimeSignature.common
         var currentKeySignature: Bar.KeySignature = Bar.KeySignature.CMajor
@@ -277,6 +281,7 @@ struct MusicXMLDataService {
                     clefs.append(Bar.Clef.Tenor)
                     break
                 default:
+                    clefs.append(Bar.Clef.Neutral)
                     break
                 }
             }
@@ -351,17 +356,19 @@ struct MusicXMLDataService {
                 }
             }
             
+            var chords: [Chord] = []
+            
             for i in 0..<currentStaves {
                 currentBars.append(Bar(chords: [], tempo: currentTempo, clef: currentClefs[i], timeSignature: currentTimeSignature, repeat: currentRepeat, doubleLine: hasDoubleBarline, volta: currentVolta, keySignature: currentKeySignature))
+                chords.append(Chord(notes: []))
             }
-            
-            var chord: Chord = Chord(notes: [])
             
             for note in notes {
                 var pitch: Note.Pitch? = nil
                 var accidental: Note.Accidental? = nil
                 var octave: Note.Octave? = nil
                 var duration: Note.Duration? = nil
+                var durationValue: Double? = nil
                 var isRest: Bool = false
                 var isDotted: Bool = false
                 var isMeasureRest: Bool = false
@@ -370,9 +377,9 @@ struct MusicXMLDataService {
                 
                 for line in note {
                     if line.contains("<rest measure=") {
-                        chord.notes.append(Note(duration: Note.Duration.bar, isRest: true, isDotted: false, hasAccent: false))
-                        currentBars[currentStave - 1].chords.append(chord)
-                        chord = Chord(notes: [])
+                        chords[currentStave - 1].notes.append(Note(duration: Note.Duration.bar, durationValue: -1, isRest: true, isDotted: false, hasAccent: false))
+                        currentBars[currentStave - 1].chords.append(chords[currentStave - 1])
+                        chords[currentStave - 1] = Chord(notes: [])
                         isMeasureRest = true
                     }
                 }
@@ -420,7 +427,15 @@ struct MusicXMLDataService {
                 
                 for line in note {
                     if line.contains("<duration") {
-                        let dur = Int(extractContent(fromTag: line) ?? "-1") ?? -1
+                        var dur = Double(extractContent(fromTag: line) ?? "-1") ?? -1
+                        durationValue = dur
+                        
+                        if let timeMod = timeModification {
+                            if case .custom(let actual, let normal) = timeMod {
+                                dur = (dur / Double(normal)) * Double(actual)
+                            }
+                        }
+                        
                         var factor: Double = -1
                         
                         if let div = currentDivisons {
@@ -581,28 +596,48 @@ struct MusicXMLDataService {
                     }
                 }
                 
-                if isRest {
-                    if let d = duration {
-                        chord.notes.append(Note(duration: d, isRest: true, isDotted: isDotted, hasAccent: false))
-                        currentBars[currentStave - 1].chords.append(chord)
-                        chord = Chord(notes: [])
-                    }
-                } else if !isRest && pitch != nil && octave != nil {
-                    if let d = duration {
-                        chord.notes.append(Note(pitch: pitch, accidental: accidental, octave: octave, duration: d, dynamic: nil, graceNotes: nil, isRest: false, isDotted: isDotted, hasAccent: hasAccent))
+                var pNote: Note? = nil
+                
+                if let d = duration,
+                   let dV = durationValue {
+                    pNote = Note(
+                        pitch: pitch,
+                        accidental: accidental,
+                        octave: octave,
+                        duration: d,
+                        durationValue: dV,
+                        timeModification: timeModification,
+                        dynamic: nil,
+                        graceNotes: nil,
+                        tie: nil,
+                        isRest: isRest,
+                        isDotted: isDotted,
+                        hasAccent: hasAccent)
+                }
+                
+                var chordTag: Bool = false
+                
+                for line in note {
+                    if line.contains("<chord") {
+                        chordTag = true
                     }
                 }
-                 
-                for line in note {
-                    if !line.contains("<chord") {
-                        if !chord.notes.isEmpty {
-                            currentBars[currentStave - 1].chords.append(chord)
+                
+                if let n = pNote {
+                    if chordTag {
+                        chords[currentStave - 1].notes.append(n)
+                    } else {
+                        if !chords[currentStave - 1].notes.isEmpty {
+                            currentBars[currentStave - 1].chords.append(chords[currentStave - 1])
                         }
                         
-                        chord = Chord(notes: [])
+                        chords[currentStave - 1] = Chord(notes: [])
+                        chords[currentStave - 1].notes.append(n)
                     }
                 }
             }
+            
+            currentBars[currentStave - 1].chords.append(chords[currentStave - 1])
             
             bars.append(currentBars)
         }

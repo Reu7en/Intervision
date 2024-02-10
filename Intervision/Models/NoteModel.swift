@@ -12,9 +12,7 @@ struct Note: Identifiable, Equatable {
     var accidental: Accidental?
     var octave: Octave?
     var duration: Duration
-    var durationValue: Double {
-        return isDotted ? self.duration.rawValue * 1.5 : self.duration.rawValue
-    }
+    var durationValue: Double
     var timeModification: TimeModification?
     var dynamic: Dynamic?
     var graceNotes: [Grace]?
@@ -95,7 +93,7 @@ extension Note: CustomStringConvertible {
     var description: String {
         var description = "Note: "
         description += "\(pitch?.rawValue ?? "")\(accidental?.rawValue ?? "")\(octave?.rawValue.description ?? "")"
-        description += " D: \(duration) Dot: \(isDotted) Rest: \(isRest) Accent: \(hasAccent) Tie: \(String(describing: tie))\n"
+        description += " D: \(duration) Dot: \(isDotted) Rest: \(isRest) Accent: \(hasAccent) Tie: \(String(describing: tie)) TMod: \(String(describing: timeModification))\n"
         return description
     }
 }

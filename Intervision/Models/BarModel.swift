@@ -9,7 +9,7 @@ import Foundation
 
 struct Bar: Identifiable, Equatable {
     var chords: [Chord]
-    var tempo: Tempo
+    var tempo: Tempo?
     var clef: Clef
     var timeSignature: TimeSignature
     var `repeat`: Repeat?
@@ -129,7 +129,7 @@ extension Bar: CustomStringConvertible {
         description += "Key: \(keySignature)\n"
         description += "Clef: \(clef)\n"
         description += "Tempo: \(tempo)\n"
-        description += "Time: \(timeSignature)\n"
+        description += "Time: \(String(describing: timeSignature))\n"
         description += "Repeat: \(String(describing: `repeat`))\n"
         description += "Volta: \(volta?.description ?? "")\n"
         description += "Section End: \(doubleLine)\n"

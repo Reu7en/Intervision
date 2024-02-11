@@ -128,7 +128,7 @@ extension Bar: CustomStringConvertible {
         var description = "\nBar: "
         description += "Key: \(keySignature)\n"
         description += "Clef: \(clef)\n"
-        description += "Tempo: \(tempo)\n"
+        description += "Tempo: \(String(describing: tempo))\n"
         description += "Time: \(String(describing: timeSignature))\n"
         description += "Repeat: \(String(describing: `repeat`))\n"
         description += "Volta: \(volta?.description ?? "")\n"

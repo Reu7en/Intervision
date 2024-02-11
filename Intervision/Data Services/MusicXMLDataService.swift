@@ -93,7 +93,7 @@ struct MusicXMLDataService {
     }
     
     /*
-     fix timemods, always nil, scope?
+     This works for parsing most info required to construct a score, but is horrific and must be refactored
      add dynamics, also should be array incase doubles
      */
     static func getBars(_ partContents: [String]) -> [[Bar]] {
@@ -108,7 +108,7 @@ struct MusicXMLDataService {
         
         var clefData: [[String]] = []
         var currentStaves: Int = 1
-        var currentDivisons: Int? = nil
+//        var currentDivisons: Int? = nil
         
         for bar in barData {
             for line in bar {
@@ -303,17 +303,17 @@ struct MusicXMLDataService {
             }
         }
         
-        if barData.count > 0 {
-            for line in barData[0] {
-                if line.contains("<divisions") {
-                    let div = Int(extractContent(fromTag: line) ?? "-1") ?? -1
-                    
-                    if div != -1 {
-                        currentDivisons = div
-                    }
-                }
-            }
-        }
+//        if barData.count > 0 {
+//            for line in barData[0] {
+//                if line.contains("<divisions") {
+//                    let div = Int(extractContent(fromTag: line) ?? "-1") ?? -1
+//                    
+//                    if div != -1 {
+//                        currentDivisons = div
+//                    }
+//                }
+//            }
+//        }
         
         for bar in barData {
             let notes = extractContentsBetweenTags(bar, startTag: "<note", endTag: "</note")
@@ -376,10 +376,29 @@ struct MusicXMLDataService {
                 var timeModification: Note.TimeModification? = nil
                 
                 for line in note {
+                    if line.contains("<staff") {
+                        let staff = Int(extractContent(fromTag: line) ?? "1") ?? 1
+                        currentStave = staff
+                    }
+                }
+                
+                for line in note {
                     if line.contains("<rest measure=") {
-                        chords[currentStave - 1].notes.append(Note(duration: Note.Duration.bar, durationValue: -1, isRest: true, isDotted: false, hasAccent: false))
-                        currentBars[currentStave - 1].chords.append(chords[currentStave - 1])
-                        chords[currentStave - 1] = Chord(notes: [])
+                        let barRest: Note = Note(
+                            duration: Note.Duration.bar,
+                            durationValue: -1,
+                            isRest: true,
+                            isDotted: false,
+                            hasAccent: false
+                        )
+                        
+                        if !chords[currentStave - 1].notes.isEmpty {
+                            print("This shouldn't happen!")
+                            currentBars[currentStave - 1].chords.append(chords[currentStave - 1])
+                        }
+                        
+                        currentBars[currentStave - 1].chords.append(Chord(notes: [barRest]))
+                        
                         isMeasureRest = true
                     }
                 }
@@ -389,11 +408,6 @@ struct MusicXMLDataService {
                 }
                 
                 for line in note {
-                    if line.contains("<staff") {
-                        let staff = Int(extractContent(fromTag: line) ?? "1") ?? 1
-                        currentStave = staff
-                    }
-                    
                     if line.contains("<dot") {
                         isDotted = true
                     }
@@ -427,53 +441,37 @@ struct MusicXMLDataService {
                 
                 for line in note {
                     if line.contains("<duration") {
-                        var dur = Double(extractContent(fromTag: line) ?? "-1") ?? -1
+                        let dur = Double(extractContent(fromTag: line) ?? "-1") ?? -1
                         durationValue = dur
+                    }
+                    
+                    if line.contains("<type") {
+                        let type = extractContent(fromTag: line)
                         
-                        if let timeMod = timeModification {
-                            if case .custom(let actual, let normal) = timeMod {
-                                dur = (dur / Double(normal)) * Double(actual)
-                            }
-                        }
-                        
-                        var factor: Double = -1
-                        
-                        if let div = currentDivisons {
-                            if dur != -1 && div != -1 {
-                                factor = Double(dur) / Double(div)
-                                
-                                if isDotted {
-                                    factor /= 1.5
-                                }
-                            }
-                        }
-                        
-                        switch factor {
-                        case 8:
+                        switch type {
+                        case "breve":
                             duration = Note.Duration.breve
                             break
-                        case 4:
+                        case "whole":
                             duration = Note.Duration.whole
                             break
-                        case 2:
+                        case "half":
                             duration = Note.Duration.half
                             break
-                        case 1:
+                        case "quarter":
                             duration = Note.Duration.quarter
                             break
-                        case 0.5:
+                        case "eighth":
                             duration = Note.Duration.eighth
                             break
-                        case 0.25:
+                        case "16th":
                             duration = Note.Duration.sixteenth
                             break
-                        case 0.125:
+                        case "32nd":
                             duration = Note.Duration.thirtySecond
                             break
-                        case 0.0625:
+                        case "64th":
                             duration = Note.Duration.sixtyFourth
-                            break
-                        case -1:
                             break
                         default:
                             break
@@ -612,7 +610,8 @@ struct MusicXMLDataService {
                         tie: nil,
                         isRest: isRest,
                         isDotted: isDotted,
-                        hasAccent: hasAccent)
+                        hasAccent: hasAccent
+                    )
                 }
                 
                 var chordTag: Bool = false

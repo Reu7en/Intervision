@@ -9,7 +9,7 @@ import Foundation
 
 struct TestLoad {
     static func testLoad() {
-        if let filePath = Bundle.main.path(forResource: "ShortTestScore", ofType: "musicxml") {
+        if let filePath = Bundle.main.path(forResource: "Simpsons_MultiPart", ofType: "musicxml") {
             let score = MusicXMLDataService.readXML(filePath)
             
         } else {

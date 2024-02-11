@@ -14,7 +14,7 @@ struct Note: Identifiable, Equatable {
     var duration: Duration
     var durationValue: Double
     var timeModification: TimeModification?
-    var dynamic: Dynamic?
+    var dynamic: [Dynamic]?
     var graceNotes: [Grace]?
     var tie: Tie?
     var isRest: Bool

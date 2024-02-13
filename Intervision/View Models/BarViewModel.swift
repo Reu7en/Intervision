@@ -19,7 +19,7 @@ class BarViewModel: ObservableObject {
     @Published var rows: Int?
     @Published var lowestGapNote: Note?
     @Published var beatSplitChords: [[Chord]]
-    @Published var noteGrid: [[Note?]]?
+    @Published var noteGrid: [[[Note?]]]?
     
     init(bar: Bar, gaps: Int = 4, step: Step = Step.Tone, ledgerLines: Int = 3) {
         self.bar = bar
@@ -38,6 +38,7 @@ class BarViewModel: ObservableObject {
             isBarRest = true
         }
         
+        populateNoteGrid()
         
     }
 }
@@ -210,18 +211,63 @@ extension BarViewModel {
     }
     
     func populateNoteGrid() {
-        if let gridColumns = beats,
-           let gridRows = rows {
-            noteGrid = Array(repeating: Array(repeating: nil, count: gridColumns), count: gridRows)
+        if let gridRows = rows {
+            noteGrid = [[[Note?]]]()
+            let lowestGapIndex = (ledgerLines * 2) + 2
             
             for (beatIndex, beatChords) in beatSplitChords.enumerated() {
-                for chord in beatChords {
-                    for note in chord.notes {
-                        
+                var beatGrid: [[Note?]] = Array(repeating: Array(repeating: nil, count: beatChords.count), count: gridRows)
+                
+                for (chordIndex, chord) in beatChords.enumerated() {
+                    for (noteIndex, note) in chord.notes.enumerated() {
+                        if note.isRest {
+                            beatGrid[0][chordIndex] = note
+                        } else {
+                            guard let distance = calculateGapBetweenLowestGapNote(note: note) else { continue }
+                            var index = lowestGapIndex + (distance * (step == .Semitone ? 2 : 1))
+                            
+                            if index < 0 {
+                                var modifiedNote = note
+                                modifiedNote.increaseOctave()
+                                beatSplitChords[beatIndex][chordIndex].notes[noteIndex] = modifiedNote
+                                index += 7
+                            } else if index > gridRows - 1 {
+                                var modifiedNote = note
+                                modifiedNote.decreaseOctave()
+                                beatSplitChords[beatIndex][chordIndex].notes[noteIndex] = modifiedNote
+                                index -= 7
+                            }
+                            
+                            if index < 0 || index > gridRows - 1 { continue }
+                            
+                            beatGrid[gridRows - 1 - index][chordIndex] = beatSplitChords[beatIndex][chordIndex].notes[noteIndex]
+//                            beatGrid[index][chordIndex] = note
+                        }
                     }
                 }
+                
+                noteGrid?.append(beatGrid)
             }
         } else { return }
+    }
+    
+    // consider semitone case
+    func calculateGapBetweenLowestGapNote(note: Note) -> Int? {
+        var distance: Int?
+        
+        if let lowest = lowestGapNote,
+           let lowestPitch = lowest.pitch,
+           let notePitch = note.pitch,
+           let lowestOctave = lowest.octave,
+           let noteOctave = note.octave {
+            distance = notePitch.distanceFromC() - lowestPitch.distanceFromC()
+            
+            if lowestOctave != noteOctave {
+                distance! += (noteOctave.rawValue - lowestOctave.rawValue) * 7
+            }
+        }
+        
+        return distance
     }
     
     // fix

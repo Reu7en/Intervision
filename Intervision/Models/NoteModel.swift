@@ -11,6 +11,7 @@ struct Note: Identifiable, Equatable {
     var pitch: Pitch?
     var accidental: Accidental?
     var octave: Octave?
+    var octaveShift: OctaveShift?
     var duration: Duration
     var durationValue: Double
     var timeModification: TimeModification?
@@ -34,6 +35,18 @@ struct Note: Identifiable, Equatable {
 extension Note {
     enum Pitch: String {
         case C, D, E, F, G, A, B
+        
+        func distanceFromC() -> Int {
+                switch self {
+                case .C: return 0
+                case .D: return 1
+                case .E: return 2
+                case .F: return 3
+                case .G: return 4
+                case .A: return 5
+                case .B: return 6
+                }
+            }
     }
     
     enum Accidental: String {
@@ -51,6 +64,14 @@ extension Note {
         case threeLine = 6
         case fourLine = 7
         case fiveLine = 8
+        
+        var next: Octave? {
+            Octave(rawValue: self.rawValue + 1)
+        }
+
+        var prev: Octave? {
+            Octave(rawValue: self.rawValue - 1)
+        }
     }
     
     enum Duration: Double {
@@ -86,6 +107,29 @@ extension Note {
     enum Tie {
         case Start
         case Stop
+    }
+    
+    enum OctaveShift {
+        case above
+        case below
+    }
+}
+
+extension Note {
+    mutating func increaseOctave() {
+        if let nextOctave = octave?.next {
+            octave = nextOctave
+            octaveShift = .below
+            print("Octave increased, shift: \(octaveShift!)")
+        }
+    }
+
+    mutating func decreaseOctave() {
+        if let prevOctave = octave?.prev {
+            octave = prevOctave
+            octaveShift = .above
+            print("Octave decreased, shift: \(octaveShift!)")
+        }
     }
 }
 

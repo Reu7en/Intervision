@@ -7,273 +7,33 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "4126F909-74C1-4F62-8D04-20977F0412D7"
+            uuid = "5B315AB8-FCAB-4DC2-B9AB-3935AFC42FAC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Intervision/Views/BarView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9C6DF642-1643-4790-A31D-78C90A083A19"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Intervision/Test Scores/TestLoad.swift"
+            filePath = "Intervision/Views/BarView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "14"
-            endingLineNumber = "14"
-            landmarkName = "testLoad()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "4126F909-74C1-4F62-8D04-20977F0412D7 - c98fc4bc0528f12a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "static Intervision.TestLoad.testLoad() -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/Test%20Scores/TestLoad.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14"
-                  offsetFromSymbolStart = "520">
-               </Location>
-               <Location
-                  uuid = "4126F909-74C1-4F62-8D04-20977F0412D7 - c98fc4bc0528f0cb"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "static Intervision.TestLoad.testLoad() -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/Test%20Scores/TestLoad.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "15"
-                  endingLineNumber = "15"
-                  offsetFromSymbolStart = "520">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "629AA86B-B425-490D-9FA8-AA70260E8FBD"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Intervision/View Models/BarViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "init(bar:gaps:step:ledgerLines:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "629AA86B-B425-490D-9FA8-AA70260E8FBD - 2375727db0f62982"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.BarViewModel.init(bar: Intervision.Bar, gaps: Swift.Int, step: Intervision.BarViewModel.Step, ledgerLines: Swift.Int) -&gt; Intervision.BarViewModel"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/BarViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "38"
-                  endingLineNumber = "38"
-                  offsetFromSymbolStart = "1800">
-               </Location>
-               <Location
-                  uuid = "629AA86B-B425-490D-9FA8-AA70260E8FBD - 2375727db0f62e40"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.BarViewModel.init(bar: Intervision.Bar, gaps: Swift.Int, step: Intervision.BarViewModel.Step, ledgerLines: Swift.Int) -&gt; Intervision.BarViewModel"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/BarViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "40"
-                  endingLineNumber = "40"
-                  offsetFromSymbolStart = "1852">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "93633CE1-C404-4842-B1E0-891F9832FC74"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Intervision/View Models/BarViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "209"
-            endingLineNumber = "209"
-            landmarkName = "splitChords()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "8B4937AA-E5CA-4882-8D4E-E734D8818235"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Intervision/View Models/BarViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
-            landmarkName = "splitChords()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "D2A9C077-1661-4D9D-9EBB-00A54282AAA8"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Intervision/View Models/BarViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
-            landmarkName = "splitChords()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "D2A9C077-1661-4D9D-9EBB-00A54282AAA8 - 91212eb788d60fc"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.BarViewModel.splitChords() -&gt; Swift.Bool"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/BarViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "197"
-                  endingLineNumber = "197"
-                  offsetFromSymbolStart = "5140">
-               </Location>
-               <Location
-                  uuid = "D2A9C077-1661-4D9D-9EBB-00A54282AAA8 - 91212eb788d603e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.BarViewModel.splitChords() -&gt; Swift.Bool"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/BarViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "199"
-                  endingLineNumber = "199"
-                  offsetFromSymbolStart = "5164">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "5C031959-43FD-4840-B584-AE6A2985C56A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Intervision/View Models/BarViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "init(bar:gaps:step:ledgerLines:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "5C031959-43FD-4840-B584-AE6A2985C56A - 2375727db0f62f77"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.BarViewModel.init(bar: Intervision.Bar, gaps: Swift.Int, step: Intervision.BarViewModel.Step, ledgerLines: Swift.Int) -&gt; Intervision.BarViewModel"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/BarViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "49"
-                  endingLineNumber = "49"
-                  offsetFromSymbolStart = "1860">
-               </Location>
-               <Location
-                  uuid = "5C031959-43FD-4840-B584-AE6A2985C56A - 2375727db0f62e2d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.BarViewModel.init(bar: Intervision.Bar, gaps: Swift.Int, step: Intervision.BarViewModel.Step, ledgerLines: Swift.Int) -&gt; Intervision.BarViewModel"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/BarViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "43"
-                  endingLineNumber = "43"
-                  offsetFromSymbolStart = "1860">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "403CFE56-1B02-46D3-9CC4-6B8E904AA316"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Intervision/View Models/BarViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "242"
-            endingLineNumber = "242"
-            landmarkName = "populateNoteGrid()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "403CFE56-1B02-46D3-9CC4-6B8E904AA316 - 811c0e6032911960"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.BarViewModel.calculateGapBetweenLowestGapNote(note: Intervision.Note) -&gt; Swift.Optional&lt;Swift.Int&gt;"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/BarViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "246"
-                  endingLineNumber = "246"
-                  offsetFromSymbolStart = "276">
-               </Location>
-               <Location
-                  uuid = "403CFE56-1B02-46D3-9CC4-6B8E904AA316 - ad87c6ed22cb444a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.BarViewModel.populateNoteGrid() -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/BarViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "245"
-                  endingLineNumber = "245"
-                  offsetFromSymbolStart = "2816">
-               </Location>
-            </Locations>
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "body"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

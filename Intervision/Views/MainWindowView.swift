@@ -12,23 +12,13 @@ struct MainWindowView: View {
     @StateObject private var scoreViewModel = ScoreViewModel()
     
     var body: some View {
-//        ScoreView()
-//            .environmentObject(scoreViewModel)
-//            .onAppear {
-//                TestLoad.testLoad()
-//            }
+        ScoreView()
+            .environmentObject(scoreViewModel)
+            .onAppear {
+                TestLoad.testLoad()
+            }
 //        HomeView()
-        /*
-         case subContra = 0
-         case contra = 1
-         case great = 2
-         case small = 3
-         case oneLine = 4
-         case twoLine = 5
-         case threeLine = 6
-         case fourLine = 7
-         case fiveLine = 8
-         */
+
         let testBVM1 = BarViewModel(
             bar: Bar(
                 chords: [

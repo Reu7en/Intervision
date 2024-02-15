@@ -120,7 +120,6 @@ extension Note {
         if let nextOctave = octave?.next {
             octave = nextOctave
             octaveShift = .below
-            print("Octave increased, shift: \(octaveShift!)")
         }
     }
 
@@ -128,7 +127,6 @@ extension Note {
         if let prevOctave = octave?.prev {
             octave = prevOctave
             octaveShift = .above
-            print("Octave decreased, shift: \(octaveShift!)")
         }
     }
 }

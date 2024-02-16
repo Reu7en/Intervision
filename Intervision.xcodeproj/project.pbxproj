@@ -16,6 +16,7 @@
 		1B9435932B7EBFF900B57DA7 /* StaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435922B7EBFF900B57DA7 /* StaveView.swift */; };
 		1B9435952B7ED65B00B57DA7 /* NoteHeadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435942B7ED65B00B57DA7 /* NoteHeadView.swift */; };
 		1B9435972B7F122A00B57DA7 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435962B7F122A00B57DA7 /* NotesView.swift */; };
+		1B9435992B7F153100B57DA7 /* RestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435982B7F153100B57DA7 /* RestView.swift */; };
 		1B97BECA2B71C167007D0BE5 /* IntervisionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEC92B71C167007D0BE5 /* IntervisionApp.swift */; };
 		1B97BECE2B71C168007D0BE5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B97BECD2B71C168007D0BE5 /* Assets.xcassets */; };
 		1B97BED12B71C168007D0BE5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B97BED02B71C168007D0BE5 /* Preview Assets.xcassets */; };
@@ -49,6 +50,7 @@
 		1B9435922B7EBFF900B57DA7 /* StaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaveView.swift; sourceTree = "<group>"; };
 		1B9435942B7ED65B00B57DA7 /* NoteHeadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteHeadView.swift; sourceTree = "<group>"; };
 		1B9435962B7F122A00B57DA7 /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
+		1B9435982B7F153100B57DA7 /* RestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestView.swift; sourceTree = "<group>"; };
 		1B97BEC62B71C167007D0BE5 /* Intervision.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Intervision.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B97BEC92B71C167007D0BE5 /* IntervisionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervisionApp.swift; sourceTree = "<group>"; };
 		1B97BECD2B71C168007D0BE5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 				1B9435922B7EBFF900B57DA7 /* StaveView.swift */,
 				1B9435942B7ED65B00B57DA7 /* NoteHeadView.swift */,
 				1B9435962B7F122A00B57DA7 /* NotesView.swift */,
+				1B9435982B7F153100B57DA7 /* RestView.swift */,
 			);
 			path = Bar;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				1B12C9E52B753EBE00DC87DC /* PartModel.swift in Sources */,
 				1B97BEE22B71C617007D0BE5 /* NoteModel.swift in Sources */,
 				1B561F772B784CF3001860E5 /* HomeView.swift in Sources */,
+				1B9435992B7F153100B57DA7 /* RestView.swift in Sources */,
 				1B97BEE02B71C607007D0BE5 /* ChordModel.swift in Sources */,
 				1B9435932B7EBFF900B57DA7 /* StaveView.swift in Sources */,
 				1B97BEE82B726CAA007D0BE5 /* MainWindowView.swift in Sources */,

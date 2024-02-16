@@ -32,8 +32,13 @@ struct NotesView: View {
                                         geometry: beatGeometry
                                     )
                                     
-                                    NoteHeadView(size: noteSize, isHollow: note.duration.isHollow)
-                                        .position(notePosition)
+                                    if note.isRest {
+                                        RestView(size: noteSize, duration: note.duration, isDotted: note.isDotted)
+                                            .position(notePosition)
+                                    } else {
+                                        NoteHeadView(size: noteSize, isHollow: note.duration.isHollow)
+                                            .position(notePosition)
+                                    }
                                 }
                             }
                         }

@@ -84,6 +84,17 @@ extension Note {
         case thirtySecond = 0.03125
         case sixtyFourth = 0.015625
         case bar = 0.0
+        
+        var isHollow: Bool {
+            switch self {
+            case .breve:
+                return true
+            case .whole:
+                return true
+            default:
+                return false
+            }
+        }
     }
     
     enum TimeModification {

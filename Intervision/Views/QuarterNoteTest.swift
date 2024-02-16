@@ -23,8 +23,8 @@ struct FilledNoteHead: View {
 }
 
 struct QuarterNoteGrid: View {
-    let rows = 4
-    let columns = 4
+    let rows = 40
+    let columns = 40
 
     var body: some View {
         VStack {

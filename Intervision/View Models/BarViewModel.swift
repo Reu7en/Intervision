@@ -13,7 +13,7 @@ class BarViewModel: ObservableObject {
     @Published var gaps: Int
     @Published var step: Step
     @Published var ledgerLines: Int
-    @Published var isBarRest: Bool?
+    @Published var isBarRest: Bool = false
     @Published var beats: Int?
     @Published var beatValue: Double?
     @Published var rows: Int?
@@ -205,6 +205,10 @@ extension BarViewModel {
                     chordGroup = [Chord]()
                 }
             } else { return false }
+        }
+        
+        if !chordGroup.isEmpty {
+            beatSplitChords.append(chordGroup)
         }
         
         return true

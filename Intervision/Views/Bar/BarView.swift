@@ -10,76 +10,65 @@ import SwiftUI
 struct BarView: View {
     
     @StateObject var barViewModel: BarViewModel
-    let lineWidth: CGFloat = 2
+    let lineWidth: CGFloat = 3
     
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                if let rows = barViewModel.rows {
+                if let rows = barViewModel.rows,
+                   let grid = barViewModel.noteGrid {
                     StaveView(rows: rows, ledgerLines: barViewModel.ledgerLines, geometry: geometry, lineWidth: lineWidth)
+                    
+                    if barViewModel.isBarRest {
+                        let noteSize = 2 * (geometry.size.height / CGFloat(rows - 1))
+                        
+                        Circle()
+                            .fill(.yellow)
+                            .frame(width: noteSize, height: noteSize)
+                            .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                    } else {
+                        HStack(spacing: 0) {
+                            ForEach(0..<grid.count, id: \.self) { beatIndex in
+                                HStack(spacing: 0) {
+                                    GeometryReader { beatGeometry in
+                                        ForEach(0..<grid[beatIndex].count, id: \.self) { rowIndex in
+                                            ForEach(0..<grid[beatIndex][rowIndex].count, id: \.self) { columnIndex in
+                                                if let note = grid[beatIndex][rowIndex][columnIndex] {
+                                                    let noteSize = 2 * (geometry.size.height / CGFloat(rows - 1))
+                                                    let notePosition =
+                                                    calculateNotePosition(
+                                                        isRest: note.isRest,
+                                                        rowIndex: rowIndex,
+                                                        columnIndex: columnIndex,
+                                                        totalRows: rows,
+                                                        totalColumns: grid[beatIndex][rowIndex].count,
+                                                        geometry: beatGeometry
+                                                    )
+                                                    
+                                                    NoteView(size: noteSize, isHollow: note.duration.isHollow)
+                                                        .position(notePosition)
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .padding(.horizontal)
+                                }
+                                .padding(.horizontal)
+                                .border(.blue)
+                            }
+                        }
+                    }
                 }
             }
-//            .border(Color.blue.opacity(0.5))
         }
         .padding()
-//        GeometryReader { geometry in
-//            ZStack {
-//                // Stave Lines
-//                if let rows = barViewModel.rows {
-//                    VStack(spacing: 0) {
-//                        ForEach(0..<rows, id: \.self) { index in
-////                            let shouldDrawLine = (index % 2 != 0) && (index >= barViewModel.ledgerLines * 2 - 1) && (index <= rows - barViewModel.ledgerLines * 2 - 1)
-//                            let shouldDrawLine = true
-//                            Path { path in
-//                                let yPosition = CGFloat(CGFloat(index) * CGFloat(CGFloat(geometry.size.height) / CGFloat(rows)))
-//                                
-//                                path.move(to: CGPoint(x: 0, y: yPosition))
-//                                path.addLine(to: CGPoint(x: geometry.size.width, y: yPosition))
-//                            }
-//                            .stroke(Color.black, lineWidth: shouldDrawLine ? lineWidth : 1)
-////                            .stroke(Color.green, lineWidth: !shouldDrawLine ? lineWidth : 0)
-//                        }
-//                    }
-//                    .frame(maxHeight: .infinity)
-//                    .border(.blue)
-//                }
-//                
-//                // Note Heads
-////                if let grid = barViewModel.noteGrid,
-////                   let rows = barViewModel.rows {
-////                    HStack(spacing: 0) {
-////                        ForEach(0..<grid.count, id: \.self) { beatIndex in
-////                            HStack(spacing: 0) {
-////                                GeometryReader { beatGeometry in
-////                                    ForEach(0..<grid[beatIndex].count, id: \.self) { rowIndex in
-////                                        ForEach(0..<grid[beatIndex][rowIndex].count, id: \.self) { columnIndex in
-////                                            if let note = grid[beatIndex][rowIndex][columnIndex] {
-////                                                let notePosition = calculateNotePosition(rowIndex: rowIndex, columnIndex: columnIndex, totalRows: rows, totalColumns: grid[beatIndex][rowIndex].count, geometry: beatGeometry)
-////                                                
-////                                                Circle()
-////                                                    .frame(width: 20, height: 20)
-////                                                    .position(notePosition)
-////                                            }
-////                                        }
-////                                    }
-////                                }
-////                                .border(.red)
-////                            }
-////                            .padding(.horizontal)
-////                        }
-////                    }
-////                }
-//            }
-//            .frame(maxHeight: .infinity)
-////            .padding()
-//        }
     }
 }
 
 extension BarView {
-    func calculateNotePosition(rowIndex: Int, columnIndex: Int, totalRows: Int, totalColumns: Int, geometry: GeometryProxy) -> CGPoint {
+    func calculateNotePosition(isRest: Bool, rowIndex: Int, columnIndex: Int, totalRows: Int, totalColumns: Int, geometry: GeometryProxy) -> CGPoint {
         let xPosition = (totalColumns == 1) ? 0 : (geometry.size.width / CGFloat(totalColumns - 1)) * CGFloat(columnIndex)
-        let yPosition = (geometry.size.height / CGFloat(totalRows)) * CGFloat(rowIndex)
+        let yPosition = isRest ? geometry.size.height / 2 : (geometry.size.height / CGFloat(totalRows - 1)) * CGFloat(rowIndex)
         
         return CGPoint(x: xPosition, y: yPosition)
     }
@@ -93,7 +82,7 @@ extension BarView {
                     Note(
                         pitch: Note.Pitch.C,
                         accidental: Note.Accidental.Sharp,
-                        octave: Note.Octave.small,
+                        octave: Note.Octave.twoLine,
                         duration: Note.Duration.quarter,
                         durationValue: 0,
                         timeModification: nil,
@@ -101,7 +90,7 @@ extension BarView {
                         graceNotes: nil,
                         tie: nil,
                         isRest: false,
-                        isDotted: false,
+                        isDotted: true,
                         hasAccent: false
                     ),
                     Note(
@@ -115,15 +104,15 @@ extension BarView {
                         graceNotes: nil,
                         tie: nil,
                         isRest: false,
-                        isDotted: false,
+                        isDotted: true,
                         hasAccent: false
                     )
                 ]),
                 Chord(notes: [
                     Note(
-                        pitch: Note.Pitch.G,
+                        pitch: Note.Pitch.F,
                         accidental: Note.Accidental.Sharp,
-                        octave: Note.Octave.small,
+                        octave: Note.Octave.twoLine,
                         duration: Note.Duration.eighth,
                         durationValue: 0,
                         timeModification: nil,
@@ -131,12 +120,44 @@ extension BarView {
                         graceNotes: nil,
                         tie: nil,
                         isRest: false,
-                        isDotted: false,
+                        isDotted: true,
                         hasAccent: false
                     ),
                     Note(
                         pitch: Note.Pitch.B,
                         accidental: nil,
+                        octave: Note.Octave.twoLine,
+                        duration: Note.Duration.eighth,
+                        durationValue: 0,
+                        timeModification: nil,
+                        dynamic: nil,
+                        graceNotes: nil,
+                        tie: nil,
+                        isRest: false,
+                        isDotted: true,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: nil,
+                        accidental: nil,
+                        octave: nil,
+                        duration: Note.Duration.sixteenth,
+                        durationValue: 0,
+                        timeModification: nil,
+                        dynamic: nil,
+                        graceNotes: nil,
+                        tie: nil,
+                        isRest: true,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: Note.Pitch.C,
+                        accidental: Note.Accidental.Sharp,
                         octave: Note.Octave.small,
                         duration: Note.Duration.eighth,
                         durationValue: 0,
@@ -151,12 +172,28 @@ extension BarView {
                 ]),
                 Chord(notes: [
                     Note(
-                        pitch: Note.Pitch.E,
-                        accidental: Note.Accidental.Sharp,
-                        octave: Note.Octave.small,
+                        pitch: nil,
+                        accidental: nil,
+                        octave: nil,
                         duration: Note.Duration.eighth,
                         durationValue: 0,
                         timeModification: nil,
+                        dynamic: nil,
+                        graceNotes: nil,
+                        tie: nil,
+                        isRest: true,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: Note.Pitch.B,
+                        accidental: Note.Accidental.Sharp,
+                        octave: Note.Octave.oneLine,
+                        duration: Note.Duration.sixteenth,
+                        durationValue: 0,
+                        timeModification: .custom(actual: 3, normal: 2),
                         dynamic: nil,
                         graceNotes: nil,
                         tie: nil,
@@ -169,10 +206,10 @@ extension BarView {
                     Note(
                         pitch: Note.Pitch.C,
                         accidental: Note.Accidental.Sharp,
-                        octave: Note.Octave.small,
-                        duration: Note.Duration.quarter,
+                        octave: Note.Octave.twoLine,
+                        duration: Note.Duration.sixteenth,
                         durationValue: 0,
-                        timeModification: nil,
+                        timeModification: .custom(actual: 3, normal: 2),
                         dynamic: nil,
                         graceNotes: nil,
                         tie: nil,
@@ -183,42 +220,12 @@ extension BarView {
                 ]),
                 Chord(notes: [
                     Note(
-                        pitch: Note.Pitch.G,
+                        pitch: Note.Pitch.D,
                         accidental: Note.Accidental.Sharp,
-                        octave: Note.Octave.small,
-                        duration: Note.Duration.eighth,
+                        octave: Note.Octave.twoLine,
+                        duration: Note.Duration.sixteenth,
                         durationValue: 0,
-                        timeModification: nil,
-                        dynamic: nil,
-                        graceNotes: nil,
-                        tie: nil,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: Note.Pitch.B,
-                        accidental: nil,
-                        octave: Note.Octave.small,
-                        duration: Note.Duration.eighth,
-                        durationValue: 0,
-                        timeModification: nil,
-                        dynamic: nil,
-                        graceNotes: nil,
-                        tie: nil,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    Note(
-                        pitch: Note.Pitch.E,
-                        accidental: Note.Accidental.Sharp,
-                        octave: Note.Octave.small,
-                        duration: Note.Duration.eighth,
-                        durationValue: 0,
-                        timeModification: nil,
+                        timeModification: .custom(actual: 3, normal: 2),
                         dynamic: nil,
                         graceNotes: nil,
                         tie: nil,
@@ -240,84 +247,22 @@ extension BarView {
         step: BarViewModel.Step.Tone
     )
     
-    let testBVM2 = BarViewModel(
+    let testBarRest = BarViewModel(
         bar: Bar(
             chords: [
                 Chord(notes: [
                     Note(
-                        pitch: Note.Pitch.C,
-                        accidental: Note.Accidental.Sharp,
-                        octave: Note.Octave.small,
-                        duration: Note.Duration.quarter,
-                        durationValue: 0,
-                        timeModification: nil,
-                        dynamic: nil,
-                        graceNotes: nil,
-                        tie: nil,
-                        isRest: false,
-                        isDotted: true,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    Note(
-                        pitch: Note.Pitch.G,
-                        accidental: Note.Accidental.Sharp,
-                        octave: Note.Octave.small,
-                        duration: Note.Duration.eighth,
-                        durationValue: 0,
-                        timeModification: nil,
-                        dynamic: nil,
-                        graceNotes: nil,
-                        tie: nil,
-                        isRest: false,
-                        isDotted: true,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: Note.Pitch.B,
+                        pitch: nil,
                         accidental: nil,
-                        octave: Note.Octave.small,
-                        duration: Note.Duration.eighth,
+                        octave: nil,
+                        duration: Note.Duration.bar,
                         durationValue: 0,
                         timeModification: nil,
                         dynamic: nil,
                         graceNotes: nil,
                         tie: nil,
-                        isRest: false,
-                        isDotted: true,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    Note(
-                        pitch: Note.Pitch.E,
-                        accidental: Note.Accidental.Sharp,
-                        octave: Note.Octave.small,
-                        duration: Note.Duration.quarter,
-                        durationValue: 0,
-                        timeModification: nil,
-                        dynamic: nil,
-                        graceNotes: nil,
-                        tie: nil,
-                        isRest: false,
+                        isRest: true,
                         isDotted: false,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    Note(
-                        pitch: Note.Pitch.C,
-                        accidental: Note.Accidental.Sharp,
-                        octave: Note.Octave.small,
-                        duration: Note.Duration.eighth,
-                        durationValue: 0,
-                        timeModification: nil,
-                        dynamic: nil,
-                        graceNotes: nil,
-                        tie: nil,
-                        isRest: false,
-                        isDotted: true,
                         hasAccent: false
                     )
                 ])

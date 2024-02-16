@@ -20,22 +20,25 @@ struct StaveView: View {
             let yPosition = CGFloat(index) * (geometry.size.height / CGFloat(rows - 1))
             
             // Horizontal Lines
-            Path { path in
-                path.move(to: CGPoint(x: 0, y: yPosition))
-                path.addLine(to: CGPoint(x: geometry.size.width, y: yPosition))
+            if shouldDrawHorizontalLine {
+                Path { path in
+                    path.move(to: CGPoint(x: 0, y: yPosition))
+                    path.addLine(to: CGPoint(x: geometry.size.width, y: yPosition))
+                }
+                .stroke(Color.black, lineWidth: lineWidth)
             }
-            .stroke(Color.black, lineWidth: shouldDrawHorizontalLine ? lineWidth : 0)
-            .stroke(Color.green, lineWidth: (!shouldDrawHorizontalLine && index % 2 != 0) ? lineWidth : 0) // remove
             
             // Vertical Lines
-            Path { path in
-                path.move(to: CGPoint(x: 0, y: yPosition))
-                path.addLine(to: CGPoint(x: 0, y: yPosition + 2 * (geometry.size.height / CGFloat(rows - 1))))
-                
-                path.move(to: CGPoint(x: geometry.size.width, y: yPosition))
-                path.addLine(to: CGPoint(x: geometry.size.width, y: yPosition + 2 * (geometry.size.height / CGFloat(rows - 1))))
+            if shouldDrawVerticalLine {
+                Path { path in
+                    path.move(to: CGPoint(x: 0, y: yPosition))
+                    path.addLine(to: CGPoint(x: 0, y: yPosition + 2 * (geometry.size.height / CGFloat(rows - 1))))
+                    
+                    path.move(to: CGPoint(x: geometry.size.width, y: yPosition))
+                    path.addLine(to: CGPoint(x: geometry.size.width, y: yPosition + 2 * (geometry.size.height / CGFloat(rows - 1))))
+                }
+                .stroke(Color.black, lineWidth: lineWidth)
             }
-            .stroke(Color.black, lineWidth: shouldDrawVerticalLine ? lineWidth : 0)
         }
     }
 }

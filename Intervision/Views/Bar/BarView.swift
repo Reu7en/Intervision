@@ -15,8 +15,7 @@ struct BarView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                if let rows = barViewModel.rows,
-                   let grid = barViewModel.noteGrid {
+                if let rows = barViewModel.rows {
                     StaveView(rows: rows, ledgerLines: barViewModel.ledgerLines, geometry: geometry, lineWidth: lineWidth)
                     
                     if barViewModel.isBarRest {
@@ -28,12 +27,12 @@ struct BarView: View {
                             .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
                     } else {
                         HStack(spacing: 0) {
-                            ForEach(0..<grid.count, id: \.self) { beatIndex in
+                            ForEach(0..<barViewModel.beatSplitNoteGrid.count, id: \.self) { beatIndex in
                                 HStack(spacing: 0) {
                                     GeometryReader { beatGeometry in
-                                        ForEach(0..<grid[beatIndex].count, id: \.self) { rowIndex in
-                                            ForEach(0..<grid[beatIndex][rowIndex].count, id: \.self) { columnIndex in
-                                                if let note = grid[beatIndex][rowIndex][columnIndex] {
+                                        ForEach(0..<barViewModel.beatSplitNoteGrid[beatIndex].count, id: \.self) { rowIndex in
+                                            ForEach(0..<barViewModel.beatSplitNoteGrid[beatIndex][rowIndex].count, id: \.self) { columnIndex in
+                                                if let note = barViewModel.beatSplitNoteGrid[beatIndex][rowIndex][columnIndex] {
                                                     let noteSize = 2 * (geometry.size.height / CGFloat(rows - 1))
                                                     let notePosition =
                                                     calculateNotePosition(
@@ -41,7 +40,7 @@ struct BarView: View {
                                                         rowIndex: rowIndex,
                                                         columnIndex: columnIndex,
                                                         totalRows: rows,
-                                                        totalColumns: grid[beatIndex][rowIndex].count,
+                                                        totalColumns: barViewModel.beatSplitNoteGrid[beatIndex][rowIndex].count,
                                                         geometry: beatGeometry
                                                     )
                                                     

@@ -19,7 +19,9 @@ class BarViewModel: ObservableObject {
     @Published var rows: Int?
     @Published var lowestGapNote: Note?
     @Published var beatSplitChords: [[Chord]]
-    @Published var noteGrid: [[[Note?]]]?
+    @Published var beatSplitNoteGrid: [[[Note?]]] = [[[Note?]]]()
+    @Published var beamSplitChords: [[Chord]]
+    @Published var beamSplitNoteGrid: [[[Note?]]] = [[[Note?]]]()
     
     init(bar: Bar, gaps: Int = 4, step: Step = Step.Tone, ledgerLines: Int = 3) {
         self.bar = bar
@@ -27,6 +29,7 @@ class BarViewModel: ObservableObject {
         self.step = step
         self.ledgerLines = ledgerLines
         self.beatSplitChords = [[Chord]]()
+        self.beamSplitChords = [[Chord]]()
         
         calculateIsBarRest()
         calculateBeats()
@@ -34,11 +37,13 @@ class BarViewModel: ObservableObject {
         calculateRows()
         calculateLowestGapNote()
         
-        if !splitChords() {
+        if !splitChordsIntoBeats() || !splitChordsIntoBeams() {
             isBarRest = true
         }
         
-        populateNoteGrid()
+        if !populateNoteGrid(splitChords: &beatSplitChords, noteGrid: &beatSplitNoteGrid) || !populateNoteGrid(splitChords: &beamSplitChords, noteGrid: &beamSplitNoteGrid) {
+            isBarRest = true
+        }
         
     }
 }
@@ -133,7 +138,7 @@ extension BarViewModel {
         }
     }
     
-    func splitChords() -> Bool {
+    func splitChordsIntoBeats() -> Bool {
         var timeLeft: Double = beatValue ?? -1
         var chordGroup: [Chord] = [Chord]()
         
@@ -175,8 +180,39 @@ extension BarViewModel {
                         var newCarry = Chord(notes: [])
                         
                         for note in chord.notes {
-                            newChord.notes.append(Note(pitch: note.pitch, accidental: note.accidental, octave: note.octave, duration: newDuration!, durationValue: note.durationValue * (Double(newDuration!.rawValue) / Double(note.duration.rawValue)), timeModification: note.timeModification, dynamic: note.dynamic, graceNotes: note.graceNotes, tie: Note.Tie.Start, isRest: note.isRest, isDotted: newDotted, hasAccent: note.hasAccent))
-                            newCarry.notes.append(Note(pitch: note.pitch, accidental: note.accidental, octave: note.octave, duration: carryDuration!, durationValue: note.durationValue * (Double(carryDuration!.rawValue) / Double(note.duration.rawValue)), timeModification: note.timeModification, dynamic: note.dynamic, graceNotes: note.graceNotes, tie: Note.Tie.Stop, isRest: note.isRest, isDotted: carryDotted, hasAccent: note.hasAccent))
+                            newChord.notes.append(
+                                Note(
+                                    pitch: note.pitch,
+                                    accidental: note.accidental,
+                                    octave: note.octave,
+                                    duration: newDuration!,
+                                    durationValue: note.durationValue * (Double(newDuration!.rawValue) / Double(note.duration.rawValue)),
+                                    timeModification: note.timeModification,
+                                    dynamic: note.dynamic,
+                                    graceNotes: note.graceNotes,
+                                    tie: Note.Tie.Start,
+                                    isRest: note.isRest,
+                                    isDotted: newDotted,
+                                    hasAccent: note.hasAccent
+                                )
+                            )
+                            
+                            newCarry.notes.append(
+                                Note(
+                                    pitch: note.pitch,
+                                    accidental: note.accidental,
+                                    octave: note.octave,
+                                    duration: carryDuration!,
+                                    durationValue: note.durationValue * (Double(carryDuration!.rawValue) / Double(note.duration.rawValue)),
+                                    timeModification: note.timeModification,
+                                    dynamic: note.dynamic,
+                                    graceNotes: note.graceNotes,
+                                    tie: Note.Tie.Stop,
+                                    isRest: note.isRest,
+                                    isDotted: carryDotted,
+                                    hasAccent: note.hasAccent
+                                )
+                            )
                         }
                         
                         chordGroup.append(newChord)
@@ -214,18 +250,62 @@ extension BarViewModel {
         return true
     }
     
-    func populateNoteGrid() {
+    func splitChordsIntoBeams() -> Bool {
+        var beamGroup: [Chord] = []
+        var timeModificationGroup: [Chord] = []
+        var remainingNotesToAdd = 0
+
+        for chordGroup in beatSplitChords {
+            for chord in chordGroup {
+                if remainingNotesToAdd == 0 {
+                    if !beamGroup.isEmpty {
+                        beamSplitChords.append(beamGroup)
+                        beamGroup = []
+                    }
+                    
+                    if !timeModificationGroup.isEmpty {
+                        beamSplitChords.append(timeModificationGroup)
+                        timeModificationGroup = []
+                    }
+
+                    if let timeModification = chord.notes.first?.timeModification,
+                       case .custom(let actual, _) = timeModification {
+                        remainingNotesToAdd = actual
+                    }
+                }
+
+                if chord.notes.first?.timeModification != nil {
+                    timeModificationGroup.append(chord)
+                } else {
+                    beamGroup.append(chord)
+                    remainingNotesToAdd -= 1
+                }
+            }
+
+            if !beamGroup.isEmpty {
+                beamSplitChords.append(beamGroup)
+                beamGroup = []
+            }
+        }
+
+        if !timeModificationGroup.isEmpty {
+            beamSplitChords.append(timeModificationGroup)
+        }
+
+        return true
+    }
+    
+    func populateNoteGrid(splitChords: inout [[Chord]], noteGrid: inout [[[Note?]]]) -> Bool {
         if let gridRows = rows {
-            noteGrid = [[[Note?]]]()
             let lowestGapIndex = (ledgerLines * 2) + 2
             
-            for (beatIndex, beatChords) in beatSplitChords.enumerated() {
-                var beatGrid: [[Note?]] = Array(repeating: Array(repeating: nil, count: beatChords.count), count: gridRows)
+            for (groupIndex, chordGroup) in splitChords.enumerated() {
+                var groupGrid: [[Note?]] = Array(repeating: Array(repeating: nil, count: chordGroup.count), count: gridRows)
                 
-                for (chordIndex, chord) in beatChords.enumerated() {
+                for (chordIndex, chord) in chordGroup.enumerated() {
                     for (noteIndex, note) in chord.notes.enumerated() {
                         if note.isRest {
-                            beatGrid[0][chordIndex] = note
+                            groupGrid[0][chordIndex] = note
                         } else {
                             guard let distance = calculateGapBetweenLowestGapNote(note: note) else { continue }
                             var index = lowestGapIndex + (distance * (step == .Semitone ? 2 : 1))
@@ -233,26 +313,27 @@ extension BarViewModel {
                             if index < 0 {
                                 var modifiedNote = note
                                 modifiedNote.increaseOctave()
-                                beatSplitChords[beatIndex][chordIndex].notes[noteIndex] = modifiedNote
+                                splitChords[groupIndex][chordIndex].notes[noteIndex] = modifiedNote
                                 index += 7
                             } else if index > gridRows - 1 {
                                 var modifiedNote = note
                                 modifiedNote.decreaseOctave()
-                                beatSplitChords[beatIndex][chordIndex].notes[noteIndex] = modifiedNote
+                                splitChords[groupIndex][chordIndex].notes[noteIndex] = modifiedNote
                                 index -= 7
                             }
                             
                             if index < 0 || index > gridRows - 1 { continue }
                             
-                            beatGrid[gridRows - 1 - index][chordIndex] = beatSplitChords[beatIndex][chordIndex].notes[noteIndex]
-//                            beatGrid[index][chordIndex] = note
+                            groupGrid[gridRows - 1 - index][chordIndex] = splitChords[groupIndex][chordIndex].notes[noteIndex]
                         }
                     }
                 }
                 
-                noteGrid?.append(beatGrid)
+                noteGrid.append(groupGrid)
             }
-        } else { return }
+        } else { return false }
+        
+        return true
     }
     
     // consider semitone case

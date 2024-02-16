@@ -26,50 +26,12 @@ struct BarView: View {
                             .frame(width: noteSize, height: noteSize)
                             .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
                     } else {
-                        HStack(spacing: 0) {
-                            ForEach(0..<barViewModel.beatSplitNoteGrid.count, id: \.self) { beatIndex in
-                                HStack(spacing: 0) {
-                                    GeometryReader { beatGeometry in
-                                        ForEach(0..<barViewModel.beatSplitNoteGrid[beatIndex].count, id: \.self) { rowIndex in
-                                            ForEach(0..<barViewModel.beatSplitNoteGrid[beatIndex][rowIndex].count, id: \.self) { columnIndex in
-                                                if let note = barViewModel.beatSplitNoteGrid[beatIndex][rowIndex][columnIndex] {
-                                                    let noteSize = 2 * (geometry.size.height / CGFloat(rows - 1))
-                                                    let notePosition =
-                                                    calculateNotePosition(
-                                                        isRest: note.isRest,
-                                                        rowIndex: rowIndex,
-                                                        columnIndex: columnIndex,
-                                                        totalRows: rows,
-                                                        totalColumns: barViewModel.beatSplitNoteGrid[beatIndex][rowIndex].count,
-                                                        geometry: beatGeometry
-                                                    )
-                                                    
-                                                    NoteView(size: noteSize, isHollow: note.duration.isHollow)
-                                                        .position(notePosition)
-                                                }
-                                            }
-                                        }
-                                    }
-                                    .padding(.horizontal)
-                                }
-                                .padding(.horizontal)
-                                .border(.blue)
-                            }
-                        }
+                        NotesView(noteGrid: barViewModel.beatSplitNoteGrid, rows: rows, geometry: geometry)
                     }
                 }
             }
         }
         .padding()
-    }
-}
-
-extension BarView {
-    func calculateNotePosition(isRest: Bool, rowIndex: Int, columnIndex: Int, totalRows: Int, totalColumns: Int, geometry: GeometryProxy) -> CGPoint {
-        let xPosition = (totalColumns == 1) ? 0 : (geometry.size.width / CGFloat(totalColumns - 1)) * CGFloat(columnIndex)
-        let yPosition = isRest ? geometry.size.height / 2 : (geometry.size.height / CGFloat(totalRows - 1)) * CGFloat(rowIndex)
-        
-        return CGPoint(x: xPosition, y: yPosition)
     }
 }
 
@@ -243,7 +205,7 @@ extension BarView {
             keySignature: Bar.KeySignature.CMajor
         ),
         gaps: 4,
-        step: BarViewModel.Step.Tone
+        step: BarViewModel.Step.Note
     )
     
     let testBarRest = BarViewModel(
@@ -275,7 +237,7 @@ extension BarView {
             keySignature: Bar.KeySignature.CMajor
         ),
         gaps: 4,
-        step: BarViewModel.Step.Tone
+        step: BarViewModel.Step.Note
     )
     
     return BarView(barViewModel: testBVM1)

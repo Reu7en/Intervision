@@ -182,7 +182,7 @@ struct IntervisionApp: App {
                 keySignature: Bar.KeySignature.CMajor
             ),
             gaps: 4,
-            step: BarViewModel.Step.Tone
+            step: BarViewModel.Step.Note
         )
         
         WindowGroup {

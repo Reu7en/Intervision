@@ -156,7 +156,7 @@ struct MainWindowView: View {
                 keySignature: Bar.KeySignature.CMajor
             ),
             gaps: 4,
-            step: BarViewModel.Step.Tone
+            step: BarViewModel.Step.Note
         )
         
         let testBVM3 = BarViewModel(
@@ -380,7 +380,7 @@ struct MainWindowView: View {
                 keySignature: Bar.KeySignature.CMajor
             ),
             gaps: 4,
-            step: BarViewModel.Step.Tone
+            step: BarViewModel.Step.Note
         )
         BarView(barViewModel: testBVM1)
     }

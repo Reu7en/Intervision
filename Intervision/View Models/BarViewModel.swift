@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class BarViewModel: ObservableObject {
     
@@ -23,7 +24,7 @@ class BarViewModel: ObservableObject {
     @Published var beamSplitChords: [[Chord]]
     @Published var beamSplitNoteGrid: [[[Note?]]] = [[[Note?]]]()
     
-    init(bar: Bar, gaps: Int = 4, step: Step = Step.Tone, ledgerLines: Int = 3) {
+    init(bar: Bar, gaps: Int = 4, step: Step = Step.Note, ledgerLines: Int = 3) {
         self.bar = bar
         self.gaps = gaps
         self.step = step
@@ -366,11 +367,18 @@ extension BarViewModel {
         
         return true
     }
+    
+    static func calculateNotePosition(isRest: Bool, rowIndex: Int, columnIndex: Int, totalRows: Int, totalColumns: Int, geometry: GeometryProxy) -> CGPoint {
+        let xPosition = (totalColumns == 1) ? 0 : (geometry.size.width / CGFloat(totalColumns - 1)) * CGFloat(columnIndex)
+        let yPosition = isRest ? geometry.size.height / 2 : (geometry.size.height / CGFloat(totalRows - 1)) * CGFloat(rowIndex)
+        
+        return CGPoint(x: xPosition, y: yPosition)
+    }
 }
 
 // Types
 extension BarViewModel {
     enum Step {
-        case Tone, Semitone
+        case Note, Semitone
     }
 }

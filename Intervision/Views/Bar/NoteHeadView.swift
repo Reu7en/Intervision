@@ -1,5 +1,5 @@
 //
-//  NoteView.swift
+//  NoteHeadView.swift
 //  Intervision
 //
 //  Created by Reuben on 15/02/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NoteView: View {
+struct NoteHeadView: View {
     
     let size: CGFloat
     let topColor: Color
@@ -46,11 +46,10 @@ struct NoteView: View {
 }
 
 #Preview {
-    NoteView(size: 500, topColor: Color.green, bottomColor: Color.blue, isHollow: true)
+    NoteHeadView(size: 500, topColor: Color.green, bottomColor: Color.blue, isHollow: true)
 }
 
 extension View {
-  @inlinable
   public func reverseMask<Mask: View>(
     alignment: Alignment = .center,
     @ViewBuilder _ mask: () -> Mask

@@ -17,6 +17,11 @@
 		1B9435952B7ED65B00B57DA7 /* NoteHeadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435942B7ED65B00B57DA7 /* NoteHeadView.swift */; };
 		1B9435972B7F122A00B57DA7 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435962B7F122A00B57DA7 /* NotesView.swift */; };
 		1B9435992B7F153100B57DA7 /* RestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435982B7F153100B57DA7 /* RestView.swift */; };
+		1B94359B2B7FE4F500B57DA7 /* BeamsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B94359A2B7FE4F500B57DA7 /* BeamsView.swift */; };
+		1B94359D2B7FE58800B57DA7 /* BeamViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B94359C2B7FE58800B57DA7 /* BeamViewModel.swift */; };
+		1B94359F2B80655D00B57DA7 /* BeamLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B94359E2B80655D00B57DA7 /* BeamLineView.swift */; };
+		1B9435A12B80657900B57DA7 /* NoteTailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A02B80657900B57DA7 /* NoteTailView.swift */; };
+		1B9435A32B80758300B57DA7 /* StemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A22B80758300B57DA7 /* StemView.swift */; };
 		1B97BECA2B71C167007D0BE5 /* IntervisionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEC92B71C167007D0BE5 /* IntervisionApp.swift */; };
 		1B97BECE2B71C168007D0BE5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B97BECD2B71C168007D0BE5 /* Assets.xcassets */; };
 		1B97BED12B71C168007D0BE5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B97BED02B71C168007D0BE5 /* Preview Assets.xcassets */; };
@@ -51,6 +56,11 @@
 		1B9435942B7ED65B00B57DA7 /* NoteHeadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteHeadView.swift; sourceTree = "<group>"; };
 		1B9435962B7F122A00B57DA7 /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
 		1B9435982B7F153100B57DA7 /* RestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestView.swift; sourceTree = "<group>"; };
+		1B94359A2B7FE4F500B57DA7 /* BeamsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeamsView.swift; sourceTree = "<group>"; };
+		1B94359C2B7FE58800B57DA7 /* BeamViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeamViewModel.swift; sourceTree = "<group>"; };
+		1B94359E2B80655D00B57DA7 /* BeamLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeamLineView.swift; sourceTree = "<group>"; };
+		1B9435A02B80657900B57DA7 /* NoteTailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTailView.swift; sourceTree = "<group>"; };
+		1B9435A22B80758300B57DA7 /* StemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StemView.swift; sourceTree = "<group>"; };
 		1B97BEC62B71C167007D0BE5 /* Intervision.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Intervision.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B97BEC92B71C167007D0BE5 /* IntervisionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervisionApp.swift; sourceTree = "<group>"; };
 		1B97BECD2B71C168007D0BE5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -95,6 +105,10 @@
 				1B9435942B7ED65B00B57DA7 /* NoteHeadView.swift */,
 				1B9435962B7F122A00B57DA7 /* NotesView.swift */,
 				1B9435982B7F153100B57DA7 /* RestView.swift */,
+				1B94359A2B7FE4F500B57DA7 /* BeamsView.swift */,
+				1B94359E2B80655D00B57DA7 /* BeamLineView.swift */,
+				1B9435A02B80657900B57DA7 /* NoteTailView.swift */,
+				1B9435A22B80758300B57DA7 /* StemView.swift */,
 			);
 			path = Bar;
 			sourceTree = "<group>";
@@ -171,6 +185,7 @@
 			children = (
 				1BBC978C2B76A50D001C953C /* ScoreViewModel.swift */,
 				1B561F7A2B793216001860E5 /* BarViewModel.swift */,
+				1B94359C2B7FE58800B57DA7 /* BeamViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -295,24 +310,29 @@
 				1BBC97802B759D8E001C953C /* GraceModel.swift in Sources */,
 				1B561F792B79219F001860E5 /* BarView.swift in Sources */,
 				1BBC97842B7699EB001C953C /* MusicXMLDataService.swift in Sources */,
+				1B9435A32B80758300B57DA7 /* StemView.swift in Sources */,
 				1B9435952B7ED65B00B57DA7 /* NoteHeadView.swift in Sources */,
 				1B97BEDC2B71C58E007D0BE5 /* ScoreModel.swift in Sources */,
 				1B9435972B7F122A00B57DA7 /* NotesView.swift in Sources */,
 				1B97BEEA2B726CC1007D0BE5 /* ScoreView.swift in Sources */,
 				1B12C9E72B75472200DC87DC /* StaveModel.swift in Sources */,
 				1B12C9E52B753EBE00DC87DC /* PartModel.swift in Sources */,
+				1B94359F2B80655D00B57DA7 /* BeamLineView.swift in Sources */,
 				1B97BEE22B71C617007D0BE5 /* NoteModel.swift in Sources */,
 				1B561F772B784CF3001860E5 /* HomeView.swift in Sources */,
 				1B9435992B7F153100B57DA7 /* RestView.swift in Sources */,
 				1B97BEE02B71C607007D0BE5 /* ChordModel.swift in Sources */,
 				1B9435932B7EBFF900B57DA7 /* StaveView.swift in Sources */,
+				1B9435A12B80657900B57DA7 /* NoteTailView.swift in Sources */,
 				1B97BEE82B726CAA007D0BE5 /* MainWindowView.swift in Sources */,
 				1B97BEE62B71D917007D0BE5 /* AppDelegate.swift in Sources */,
 				1B561F7B2B793216001860E5 /* BarViewModel.swift in Sources */,
+				1B94359B2B7FE4F500B57DA7 /* BeamsView.swift in Sources */,
 				1B97BECA2B71C167007D0BE5 /* IntervisionApp.swift in Sources */,
 				1B97BEED2B7279CF007D0BE5 /* PageView.swift in Sources */,
 				1BBC978D2B76A50D001C953C /* ScoreViewModel.swift in Sources */,
 				1B97BEDE2B71C59B007D0BE5 /* BarModel.swift in Sources */,
+				1B94359D2B7FE58800B57DA7 /* BeamViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

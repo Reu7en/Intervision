@@ -25,28 +25,34 @@ struct Note: Identifiable, Equatable {
     // Identifiable
     var id = UUID()
     
-    // Equatable
+    // Equatable - checks for equal relevant properties rather than id
     static func == (lhs: Note, rhs: Note) -> Bool {
-        lhs.id == rhs.id
+        return lhs.pitch == rhs.pitch &&
+               lhs.accidental == rhs.accidental &&
+               lhs.octave == rhs.octave &&
+               lhs.duration == rhs.duration &&
+               lhs.timeModification == rhs.timeModification &&
+               lhs.isRest == rhs.isRest &&
+               lhs.isDotted == rhs.isDotted
     }
 }
 
 // Enums
 extension Note {
-    enum Pitch: String {
+    enum Pitch: String, CaseIterable {
         case C, D, E, F, G, A, B
         
         func distanceFromC() -> Int {
-                switch self {
-                case .C: return 0
-                case .D: return 1
-                case .E: return 2
-                case .F: return 3
-                case .G: return 4
-                case .A: return 5
-                case .B: return 6
-                }
+            switch self {
+            case .C: return 0
+            case .D: return 1
+            case .E: return 2
+            case .F: return 3
+            case .G: return 4
+            case .A: return 5
+            case .B: return 6
             }
+        }
     }
     
     enum Accidental: String {
@@ -97,7 +103,7 @@ extension Note {
         }
     }
     
-    enum TimeModification {
+    enum TimeModification: Equatable {
         case custom(actual: Int, normal: Int)
     }
     
@@ -139,6 +145,19 @@ extension Note {
             octave = prevOctave
             octaveShift = .above
         }
+    }
+}
+
+extension Note {
+    func calculateDistance(from note1: Note, to note2: Note) -> Int {
+        guard let pitch1 = note1.pitch, let pitch2 = note2.pitch else {
+            return 0 // Handle the case where pitch is not set
+        }
+        
+        let octaveDistance = (note2.octave?.rawValue ?? 0) - (note1.octave?.rawValue ?? 0)
+        let pitchDistance = pitch2.distanceFromC() - pitch1.distanceFromC()
+        
+        return octaveDistance * 7 + pitchDistance
     }
 }
 

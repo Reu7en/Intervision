@@ -9,6 +9,8 @@ import SwiftUI
 
 struct NotesView: View {
     
+    @StateObject var barViewModel: BarViewModel
+    
     let noteGrid: [[[Note?]]]
     let rows: Int
     let geometry: GeometryProxy
@@ -38,6 +40,7 @@ struct NotesView: View {
                                     } else {
                                         NoteHeadView(size: noteSize, isHollow: note.duration.isHollow)
                                             .position(notePosition)
+                                        BeamsView(beamViewModel: BeamViewModel(beamGroups: barViewModel.beamSplitChords, noteGrid: noteGrid[beatIndex], geometry: geometry, beatGeometry: beatGeometry, middleStaveNote: barViewModel.middleStaveNote, rows: rows, noteSize: noteSize))
                                     }
                                 }
                             }
@@ -46,6 +49,8 @@ struct NotesView: View {
                     .padding(.horizontal)
                 }
                 .padding(.horizontal)
+                .padding(.horizontal)
+                .padding(.horizontal)
             }
         }
     }
@@ -53,6 +58,6 @@ struct NotesView: View {
 
 #Preview {
     GeometryReader { geometry in
-        NotesView(noteGrid: [[[Note?]]](), rows: 23, geometry: geometry)
+        NotesView(barViewModel: BarViewModel(bar: Bar(chords: [], clef: Bar.Clef.Neutral, timeSignature: Bar.TimeSignature.common, doubleLine: false, keySignature: Bar.KeySignature.CMajor), gaps: 4, step: .Note, ledgerLines: 3), noteGrid: [[[Note?]]](), rows: 23, geometry: geometry)
     }
 }

@@ -187,8 +187,19 @@ struct IntervisionApp: App {
         
         WindowGroup {
 //            MainWindowView()
-            BarView(barViewModel: testBVM1)
-                .frame(width: 1500, height: 500)
+            VStack {
+                BarView(barViewModel: testBVM1)
+                    .frame(width: 1500, height: 500)
+                
+                BarView(barViewModel: testBVM1)
+                    .frame(width: 1000, height: 300)
+                
+                BarView(barViewModel: testBVM1)
+                    .frame(width: 500, height: 100)
+                
+                BarView(barViewModel: testBVM1)
+                    .frame(width: 100, height: 50)
+            }
         }
     }
 }

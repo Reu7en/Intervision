@@ -23,6 +23,7 @@ class BarViewModel: ObservableObject {
     @Published var beatSplitNoteGrid: [[[Note?]]] = [[[Note?]]]()
     @Published var beamSplitChords: [[Chord]]
     @Published var beamSplitNoteGrid: [[[Note?]]] = [[[Note?]]]()
+    @Published var middleStaveNote: Note?
     
     init(bar: Bar, gaps: Int = 4, step: Step = Step.Note, ledgerLines: Int = 3) {
         self.bar = bar
@@ -37,6 +38,7 @@ class BarViewModel: ObservableObject {
         calculateBeatValue()
         calculateRows()
         calculateLowestGapNote()
+        calculateMiddleStaveNote()
         
         if !splitChordsIntoBeats() || !splitChordsIntoBeams() {
             isBarRest = true
@@ -366,6 +368,26 @@ extension BarViewModel {
         }
         
         return true
+    }
+    
+    func calculateMiddleStaveNote() {
+        guard let bottomGapNote = lowestGapNote,
+              let bottomPitch = bottomGapNote.pitch,
+              let bottomOctave = bottomGapNote.octave else {
+            return
+        }
+        
+        let middleNoteDistance = gaps - 1
+        
+        var newPitch = bottomPitch
+        var newOctave = bottomOctave.rawValue
+        
+        let totalPitchDistance = bottomPitch.distanceFromC() + (bottomOctave.rawValue * 7) + middleNoteDistance
+        newOctave = totalPitchDistance / 7
+        let pitchDistanceInOctave = totalPitchDistance % 7
+        newPitch = Note.Pitch.allCases[pitchDistanceInOctave]
+        
+        middleStaveNote = Note(pitch: newPitch, accidental: nil, octave: Note.Octave(rawValue: newOctave), octaveShift: nil, duration: .bar, durationValue: -1, timeModification: nil, dynamic: nil, graceNotes: nil, tie: nil, isRest: false, isDotted: false, hasAccent: false)
     }
     
     static func calculateNotePosition(isRest: Bool, rowIndex: Int, columnIndex: Int, totalRows: Int, totalColumns: Int, geometry: GeometryProxy) -> CGPoint {

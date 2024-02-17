@@ -33,7 +33,6 @@ struct RestView: View {
                         }
                     }
                 }
-                .offset()
             case .half:
                 Image("RestHalf")
                     .resizable()
@@ -144,6 +143,7 @@ struct RestView: View {
             }
         }
         .frame(width: size)
+        .scaleEffect(0.85)
     }
 }
 

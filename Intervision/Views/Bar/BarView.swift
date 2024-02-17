@@ -26,7 +26,7 @@ struct BarView: View {
                             .frame(width: noteSize, height: noteSize)
                             .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
                     } else {
-                        NotesView(noteGrid: barViewModel.beatSplitNoteGrid, rows: rows, geometry: geometry)
+                        NotesView(barViewModel: barViewModel, noteGrid: barViewModel.beatSplitNoteGrid, rows: rows, geometry: geometry)
                     }
                 }
             }

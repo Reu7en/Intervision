@@ -14,7 +14,7 @@ struct NoteTailView: View {
     let stemLength: CGFloat
     let direction: BeamViewModel.Direction
     let xOffset: CGFloat
-    let tailThickness: CGFloat = 7
+    let scale: CGFloat
     
     var numberOfTails: Int {
         switch duration {
@@ -47,6 +47,9 @@ struct NoteTailView: View {
     }
     
     var body: some View {
+        
+        let tailThickness: CGFloat = 7 * scale
+        
         ZStack {
             ForEach(0..<tailStartPositions.count, id: \.self) { positionIndex in
                 let startPosition = tailStartPositions[positionIndex]
@@ -65,5 +68,5 @@ struct NoteTailView: View {
 }
 
 #Preview {
-    NoteTailView(furthestPosition: CGPoint(x: 0, y: 0), duration: Note.Duration.eighth, stemLength: 10, direction: .Upward, xOffset: 0)
+    NoteTailView(furthestPosition: CGPoint(x: 0, y: 0), duration: Note.Duration.eighth, stemLength: 10, direction: .Upward, xOffset: 0, scale: 1.0)
 }

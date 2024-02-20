@@ -185,6 +185,38 @@ struct IntervisionApp: App {
             step: BarViewModel.Step.Note
         )
         
+        let testBarRest = BarViewModel(
+            bar: Bar(
+                chords: [
+                    Chord(notes: [
+                        Note(
+                            pitch: nil,
+                            accidental: nil,
+                            octave: nil,
+                            duration: Note.Duration.bar,
+                            durationValue: 0,
+                            timeModification: nil,
+                            dynamic: nil,
+                            graceNotes: nil,
+                            tie: nil,
+                            isRest: true,
+                            isDotted: false,
+                            hasAccent: false
+                        )
+                    ])
+                ],
+                tempo: Bar.Tempo.quarter(bpm: 120),
+                clef: Bar.Clef.Treble,
+                timeSignature: Bar.TimeSignature.custom(beats: 4, noteValue: 4),
+                repeat: nil,
+                doubleLine: false,
+                volta: nil,
+                keySignature: Bar.KeySignature.CMajor
+            ),
+            gaps: 4,
+            step: BarViewModel.Step.Note
+        )
+        
         WindowGroup {
 //            MainWindowView()
             VStack {
@@ -198,7 +230,7 @@ struct IntervisionApp: App {
                     .frame(width: 500, height: 100)
                 
                 BarView(barViewModel: testBVM1)
-                    .frame(width: 100, height: 50)
+                    .frame(width: 150, height: 75)
             }
         }
     }

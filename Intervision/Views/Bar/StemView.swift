@@ -13,10 +13,11 @@ struct StemView: View {
     let direction: BeamViewModel.Direction
     let stemLength: CGFloat
     let xOffset: CGFloat
-    let stemThickness: CGFloat = 5
+    let scale: CGFloat
     
     var body: some View {
         
+        let stemThickness: CGFloat = 5 * scale
         let stemY = (direction == .Upward) ? position.y - stemLength : position.y + stemLength
         
         Path { path in
@@ -28,5 +29,5 @@ struct StemView: View {
 }
 
 #Preview {
-    StemView(position: CGPoint(x: 0, y: 0), direction: .Upward, stemLength: 10, xOffset: 0)
+    StemView(position: CGPoint(x: 0, y: 0), direction: .Upward, stemLength: 10, xOffset: 0, scale: 1.0)
 }

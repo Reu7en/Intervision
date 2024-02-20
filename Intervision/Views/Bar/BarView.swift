@@ -10,28 +10,34 @@ import SwiftUI
 struct BarView: View {
     
     @StateObject var barViewModel: BarViewModel
-    let lineWidth: CGFloat = 3
+    @State private var scale: CGFloat = 1.0
     
     var body: some View {
         GeometryReader { geometry in
             ZStack {
                 if let rows = barViewModel.rows {
-                    StaveView(rows: rows, ledgerLines: barViewModel.ledgerLines, geometry: geometry, lineWidth: lineWidth)
+                    StaveView(rows: rows, ledgerLines: barViewModel.ledgerLines, geometry: geometry, scale: scale)
                     
                     if barViewModel.isBarRest {
                         let noteSize = 2 * (geometry.size.height / CGFloat(rows - 1))
                         
-                        Circle()
-                            .fill(.yellow)
-                            .frame(width: noteSize, height: noteSize)
-                            .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                        RestView(size: noteSize, duration: Note.Duration.bar, isDotted: false, scale: scale)
                     } else {
-                        NotesView(barViewModel: barViewModel, noteGrid: barViewModel.beatSplitNoteGrid, rows: rows, geometry: geometry)
+                        NotesView(barViewModel: barViewModel, noteGrid: barViewModel.beatSplitNoteGrid, rows: rows, geometry: geometry, scale: scale)
                     }
                 }
             }
+            .onChange(of: geometry.size) {
+                updateScale(with: geometry.size)
+            }
+            .onAppear {
+                updateScale(with: geometry.size)
+            }
         }
-        .padding()
+    }
+    
+    private func updateScale(with newSize: CGSize) {
+        scale = newSize.height / 500
     }
 }
 

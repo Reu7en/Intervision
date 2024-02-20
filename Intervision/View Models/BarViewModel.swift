@@ -396,6 +396,17 @@ extension BarViewModel {
         
         return CGPoint(x: xPosition, y: yPosition)
     }
+    
+    static func calculateNotePosition(isRest: Bool, rowIndex: Int, columnIndex: Int, totalRows: Int, totalColumns: Int, geometry: GeometryProxy, horizontalPadding: CGFloat = 0) -> CGPoint {
+        // Adjust width based on horizontal padding
+        let adjustedWidth = geometry.size.width - 2 * horizontalPadding
+
+        // Calculate x and y positions
+        let xPosition = (totalColumns == 1) ? horizontalPadding : horizontalPadding + (adjustedWidth / CGFloat(totalColumns - 1)) * CGFloat(columnIndex)
+        let yPosition = isRest ? geometry.size.height / 2 : (geometry.size.height / CGFloat(totalRows - 1)) * CGFloat(rowIndex)
+        
+        return CGPoint(x: xPosition, y: yPosition)
+    }
 }
 
 // Types

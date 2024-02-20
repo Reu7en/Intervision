@@ -14,6 +14,7 @@ struct NotesView: View {
     let noteGrid: [[[Note?]]]
     let rows: Int
     let geometry: GeometryProxy
+    let scale: CGFloat
     
     var body: some View {
         HStack(spacing: 0) {
@@ -35,22 +36,20 @@ struct NotesView: View {
                                     )
                                     
                                     if note.isRest {
-                                        RestView(size: noteSize, duration: note.duration, isDotted: note.isDotted)
+                                        RestView(size: noteSize, duration: note.duration, isDotted: note.isDotted, scale: scale)
                                             .position(notePosition)
                                     } else {
                                         NoteHeadView(size: noteSize, isHollow: note.duration.isHollow)
                                             .position(notePosition)
-                                        BeamsView(beamViewModel: BeamViewModel(beamGroups: barViewModel.beamSplitChords, noteGrid: noteGrid[beatIndex], geometry: geometry, beatGeometry: beatGeometry, middleStaveNote: barViewModel.middleStaveNote, rows: rows, noteSize: noteSize))
+                                        BeamsView(beamViewModel: BeamViewModel(beamGroups: barViewModel.beamSplitChords, noteGrid: noteGrid[beatIndex], geometry: geometry, beatGeometry: beatGeometry, middleStaveNote: barViewModel.middleStaveNote, rows: rows, noteSize: noteSize), scale: scale)
                                     }
                                 }
                             }
                         }
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, geometry.size.width / 50)
                 }
-                .padding(.horizontal)
-                .padding(.horizontal)
-                .padding(.horizontal)
+                .padding(.horizontal, geometry.size.width / 50)
             }
         }
     }
@@ -58,6 +57,6 @@ struct NotesView: View {
 
 #Preview {
     GeometryReader { geometry in
-        NotesView(barViewModel: BarViewModel(bar: Bar(chords: [], clef: Bar.Clef.Neutral, timeSignature: Bar.TimeSignature.common, doubleLine: false, keySignature: Bar.KeySignature.CMajor), gaps: 4, step: .Note, ledgerLines: 3), noteGrid: [[[Note?]]](), rows: 23, geometry: geometry)
+        NotesView(barViewModel: BarViewModel(bar: Bar(chords: [], clef: Bar.Clef.Neutral, timeSignature: Bar.TimeSignature.common, doubleLine: false, keySignature: Bar.KeySignature.CMajor), gaps: 4, step: .Note, ledgerLines: 3), noteGrid: [[[Note?]]](), rows: 23, geometry: geometry, scale: 1.0)
     }
 }

@@ -32,6 +32,7 @@ class BeamViewModel: ObservableObject {
         
         calculatePositions()
         calculateBeamDirection()
+        
     }
     
     func calculateBeamDirection() {

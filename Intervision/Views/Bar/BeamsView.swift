@@ -14,8 +14,6 @@ struct BeamsView: View {
     let scale: CGFloat
     
     var body: some View {
-        let beamThickness: CGFloat = 5 * scale
-        
         ForEach(0..<beamViewModel.positions.count, id: \.self) { beamIndex in
             let direction = beamViewModel.beamDirections[beamIndex]
             let stemLength = beamViewModel.geometry.size.height / 4
@@ -29,7 +27,18 @@ struct BeamsView: View {
                 }
                 
                 if let furthestPosition = beamViewModel.findFurthestPosition(in: beamViewModel.positions[beamIndex][chordIndex], direction: direction) {
-                    NoteTailView(furthestPosition: furthestPosition, duration: beamViewModel.beamGroups[beamIndex][chordIndex].notes.first?.duration ?? Note.Duration.bar, stemLength: stemLength, direction: direction, xOffset: xOffset, scale: scale)
+                    if beamViewModel.positions[beamIndex].count == 1{
+                        NoteTailView(furthestPosition: furthestPosition, duration: beamViewModel.beamGroups[beamIndex][chordIndex].notes.first?.duration ?? Note.Duration.bar, stemLength: stemLength, direction: direction, xOffset: xOffset, scale: scale)
+                    }
+                }
+            }
+            
+            if beamViewModel.positions[beamIndex].count > 1 {
+                if let furthestStartPosition = beamViewModel.findFurthestPosition(in: beamViewModel.positions[beamIndex][0], direction: direction),
+                   let furthestEndPosition = beamViewModel.findFurthestPosition(in: beamViewModel.positions[beamIndex][beamViewModel.positions[beamIndex].count - 1], direction: direction) {
+                    let durations = beamViewModel.beamGroups[beamIndex].map { $0.notes.first?.duration ?? Note.Duration.bar }
+                    
+                    BeamLineView(furthestStartPosition: furthestStartPosition, furthestEndPosition: furthestEndPosition, durations: durations, timeModification: beamViewModel.beamGroups[beamIndex][0].notes.first?.timeModification, stemLength: stemLength, direction: direction, xOffset: xOffset, scale: scale)
                 }
             }
         }

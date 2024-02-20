@@ -126,7 +126,7 @@ struct IntervisionApp: App {
                     ]),
                     Chord(notes: [
                         Note(
-                            pitch: Note.Pitch.B,
+                            pitch: Note.Pitch.A,
                             accidental: Note.Accidental.Sharp,
                             octave: Note.Octave.oneLine,
                             duration: Note.Duration.sixteenth,

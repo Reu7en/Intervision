@@ -253,6 +253,7 @@ extension BarViewModel {
         return true
     }
     
+    /*
     func splitChordsIntoBeams() -> Bool {
         var beamGroup: [Chord] = []
         var timeModificationGroup: [Chord] = []
@@ -297,7 +298,66 @@ extension BarViewModel {
 
         return true
     }
+     */
     
+    func splitChordsIntoBeams() -> Bool {
+        var beamGroup: [Chord] = []
+        var timeModificationGroup: [Chord] = []
+        var remainingNotesToAdd = 0
+
+        for chordGroup in beatSplitChords {
+            for chord in chordGroup {
+                if remainingNotesToAdd == 0 {
+                    if !beamGroup.isEmpty {
+                        beamSplitChords.append(beamGroup)
+                        beamGroup = []
+                    }
+                    
+                    if !timeModificationGroup.isEmpty {
+                        beamSplitChords.append(timeModificationGroup)
+                        timeModificationGroup = []
+                    }
+
+                    if let timeModification = chord.notes.first?.timeModification,
+                       case .custom(let actual, _) = timeModification {
+                        remainingNotesToAdd = actual
+                    }
+                }
+
+                if let firstNote = chord.notes.first, firstNote.isRest {
+                    if !beamGroup.isEmpty {
+                        beamSplitChords.append(beamGroup)
+                        beamGroup = []
+                    }
+                    
+                    if !timeModificationGroup.isEmpty {
+                        beamSplitChords.append(timeModificationGroup)
+                        timeModificationGroup = []
+                    }
+
+                    beamSplitChords.append([chord])
+                    remainingNotesToAdd = 0
+                } else if chord.notes.first?.timeModification != nil {
+                    timeModificationGroup.append(chord)
+                } else {
+                    beamGroup.append(chord)
+                    remainingNotesToAdd -= 1
+                }
+            }
+
+            if !beamGroup.isEmpty {
+                beamSplitChords.append(beamGroup)
+                beamGroup = []
+            }
+        }
+
+        if !timeModificationGroup.isEmpty {
+            beamSplitChords.append(timeModificationGroup)
+        }
+
+        return true
+    }
+
     func populateNoteGrid(splitChords: inout [[Chord]], noteGrid: inout [[[Note?]]]) -> Bool {
         if let gridRows = rows {
             let lowestGapIndex = (ledgerLines * 2) + 2
@@ -358,12 +418,13 @@ extension BarViewModel {
         return distance
     }
     
-    // fix
     func shouldRenderAccidental(_ note: Note) -> Bool {
         if let pitch = note.pitch,
            let accidental = note.accidental {
             for alteredNote in bar.keySignature.alteredNotes {
-                return alteredNote == (pitch, accidental)
+                if alteredNote == (pitch, accidental) {
+                    return false
+                }
             }
         }
         
@@ -392,17 +453,6 @@ extension BarViewModel {
     
     static func calculateNotePosition(isRest: Bool, rowIndex: Int, columnIndex: Int, totalRows: Int, totalColumns: Int, geometry: GeometryProxy) -> CGPoint {
         let xPosition = (totalColumns == 1) ? 0 : (geometry.size.width / CGFloat(totalColumns - 1)) * CGFloat(columnIndex)
-        let yPosition = isRest ? geometry.size.height / 2 : (geometry.size.height / CGFloat(totalRows - 1)) * CGFloat(rowIndex)
-        
-        return CGPoint(x: xPosition, y: yPosition)
-    }
-    
-    static func calculateNotePosition(isRest: Bool, rowIndex: Int, columnIndex: Int, totalRows: Int, totalColumns: Int, geometry: GeometryProxy, horizontalPadding: CGFloat = 0) -> CGPoint {
-        // Adjust width based on horizontal padding
-        let adjustedWidth = geometry.size.width - 2 * horizontalPadding
-
-        // Calculate x and y positions
-        let xPosition = (totalColumns == 1) ? horizontalPadding : horizontalPadding + (adjustedWidth / CGFloat(totalColumns - 1)) * CGFloat(columnIndex)
         let yPosition = isRest ? geometry.size.height / 2 : (geometry.size.height / CGFloat(totalRows - 1)) * CGFloat(rowIndex)
         
         return CGPoint(x: xPosition, y: yPosition)

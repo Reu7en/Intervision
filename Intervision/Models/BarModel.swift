@@ -49,40 +49,40 @@ extension Bar {
         case RepeatEnd
     }
     
-    enum KeySignature: String {
+    enum KeySignature {
         // Major keys
-        case CMajor = "C Major"
-        case GMajor = "G Major"
-        case DMajor = "D Major"
-        case AMajor = "A Major"
-        case EMajor = "E Major"
-        case BMajor = "B Major"
-        case FSharpMajor = "F# Major"
-        case CSharpMajor = "C# Major"
-        case FMajor = "F Major"
-        case BFlatMajor = "B♭ Major"
-        case EFlatMajor = "E♭ Major"
-        case AFlatMajor = "A♭ Major"
-        case DFlatMajor = "D♭ Major"
-        case GFlatMajor = "G♭ Major"
-        case CFlatMajor = "C♭ Major"
+        case CMajor
+        case GMajor
+        case DMajor
+        case AMajor
+        case EMajor
+        case BMajor
+        case FSharpMajor
+        case CSharpMajor
+        case FMajor
+        case BFlatMajor
+        case EFlatMajor
+        case AFlatMajor
+        case DFlatMajor
+        case GFlatMajor
+        case CFlatMajor
         
         // Minor keys
-        case AMinor = "A Minor"
-        case EMinor = "E Minor"
-        case BMinor = "B Minor"
-        case FSharpMinor = "F# Minor"
-        case CSharpMinor = "C# Minor"
-        case GSharpMinor = "G# Minor"
-        case DSharpMinor = "D# Minor"
-        case ASharpMinor = "A# Minor"
-        case DMinor = "D Minor"
-        case GMinor = "G Minor"
-        case CMinor = "C Minor"
-        case FMinor = "F Minor"
-        case BFlatMinor = "B♭ Minor"
-        case EFlatMinor = "E♭ Minor"
-        case AFlatMinor = "A♭ Minor"
+        case AMinor
+        case EMinor
+        case BMinor
+        case FSharpMinor
+        case CSharpMinor
+        case GSharpMinor
+        case DSharpMinor
+        case ASharpMinor
+        case DMinor
+        case GMinor
+        case CMinor
+        case FMinor
+        case BFlatMinor
+        case EFlatMinor
+        case AFlatMinor
         
         var alteredNotes: [(Note.Pitch, Note.Accidental)] {
             switch self {
@@ -103,6 +103,7 @@ extension Bar {
                 return [(.F, .Sharp), (.C, .Sharp), (.G, .Sharp), (.D, .Sharp), (.A, .Sharp), (.E, .Sharp)]
             case .CSharpMajor, .ASharpMinor:
                 return [(.F, .Sharp), (.C, .Sharp), (.G, .Sharp), (.D, .Sharp), (.A, .Sharp), (.E, .Sharp), (.B, .Sharp)]
+                
             // Flats
             case .FMajor, .DMinor:
                 return [(.B, .Flat)]
@@ -118,6 +119,44 @@ extension Bar {
                 return [(.B, .Flat), (.E, .Flat), (.A, .Flat), (.D, .Flat), (.G, .Flat), (.C, .Flat)]
             case .CFlatMajor, .AFlatMinor:
                 return [(.B, .Flat), (.E, .Flat), (.A, .Flat), (.D, .Flat), (.G, .Flat), (.C, .Flat), (.F, .Flat)]
+            }
+        }
+        
+        var sharps: Bool {
+            switch self {
+            // Sharps
+            case .CMajor, .AMinor:
+                return true
+            case .GMajor, .EMinor:
+                return true
+            case .DMajor, .BMinor:
+                return true
+            case .AMajor, .FSharpMinor:
+                return true
+            case .EMajor, .CSharpMinor:
+                return true
+            case .BMajor, .GSharpMinor:
+                return true
+            case .FSharpMajor, .DSharpMinor:
+                return true
+            case .CSharpMajor, .ASharpMinor:
+                return true
+                
+            // Flats
+            case .FMajor, .DMinor:
+                return false
+            case .BFlatMajor, .GMinor:
+                return false
+            case .EFlatMajor, .CMinor:
+                return false
+            case .AFlatMajor, .FMinor:
+                return false
+            case .DFlatMajor, .BFlatMinor:
+                return false
+            case .GFlatMajor, .EFlatMinor:
+                return false
+            case .CFlatMajor, .AFlatMinor:
+                return false
             }
         }
     }

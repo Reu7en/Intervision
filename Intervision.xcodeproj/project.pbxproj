@@ -22,6 +22,9 @@
 		1B94359F2B80655D00B57DA7 /* BeamLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B94359E2B80655D00B57DA7 /* BeamLineView.swift */; };
 		1B9435A12B80657900B57DA7 /* NoteTailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A02B80657900B57DA7 /* NoteTailView.swift */; };
 		1B9435A32B80758300B57DA7 /* StemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A22B80758300B57DA7 /* StemView.swift */; };
+		1B9435A52B856D5900B57DA7 /* ClefView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A42B856D5900B57DA7 /* ClefView.swift */; };
+		1B9435A72B85703600B57DA7 /* KeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A62B85703600B57DA7 /* KeyView.swift */; };
+		1B9435A92B857A8D00B57DA7 /* TimeSignatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A82B857A8D00B57DA7 /* TimeSignatureView.swift */; };
 		1B97BECA2B71C167007D0BE5 /* IntervisionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEC92B71C167007D0BE5 /* IntervisionApp.swift */; };
 		1B97BECE2B71C168007D0BE5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B97BECD2B71C168007D0BE5 /* Assets.xcassets */; };
 		1B97BED12B71C168007D0BE5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B97BED02B71C168007D0BE5 /* Preview Assets.xcassets */; };
@@ -61,6 +64,9 @@
 		1B94359E2B80655D00B57DA7 /* BeamLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeamLineView.swift; sourceTree = "<group>"; };
 		1B9435A02B80657900B57DA7 /* NoteTailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTailView.swift; sourceTree = "<group>"; };
 		1B9435A22B80758300B57DA7 /* StemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StemView.swift; sourceTree = "<group>"; };
+		1B9435A42B856D5900B57DA7 /* ClefView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClefView.swift; sourceTree = "<group>"; };
+		1B9435A62B85703600B57DA7 /* KeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyView.swift; sourceTree = "<group>"; };
+		1B9435A82B857A8D00B57DA7 /* TimeSignatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignatureView.swift; sourceTree = "<group>"; };
 		1B97BEC62B71C167007D0BE5 /* Intervision.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Intervision.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B97BEC92B71C167007D0BE5 /* IntervisionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervisionApp.swift; sourceTree = "<group>"; };
 		1B97BECD2B71C168007D0BE5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -109,6 +115,9 @@
 				1B94359E2B80655D00B57DA7 /* BeamLineView.swift */,
 				1B9435A02B80657900B57DA7 /* NoteTailView.swift */,
 				1B9435A22B80758300B57DA7 /* StemView.swift */,
+				1B9435A42B856D5900B57DA7 /* ClefView.swift */,
+				1B9435A62B85703600B57DA7 /* KeyView.swift */,
+				1B9435A82B857A8D00B57DA7 /* TimeSignatureView.swift */,
 			);
 			path = Bar;
 			sourceTree = "<group>";
@@ -309,9 +318,12 @@
 				1BBC978B2B76A3C7001C953C /* TestLoad.swift in Sources */,
 				1BBC97802B759D8E001C953C /* GraceModel.swift in Sources */,
 				1B561F792B79219F001860E5 /* BarView.swift in Sources */,
+				1B9435A72B85703600B57DA7 /* KeyView.swift in Sources */,
 				1BBC97842B7699EB001C953C /* MusicXMLDataService.swift in Sources */,
 				1B9435A32B80758300B57DA7 /* StemView.swift in Sources */,
+				1B9435A92B857A8D00B57DA7 /* TimeSignatureView.swift in Sources */,
 				1B9435952B7ED65B00B57DA7 /* NoteHeadView.swift in Sources */,
+				1B9435A52B856D5900B57DA7 /* ClefView.swift in Sources */,
 				1B97BEDC2B71C58E007D0BE5 /* ScoreModel.swift in Sources */,
 				1B9435972B7F122A00B57DA7 /* NotesView.swift in Sources */,
 				1B97BEEA2B726CC1007D0BE5 /* ScoreView.swift in Sources */,

@@ -179,7 +179,7 @@ struct IntervisionApp: App {
                 repeat: nil,
                 doubleLine: false,
                 volta: nil,
-                keySignature: Bar.KeySignature.CMajor
+                keySignature: Bar.KeySignature.CSharpMajor
             ),
             gaps: 4,
             step: BarViewModel.Step.Note
@@ -220,16 +220,16 @@ struct IntervisionApp: App {
         WindowGroup {
 //            MainWindowView()
             VStack {
-                BarView(barViewModel: testBVM1)
+                BarView(barViewModel: testBVM1, showClef: true, showKey: true, showTime: true)
                     .frame(width: 1500, height: 500)
                 
-                BarView(barViewModel: testBVM1)
+                BarView(barViewModel: testBVM1, showClef: true, showKey: true, showTime: true)
                     .frame(width: 1000, height: 300)
                 
-                BarView(barViewModel: testBVM1)
+                BarView(barViewModel: testBVM1, showClef: true, showKey: true, showTime: true)
                     .frame(width: 500, height: 100)
                 
-                BarView(barViewModel: testBVM1)
+                BarView(barViewModel: testBVM1, showClef: true, showKey: true, showTime: true)
                     .frame(width: 150, height: 75)
             }
         }

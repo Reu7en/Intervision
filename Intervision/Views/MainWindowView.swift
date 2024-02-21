@@ -382,7 +382,7 @@ struct MainWindowView: View {
             gaps: 4,
             step: BarViewModel.Step.Note
         )
-        BarView(barViewModel: testBVM1)
+        BarView(barViewModel: testBVM1, showClef: true, showKey: true, showTime: true)
     }
 }
 

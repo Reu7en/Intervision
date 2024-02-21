@@ -12,10 +12,9 @@ struct StaveView: View {
     let ledgerLines: Int
     let geometry: GeometryProxy
     let scale: CGFloat
+    let thickness: CGFloat
     
     var body: some View {
-        let lineWidth: CGFloat = 3 * scale
-        
         ForEach(0..<rows, id: \.self) { index in
             let shouldDrawHorizontalLine = (index % 2 != 0) && (index > ledgerLines * 2 - 1) && (index < rows - ledgerLines * 2 - 1)
             let shouldDrawVerticalLine = (index % 2 != 0) && (index > ledgerLines * 2 - 1) && (index < rows - ledgerLines * 2 - 2)
@@ -27,7 +26,7 @@ struct StaveView: View {
                     path.move(to: CGPoint(x: 0, y: yPosition))
                     path.addLine(to: CGPoint(x: geometry.size.width, y: yPosition))
                 }
-                .stroke(Color.black, lineWidth: lineWidth)
+                .stroke(Color.black, lineWidth: thickness)
             }
             
             // Vertical Lines
@@ -39,7 +38,7 @@ struct StaveView: View {
                     path.move(to: CGPoint(x: geometry.size.width, y: yPosition))
                     path.addLine(to: CGPoint(x: geometry.size.width, y: yPosition + 2 * (geometry.size.height / CGFloat(rows - 1))))
                 }
-                .stroke(Color.black, lineWidth: lineWidth)
+                .stroke(Color.black, lineWidth: thickness)
             }
         }
     }
@@ -47,6 +46,6 @@ struct StaveView: View {
 
 #Preview {
     GeometryReader { geometry in
-        StaveView(rows: 23, ledgerLines: 3, geometry: geometry, scale: 1.0)
+        StaveView(rows: 23, ledgerLines: 3, geometry: geometry, scale: 1.0, thickness: 3)
     }
 }

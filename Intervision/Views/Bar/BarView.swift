@@ -11,19 +11,24 @@ struct BarView: View {
     
     @StateObject var barViewModel: BarViewModel
     @State private var scale: CGFloat = 1.0
+    let showClef: Bool
+    let showKey: Bool
+    let showTime: Bool
     
     var body: some View {
         GeometryReader { geometry in
             ZStack {
                 if let rows = barViewModel.rows {
-                    StaveView(rows: rows, ledgerLines: barViewModel.ledgerLines, geometry: geometry, scale: scale)
+                    let staveThickness = 3 * scale
+                    
+                    StaveView(rows: rows, ledgerLines: barViewModel.ledgerLines, geometry: geometry, scale: scale, thickness: staveThickness)
                     
                     if barViewModel.isBarRest {
-                        let noteSize = 2 * (geometry.size.height / CGFloat(rows - 1))
+                        let restSize = 2 * (geometry.size.height / CGFloat(rows - 1))
                         
-                        RestView(size: noteSize, duration: Note.Duration.bar, isDotted: false, scale: scale)
+                        RestView(size: restSize, duration: Note.Duration.bar, isDotted: false, scale: scale)
                     } else {
-                        NotesView(barViewModel: barViewModel, noteGrid: barViewModel.beatSplitNoteGrid, rows: rows, geometry: geometry, scale: scale)
+                        NotesView(barViewModel: barViewModel, noteGrid: barViewModel.beatSplitNoteGrid, rows: rows, geometry: geometry, scale: scale, showClef: showClef, showKey: showKey, showTime: showTime, staveThickness: staveThickness)
                     }
                 }
             }
@@ -246,5 +251,5 @@ struct BarView: View {
         step: BarViewModel.Step.Note
     )
     
-    return BarView(barViewModel: testBVM1)
+    return BarView(barViewModel: testBVM1, showClef: true, showKey: true, showTime: true)
 }

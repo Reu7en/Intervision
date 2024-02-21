@@ -27,7 +27,7 @@ struct BeamsView: View {
                 }
                 
                 if let furthestPosition = beamViewModel.findFurthestPosition(in: beamViewModel.positions[beamIndex][chordIndex], direction: direction) {
-                    if beamViewModel.positions[beamIndex].count == 1{
+                    if beamViewModel.positions[beamIndex].count <= 1 {
                         NoteTailView(furthestPosition: furthestPosition, duration: beamViewModel.beamGroups[beamIndex][chordIndex].notes.first?.duration ?? Note.Duration.bar, stemLength: stemLength, direction: direction, xOffset: xOffset, scale: scale)
                     }
                 }

@@ -8,10 +8,13 @@
 import Foundation
 
 class ScoreViewModel: ObservableObject {
-    @Published var viewType: ViewType
     
-    init() {
-        self.viewType = .Horizontal
+    @Published var viewType: ViewType
+    @Published var score: Score?
+    
+    init(viewType: ViewType = .Horizontal, score: Score?) {
+        self.viewType = viewType
+        self.score = score
     }
 }
 

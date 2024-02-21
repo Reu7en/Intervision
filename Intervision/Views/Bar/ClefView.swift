@@ -46,10 +46,11 @@ struct ClefView: View {
                 }
             case .Bass:
                 ZStack {
-                    Image("ClefSATB")
+                    Image("ClefBass")
                         .interpolation(.high)
                         .resizable()
                         .scaledToFit()
+                        .scaleEffect(0.5)
                 }
             case .Neutral:
                 ZStack {

@@ -219,37 +219,5 @@ struct BarView: View {
         step: BarViewModel.Step.Note
     )
     
-    let testBarRest = BarViewModel(
-        bar: Bar(
-            chords: [
-                Chord(notes: [
-                    Note(
-                        pitch: nil,
-                        accidental: nil,
-                        octave: nil,
-                        duration: Note.Duration.bar,
-                        durationValue: 0,
-                        timeModification: nil,
-                        dynamic: nil,
-                        graceNotes: nil,
-                        tie: nil,
-                        isRest: true,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ])
-            ],
-            tempo: Bar.Tempo.quarter(bpm: 120),
-            clef: Bar.Clef.Treble,
-            timeSignature: Bar.TimeSignature.custom(beats: 4, noteValue: 4),
-            repeat: nil,
-            doubleLine: false,
-            volta: nil,
-            keySignature: Bar.KeySignature.CMajor
-        ),
-        gaps: 4,
-        step: BarViewModel.Step.Note
-    )
-    
     return BarView(barViewModel: testBVM1, showClef: true, showKey: true, showTime: true)
 }

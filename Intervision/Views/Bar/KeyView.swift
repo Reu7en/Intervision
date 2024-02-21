@@ -17,7 +17,7 @@ struct KeyView: View {
     
     var body: some View {
         
-        let maxSharpsOrFlats = 7
+        let maxSharpsOrFlats = key.alteredNotes.count
         let horizontalSpacing = width / CGFloat(maxSharpsOrFlats + 1)
         
         ZStack {

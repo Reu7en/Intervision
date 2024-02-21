@@ -67,6 +67,7 @@
 		1B9435A42B856D5900B57DA7 /* ClefView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClefView.swift; sourceTree = "<group>"; };
 		1B9435A62B85703600B57DA7 /* KeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyView.swift; sourceTree = "<group>"; };
 		1B9435A82B857A8D00B57DA7 /* TimeSignatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignatureView.swift; sourceTree = "<group>"; };
+		1B9435AA2B85A55500B57DA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		1B97BEC62B71C167007D0BE5 /* Intervision.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Intervision.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B97BEC92B71C167007D0BE5 /* IntervisionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervisionApp.swift; sourceTree = "<group>"; };
 		1B97BECD2B71C168007D0BE5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -141,6 +142,7 @@
 		1B97BEC82B71C167007D0BE5 /* Intervision */ = {
 			isa = PBXGroup;
 			children = (
+				1B9435AA2B85A55500B57DA7 /* Info.plist */,
 				1BBC97852B769ACA001C953C /* Test Scores */,
 				1B97BED92B71C4D1007D0BE5 /* Models */,
 				1B97BED82B71C4C9007D0BE5 /* Views */,
@@ -483,6 +485,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Intervision/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -512,6 +515,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Intervision/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (

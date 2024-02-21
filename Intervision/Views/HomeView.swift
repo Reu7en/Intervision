@@ -6,56 +6,97 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
+
+extension UTType {
+    static var musicXML: UTType {
+        UTType(exportedAs: "com.example.musicxml")
+    }
+}
 
 struct HomeView: View {
+    
+    @State private var showScoreView: Bool = false
+    @StateObject var scoreViewModel = ScoreViewModel(score: nil)
+    
     var body: some View {
         GeometryReader { geometry in
             let width = geometry.size.width
             let height = geometry.size.height
             
-            ZStack {
-                VStack {
-                    Image(systemName: "pianokeys")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxHeight: height / 9)
-                    
-                    Button {
+            NavigationStack {
+                ZStack {
+                    VStack {
+                        Spacer()
                         
-                    } label: {
-                        HStack {
-                            Text("New")
-                            Spacer()
-                            Image(systemName: "pencil")
-                        }
-                        .padding()
-                    }
-                    
-                    Button {
+                        Image(systemName: "pianokeys")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: width / 20)
                         
-                    } label: {
-                        HStack {
-                            Text("Open")
-                            Spacer()
-                            Image(systemName: "folder")
+                        Spacer()
+                        
+                        Button {
+                            
+                        } label: {
+                            HStack {
+                                Text("New")
+                                Spacer()
+                                Image(systemName: "pencil")
+                            }
+                            .padding()
                         }
-                        .padding()
+                        .frame(width: width / 5)
+                        
+                        Button {
+                            let panel = NSOpenPanel()
+                            
+                            panel.allowedContentTypes = [UTType.musicXML]
+                            panel.allowsMultipleSelection = false
+                            panel.canChooseDirectories = false
+                            
+                            if panel.runModal() == .OK {
+                                if let fileURL = panel.urls.first {
+                                    let parsedScore = MusicXMLDataService.readXML(fileURL.standardizedFileURL.path)
+                                    
+                                    DispatchQueue.main.async {
+                                        self.scoreViewModel.score = parsedScore
+                                    }
+                                    
+                                    showScoreView.toggle()
+                                }
+                            }
+                        } label: {
+                            HStack {
+                                Text("Open")
+                                Spacer()
+                                Image(systemName: "folder")
+                            }
+                            .padding()
+                        }
+                        .frame(width: width / 5)
+                        
+                        Spacer()
                     }
+                    .padding()
+                    .frame(width: width / 3, height: height / 3)
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Material.ultraThickMaterial)
+                            .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(Color.gray.opacity(0.2))
+                            }
+                    )
+                    .shadow(radius: 10)
                 }
-                .padding()
-                .frame(width: width / 3, height: height / 3)
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Material.ultraThickMaterial)
-                        .stroke(Color.gray.opacity(0.5), lineWidth: 1)
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 20)
-                                .fill(Color.gray.opacity(0.2))
-                        }
-                )
-                .shadow(radius: 10)
+                .position(x: width / 2, y: height / 2)
+                .navigationDestination(isPresented: $showScoreView) {
+                    ScoreView(scoreViewModel: scoreViewModel)
+                        .navigationBarBackButtonHidden()
+                }
             }
-            .position(x: width / 2, y: height / 2)
         }
     }
 }

@@ -108,32 +108,9 @@ struct MusicXMLDataService {
         
         var clefData: [[String]] = []
         var currentStaves: Int = 1
-//        var currentDivisons: Int? = nil
         
         for bar in barData {
             for line in bar {
-                if line.contains("<time") {
-                    let time = extractContentsBetweenTags(bar, startTag: "<time", endTag: "</time")
-                    var beats: Int = -1
-                    var noteValue: Int = -1
-                    
-                    if time.count > 0 {
-                        for subLine in time[0] {
-                            if subLine.contains("<beats") {
-                                beats = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
-                            }
-                            
-                            if subLine.contains("<beat-type") {
-                                noteValue = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
-                            }
-                        }
-                    }
-                    
-                    if beats != -1 && noteValue != -1 {
-                        currentTimeSignature = Bar.TimeSignature.custom(beats: beats, noteValue: noteValue)
-                    }
-                }
-                
                 if line.contains("<metronome") {
                     let metronome = extractContentsBetweenTags(bar, startTag: "<metronome", endTag: "</metronome")
                     var time: String? = nil
@@ -240,6 +217,8 @@ struct MusicXMLDataService {
                 }
             }
             
+            
+            
             var clefs: [Bar.Clef] = []
             
             for clef in clefData {
@@ -253,14 +232,6 @@ struct MusicXMLDataService {
                     
                     if subLine.contains("<line") {
                         line = extractContent(fromTag: subLine)
-                    }
-                }
-                
-                if sign != nil && line != nil {
-                    if sign == "G" && line == "2" {
-                        clefs.append(Bar.Clef.Treble)
-                    } else if sign == "F" && line == "4" {
-                        clefs.append(Bar.Clef.Bass)
                     }
                 }
                 
@@ -287,7 +258,9 @@ struct MusicXMLDataService {
             }
             
             if !clefs.isEmpty {
-                currentClefs = clefs
+                for clef in clefs {
+                    currentClefs.append(clef)
+                }
             }
         }
         
@@ -303,18 +276,6 @@ struct MusicXMLDataService {
             }
         }
         
-//        if barData.count > 0 {
-//            for line in barData[0] {
-//                if line.contains("<divisions") {
-//                    let div = Int(extractContent(fromTag: line) ?? "-1") ?? -1
-//                    
-//                    if div != -1 {
-//                        currentDivisons = div
-//                    }
-//                }
-//            }
-//        }
-        
         for bar in barData {
             let notes = extractContentsBetweenTags(bar, startTag: "<note", endTag: "</note")
             var currentBars: [Bar] = []
@@ -324,6 +285,29 @@ struct MusicXMLDataService {
             var hasDoubleBarline: Bool = false
             
             for line in bar {
+                if line.contains("<time") {
+                    let time = extractContentsBetweenTags(bar, startTag: "<time", endTag: "</time")
+                    var beats: Int = -1
+                    var noteValue: Int = -1
+                    
+                    if time.count > 0 {
+                        for subLine in time[0] {
+                            if subLine.contains("<beats") {
+                                beats = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
+                            }
+                            
+                            if subLine.contains("<beat-type") {
+                                noteValue = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
+                            }
+                        }
+                    }
+                    
+                    if beats != -1 && noteValue != -1 {
+                        currentTimeSignature = Bar.TimeSignature.custom(beats: beats, noteValue: noteValue)
+                    }
+                    
+                }
+                
                 if line.contains("<repeat") {
                     let `repeat` = extractFirstAttributeValue(fromTag: line)
                     

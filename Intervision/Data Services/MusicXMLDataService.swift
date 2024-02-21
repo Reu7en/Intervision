@@ -105,11 +105,22 @@ struct MusicXMLDataService {
         var currentClefs: [Bar.Clef] = []
         var currentTimeSignature: Bar.TimeSignature = Bar.TimeSignature.common
         var currentKeySignature: Bar.KeySignature = Bar.KeySignature.CMajor
-        
         var clefData: [[String]] = []
         var currentStaves: Int = 1
         
         for bar in barData {
+            if barData.count > 0 {
+                for line in barData[0] {
+                    if line.contains("<staves") {
+                        let staves = Int(extractContent(fromTag: line) ?? "1") ?? 1
+                        currentStaves = staves
+                        break
+                    }
+                    
+                    currentStaves = 1
+                }
+            }
+            
             for line in bar {
                 if line.contains("<metronome") {
                     let metronome = extractContentsBetweenTags(bar, startTag: "<metronome", endTag: "</metronome")
@@ -217,10 +228,6 @@ struct MusicXMLDataService {
                 }
             }
             
-            
-            
-            var clefs: [Bar.Clef] = []
-            
             for clef in clefData {
                 var sign: String? = nil
                 var line: String? = nil
@@ -235,44 +242,28 @@ struct MusicXMLDataService {
                     }
                 }
                 
-                switch (sign, line) {
-                case ("G", _):
-                    clefs.append(Bar.Clef.Treble)
-                    break
-                case ("F", _):
-                    clefs.append(Bar.Clef.Bass)
-                    break
-                case ("C", "1"):
-                    clefs.append(Bar.Clef.Soprano)
-                    break
-                case ("C", "3"):
-                    clefs.append(Bar.Clef.Alto)
-                    break
-                case ("C", "4"):
-                    clefs.append(Bar.Clef.Tenor)
-                    break
-                default:
-                    clefs.append(Bar.Clef.Neutral)
-                    break
+                if currentClefs.count < currentStaves {
+                    switch (sign, line) {
+                    case ("G", _):
+                        currentClefs.append(Bar.Clef.Treble)
+                        break
+                    case ("F", _):
+                        currentClefs.append(Bar.Clef.Bass)
+                        break
+                    case ("C", "1"):
+                        currentClefs.append(Bar.Clef.Soprano)
+                        break
+                    case ("C", "3"):
+                        currentClefs.append(Bar.Clef.Alto)
+                        break
+                    case ("C", "4"):
+                        currentClefs.append(Bar.Clef.Tenor)
+                        break
+                    default:
+                        currentClefs.append(Bar.Clef.Neutral)
+                        break
+                    }
                 }
-            }
-            
-            if !clefs.isEmpty {
-                for clef in clefs {
-                    currentClefs.append(clef)
-                }
-            }
-        }
-        
-        if barData.count > 0 {
-            for line in barData[0] {
-                if line.contains("<staves") {
-                    let staves = Int(extractContent(fromTag: line) ?? "1") ?? 1
-                    currentStaves = staves
-                    break
-                }
-                
-                currentStaves = 1
             }
         }
         
@@ -305,7 +296,6 @@ struct MusicXMLDataService {
                     if beats != -1 && noteValue != -1 {
                         currentTimeSignature = Bar.TimeSignature.custom(beats: beats, noteValue: noteValue)
                     }
-                    
                 }
                 
                 if line.contains("<repeat") {
@@ -607,6 +597,7 @@ struct MusicXMLDataService {
                 }
                 
                 if let n = pNote {
+                    
                     if chordTag {
                         chords[currentStave - 1].notes.append(n)
                     } else {
@@ -620,7 +611,11 @@ struct MusicXMLDataService {
                 }
             }
             
-            currentBars[currentStave - 1].chords.append(chords[currentStave - 1])
+            for i in 0..<currentStaves {
+                if !chords[i].notes.isEmpty {
+                    currentBars[i].chords.append(chords[i])
+                }
+            }
             
             bars.append(currentBars)
         }
@@ -691,6 +686,7 @@ struct MusicXMLDataService {
         for i in 0..<(partData?.count ?? 0) {
             let bars: [[Bar]] = getBars(partContents[i])
             partData?[i].bars = bars
+            
         }
         
         let score: Score = Score(title: title, composer: composer, parts: partData)

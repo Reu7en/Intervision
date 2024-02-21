@@ -28,7 +28,7 @@ struct ScoreView: View {
                         } else if scoreViewModel.viewType == .Horizontal {
                             HStack(spacing: 0) {
                                 ForEach(0..<parts.count, id: \.self) { partIndex in
-                                    PageView(geometry: Binding.constant(geometry), zoomLevel: $zoomLevel, bars: parts[partIndex].bars)
+                                    PageView(geometry: Binding.constant(geometry), zoomLevel: $zoomLevel, bars: parts[partIndex].bars, part: parts[partIndex])
                                         .offset(contentOffset)
                                 }
                             }

@@ -30,8 +30,8 @@ struct RestView: View {
                             
                             Circle()
                                 .fill(Color.black)
-                                .frame(width: size / 10)
-                                .padding(10 * scale)
+                                .frame(width: size / 4)
+                                .padding(-5 * scale)
                         }
                     }
                 }
@@ -50,8 +50,8 @@ struct RestView: View {
                             
                             Circle()
                                 .fill(Color.black)
-                                .frame(width: size / 10)
-                                .padding(10 * scale)
+                                .frame(width: size / 4)
+                                .padding(-5 * scale)
                         }
                     }
                 }
@@ -67,17 +67,15 @@ struct RestView: View {
                     if isDotted {
                         HStack {
                             Spacer()
-                            Spacer()
                             
                             Circle()
                                 .fill(Color.black)
-                                .frame(width: size / 10)
-                                .padding(10 * scale)
-                            
-                            Spacer()
+                                .frame(width: size / 4)
+                                .padding(-5 * scale)
                         }
                     }
                 }
+                .offset(y: -size / 5)
             case .eighth:
                 ZStack {
                     Image("RestEighth")
@@ -88,18 +86,15 @@ struct RestView: View {
                     if isDotted {
                         HStack {
                             Spacer()
-                            Spacer()
-                            Spacer()
                             
                             Circle()
                                 .fill(Color.black)
-                                .frame(width: size / 10)
-                                .padding(10 * scale)
-                            
-                            Spacer()
+                                .frame(width: size / 4)
+                                .padding(-5 * scale)
                         }
                     }
                 }
+                .offset(y: -size / 5)
             case .sixteenth:
                 ZStack {
                     Image("RestSixteenth")
@@ -110,18 +105,15 @@ struct RestView: View {
                     if isDotted {
                         HStack {
                             Spacer()
-                            Spacer()
-                            Spacer()
                             
                             Circle()
                                 .fill(Color.black)
-                                .frame(width: size / 10)
-                                .padding(10 * scale)
-                            
-                            Spacer()
+                                .frame(width: size / 4)
+                                .padding(-5 * scale)
                         }
                     }
                 }
+                .offset(y: -size / 5)
             case .thirtySecond:
                 ZStack {
                     Image("RestThirtySecond")
@@ -132,17 +124,15 @@ struct RestView: View {
                     if isDotted {
                         HStack {
                             Spacer()
-                            Spacer()
                             
                             Circle()
                                 .fill(Color.black)
-                                .frame(width: size / 10)
-                                .padding(10 * scale)
-                            
-                            Spacer()
+                                .frame(width: size / 4)
+                                .padding(-5 * scale)
                         }
                     }
                 }
+                .offset(y: -size / 5)
             case .sixtyFourth:
                 ZStack {
                     Image("RestSixtyFourth")
@@ -153,17 +143,15 @@ struct RestView: View {
                     if isDotted {
                         HStack {
                             Spacer()
-                            Spacer()
                             
                             Circle()
                                 .fill(Color.black)
-                                .frame(width: size / 10)
-                                .padding(10 * scale)
-                            
-                            Spacer()
+                                .frame(width: size / 4)
+                                .padding(-5 * scale)
                         }
                     }
                 }
+                .offset(y: -size / 5)
             }
         }
         .frame(width: size)
@@ -172,5 +160,5 @@ struct RestView: View {
 }
 
 #Preview {
-    RestView(size: 500, duration: Note.Duration.whole, isDotted: true, scale: 1.0)
+    RestView(size: 50, duration: Note.Duration.eighth, isDotted: true, scale: 1.0)
 }

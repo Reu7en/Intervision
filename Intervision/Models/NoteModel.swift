@@ -97,6 +97,8 @@ extension Note {
                 return true
             case .whole:
                 return true
+            case .half:
+                return true
             default:
                 return false
             }

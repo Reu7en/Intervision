@@ -130,8 +130,30 @@ struct BeamLineView: View {
                     .font(Font.system(size: 50 * scale))
                     .foregroundStyle(Color.black)
                     .position(numberPosition)
+                
+                if numberOfBeamLines.allSatisfy({ $0 == 0 }) {
+                    let lineStart = CGPoint(x: furthestStartPosition.x + xOffset + CGFloat(cos(backwardBeamAngle.radians)) * 20 * scale, y: direction == .Upward ? furthestStartPosition.y - stemLength - 25 * scale - CGFloat(sin(backwardBeamAngle.radians)) * 20 * scale : furthestStartPosition.y + stemLength + 25 * scale + CGFloat(sin(backwardBeamAngle.radians)) * 20 * scale)
+                    let lineEnd = CGPoint(x: furthestEndPosition.x + xOffset + CGFloat(cos(forwardBeamAngle.radians)) * 20 * scale, y: direction == .Upward ? furthestEndPosition.y - stemLength - 25 * scale - CGFloat(sin(forwardBeamAngle.radians)) * 20 * scale : furthestEndPosition.y + stemLength + 25 * scale + CGFloat(sin(forwardBeamAngle.radians)) * 20 * scale)
+                    
+                    let lineStartEdge = CGPoint(x: furthestStartPosition.x + xOffset + CGFloat(cos(backwardBeamAngle.radians)) * 20 * scale, y: direction == .Upward ? furthestStartPosition.y - stemLength - 20 * scale - CGFloat(sin(backwardBeamAngle.radians)) * 20 * scale : furthestStartPosition.y + stemLength + 20 * scale + CGFloat(sin(backwardBeamAngle.radians)) * 20 * scale)
+                    
+                    let lineEndEdge = CGPoint(x: furthestEndPosition.x + xOffset + CGFloat(cos(forwardBeamAngle.radians)) * 20 * scale, y: direction == .Upward ? furthestEndPosition.y - stemLength - 20 * scale - CGFloat(sin(forwardBeamAngle.radians)) * 20 * scale : furthestEndPosition.y + stemLength + 20 * scale + CGFloat(sin(forwardBeamAngle.radians)) * 20 * scale)
+                    
+                    Path { path in
+                        path.move(to: lineStart)
+                        path.addLine(to: lineEnd)
+                        
+                        path.move(to: lineStart)
+                        path.addLine(to: lineStartEdge)
+                        
+                        path.move(to: lineEnd)
+                        path.addLine(to: lineEndEdge)
+                    }
+                    .stroke(Color.black, lineWidth: beamThickness / 2)
+                }
             }
         }
+//        .border(.blue)
     }
 }
 

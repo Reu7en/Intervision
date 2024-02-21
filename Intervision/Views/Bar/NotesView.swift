@@ -61,7 +61,7 @@ struct NotesView: View {
                                         RestView(size: noteSize, duration: note.duration, isDotted: note.isDotted, scale: scale)
                                             .position(notePosition)
                                     } else {
-                                        NoteHeadView(size: noteSize, isHollow: note.duration.isHollow)
+                                        NoteHeadView(size: noteSize, isHollow: note.duration.isHollow, isDotted: note.isDotted)
                                             .position(notePosition)
                                         BeamsView(beamViewModel: BeamViewModel(beamGroups: barViewModel.beamSplitChords, noteGrid: noteGrid[beatIndex], geometry: geometry, beatGeometry: beatGeometry, middleStaveNote: barViewModel.middleStaveNote, rows: rows, noteSize: noteSize), scale: scale)
                                     }
@@ -70,6 +70,7 @@ struct NotesView: View {
                         }
                     }
                     .padding(.horizontal, geometry.size.width / 50)
+//                    .border(.green)
                 }
                 .padding(.horizontal, geometry.size.width / 50)
             }

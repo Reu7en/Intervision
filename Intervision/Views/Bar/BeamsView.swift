@@ -23,7 +23,11 @@ struct BeamsView: View {
                 ForEach(0..<beamViewModel.positions[beamIndex][chordIndex].count, id: \.self) { noteIndex in
                     let position = beamViewModel.positions[beamIndex][chordIndex][noteIndex]
                     
-                    StemView(position: position, direction: direction, stemLength: stemLength, xOffset: xOffset, scale: scale)
+                    if let duration = beamViewModel.beamGroups[beamIndex][chordIndex].notes.first?.duration {
+                        if !(duration == .bar || duration == .breve || duration == .whole) {
+                            StemView(position: position, direction: direction, stemLength: stemLength, xOffset: xOffset, scale: scale)
+                        }
+                    }
                 }
                 
                 if let furthestPosition = beamViewModel.findFurthestPosition(in: beamViewModel.positions[beamIndex][chordIndex], direction: direction) {
@@ -36,6 +40,17 @@ struct BeamsView: View {
             if beamViewModel.positions[beamIndex].count > 1 {
                 if let furthestStartPosition = beamViewModel.findFurthestPosition(in: beamViewModel.positions[beamIndex][0], direction: direction),
                    let furthestEndPosition = beamViewModel.findFurthestPosition(in: beamViewModel.positions[beamIndex][beamViewModel.positions[beamIndex].count - 1], direction: direction) {
+                    
+//                    Circle()
+//                        .fill(.red)
+//                        .frame(width: 5, height: 5)
+//                        .position(furthestStartPosition)
+//                    
+//                    Circle()
+//                        .fill(.red)
+//                        .frame(width: 5, height: 5)
+//                        .position(furthestEndPosition)
+                    
                     let durations = beamViewModel.beamGroups[beamIndex].map { $0.notes.first?.duration ?? Note.Duration.bar }
                     
                     BeamLineView(furthestStartPosition: furthestStartPosition, furthestEndPosition: furthestEndPosition, durations: durations, timeModification: beamViewModel.beamGroups[beamIndex][0].notes.first?.timeModification, stemLength: stemLength, direction: direction, xOffset: xOffset, scale: scale)

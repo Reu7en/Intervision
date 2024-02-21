@@ -141,6 +141,7 @@ extension BarViewModel {
         }
     }
     
+    /*
     func splitChordsIntoBeats() -> Bool {
         var timeLeft: Double = beatValue ?? -1
         var chordGroup: [Chord] = [Chord]()
@@ -252,8 +253,63 @@ extension BarViewModel {
         
         return true
     }
+     */
     
-    /*
+    func splitChordsIntoBeats() -> Bool {
+        var timeLeft: Double = beatValue ?? -999
+        var chordGroup: [Chord] = [Chord]()
+        
+        for chord in bar.chords {
+            if timeLeft == -999 { return false }
+            
+            if let duration = chord.notes.first?.duration.rawValue,
+               let isDotted = chord.notes.first?.isDotted {
+                let actualDuration = isDotted ? duration * 1.5 : duration
+                let timeModification = chord.notes.first?.timeModification
+                
+                if timeModification == nil {
+                    if actualDuration <= timeLeft {
+                        chordGroup.append(chord)
+                        timeLeft -= actualDuration
+                    } else {
+                        timeLeft = beatValue ?? -999
+                        
+                        if !chordGroup.isEmpty {
+                            beatSplitChords.append(chordGroup)
+                            chordGroup = [Chord]()
+                        }
+                        
+                        chordGroup.append(chord)
+                        timeLeft -= actualDuration
+                    }
+                } else {
+                    chordGroup.append(chord)
+                    
+                    if case .custom(let actual, let normal) = chord.notes.first?.timeModification {
+                        if let duration = chord.notes.first?.duration.rawValue {
+                            let actualDuration = duration * (Double(normal) / Double(actual))
+                            timeLeft -= actualDuration
+                        } else { return false }
+                    } else { return false }
+                }
+                
+                let epsilon = 0.00001
+                
+                if abs(timeLeft) < epsilon {
+                    timeLeft = beatValue ?? -999
+                    beatSplitChords.append(chordGroup)
+                    chordGroup = [Chord]()
+                }
+            } else { return false }
+        }
+        
+        if !chordGroup.isEmpty {
+            beatSplitChords.append(chordGroup)
+        }
+        
+        return true
+    }
+    
     func splitChordsIntoBeams() -> Bool {
         var beamGroup: [Chord] = []
         var timeModificationGroup: [Chord] = []
@@ -298,8 +354,8 @@ extension BarViewModel {
 
         return true
     }
-     */
     
+    /*
     func splitChordsIntoBeams() -> Bool {
         var beamGroup: [Chord] = []
         var timeModificationGroup: [Chord] = []
@@ -357,6 +413,7 @@ extension BarViewModel {
 
         return true
     }
+     */
 
     func populateNoteGrid(splitChords: inout [[Chord]], noteGrid: inout [[[Note?]]]) -> Bool {
         if let gridRows = rows {

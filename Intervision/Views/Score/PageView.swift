@@ -13,6 +13,7 @@ struct PageView: View {
     @Binding var zoomLevel: CGFloat
     let aspectRatio: CGFloat = 210 / 297 // A4 paper aspect ratio
     let bars: [[Bar]]
+    let part: Part
     
     var body: some View {
         
@@ -24,18 +25,23 @@ struct PageView: View {
                 .fill(Color.white)
             
             ScrollView {
+                if let name = part.name {
+                    Text("\(name)")
+                        .font(.title)
+                        .foregroundStyle(Color.black)
+                }
+                
                 LazyVStack(spacing: 0) {
                     ForEach(0..<bars.count, id: \.self) { barIndex in
                         ForEach(0..<bars[barIndex].count, id: \.self) { voiceIndex in
                             BarView(barViewModel: BarViewModel(bar: bars[barIndex][voiceIndex], gaps: 4, step: .Note, ledgerLines: 3), showClef: true, showKey: true, showTime: true)
-                                .frame(height: height / 7)
+                                .frame(width: width * 0.9, height: height / 6)
                                 .id(UUID())
                             
                         }
                     }
                 }
             }
-            .padding()
         }
         .frame(width: width, height: height)
         .padding()
@@ -44,6 +50,6 @@ struct PageView: View {
 
 #Preview {
     GeometryReader { geometry in
-        PageView(geometry: Binding.constant(geometry), zoomLevel: Binding.constant(1.0), bars: [])
+        PageView(geometry: Binding.constant(geometry), zoomLevel: Binding.constant(1.0), bars: [], part: Part(bars: []))
     }
 }

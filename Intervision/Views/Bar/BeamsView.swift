@@ -25,7 +25,7 @@ struct BeamsView: View {
                     
                     if let duration = beamViewModel.beamGroups[beamIndex][chordIndex].notes.first?.duration {
                         if !(duration == .bar || duration == .breve || duration == .whole) {
-                            StemView(position: position, direction: direction, stemLength: stemLength, xOffset: xOffset, scale: scale)
+//                            StemView(position: position, direction: direction, stemLength: stemLength, xOffset: xOffset, scale: scale)
                         }
                     }
                 }

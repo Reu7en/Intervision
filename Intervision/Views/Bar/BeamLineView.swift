@@ -135,9 +135,9 @@ struct BeamLineView: View {
                     let lineStart = CGPoint(x: furthestStartPosition.x + xOffset + CGFloat(cos(backwardBeamAngle.radians)) * 20 * scale, y: direction == .Upward ? furthestStartPosition.y - stemLength - 25 * scale - CGFloat(sin(backwardBeamAngle.radians)) * 20 * scale : furthestStartPosition.y + stemLength + 25 * scale + CGFloat(sin(backwardBeamAngle.radians)) * 20 * scale)
                     let lineEnd = CGPoint(x: furthestEndPosition.x + xOffset + CGFloat(cos(forwardBeamAngle.radians)) * 20 * scale, y: direction == .Upward ? furthestEndPosition.y - stemLength - 25 * scale - CGFloat(sin(forwardBeamAngle.radians)) * 20 * scale : furthestEndPosition.y + stemLength + 25 * scale + CGFloat(sin(forwardBeamAngle.radians)) * 20 * scale)
                     
-                    let lineStartEdge = CGPoint(x: furthestStartPosition.x + xOffset + CGFloat(cos(backwardBeamAngle.radians)) * 20 * scale, y: direction == .Upward ? furthestStartPosition.y - stemLength - 20 * scale - CGFloat(sin(backwardBeamAngle.radians)) * 20 * scale : furthestStartPosition.y + stemLength + 20 * scale + CGFloat(sin(backwardBeamAngle.radians)) * 20 * scale)
+                    let lineStartEdge = CGPoint(x: furthestStartPosition.x + xOffset + CGFloat(cos(backwardBeamAngle.radians)) * 20 * scale, y: direction == .Upward ? furthestStartPosition.y - stemLength : furthestStartPosition.y + stemLength)
                     
-                    let lineEndEdge = CGPoint(x: furthestEndPosition.x + xOffset + CGFloat(cos(forwardBeamAngle.radians)) * 20 * scale, y: direction == .Upward ? furthestEndPosition.y - stemLength - 20 * scale - CGFloat(sin(forwardBeamAngle.radians)) * 20 * scale : furthestEndPosition.y + stemLength + 20 * scale + CGFloat(sin(forwardBeamAngle.radians)) * 20 * scale)
+                    let lineEndEdge = CGPoint(x: furthestEndPosition.x + xOffset + CGFloat(cos(forwardBeamAngle.radians)) * 20 * scale, y: direction == .Upward ? furthestEndPosition.y - stemLength : furthestEndPosition.y + stemLength)
                     
                     Path { path in
                         path.move(to: lineStart)

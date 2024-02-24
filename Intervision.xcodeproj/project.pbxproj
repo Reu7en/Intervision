@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1B12C9E52B753EBE00DC87DC /* PartModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B12C9E42B753EBE00DC87DC /* PartModel.swift */; };
 		1B12C9E72B75472200DC87DC /* StaveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B12C9E62B75472200DC87DC /* StaveModel.swift */; };
+		1B231FF12B8950E4003AB714 /* RollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FF02B8950E4003AB714 /* RollView.swift */; };
+		1B231FF32B895153003AB714 /* PianoKeysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FF22B895153003AB714 /* PianoKeysView.swift */; };
 		1B561F772B784CF3001860E5 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F762B784CF3001860E5 /* HomeView.swift */; };
 		1B561F792B79219F001860E5 /* BarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F782B79219F001860E5 /* BarView.swift */; };
 		1B561F7B2B793216001860E5 /* BarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F7A2B793216001860E5 /* BarViewModel.swift */; };
@@ -51,6 +53,8 @@
 /* Begin PBXFileReference section */
 		1B12C9E42B753EBE00DC87DC /* PartModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartModel.swift; sourceTree = "<group>"; };
 		1B12C9E62B75472200DC87DC /* StaveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaveModel.swift; sourceTree = "<group>"; };
+		1B231FF02B8950E4003AB714 /* RollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollView.swift; sourceTree = "<group>"; };
+		1B231FF22B895153003AB714 /* PianoKeysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoKeysView.swift; sourceTree = "<group>"; };
 		1B561F762B784CF3001860E5 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		1B561F782B79219F001860E5 /* BarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarView.swift; sourceTree = "<group>"; };
 		1B561F7A2B793216001860E5 /* BarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarViewModel.swift; sourceTree = "<group>"; };
@@ -104,6 +108,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1B231FEF2B8950D2003AB714 /* Roll */ = {
+			isa = PBXGroup;
+			children = (
+				1B231FF02B8950E4003AB714 /* RollView.swift */,
+				1B231FF22B895153003AB714 /* PianoKeysView.swift */,
+			);
+			path = Roll;
+			sourceTree = "<group>";
+		};
 		1B9435912B7EBFEA00B57DA7 /* Bar */ = {
 			isa = PBXGroup;
 			children = (
@@ -169,6 +182,7 @@
 		1B97BED82B71C4C9007D0BE5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				1B231FEF2B8950D2003AB714 /* Roll */,
 				1B9435912B7EBFEA00B57DA7 /* Bar */,
 				1B97BEEB2B7279C3007D0BE5 /* Score */,
 				1B97BEE72B726CAA007D0BE5 /* MainWindowView.swift */,
@@ -318,6 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1BBC978B2B76A3C7001C953C /* TestLoad.swift in Sources */,
+				1B231FF12B8950E4003AB714 /* RollView.swift in Sources */,
 				1BBC97802B759D8E001C953C /* GraceModel.swift in Sources */,
 				1B561F792B79219F001860E5 /* BarView.swift in Sources */,
 				1B9435A72B85703600B57DA7 /* KeyView.swift in Sources */,
@@ -344,6 +359,7 @@
 				1B94359B2B7FE4F500B57DA7 /* BeamsView.swift in Sources */,
 				1B97BECA2B71C167007D0BE5 /* IntervisionApp.swift in Sources */,
 				1B97BEED2B7279CF007D0BE5 /* PageView.swift in Sources */,
+				1B231FF32B895153003AB714 /* PianoKeysView.swift in Sources */,
 				1BBC978D2B76A50D001C953C /* ScoreViewModel.swift in Sources */,
 				1B97BEDE2B71C59B007D0BE5 /* BarModel.swift in Sources */,
 				1B94359D2B7FE58800B57DA7 /* BeamViewModel.swift in Sources */,

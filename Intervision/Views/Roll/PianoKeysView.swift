@@ -11,6 +11,7 @@ struct PianoKeysView: View {
     
     let geometry: GeometryProxy
     let octaves: Int
+    let width: CGFloat
     let whiteKeysPerOctave = 7
     let blackKeysPerOctave = 5
     let totalKeysPerOctave = 12
@@ -23,14 +24,26 @@ struct PianoKeysView: View {
         let blackKeyHeight = octaveHeight / CGFloat(totalKeysPerOctave)
         
         VStack(spacing: 0) {
-            ForEach(0..<octaves, id: \.self) { rowIndex in
+            ForEach(0..<octaves, id: \.self) { octaveIndex in
                 ZStack {
                     VStack(spacing: 0) {
                         ForEach(0..<whiteKeysPerOctave, id: \.self) { whiteKeyIndex in
-                            Rectangle()
-                                .fill(Color.white)
-                                .frame(width: geometry.size.width / 10, height: whiteKeyHeight)
-                                .border(Color.black)
+                            ZStack {
+                                Rectangle()
+                                    .fill(Color.white)
+                                    .frame(width: width, height: whiteKeyHeight)
+                                    .border(Color.black)
+                                
+                                if whiteKeyIndex == whiteKeysPerOctave - 1 {
+                                    HStack(spacing: 0) {
+                                        Spacer()
+                                        
+                                        Text("C\(octaves - octaveIndex - 1)")
+                                            .foregroundStyle(Color.gray)
+                                            .padding(.horizontal, geometry.size.width / 200)
+                                    }
+                                }
+                            }
                         }
                     }
                     
@@ -39,7 +52,7 @@ struct PianoKeysView: View {
                             HStack(spacing: 0) {
                                 Rectangle()
                                     .fill([1, 3, 5, 8, 10].contains(keyIndex) ? Color.black : Color.clear)
-                                    .frame(width: geometry.size.width / 25, height: blackKeyHeight)
+                                    .frame(width: width / 2.5, height: blackKeyHeight)
                                 
                                 Spacer()
                             }
@@ -53,6 +66,6 @@ struct PianoKeysView: View {
 
 #Preview {
     GeometryReader { geometry in
-        PianoKeysView(geometry: geometry, octaves: 9)
+        PianoKeysView(geometry: geometry, octaves: 9, width: 100.0)
     }
 }

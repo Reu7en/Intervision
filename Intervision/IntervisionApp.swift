@@ -14,8 +14,7 @@ struct IntervisionApp: App {
         @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
         
         WindowGroup {
-//            MainWindowView()
-            RollView()
+            MainWindowView()
         }
     }
 }

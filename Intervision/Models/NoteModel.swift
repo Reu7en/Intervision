@@ -53,11 +53,26 @@ extension Note {
             case .B: return 6
             }
         }
+        
+        func semitonesFromC() -> Int {
+            switch self {
+            case .C: return 0
+            case .D: return 2
+            case .E: return 4
+            case .F: return 5
+            case .G: return 7
+            case .A: return 9
+            case .B: return 11
+            }
+        }
     }
     
-    enum Accidental: String {
-        case Sharp, Flat, Natural
-        case DoubleSharp, DoubleFlat
+    enum Accidental: Int {
+        case Sharp = 1
+        case Flat = -1
+        case Natural = 0
+        case DoubleSharp = 2
+        case DoubleFlat = -2
     }
     
     enum Octave: Int {
@@ -166,7 +181,7 @@ extension Note {
 extension Note: CustomStringConvertible {
     var description: String {
         var description = "Note: "
-        description += "\(pitch?.rawValue ?? "")\(accidental?.rawValue ?? "")\(octave?.rawValue.description ?? "")"
+        description += "\(pitch?.rawValue ?? "")\(accidental?.rawValue ?? 0)\(octave?.rawValue.description ?? "")"
         description += " D: \(duration) Dot: \(isDotted) Rest: \(isRest) Accent: \(hasAccent) Tie: \(String(describing: tie)) TMod: \(String(describing: timeModification))\n"
         return description
     }

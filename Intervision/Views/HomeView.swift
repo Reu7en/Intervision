@@ -16,8 +16,10 @@ extension UTType {
 
 struct HomeView: View {
     
-    @State private var showScoreView: Bool = false
     @StateObject var scoreViewModel = ScoreViewModel(score: nil)
+    @StateObject var rollViewModel = RollViewModel(score: nil)
+    @State private var showScoreView: Bool = false
+    @State private var showRollView: Bool = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -63,7 +65,13 @@ struct HomeView: View {
                                         self.scoreViewModel.score = parsedScore
                                     }
                                     
-                                    showScoreView.toggle()
+                                    DispatchQueue.main.async {
+                                        self.rollViewModel.score = parsedScore
+                                        rollViewModel.setPart(partIndex: 0)
+                                    }
+                                    
+//                                    showScoreView.toggle()
+                                    showRollView.toggle()
                                 }
                             }
                         } label: {
@@ -94,6 +102,10 @@ struct HomeView: View {
                 .position(x: width / 2, y: height / 2)
                 .navigationDestination(isPresented: $showScoreView) {
                     ScoreView(scoreViewModel: scoreViewModel)
+                        .navigationBarBackButtonHidden()
+                }
+                .navigationDestination(isPresented: $showRollView) {
+                    RollView(rollViewModel: rollViewModel)
                         .navigationBarBackButtonHidden()
                 }
             }

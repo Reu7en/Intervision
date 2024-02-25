@@ -9,7 +9,7 @@ import Foundation
 
 class RollBarViewModel: ObservableObject {
     
-    @Published var segments: [Segment] = []
+    @Published var segments: [[Segment]] = []
     
     let bars: [Bar]
     let octaves: Int
@@ -19,11 +19,11 @@ class RollBarViewModel: ObservableObject {
         self.octaves = octaves
         
         calculateSegments()
-        
     }
     
     private func calculateSegments() {
         for bar in bars {
+            var barSegments: [Segment] = []
             let timeSignature = bar.timeSignature
             var barDuration: Double = -1
             
@@ -47,13 +47,15 @@ class RollBarViewModel: ObservableObject {
                             let duration = note.isDotted ? note.duration.rawValue * 1.5 : note.duration.rawValue
                             let durationPreceeding = barDuration - timeLeft
                             
-                            segments.append(Segment(rowIndex: rowIndex, duration: duration, durationPreceeding: durationPreceeding))
+                            barSegments.append(Segment(rowIndex: rowIndex, duration: duration, durationPreceeding: durationPreceeding))
                         }
                     }
                 }
                 
                 timeLeft -= chordDuration
             }
+            
+            segments.append(barSegments)
         }
     }
     
@@ -66,7 +68,7 @@ class RollBarViewModel: ObservableObject {
             let octaveValue = octave.rawValue
             let rows = octaves * 12
             
-            rowIndex = rows - ((12 - semitonesFromC) * (octaves - octaveValue))
+            rowIndex = rows - 1 - (octaveValue * 12) - semitonesFromC
             
             if let accidental = note.accidental {
                 rowIndex += accidental.rawValue

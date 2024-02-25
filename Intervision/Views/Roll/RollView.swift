@@ -28,9 +28,9 @@ struct RollView: View {
                                     LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
                                         Section {
                                             ZStack {
+                                                let rows = octaves * 12
+                                                
                                                 LazyVStack(spacing: 0) {
-                                                    let rows = octaves * 12
-                                                    
                                                     ForEach(0..<rows, id: \.self) { rowIndex in
                                                         Rectangle()
                                                             .fill([1, 3, 5, 8, 10].contains(rowIndex % 12) ? Color.black.opacity(0.5) : Color.black.opacity(0.125))
@@ -39,9 +39,7 @@ struct RollView: View {
                                                     }
                                                 }
                                                 
-                                                ForEach(0..<part.bars.count, id: \.self) { barIndex in
-                                                    RollBarView(rollBarViewModel: RollBarViewModel(bars: part.bars[barIndex], octaves: octaves), geometry: geometry)
-                                                }
+                                                RollBarView(rollBarViewModel: RollBarViewModel(bars: part.bars[barIndex], octaves: octaves), geometry: geometry, barWidth: barWidth, rows: rows)
                                             }
                                         } header: {
                                             Rectangle()

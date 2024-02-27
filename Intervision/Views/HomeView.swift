@@ -67,7 +67,8 @@ struct HomeView: View {
                                     
                                     DispatchQueue.main.async {
                                         self.rollViewModel.score = parsedScore
-                                        rollViewModel.setPart(partIndex: 2)
+                                        rollViewModel.setAllParts()
+//                                        rollViewModel.setPart(partIndex: 2)
                                     }
                                     
 //                                    showScoreView.toggle()

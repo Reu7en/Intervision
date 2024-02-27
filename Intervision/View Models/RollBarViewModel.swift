@@ -19,6 +19,7 @@ class RollBarViewModel: ObservableObject {
         self.octaves = octaves
         
         calculateSegments()
+        
     }
     
     private func calculateSegments() {
@@ -39,20 +40,22 @@ class RollBarViewModel: ObservableObject {
             var timeLeft = barDuration
             
             for chord in bar.chords {
-                let chordDuration = chord.notes.first?.duration.rawValue ?? 0
-                
-                for note in chord.notes {
-                    if !note.isRest {
-                        if let rowIndex = calculateRowIndex(for: note) {
-                            let duration = note.isDotted ? note.duration.rawValue * 1.5 : note.duration.rawValue
-                            let durationPreceeding = barDuration - timeLeft
-                            
-                            barSegments.append(Segment(rowIndex: rowIndex, duration: duration, durationPreceeding: durationPreceeding))
+                if let firstNote = chord.notes.first {
+                    let chordDuration = firstNote.isDotted ? firstNote.duration.rawValue * 1.5 : firstNote.duration.rawValue
+                    
+                    for note in chord.notes {
+                        if !note.isRest {
+                            if let rowIndex = calculateRowIndex(for: note) {
+                                let duration = note.isDotted ? note.duration.rawValue * 1.5 : note.duration.rawValue
+                                let durationPreceeding = barDuration - timeLeft
+                                
+                                barSegments.append(Segment(rowIndex: rowIndex, duration: duration, durationPreceeding: durationPreceeding))
+                            }
                         }
                     }
+                    
+                    timeLeft -= chordDuration
                 }
-                
-                timeLeft -= chordDuration
             }
             
             segments.append(barSegments)

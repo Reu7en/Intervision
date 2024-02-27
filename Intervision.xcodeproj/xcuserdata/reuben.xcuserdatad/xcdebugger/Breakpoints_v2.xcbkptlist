@@ -228,5 +228,53 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "649BACA4-DD7D-4DF7-AC7C-089497A67FC5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Intervision/View Models/RollBarViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
+            landmarkName = "init(bars:octaves:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "649BACA4-DD7D-4DF7-AC7C-089497A67FC5 - ca2c5b8f2b7daae9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.RollBarViewModel.init(bars: Swift.Array&lt;Intervision.Bar&gt;, octaves: Swift.Int) -&gt; Intervision.RollBarViewModel"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/RollBarViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "22"
+                  endingLineNumber = "22"
+                  offsetFromSymbolStart = "264">
+               </Location>
+               <Location
+                  uuid = "649BACA4-DD7D-4DF7-AC7C-089497A67FC5 - ca2c5b8f2b7daac8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.RollBarViewModel.init(bars: Swift.Array&lt;Intervision.Bar&gt;, octaves: Swift.Int) -&gt; Intervision.RollBarViewModel"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/RollBarViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "264">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

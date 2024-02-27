@@ -32,14 +32,27 @@ class RollViewModel: ObservableObject {
         }
     }
     
-    static func getBeats(bar: Bar) -> Int {
+    static func getBeatData(bar: Bar) -> (beats: Int, noteValue: Int) {
         switch bar.timeSignature {
         case .common:
-            return 4
+            return (4, 4)
         case .cut:
-            return 2
+            return (2, 2)
         case .custom(let beats, let noteValue):
-            return beats
+            return (beats, noteValue)
+        }
+    }
+}
+
+extension RollViewModel {
+    enum IntervalLinesType: String, Identifiable, CaseIterable {
+        case none
+        case staves
+        case parts
+        case all
+        
+        var id: UUID {
+            UUID()
         }
     }
 }

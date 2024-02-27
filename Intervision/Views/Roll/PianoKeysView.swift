@@ -12,18 +12,18 @@ struct PianoKeysView: View {
     let geometry: GeometryProxy
     let octaves: Int
     let width: CGFloat
+    let rowHeight: CGFloat
     let whiteKeysPerOctave = 7
     let blackKeysPerOctave = 5
     let totalKeysPerOctave = 12
     
     var body: some View {
         
-        let rows = octaves * totalKeysPerOctave
-        let octaveHeight = geometry.size.height / CGFloat(rows / totalKeysPerOctave) * 2
+        let octaveHeight = rowHeight * CGFloat(totalKeysPerOctave)
         let whiteKeyHeight = octaveHeight / CGFloat(whiteKeysPerOctave)
         let blackKeyHeight = octaveHeight / CGFloat(totalKeysPerOctave)
         
-        VStack(spacing: 0) {
+        LazyVStack(spacing: 0) {
             ForEach(0..<octaves, id: \.self) { octaveIndex in
                 ZStack {
                     VStack(spacing: 0) {
@@ -66,6 +66,6 @@ struct PianoKeysView: View {
 
 #Preview {
     GeometryReader { geometry in
-        PianoKeysView(geometry: geometry, octaves: 9, width: 100.0)
+        PianoKeysView(geometry: geometry, octaves: 9, width: 100, rowHeight: 10)
     }
 }

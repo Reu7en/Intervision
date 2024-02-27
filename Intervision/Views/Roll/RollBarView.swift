@@ -17,13 +17,7 @@ struct RollBarView: View {
     let rows: Int
     let rowHeight: CGFloat
     let partIndex: Int
-    let partSegmentColors: [Color] = [
-        .red,
-        .yellow,
-        .green,
-        .blue,
-        .purple
-    ]
+    let partSegmentColors: [Color]
     
     var body: some View {
         ForEach(0..<rollBarViewModel.segments.count, id: \.self) { staveIndex in
@@ -50,6 +44,6 @@ struct RollBarView: View {
 
 #Preview {
     GeometryReader { geometry in
-        RollBarView(rollBarViewModel: RollBarViewModel(bars: [], octaves: 9), geometry: geometry, barWidth: 100, pianoKeysWidth: 100, rows: 12, rowHeight: 10, partIndex: 0)
+        RollBarView(rollBarViewModel: RollBarViewModel(bars: [], octaves: 9), geometry: geometry, barWidth: 100, pianoKeysWidth: 100, rows: 12, rowHeight: 10, partIndex: 0, partSegmentColors: [])
     }
 }

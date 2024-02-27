@@ -11,28 +11,39 @@ struct RollView: View {
     
     @StateObject var rollViewModel: RollViewModel
     
-    let scale: CGFloat = 1.0
+    @State var widthScale: CGFloat = 1.0
+    @State var showInspector: Bool = false
+    @State var intervalLinesType: RollViewModel.IntervalLinesType = .none
+    
     let octaves = 9
+    let partSegmentColors: [Color] = [
+        .red,
+        .yellow,
+        .green,
+        .blue,
+        .purple
+    ]
     
     var body: some View {
         GeometryReader { geometry in
             let pianoKeysWidth = geometry.size.width / 10
-            let barWidth = geometry.size.width / 3
+            let barWidth = geometry.size.width / 3 * widthScale
+            let rows = octaves * 12
+            let rowHeight = geometry.size.height / CGFloat(rows / 2)
             
-            ScrollView([.vertical, .horizontal]) {
-                LazyHStack(spacing: 0, pinnedViews: .sectionHeaders) {
-                    Section {
-                        if let parts = rollViewModel.parts {
-                            if parts.count > 0 {
-                                LazyHStack(spacing: 0) {
+            HStack(spacing: 0) {
+                ScrollView([.vertical, .horizontal]) {
+                    LazyHStack(spacing: 0, pinnedViews: .sectionHeaders) {
+                        Section {
+                            if let parts = rollViewModel.parts {
+                                if parts.count > 0 {
                                     ForEach(0..<parts[0].bars.count, id: \.self) { barIndex in
+                                        let (beats, noteValue) = RollViewModel.getBeatData(bar: parts[0].bars[barIndex][0])
+                                        let rowWidth = CGFloat(beats) / CGFloat(noteValue) * barWidth
+                                        
                                         LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
                                             Section {
                                                 ZStack {
-                                                    let rows = octaves * 12
-                                                    let rowHeight = geometry.size.height / CGFloat(rows / 2)
-                                                    let beats = RollViewModel.getBeats(bar: parts[0].bars[0][0])
-                                                    
                                                     LazyVStack(spacing: 0) {
                                                         ForEach(0..<rows, id: \.self) { rowIndex in
                                                             ZStack {
@@ -43,7 +54,7 @@ struct RollView: View {
                                                                 
                                                                 ForEach(0..<beats, id: \.self) { beatIndex in
                                                                     Path { path in
-                                                                        let xPosition = CGFloat(beatIndex) * (barWidth / CGFloat(beats))
+                                                                        let xPosition = CGFloat(beatIndex) * (rowWidth / CGFloat(beats))
                                                                         
                                                                         path.move(to: CGPoint(x: xPosition, y: 0))
                                                                         path.addLine(to: CGPoint(x: xPosition, y: rowHeight))
@@ -55,53 +66,81 @@ struct RollView: View {
                                                     }
                                                     
                                                     ForEach(0..<parts.count, id: \.self) { partIndex in
-                                                        RollBarView(rollBarViewModel: RollBarViewModel(bars: parts[partIndex].bars[barIndex], octaves: octaves), geometry: geometry, barWidth: barWidth, pianoKeysWidth: pianoKeysWidth, rows: rows, rowHeight: rowHeight, partIndex: partIndex)
+                                                        RollBarView(
+                                                            rollBarViewModel: RollBarViewModel(
+                                                                bars: parts[partIndex].bars[barIndex],
+                                                                octaves: octaves
+                                                            ),
+                                                            geometry: geometry,
+                                                            barWidth: barWidth,
+                                                            pianoKeysWidth: pianoKeysWidth,
+                                                            rows: rows,
+                                                            rowHeight: rowHeight,
+                                                            partIndex: partIndex,
+                                                            partSegmentColors: partSegmentColors
+                                                        )
                                                     }
                                                 }
                                             } header: {
                                                 Rectangle()
                                                     .fill(Color.clear)
-                                                    .frame(height: 25)
+                                                    .frame(height: 30)
                                                     .overlay {
                                                         HStack(spacing: 0) {
                                                             Text("\(barIndex + 1)")
                                                                 .foregroundStyle(Color.gray)
                                                                 .padding(.horizontal, geometry.size.width / 200)
-                                                                .overlay {
-                                                                    Circle()
-                                                                        .fill(Color.clear)
-                                                                        .stroke(Color.gray)
-                                                                }
                                                             
                                                             Spacer()
                                                         }
                                                     }
                                             }
                                         }
-                                        .frame(width: barWidth)
+                                        .frame(width: rowWidth)
                                     }
+                                } else {
+                                    Color.clear
+                                        .frame(width: geometry.size.width)
                                 }
                             } else {
                                 Color.clear
                                     .frame(width: geometry.size.width)
                             }
-                        } else {
-                            Color.clear
-                                .frame(width: geometry.size.width)
-                        }
-                    } header: {
-                        LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
-                            Section {
-                                PianoKeysView(geometry: geometry, octaves: octaves, width: pianoKeysWidth)
-                            } header: {
-                                Rectangle()
-                                    .fill(Color.clear)
-                                    .frame(height: 25)
+                        } header: {
+                            LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
+                                Section {
+                                    PianoKeysView(geometry: geometry, octaves: octaves, width: pianoKeysWidth, rowHeight: rowHeight)
+                                } header: {
+                                    Spacer()
+                                        .frame(height: 30)
+                                }
                             }
+                            .frame(width: pianoKeysWidth)
                         }
-                        .frame(width: pianoKeysWidth)
                     }
                 }
+                
+                if showInspector {
+                    RollInspectorView(widthScale: $widthScale, intervalLinesType: $intervalLinesType, partSegmentColors: partSegmentColors, parts: rollViewModel.parts, rowHeight: rowHeight)
+                        .frame(width: geometry.size.width / 10)
+                }
+            }
+            .overlay(alignment: .topTrailing) {
+                Button {
+                    withAnimation(.easeInOut) {
+                        showInspector.toggle()
+                    }
+                } label: {
+                    Image(systemName: "gear.circle")
+                        .frame(width: 40, height: 20)
+                }
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(showInspector ? Color.accentColor : Color.clear)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .padding(.trailing)
+                .padding(.top, 5)
             }
         }
     }

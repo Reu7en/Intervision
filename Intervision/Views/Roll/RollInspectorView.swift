@@ -9,17 +9,39 @@ import SwiftUI
 
 struct RollInspectorView: View {
     
+    @Binding var presentedView: HomeView.PresentedView
     @Binding var widthScale: CGFloat
     @Binding var intervalLinesType: RollViewModel.IntervalLinesType
     
     let partSegmentColors: [Color]
     let parts: [Part]?
-    let rowHeight: CGFloat
+    
+    let spacing: CGFloat = 20
     
     var body: some View {
-        VStack(spacing: rowHeight / 2) {
+        VStack(spacing: spacing) {
             Spacer()
-                .frame(height: 30)
+                .frame(height: spacing / 2)
+            
+            HStack {
+                Text("View Type:")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                
+                Spacer()
+            }
+            
+            Picker("", selection: $presentedView) {
+                ForEach(HomeView.PresentedView.allCases.filter({ $0 != .None }), id: \.self) { type in
+                    Text("\(type.rawValue.capitalized)").tag(type)
+                }
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .onChange(of: presentedView) { newValue, _ in
+                withAnimation(.easeInOut(duration: 1.0)) {
+                    presentedView = newValue
+                }
+            }
             
             HStack {
                 Text("Scale:")
@@ -52,10 +74,10 @@ struct RollInspectorView: View {
                         
                         Spacer()
                         
-                        Rectangle()
+                        RoundedRectangle(cornerRadius: 20)
                             .fill(segmentColor)
-                            .frame(height: rowHeight)
-                            .frame(maxWidth: rowHeight * 3)
+                            .frame(height: spacing)
+                            .frame(maxWidth: spacing * 3)
                     }
                 }
             }
@@ -82,6 +104,6 @@ struct RollInspectorView: View {
 }
 
 #Preview {
-    RollInspectorView(widthScale: Binding.constant(1), intervalLinesType: Binding.constant(.none), partSegmentColors: [], parts: [], rowHeight: 10)
+    RollInspectorView(presentedView: Binding.constant(.Roll), widthScale: Binding.constant(1), intervalLinesType: Binding.constant(.none), partSegmentColors: [], parts: [])
         .frame(width: 500)
 }

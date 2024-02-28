@@ -9,49 +9,54 @@ import SwiftUI
 
 struct ScoreView: View {
     
+    @Binding var presentedView: HomeView.PresentedView
+    
     @StateObject var scoreViewModel: ScoreViewModel
-    @State private var zoomLevel: CGFloat = 0.9
-    @State private var pageCount: Int = 10
-    @State private var contentOffset: CGSize = .zero
-    @State private var accumulatedOffset: CGSize = .zero
+    
+    @State private var zoomLevel: CGFloat = 0.75
+    @State private var showInspector: Bool = false
     
     var body: some View {
         if let score = scoreViewModel.score,
            let parts = score.parts {
             GeometryReader { geometry in
-                ZStack {
-                    ScrollView([.horizontal, .vertical]) {
-                        if scoreViewModel.viewType == .Vertical {
-                            VStack(spacing: 0) {
-                                
+                HStack(spacing: 0) {
+                    ScrollView([.vertical, .horizontal]) {
+                        HStack(spacing: 0) {
+                            ForEach(0..<parts.count, id: \.self) { partIndex in
+                                PageView(geometry: Binding.constant(geometry), zoomLevel: $zoomLevel, bars: parts[partIndex].bars, part: parts[partIndex])
                             }
-                        } else if scoreViewModel.viewType == .Horizontal {
-                            HStack(spacing: 0) {
-                                ForEach(0..<parts.count, id: \.self) { partIndex in
-                                    PageView(geometry: Binding.constant(geometry), zoomLevel: $zoomLevel, bars: parts[partIndex].bars, part: parts[partIndex])
-                                        .offset(contentOffset)
-                                }
-                            }
-                        } else if scoreViewModel.viewType == .VerticalWide {
-                            
                         }
                     }
-                    .gesture(DragGesture()
-                        .onChanged { gesture in
-                            contentOffset = CGSize(width: accumulatedOffset.width + gesture.translation.width, height: accumulatedOffset.height + gesture.translation.height)
-                        }
-                        .onEnded { _ in
-                            accumulatedOffset = contentOffset
-                        }
-                    )
+                    
+                    if showInspector {
+                        ScoreInspectorView(presentedView: $presentedView)
+                            .frame(width: geometry.size.width / 10)
+                    }
                 }
-                .frame(width: geometry.size.width, height: geometry.size.height)
+                .overlay(alignment: .topTrailing) {
+                    Button {
+                        withAnimation(.easeInOut) {
+                            showInspector.toggle()
+                        }
+                    } label: {
+                        Image(systemName: "gear.circle")
+                            .frame(width: 40, height: 20)
+                    }
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(showInspector ? Color.accentColor : Color.clear)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .padding(.trailing)
+                    .padding(.top, 5)
+                }
             }
         }
     }
 }
 
 #Preview {
-    ScoreView(scoreViewModel: ScoreViewModel(score: nil))
+    ScoreView(presentedView: Binding.constant(.Score), scoreViewModel: ScoreViewModel(score: nil))
         .environmentObject(ScoreViewModel(score: nil))
 }

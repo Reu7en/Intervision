@@ -19,7 +19,6 @@ class RollBarViewModel: ObservableObject {
         self.octaves = octaves
         
         calculateSegments()
-        
     }
     
     private func calculateSegments() {
@@ -41,13 +40,27 @@ class RollBarViewModel: ObservableObject {
             
             for chord in bar.chords {
                 if let firstNote = chord.notes.first {
-                    let chordDuration = firstNote.isDotted ? firstNote.duration.rawValue * 1.5 : firstNote.duration.rawValue
+                    var chordDuration = firstNote.isDotted ? firstNote.duration.rawValue * 1.5 : firstNote.duration.rawValue
+                    
+                    if let timeModification = firstNote.timeModification {
+                        switch timeModification {
+                        case .custom(let actual, let normal):
+                            chordDuration /= (Double(actual) / Double(normal))
+                        }
+                    }
                     
                     for note in chord.notes {
                         if !note.isRest {
                             if let rowIndex = calculateRowIndex(for: note) {
-                                let duration = note.isDotted ? note.duration.rawValue * 1.5 : note.duration.rawValue
+                                var duration = note.isDotted ? note.duration.rawValue * 1.5 : note.duration.rawValue
                                 let durationPreceeding = barDuration - timeLeft
+                                
+                                if let timeModification = note.timeModification {
+                                    switch timeModification {
+                                    case .custom(let actual, let normal):
+                                        duration /= (Double(actual) / Double(normal))
+                                    }
+                                }
                                 
                                 barSegments.append(Segment(rowIndex: rowIndex, duration: duration, durationPreceeding: durationPreceeding))
                             }
@@ -74,7 +87,7 @@ class RollBarViewModel: ObservableObject {
             rowIndex = rows - 1 - (octaveValue * 12) - semitonesFromC
             
             if let accidental = note.accidental {
-                rowIndex += accidental.rawValue
+                rowIndex -= accidental.rawValue
             }
             
             return rowIndex

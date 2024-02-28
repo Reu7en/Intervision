@@ -9,6 +9,8 @@ import SwiftUI
 
 struct RollView: View {
     
+    @Binding var presentedView: HomeView.PresentedView
+    
     @StateObject var rollViewModel: RollViewModel
     
     @State var widthScale: CGFloat = 1.0
@@ -121,7 +123,7 @@ struct RollView: View {
                 }
                 
                 if showInspector {
-                    RollInspectorView(widthScale: $widthScale, intervalLinesType: $intervalLinesType, partSegmentColors: partSegmentColors, parts: rollViewModel.parts, rowHeight: rowHeight)
+                    RollInspectorView(presentedView: $presentedView, widthScale: $widthScale, intervalLinesType: $intervalLinesType, partSegmentColors: partSegmentColors, parts: rollViewModel.parts)
                         .frame(width: geometry.size.width / 10)
                 }
             }
@@ -147,5 +149,5 @@ struct RollView: View {
 }
 
 #Preview {
-    RollView(rollViewModel: RollViewModel(score: Score()))
+    RollView(presentedView: Binding.constant(.Roll), rollViewModel: RollViewModel(score: Score()))
 }

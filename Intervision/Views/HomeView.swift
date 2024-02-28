@@ -18,8 +18,11 @@ struct HomeView: View {
     
     @StateObject var scoreViewModel = ScoreViewModel(score: nil)
     @StateObject var rollViewModel = RollViewModel(score: nil)
+    
     @State private var showScoreView: Bool = false
     @State private var showRollView: Bool = false
+    @State var showView: Bool = false
+    @State var presentedView: PresentedView = .Score
     
     var body: some View {
         GeometryReader { geometry in
@@ -68,11 +71,9 @@ struct HomeView: View {
                                     DispatchQueue.main.async {
                                         self.rollViewModel.score = parsedScore
                                         rollViewModel.setAllParts()
-//                                        rollViewModel.setPart(partIndex: 2)
                                     }
                                     
-//                                    showScoreView.toggle()
-                                    showRollView.toggle()
+                                    showView.toggle()
                                 }
                             }
                         } label: {
@@ -101,16 +102,28 @@ struct HomeView: View {
                     .shadow(radius: 10)
                 }
                 .position(x: width / 2, y: height / 2)
-                .navigationDestination(isPresented: $showScoreView) {
-                    ScoreView(scoreViewModel: scoreViewModel)
-                        .navigationBarBackButtonHidden()
-                }
-                .navigationDestination(isPresented: $showRollView) {
-                    RollView(rollViewModel: rollViewModel)
-                        .navigationBarBackButtonHidden()
+                .navigationDestination(isPresented: $showView) {
+                    switch presentedView {
+                    case .Score:
+                        ScoreView(presentedView: $presentedView, scoreViewModel: scoreViewModel)
+                            .navigationBarBackButtonHidden()
+                    case .Roll:
+                        RollView(presentedView: $presentedView, rollViewModel: rollViewModel)
+                            .navigationBarBackButtonHidden()
+                    case .None:
+                        HomeView()
+                    }
                 }
             }
         }
+    }
+}
+
+extension HomeView {
+    enum PresentedView: String, CaseIterable {
+        case Score
+        case Roll
+        case None
     }
 }
 

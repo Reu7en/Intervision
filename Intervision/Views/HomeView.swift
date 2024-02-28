@@ -70,7 +70,7 @@ struct HomeView: View {
                                     
                                     DispatchQueue.main.async {
                                         self.rollViewModel.score = parsedScore
-                                        rollViewModel.setAllParts()
+                                        rollViewModel.addAllParts()
                                     }
                                     
                                     showView.toggle()

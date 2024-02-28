@@ -40,7 +40,8 @@ struct ScoreView: View {
                             showInspector.toggle()
                         }
                     } label: {
-                        Image(systemName: "gear.circle")
+                        Image(systemName: "arrowshape.left.fill")
+                            .rotationEffect(.degrees(showInspector ? 180 : 0))
                             .frame(width: 40, height: 20)
                     }
                     .background(

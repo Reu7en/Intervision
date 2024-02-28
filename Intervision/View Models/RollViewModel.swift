@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class RollViewModel: ObservableObject {
     
@@ -16,20 +17,38 @@ class RollViewModel: ObservableObject {
         self.score = score
     }
     
-    func setAllParts() {
-        if let score = score,
-           let parts = score.parts {
-            self.parts = parts
-        }
+    func addAllParts() {
+        guard let score = score, let parts = score.parts else { return }
+        self.parts = parts
+    }
+
+    func removeAllParts() {
+        self.parts = nil
+    }
+
+    func addPart(_ part: Part) {
+        var updatedParts = self.parts ?? []
+        updatedParts.append(part)
+        self.parts = sortPartsBasedOnScoreOrder(updatedParts)
+    }
+
+    func removePart(_ part: Part) {
+        guard var updatedParts = self.parts else { return }
+        updatedParts.removeAll { $0.id == part.id }
+        self.parts = sortPartsBasedOnScoreOrder(updatedParts)
     }
     
-    func setPart(partIndex: Int) {
-        if let score = score,
-           let parts = score.parts {
-            if partIndex < parts.count {
-                self.parts = [parts[partIndex]]
+    func sortPartsBasedOnScoreOrder(_ parts: [Part]) -> [Part] {
+        guard let scoreParts = score?.parts else { return parts }
+        
+        var sortedParts = [Part]()
+        for scorePart in scoreParts {
+            if let matchingPart = parts.first(where: { $0.id == scorePart.id }) {
+                sortedParts.append(matchingPart)
             }
         }
+        
+        return sortedParts
     }
     
     static func getBeatData(bar: Bar) -> (beats: Int, noteValue: Int) {

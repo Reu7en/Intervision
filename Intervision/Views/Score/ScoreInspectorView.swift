@@ -16,7 +16,7 @@ struct ScoreInspectorView: View {
     var body: some View {
         VStack(spacing: spacing) {
             Spacer()
-                .frame(height: spacing)
+                .frame(height: spacing / 2)
             
             HStack {
                 Text("View Type:")
@@ -33,13 +33,17 @@ struct ScoreInspectorView: View {
             }
             .pickerStyle(SegmentedPickerStyle())
             .onChange(of: presentedView) { newValue, _ in
-                withAnimation(.easeInOut(duration: 1.0)) {
+                withAnimation(.easeInOut(duration: 0.75)) {
                     presentedView = newValue
                 }
             }
             
             Spacer()
         }
+        .padding()
+        .background(
+            Color.black.opacity(0.25)
+        )
     }
 }
 

@@ -16,14 +16,37 @@ struct RollView: View {
     @State var widthScale: CGFloat = 1.0
     @State var showInspector: Bool = false
     @State var intervalLinesType: RollViewModel.IntervalLinesType = .none
+    @State var refresh = UUID()
     
     let octaves = 9
     let partSegmentColors: [Color] = [
-        .red,
-        .yellow,
-        .green,
-        .blue,
-        .purple
+        Color(red: 1, green: 0, blue: 0),
+        Color(red: 0, green: 1, blue: 0),
+        Color(red: 0, green: 0, blue: 1),
+        Color(red: 1, green: 1, blue: 0),
+        Color(red: 1, green: 0, blue: 1),
+        Color(red: 0, green: 1, blue: 1),
+        Color(red: 1, green: 128/255, blue: 0),
+        Color(red: 0, green: 1, blue: 128/255),
+        Color(red: 128/255, green: 0, blue: 1),
+        Color(red: 1, green: 128/255, blue: 1),
+        Color(red: 1, green: 1, blue: 1),
+        Color(red: 0, green: 0, blue: 0)
+    ]
+    
+    let intervalLineColors: [Color] = [
+        Color(red: 1, green: 0, blue: 0),
+        Color(red: 0, green: 1, blue: 0),
+        Color(red: 0, green: 0, blue: 1),
+        Color(red: 1, green: 1, blue: 0),
+        Color(red: 1, green: 0, blue: 1),
+        Color(red: 0, green: 1, blue: 1),
+        Color(red: 1, green: 128/255, blue: 0),
+        Color(red: 0, green: 1, blue: 128/255),
+        Color(red: 128/255, green: 0, blue: 1),
+        Color(red: 1, green: 128/255, blue: 1),
+        Color(red: 1, green: 1, blue: 1),
+        Color(red: 0, green: 0, blue: 0)
     ]
     
     var body: some View {
@@ -81,6 +104,7 @@ struct RollView: View {
                                                             partIndex: partIndex,
                                                             partSegmentColors: partSegmentColors
                                                         )
+                                                        .id(refresh)
                                                     }
                                                 }
                                             } header: {
@@ -123,7 +147,7 @@ struct RollView: View {
                 }
                 
                 if showInspector {
-                    RollInspectorView(presentedView: $presentedView, widthScale: $widthScale, intervalLinesType: $intervalLinesType, partSegmentColors: partSegmentColors, parts: rollViewModel.parts)
+                    RollInspectorView(rollViewModel: rollViewModel, presentedView: $presentedView, widthScale: $widthScale, intervalLinesType: $intervalLinesType, partSegmentColors: partSegmentColors, parts: rollViewModel.parts, intervalLineColors: intervalLineColors)
                         .frame(width: geometry.size.width / 10)
                 }
             }
@@ -133,7 +157,8 @@ struct RollView: View {
                         showInspector.toggle()
                     }
                 } label: {
-                    Image(systemName: "gear.circle")
+                    Image(systemName: "arrowshape.left.fill")
+                        .rotationEffect(.degrees(showInspector ? 180 : 0))
                         .frame(width: 40, height: 20)
                 }
                 .background(
@@ -144,6 +169,9 @@ struct RollView: View {
                 .padding(.trailing)
                 .padding(.top, 5)
             }
+        }
+        .onChange(of: rollViewModel.parts) {
+            refresh = UUID()
         }
     }
 }

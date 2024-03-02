@@ -17,12 +17,12 @@ extension UTType {
 struct HomeView: View {
     
     @StateObject var scoreViewModel = ScoreViewModel(score: nil)
-    @StateObject var rollViewModel = RollViewModel(score: nil)
+    @StateObject var rollViewModel = RollViewModel()
     
     @State private var showScoreView: Bool = false
     @State private var showRollView: Bool = false
     @State var showView: Bool = false
-    @State var presentedView: PresentedView = .Score
+    @State var presentedView: PresentedView = .Roll
     
     var body: some View {
         GeometryReader { geometry in
@@ -71,6 +71,7 @@ struct HomeView: View {
                                     DispatchQueue.main.async {
                                         self.rollViewModel.score = parsedScore
                                         rollViewModel.addAllParts()
+                                        rollViewModel.calculateSegments()
                                     }
                                     
                                     showView.toggle()
@@ -108,7 +109,7 @@ struct HomeView: View {
                         ScoreView(presentedView: $presentedView, scoreViewModel: scoreViewModel)
                             .navigationBarBackButtonHidden()
                     case .Roll:
-                        RollView(presentedView: $presentedView, rollViewModel: rollViewModel)
+                        RollView(presentedView: $presentedView, rollViewModel: rollViewModel, octaves: 9)
                             .navigationBarBackButtonHidden()
                     case .None:
                         HomeView()

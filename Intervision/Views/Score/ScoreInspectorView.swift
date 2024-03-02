@@ -14,33 +14,39 @@ struct ScoreInspectorView: View {
     let spacing: CGFloat = 20
     
     var body: some View {
-        VStack(spacing: spacing) {
-            Spacer()
-                .frame(height: spacing / 2)
-            
-            HStack {
-                Text("View Type:")
-                    .font(.title2)
-                    .fontWeight(.bold)
+        ScrollView {
+            VStack(spacing: spacing) {
+                Spacer()
+                    .frame(height: spacing / 2)
+                
+                HStack {
+                    Text("View Type:")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    
+                    Spacer()
+                }
+                
+                HStack {
+                    Picker("", selection: $presentedView) {
+                        ForEach(HomeView.PresentedView.allCases.filter({ $0 != .None }), id: \.self) { type in
+                            Text("\(type.rawValue.capitalized)").tag(type)
+                        }
+                    }
+                    .pickerStyle(RadioGroupPickerStyle())
+                    .onChange(of: presentedView) { newValue, _ in
+                        withAnimation(.easeInOut(duration: 0.75)) {
+                            presentedView = newValue
+                        }
+                    }
+                    
+                    Spacer()
+                }
                 
                 Spacer()
             }
-            
-            Picker("", selection: $presentedView) {
-                ForEach(HomeView.PresentedView.allCases.filter({ $0 != .None }), id: \.self) { type in
-                    Text("\(type.rawValue.capitalized)").tag(type)
-                }
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .onChange(of: presentedView) { newValue, _ in
-                withAnimation(.easeInOut(duration: 0.75)) {
-                    presentedView = newValue
-                }
-            }
-            
-            Spacer()
+            .padding()
         }
-        .padding()
         .background(
             Color.black.opacity(0.25)
         )

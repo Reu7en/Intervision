@@ -12,10 +12,25 @@ class RollViewModel: ObservableObject {
     
     @Published var score: Score?
     @Published var parts: [Part]?
+    @Published var segments: [[[[Segment]]]]?
+    @Published var octaves: Int = 9
     
-    init(score: Score?) {
-        self.score = score
-    }
+    static let partSegmentColors: [Color] = [
+        Color(red: 1, green: 0, blue: 0),
+        Color(red: 0, green: 1, blue: 0),
+        Color(red: 0, green: 0, blue: 1),
+        Color(red: 1, green: 1, blue: 0),
+        Color(red: 1, green: 0, blue: 1),
+        Color(red: 0, green: 1, blue: 1),
+        Color(red: 1, green: 128/255, blue: 0),
+        Color(red: 0, green: 1, blue: 128/255),
+        Color(red: 128/255, green: 0, blue: 1),
+        Color(red: 1, green: 128/255, blue: 1),
+        Color(red: 1, green: 1, blue: 1),
+        Color(red: 0, green: 0, blue: 0)
+    ]
+    
+    static let intervalLineColors: [Color] = partSegmentColors
     
     func addAllParts() {
         guard let score = score, let parts = score.parts else { return }
@@ -51,6 +66,94 @@ class RollViewModel: ObservableObject {
         return sortedParts
     }
     
+    func calculateSegments() {
+        guard let scoreParts = score?.parts else { return }
+        self.segments = []
+        
+        for part in scoreParts {
+            var partSegments: [[[Segment]]] = []
+            
+            for staveBars in part.bars {
+                var staveSegments: [[Segment]] = []
+                
+                for bar in staveBars {
+                    var barSegments: [Segment] = []
+                    let timeSignature = bar.timeSignature
+                    var barDuration: Double = -1
+                    
+                    switch timeSignature {
+                    case .common:
+                        barDuration = 1.0
+                    case .cut:
+                        barDuration = 1.0
+                    case .custom(let beats, let noteValue):
+                        barDuration = Double(beats) / Double(noteValue)
+                    }
+                    
+                    var timeLeft = barDuration
+                    
+                    for chord in bar.chords {
+                        if let firstNote = chord.notes.first {
+                            var chordDuration = firstNote.isDotted ? firstNote.duration.rawValue * 1.5 : firstNote.duration.rawValue
+                            
+                            if let timeModification = firstNote.timeModification {
+                                switch timeModification {
+                                case .custom(let actual, let normal):
+                                    chordDuration /= (Double(actual) / Double(normal))
+                                }
+                            }
+                            
+                            for note in chord.notes {
+                                if !note.isRest {
+                                    if let rowIndex = calculateRowIndex(for: note) {
+                                        var duration = note.isDotted ? note.duration.rawValue * 1.5 : note.duration.rawValue
+                                        let durationPreceeding = barDuration - timeLeft
+                                        
+                                        if let timeModification = note.timeModification {
+                                            switch timeModification {
+                                            case .custom(let actual, let normal):
+                                                duration /= (Double(actual) / Double(normal))
+                                            }
+                                        }
+                                        
+                                        barSegments.append(Segment(rowIndex: rowIndex, duration: duration, durationPreceeding: durationPreceeding))
+                                    }
+                                }
+                            }
+                            
+                            timeLeft -= chordDuration
+                        }
+                    }
+                    
+                    staveSegments.append(barSegments)
+                }
+                
+                partSegments.append(staveSegments)
+            }
+            
+            self.segments?.append(partSegments)
+        }
+    }
+    
+    private func calculateRowIndex(for note: Note) -> Int? {
+        if let pitch = note.pitch,
+           let octave = note.octave {
+            var rowIndex = 0
+            
+            let semitonesFromC = pitch.semitonesFromC()
+            let octaveValue = octave.rawValue
+            let rows = octaves * 12
+            
+            rowIndex = rows - 1 - (octaveValue * 12) - semitonesFromC
+            
+            if let accidental = note.accidental {
+                rowIndex -= accidental.rawValue
+            }
+            
+            return rowIndex
+        } else { return nil }
+    }
+    
     static func getBeatData(bar: Bar) -> (beats: Int, noteValue: Int) {
         switch bar.timeSignature {
         case .common:
@@ -59,19 +162,6 @@ class RollViewModel: ObservableObject {
             return (2, 2)
         case .custom(let beats, let noteValue):
             return (beats, noteValue)
-        }
-    }
-}
-
-extension RollViewModel {
-    enum IntervalLinesType: String, Identifiable, CaseIterable {
-        case none
-        case staves
-        case parts
-        case all
-        
-        var id: UUID {
-            UUID()
         }
     }
 }

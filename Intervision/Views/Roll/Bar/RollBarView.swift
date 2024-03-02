@@ -9,22 +9,20 @@ import SwiftUI
 
 struct RollBarView: View {
     
-    @StateObject var rollBarViewModel: RollBarViewModel
-    
+    let segments: [[Segment]]
     let geometry: GeometryProxy
     let barWidth: CGFloat
     let pianoKeysWidth: CGFloat
     let rows: Int
     let rowHeight: CGFloat
     let partIndex: Int
-    let partSegmentColors: [Color]
     
     var body: some View {
-        ForEach(0..<rollBarViewModel.segments.count, id: \.self) { staveIndex in
-            let segmentColor = partIndex > partSegmentColors.count - 1 ? Color.black : partSegmentColors[partIndex]
+        ForEach(0..<segments.count, id: \.self) { staveIndex in
+            let segmentColor = partIndex > RollViewModel.partSegmentColors.count - 1 ? Color.black : RollViewModel.partSegmentColors[partIndex]
             
-            ForEach(0..<rollBarViewModel.segments[staveIndex].count, id: \.self) { segmentIndex in
-                let segment = rollBarViewModel.segments[staveIndex][segmentIndex]
+            ForEach(0..<segments[staveIndex].count, id: \.self) { segmentIndex in
+                let segment = segments[staveIndex][segmentIndex]
                 let width = barWidth * CGFloat(segment.duration)
                 let xPosition = barWidth * CGFloat(segment.durationPreceeding)
                 let yPosition = rowHeight * CGFloat(segment.rowIndex)
@@ -44,6 +42,6 @@ struct RollBarView: View {
 
 #Preview {
     GeometryReader { geometry in
-        RollBarView(rollBarViewModel: RollBarViewModel(bars: [], octaves: 9), geometry: geometry, barWidth: 100, pianoKeysWidth: 100, rows: 12, rowHeight: 10, partIndex: 0, partSegmentColors: [])
+        RollBarView(segments: [], geometry: geometry, barWidth: 100, pianoKeysWidth: 100, rows: 12, rowHeight: 10, partIndex: 0)
     }
 }

@@ -16,6 +16,7 @@
 		1B0E44B02B92899400C0E12C /* EmptyRollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44AF2B92899400C0E12C /* EmptyRollView.swift */; };
 		1B0E44B22B928A1600C0E12C /* RollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44B12B928A1600C0E12C /* RollView.swift */; };
 		1B0E44B52B928A8400C0E12C /* RollBarHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44B42B928A8400C0E12C /* RollBarHeader.swift */; };
+		1B0E44B82B96AE8C00C0E12C /* LineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44B72B96AE8C00C0E12C /* LineModel.swift */; };
 		1B12C9E52B753EBE00DC87DC /* PartModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B12C9E42B753EBE00DC87DC /* PartModel.swift */; };
 		1B12C9E72B75472200DC87DC /* StaveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B12C9E62B75472200DC87DC /* StaveModel.swift */; };
 		1B231FF32B895153003AB714 /* PianoKeysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FF22B895153003AB714 /* PianoKeysView.swift */; };
@@ -72,6 +73,7 @@
 		1B0E44AF2B92899400C0E12C /* EmptyRollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyRollView.swift; sourceTree = "<group>"; };
 		1B0E44B12B928A1600C0E12C /* RollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RollView.swift; sourceTree = "<group>"; };
 		1B0E44B42B928A8400C0E12C /* RollBarHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollBarHeader.swift; sourceTree = "<group>"; };
+		1B0E44B72B96AE8C00C0E12C /* LineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineModel.swift; sourceTree = "<group>"; };
 		1B12C9E42B753EBE00DC87DC /* PartModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartModel.swift; sourceTree = "<group>"; };
 		1B12C9E62B75472200DC87DC /* StaveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaveModel.swift; sourceTree = "<group>"; };
 		1B231FF22B895153003AB714 /* PianoKeysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoKeysView.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 				1B12C9E62B75472200DC87DC /* StaveModel.swift */,
 				1BBC977F2B759D8E001C953C /* GraceModel.swift */,
 				1B0E44A12B92519800C0E12C /* SegmentModel.swift */,
+				1B0E44B72B96AE8C00C0E12C /* LineModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -444,6 +447,7 @@
 				1B0E449E2B92510F00C0E12C /* IntervalLinesView.swift in Sources */,
 				1B9435932B7EBFF900B57DA7 /* StaveView.swift in Sources */,
 				1B9435A12B80657900B57DA7 /* NoteTailView.swift in Sources */,
+				1B0E44B82B96AE8C00C0E12C /* LineModel.swift in Sources */,
 				1B97BEE82B726CAA007D0BE5 /* MainWindowView.swift in Sources */,
 				1B97BEE62B71D917007D0BE5 /* AppDelegate.swift in Sources */,
 				1B0E44B52B928A8400C0E12C /* RollBarHeader.swift in Sources */,

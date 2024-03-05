@@ -15,8 +15,6 @@ struct RollView: View {
     
     @State var widthScale: CGFloat = 1.0
     @State var showInspector: Bool = false
-    @State var harmonicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType = .none
-    @State var melodicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType = .none
     
     let octaves: Int
     
@@ -50,18 +48,28 @@ struct RollView: View {
                                                         beats: beats
                                                     )
                                                     
+                                                    IntervalLinesView(
+                                                        intervalLinesViewModel: IntervalLinesViewModel(
+                                                            segments: segments,
+                                                            harmonicIntervalLinesType: rollViewModel.harmonicIntervalLinesType,
+                                                            melodicIntervalLinesType: rollViewModel.melodicIntervalLinesType,
+                                                            barIndex: barIndex,
+                                                            barWidth: barWidth,
+                                                            rowHeight: rowHeight
+                                                        )
+                                                    )
+                                                    .id(UUID())
+                                                    
                                                     ForEach(0..<parts.count, id: \.self) { partIndex in
                                                         RollBarView(
                                                             segments: segments[partIndex][barIndex],
-                                                            geometry: geometry,
                                                             barWidth: barWidth,
                                                             pianoKeysWidth: pianoKeysWidth,
-                                                            rows: rows,
                                                             rowHeight: rowHeight,
                                                             partIndex: partIndex
                                                         )
                                                         .id(UUID())
-                                                    }
+                                                    }  
                                                 }
                                             } header: {
                                                 RollBarHeader(
@@ -103,8 +111,6 @@ struct RollView: View {
                         rollViewModel: rollViewModel,
                         presentedView: $presentedView,
                         widthScale: $widthScale,
-                        harmonicIntervalLinesType: $harmonicIntervalLinesType,
-                        melodicIntervalLinesType: $melodicIntervalLinesType,
                         parts: rollViewModel.parts
                     )
                     .frame(width: inspectorWidth)

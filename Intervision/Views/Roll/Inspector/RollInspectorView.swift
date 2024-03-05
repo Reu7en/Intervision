@@ -13,8 +13,6 @@ struct RollInspectorView: View {
     
     @Binding var presentedView: HomeView.PresentedView
     @Binding var widthScale: CGFloat
-    @Binding var harmonicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType
-    @Binding var melodicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType
     
     let parts: [Part]?
     
@@ -147,7 +145,7 @@ struct RollInspectorView: View {
                 }
                 
                 HStack {
-                    Picker("", selection: $harmonicIntervalLinesType.animation(.easeInOut)) {
+                    Picker("", selection: $rollViewModel.harmonicIntervalLinesType.animation(.easeInOut)) {
                         ForEach(IntervalLinesViewModel.IntervalLinesType.allCases, id: \.self) { type in
                             Text("\(type.rawValue.capitalized)").tag(type)
                         }
@@ -155,6 +153,35 @@ struct RollInspectorView: View {
                     .pickerStyle(RadioGroupPickerStyle())
                     
                     Spacer()
+                }
+                
+                if rollViewModel.harmonicIntervalLinesType != .none {
+                    HStack {
+                        Text("Harmonic Lines Colour Key:")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        
+                        Spacer()
+                    }
+                    
+                    ForEach(0..<RollViewModel.harmonicIntervalLineColors.count, id: \.self) { colorIndex in
+                        let intervalLineColor = RollViewModel.harmonicIntervalLineColors[colorIndex]
+                        
+                        HStack {
+                            Text("\(intervals[colorIndex])")
+                            
+                            Spacer()
+                            
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.black)
+                                .background (
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .fill(intervalLineColor)
+                                )
+                                .frame(height: spacing)
+                                .frame(width: spacing * 2)
+                        }
+                    }
                 }
                 
                 HStack {
@@ -166,7 +193,7 @@ struct RollInspectorView: View {
                 }
                 
                 HStack {
-                    Picker("", selection: $melodicIntervalLinesType.animation(.easeInOut)) {
+                    Picker("", selection: $rollViewModel.melodicIntervalLinesType.animation(.easeInOut)) {
                         ForEach(IntervalLinesViewModel.IntervalLinesType.allCases, id: \.self) { type in
                             Text("\(type.rawValue.capitalized)").tag(type)
                         }
@@ -176,17 +203,17 @@ struct RollInspectorView: View {
                     Spacer()
                 }
                 
-                if harmonicIntervalLinesType != .none || melodicIntervalLinesType != .none {
+                if rollViewModel.melodicIntervalLinesType != .none {
                     HStack {
-                        Text("Interval Colour Key:")
+                        Text("Melodic Lines Colour Key:")
                             .font(.title2)
                             .fontWeight(.bold)
                         
                         Spacer()
                     }
                     
-                    ForEach(0..<RollViewModel.intervalLineColors.count, id: \.self) { colorIndex in
-                        let intervalLineColor = RollViewModel.intervalLineColors[colorIndex]
+                    ForEach(0..<RollViewModel.melodicIntervalLineColors.count, id: \.self) { colorIndex in
+                        let intervalLineColor = RollViewModel.melodicIntervalLineColors[colorIndex]
                         
                         HStack {
                             Text("\(intervals[colorIndex])")
@@ -219,6 +246,6 @@ struct RollInspectorView: View {
 }
 
 #Preview {
-    RollInspectorView(rollViewModel: RollViewModel(), presentedView: Binding.constant(.Roll), widthScale: Binding.constant(1), harmonicIntervalLinesType: Binding.constant(.none), melodicIntervalLinesType: Binding.constant(.none), parts: [])
+    RollInspectorView(rollViewModel: RollViewModel(), presentedView: Binding.constant(.Roll), widthScale: Binding.constant(1), parts: [])
         .frame(width: 500)
 }

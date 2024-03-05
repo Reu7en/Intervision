@@ -10,10 +10,8 @@ import SwiftUI
 struct RollBarView: View {
     
     let segments: [[Segment]]
-    let geometry: GeometryProxy
     let barWidth: CGFloat
     let pianoKeysWidth: CGFloat
-    let rows: Int
     let rowHeight: CGFloat
     let partIndex: Int
     
@@ -41,7 +39,5 @@ struct RollBarView: View {
 }
 
 #Preview {
-    GeometryReader { geometry in
-        RollBarView(segments: [], geometry: geometry, barWidth: 100, pianoKeysWidth: 100, rows: 12, rowHeight: 10, partIndex: 0)
-    }
+    RollBarView(segments: [], barWidth: 100, pianoKeysWidth: 100, rowHeight: 10, partIndex: 0)
 }

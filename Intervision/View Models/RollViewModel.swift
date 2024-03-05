@@ -13,7 +13,10 @@ class RollViewModel: ObservableObject {
     @Published var score: Score?
     @Published var parts: [Part]?
     @Published var segments: [[[[Segment]]]]?
+    
     @Published var octaves: Int = 9
+    @Published var harmonicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType = .none
+    @Published var melodicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType = .none
     
     static let partSegmentColors: [Color] = [
         Color(red: 1, green: 0, blue: 0),
@@ -27,10 +30,11 @@ class RollViewModel: ObservableObject {
         Color(red: 128/255, green: 0, blue: 1),
         Color(red: 1, green: 128/255, blue: 1),
         Color(red: 1, green: 1, blue: 1),
-        Color(red: 0, green: 0, blue: 0)
+        Color(red: 128/255, green: 128/255, blue: 128/255)
     ]
     
-    static let intervalLineColors: [Color] = partSegmentColors
+    static let harmonicIntervalLineColors: [Color] = partSegmentColors
+    static let melodicIntervalLineColors: [Color] = partSegmentColors
     
     func addAllParts() {
         guard let score = score, let parts = score.parts else { return }

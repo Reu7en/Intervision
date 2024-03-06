@@ -89,10 +89,9 @@ struct RollInspectorView: View {
                     ForEach(0..<parts.count, id: \.self) { partIndex in
                         let part = parts[partIndex]
                         let segmentColor: Color = {
-                            if let parts = rollViewModel.parts,
-                               let index = parts.firstIndex(of: part) {
-                                if index < RollViewModel.partSegmentColors.count {
-                                    return RollViewModel.partSegmentColors[index]
+                            if let viewParts = rollViewModel.parts, viewParts.contains(part) {
+                                if partIndex < RollViewModel.partSegmentColors.count {
+                                    return RollViewModel.partSegmentColors[partIndex]
                                 } else {
                                     return Color.black
                                 }
@@ -185,25 +184,12 @@ struct RollInspectorView: View {
                 }
                 
                 HStack {
-                    Text("Show Melodic Interval Lines:")
-                        .font(.title2)
-                        .fontWeight(.bold)
+                    Toggle("Show Melodic Interval Lines", isOn: $rollViewModel.showMelodicIntervalLines)
                     
                     Spacer()
                 }
                 
-                HStack {
-                    Picker("", selection: $rollViewModel.melodicIntervalLinesType.animation(.easeInOut)) {
-                        ForEach(IntervalLinesViewModel.IntervalLinesType.allCases, id: \.self) { type in
-                            Text("\(type.rawValue.capitalized)").tag(type)
-                        }
-                    }
-                    .pickerStyle(RadioGroupPickerStyle())
-                    
-                    Spacer()
-                }
-                
-                if rollViewModel.melodicIntervalLinesType != .none {
+                if rollViewModel.showMelodicIntervalLines {
                     HStack {
                         Text("Melodic Lines Colour Key:")
                             .font(.title2)

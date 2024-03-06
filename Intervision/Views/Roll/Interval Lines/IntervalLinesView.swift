@@ -18,23 +18,25 @@ struct IntervalLinesView: View {
                     path.move(to: harmonicLines[lineIndex].startPoint)
                     path.addLine(to: harmonicLines[lineIndex].endPoint)
                 }
-                .stroke(harmonicLines[lineIndex].color, lineWidth: 3)
-//                .stroke(harmonicLines[lineIndex].color, style: StrokeStyle(lineWidth: 2, lineCap: .round, dash: [5]))
+                .stroke(harmonicLines[lineIndex].color, style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                .shadow(color: Color.black.opacity(0.75), radius: 5, x: 0, y: 0)
             }
         }
         
         if let melodicLines = intervalLinesViewModel.melodicLines {
             ForEach(0..<melodicLines.count, id: \.self) { lineIndex in
                 Path { path in
-                    path.move(to: melodicLines[lineIndex].0[0])
-                    path.addLine(to: melodicLines[lineIndex].0[1])
+                    path.move(to: melodicLines[lineIndex].startPoint)
+                    path.addLine(to: melodicLines[lineIndex].endPoint)
                 }
-                .stroke(melodicLines[lineIndex].1)
+                .stroke(melodicLines[lineIndex].color, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round, dash: [5]))
+                .shadow(color: Color.black.opacity(0.75), radius: 5, x: 0, y: 0)
+                .zIndex(.infinity)
             }
         }
     }
 }
 
 #Preview {
-    IntervalLinesView(intervalLinesViewModel: IntervalLinesViewModel(segments: [], harmonicIntervalLinesType: .none, melodicIntervalLinesType: .none, barIndex: 0, barWidth: 0, rowHeight: 0))
+    IntervalLinesView(intervalLinesViewModel: IntervalLinesViewModel(segments: [], harmonicIntervalLinesType: .none, showMelodicIntervalLines: false, barIndex: 0, barWidth: 0, rowHeight: 0))
 }

@@ -52,7 +52,7 @@ struct RollView: View {
                                                         intervalLinesViewModel: IntervalLinesViewModel(
                                                             segments: segments,
                                                             harmonicIntervalLinesType: rollViewModel.harmonicIntervalLinesType,
-                                                            melodicIntervalLinesType: rollViewModel.melodicIntervalLinesType,
+                                                            showMelodicIntervalLines: rollViewModel.showMelodicIntervalLines,
                                                             barIndex: barIndex,
                                                             barWidth: barWidth,
                                                             rowHeight: rowHeight
@@ -60,16 +60,14 @@ struct RollView: View {
                                                     )
                                                     .id(UUID())
                                                     
-                                                    ForEach(0..<parts.count, id: \.self) { partIndex in
-                                                        RollBarView(
-                                                            segments: segments[partIndex][barIndex],
-                                                            barWidth: barWidth,
-                                                            pianoKeysWidth: pianoKeysWidth,
-                                                            rowHeight: rowHeight,
-                                                            partIndex: partIndex
-                                                        )
-                                                        .id(UUID())
-                                                    }  
+                                                    RollBarView(
+                                                        segments: segments,
+                                                        barIndex: barIndex,
+                                                        barWidth: barWidth,
+                                                        rowHeight: rowHeight,
+                                                        colors: rollViewModel.getSegmentColors()
+                                                    )
+                                                    .id(UUID())
                                                 }
                                             } header: {
                                                 RollBarHeader(

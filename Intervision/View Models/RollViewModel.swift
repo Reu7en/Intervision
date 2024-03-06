@@ -11,12 +11,17 @@ import SwiftUI
 class RollViewModel: ObservableObject {
     
     @Published var score: Score?
-    @Published var parts: [Part]?
+    @Published var parts: [Part]? {
+        didSet {
+            calculateSegments()
+        }
+    }
+    
     @Published var segments: [[[[Segment]]]]?
     
     @Published var octaves: Int = 9
     @Published var harmonicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType = .none
-    @Published var melodicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType = .none
+    @Published var showMelodicIntervalLines: Bool = false
     
     static let partSegmentColors: [Color] = [
         Color(red: 1, green: 0, blue: 0),
@@ -26,7 +31,7 @@ class RollViewModel: ObservableObject {
         Color(red: 1, green: 0, blue: 1),
         Color(red: 0, green: 1, blue: 1),
         Color(red: 1, green: 128/255, blue: 0),
-        Color(red: 0, green: 1, blue: 128/255),
+        Color(red: 0, green: 128/255, blue: 128/255),
         Color(red: 128/255, green: 0, blue: 1),
         Color(red: 1, green: 128/255, blue: 1),
         Color(red: 1, green: 1, blue: 1),
@@ -71,7 +76,7 @@ class RollViewModel: ObservableObject {
     }
     
     func calculateSegments() {
-        guard let scoreParts = score?.parts else { return }
+        guard let scoreParts = self.parts else { self.segments = nil; return }
         self.segments = []
         
         for part in scoreParts {
@@ -167,5 +172,26 @@ class RollViewModel: ObservableObject {
         case .custom(let beats, let noteValue):
             return (beats, noteValue)
         }
+    }
+    
+    func getSegmentColors() -> [Color] {
+        var colors: [Color] = []
+        
+        if let score = self.score, let parts = score.parts, let viewParts = self.parts {
+            for (partIndex, part) in parts.enumerated() {
+                let segmentColor: Color
+                if viewParts.contains(part) {
+                    if partIndex < RollViewModel.partSegmentColors.count {
+                        segmentColor = RollViewModel.partSegmentColors[partIndex]
+                    } else {
+                        segmentColor = Color.black
+                    }
+                    
+                    colors.append(segmentColor)
+                }
+            }
+        }
+        
+        return colors
     }
 }

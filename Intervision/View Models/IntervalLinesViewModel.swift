@@ -11,14 +11,14 @@ import SwiftUI
 class IntervalLinesViewModel: ObservableObject {
     
     @Published var harmonicLines: [Line]?
-    @Published var melodicLines: [([CGPoint], Color)]?
+    @Published var melodicLines: [Line]?
     
     let segments: [[[[Segment]]]]
     let barIndex: Int
     let barWidth: CGFloat
     let rowHeight: CGFloat
     
-    init(segments: [[[[Segment]]]], harmonicIntervalLinesType: IntervalLinesType, melodicIntervalLinesType: IntervalLinesType, barIndex: Int, barWidth: CGFloat, rowHeight: CGFloat) {
+    init(segments: [[[[Segment]]]], harmonicIntervalLinesType: IntervalLinesType, showMelodicIntervalLines: Bool, barIndex: Int, barWidth: CGFloat, rowHeight: CGFloat) {
         self.segments = segments
         self.barIndex = barIndex
         self.barWidth = barWidth
@@ -44,26 +44,9 @@ class IntervalLinesViewModel: ObservableObject {
             self.harmonicLines = calculateHarmonicLines(segments: harmonicSegments)
         }
         
-        var melodicSegments: [[Segment]]?
-        
-        switch melodicIntervalLinesType {
-        case .none:
-            break
-        case .staves:
-            melodicSegments = getStaveSegments()
-            break
-        case .parts:
-            melodicSegments = getPartSegments()
-            break
-        case .all:
-            melodicSegments = getAllSegments()
-            break
-        }
-        
-        if let melodicSegments = melodicSegments {
+        if showMelodicIntervalLines, let melodicSegments = getMelodicSegments() {
             self.melodicLines = calculateMelodicLines(segments: melodicSegments)
         }
-        
     }
     
     func getStaveSegments() -> [[Segment]]? {
@@ -125,6 +108,39 @@ class IntervalLinesViewModel: ObservableObject {
         return allSegments
     }
     
+    func getMelodicSegments() -> [[[Segment]]]? {
+        guard segments.indices.contains(0), segments[0].indices.contains(barIndex) else { return nil }
+        
+        var barSegments: [[[Segment]]] = []
+        var staveSegments: [[Segment]] = []
+        
+        for part in segments {
+            let bar = part[barIndex]
+            
+            for stave in bar {
+                staveSegments.append(stave)
+            }
+        }
+        
+        barSegments.append(staveSegments)
+        
+        if segments[0].indices.contains(barIndex + 1) {
+            var staveSegments: [[Segment]] = []
+            
+            for part in segments {
+                let bar = part[barIndex]
+                
+                for stave in bar {
+                    staveSegments.append(stave)
+                }
+            }
+            
+            barSegments.append(staveSegments)
+        }
+        
+        return barSegments
+    }
+    
     func calculateHarmonicLines(segments: [[Segment]]) -> [Line] {
         var lines: [Line] = []
         
@@ -163,8 +179,61 @@ class IntervalLinesViewModel: ObservableObject {
         return lines
     }
     
-    func calculateMelodicLines(segments: [[Segment]]) -> [([CGPoint], Color)] {
-        var lines: [([CGPoint], Color)] = []
+    /*
+     To Do:
+     - Fix missing lines when interval is 0
+     - Add lines between bar edges
+     */
+    func calculateMelodicLines(segments: [[[Segment]]]) -> [Line] {
+        guard segments.indices.contains(0) else { return [] }
+        
+        var lines: [Line] = []
+        
+        for (groupIndex, segmentGroup) in segments[0].enumerated() {
+            var harmonicSegments: [Segment] = []
+            
+            if !segmentGroup.isEmpty {
+                for i in 0..<(segmentGroup.count - 1) {
+                    for j in (i + 1)..<segmentGroup.count {
+                        let segment1 = segmentGroup[i]
+                        let segment2 = segmentGroup[j]
+                        
+                        if segmentsAreHarmonic(segment1, segment2) {
+                            harmonicSegments.append(segment1)
+                            harmonicSegments.append(segment2)
+                        }
+                    }
+                }
+            }
+
+            let melodicSegments = segmentGroup
+                .filter { !harmonicSegments.contains($0) }
+                .sorted { $0.durationPreceeding < $1.durationPreceeding }
+            
+            if !melodicSegments.isEmpty {
+                for i in 0..<(melodicSegments.count - 1) {
+                    let segment1 = melodicSegments[i]
+                    let segment2 = melodicSegments[i + 1]
+                    
+                    let xStartPosition = barWidth * CGFloat(segment1.durationPreceeding + segment1.duration / 2)
+                    let yStartPosition = rowHeight * CGFloat(segment1.rowIndex) + rowHeight / 2
+                    let xEndPosition = barWidth * CGFloat(segment2.durationPreceeding + segment2.duration / 2)
+                    let yEndPosition = rowHeight * CGFloat(segment2.rowIndex) + rowHeight / 2
+                    
+                    let startPoint = CGPoint(x: xStartPosition, y: yStartPosition)
+                    let endPoint = CGPoint(x: xEndPosition, y: yEndPosition)
+                    
+                    let intervalColorIndex = (abs(segment1.rowIndex - segment2.rowIndex) - 1) % 12
+                    let color = RollViewModel.melodicIntervalLineColors.indices.contains(intervalColorIndex) ? RollViewModel.melodicIntervalLineColors[intervalColorIndex] : Color.clear
+                    
+                    let line = Line(startPoint: startPoint, endPoint: endPoint, color: color)
+                    
+                    if !lines.contains(line) {
+                        lines.append(line)
+                    }
+                }
+            }
+        }
         
         return lines
     }
@@ -175,34 +244,43 @@ class IntervalLinesViewModel: ObservableObject {
         let segment2Start = segment2.durationPreceeding
         let segment2End = segment2Start + segment2.duration
         
-        return segment1End > segment2Start && segment1Start < segment2End
+        let epsilon = 0.00001
+        
+        return segment1End > segment2Start + epsilon && segment1Start + epsilon < segment2End
     }
     
     func removeOverlappingLines(_ lines: inout [Line]) {
-        // Iterate through each line
-        var index = 0
-        while index < lines.count - 1 {
-            let line1 = lines[index]
-            let line2 = lines[index + 1]
+        var overlapDetected = true
+        
+        while overlapDetected {
+            overlapDetected = false
             
-            // Check if the x positions are the same
-            if line1.startPoint.x == line2.startPoint.x {
-                // Check for vertical overlap
-                if max(line1.startPoint.y, line1.endPoint.y) > min(line2.startPoint.y, line2.endPoint.y)
-                    && min(line1.startPoint.y, line1.endPoint.y) < max(line2.startPoint.y, line2.endPoint.y) {
-                    // Remove the longer line
-                    if line1.length > line2.length {
-                        lines.remove(at: index)
-                    } else {
-                        lines.remove(at: index + 1)
+            if !lines.isEmpty {
+                for i in 0..<(lines.count - 1) {
+                    for j in (i + 1)..<lines.count {
+                        let line1 = lines[i]
+                        let line2 = lines[j]
+                        
+                        if line1.startPoint.x == line2.startPoint.x {
+                            if max(line1.startPoint.y, line1.endPoint.y) > min(line2.startPoint.y, line2.endPoint.y)
+                                && min(line1.startPoint.y, line1.endPoint.y) < max(line2.startPoint.y, line2.endPoint.y) {
+                                if line1.length > line2.length {
+                                    lines.remove(at: i)
+                                } else {
+                                    lines.remove(at: j)
+                                }
+                                
+                                overlapDetected = true
+                                break
+                            }
+                        }
                     }
-                    // Continue with the current index since we've removed a line
-                    continue
+                    
+                    if overlapDetected {
+                        break
+                    }
                 }
             }
-            
-            // Move to the next line
-            index += 1
         }
     }
 }

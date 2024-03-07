@@ -13,7 +13,7 @@ class IntervalLinesViewModel: ObservableObject {
     @Published var harmonicLines: [Line]?
     @Published var melodicLines: [Line]?
     
-    let segments: [[[[Segment]]]]
+    let segments: [[[[Segment]]]] // part->bar->stave->segment
     let barIndex: Int
     let barWidth: CGFloat
     let rowHeight: CGFloat
@@ -111,34 +111,45 @@ class IntervalLinesViewModel: ObservableObject {
     func getMelodicSegments() -> [[[Segment]]]? {
         guard segments.indices.contains(0), segments[0].indices.contains(barIndex) else { return nil }
         
-        var barSegments: [[[Segment]]] = []
-        var staveSegments: [[Segment]] = []
+        var melodicSegments: [[[Segment]]] = []
         
-        for part in segments {
-            let bar = part[barIndex]
+        var previousSegments: [[Segment]] = []
+        var currentSegments: [[Segment]] = []
+        var nextSegments: [[Segment]] = []
+        
+        for part in self.segments {
+            let currentBar = part[barIndex]
             
-            for stave in bar {
-                staveSegments.append(stave)
+            for stave in currentBar {
+                currentSegments.append(stave)
             }
         }
         
-        barSegments.append(staveSegments)
-        
-        if segments[0].indices.contains(barIndex + 1) {
-            var staveSegments: [[Segment]] = []
-            
-            for part in segments {
-                let bar = part[barIndex]
+        if segments[0].indices.contains(barIndex - 1) {
+            for part in self.segments {
+                let previousBar = part[barIndex - 1]
                 
-                for stave in bar {
-                    staveSegments.append(stave)
+                for stave in previousBar {
+                    previousSegments.append(stave)
                 }
             }
-            
-            barSegments.append(staveSegments)
         }
         
-        return barSegments
+        if segments[0].indices.contains(barIndex + 1) {
+            for part in self.segments {
+                let nextBar = part[barIndex + 1]
+                
+                for stave in nextBar {
+                    nextSegments.append(stave)
+                }
+            }
+        }
+        
+        melodicSegments.append(previousSegments)
+        melodicSegments.append(currentSegments)
+        melodicSegments.append(nextSegments)
+        
+        return melodicSegments
     }
     
     func calculateHarmonicLines(segments: [[Segment]]) -> [Line] {
@@ -178,19 +189,22 @@ class IntervalLinesViewModel: ObservableObject {
 
         return lines
     }
-    
-    /*
-     To Do:
-     - Fix missing lines when interval is 0
-     - Add lines between bar edges
-     */
+
     func calculateMelodicLines(segments: [[[Segment]]]) -> [Line] {
-        guard segments.indices.contains(0) else { return [] }
+        guard segments.count == 3 else { return [] }
         
         var lines: [Line] = []
         
-        for (groupIndex, segmentGroup) in segments[0].enumerated() {
-            var harmonicSegments: [Segment] = []
+        let previousSegments = segments[0]
+        let currentSegments = segments[1]
+        let nextsegments = segments[2]
+        
+        var previousMelodicSegments: [[Segment]] = []
+        var currentMelodicSegments: [[Segment]] = []
+        var nextMelodicSegments: [[Segment]] = []
+        
+        for segmentGroup in currentSegments {
+            var currentHarmonicSegments: [Segment] = []
             
             if !segmentGroup.isEmpty {
                 for i in 0..<(segmentGroup.count - 1) {
@@ -199,34 +213,130 @@ class IntervalLinesViewModel: ObservableObject {
                         let segment2 = segmentGroup[j]
                         
                         if segmentsAreHarmonic(segment1, segment2) {
-                            harmonicSegments.append(segment1)
-                            harmonicSegments.append(segment2)
+                            currentHarmonicSegments.append(segment1)
+                            currentHarmonicSegments.append(segment2)
                         }
                     }
                 }
             }
-
-            let melodicSegments = segmentGroup
-                .filter { !harmonicSegments.contains($0) }
-                .sorted { $0.durationPreceeding < $1.durationPreceeding }
             
-            if !melodicSegments.isEmpty {
-                for i in 0..<(melodicSegments.count - 1) {
-                    let segment1 = melodicSegments[i]
-                    let segment2 = melodicSegments[i + 1]
-                    
-                    let xStartPosition = barWidth * CGFloat(segment1.durationPreceeding + segment1.duration / 2)
-                    let yStartPosition = rowHeight * CGFloat(segment1.rowIndex) + rowHeight / 2
-                    let xEndPosition = barWidth * CGFloat(segment2.durationPreceeding + segment2.duration / 2)
-                    let yEndPosition = rowHeight * CGFloat(segment2.rowIndex) + rowHeight / 2
+            currentMelodicSegments.append(
+                segmentGroup
+                    .filter { !currentHarmonicSegments.contains($0) }
+                    .sorted { $0.durationPreceeding < $1.durationPreceeding }
+                )
+            
+            for melodicGroup in currentMelodicSegments {
+                if !melodicGroup.isEmpty {
+                    for i in 0..<(melodicGroup.count - 1) {
+                        let segment1 = melodicGroup[i]
+                        let segment2 = melodicGroup[i + 1]
+                        
+                        let xStartPosition = barWidth * CGFloat(segment1.durationPreceeding + segment1.duration / 2)
+                        let yStartPosition = rowHeight * CGFloat(segment1.rowIndex) + rowHeight / 2
+                        let xEndPosition = barWidth * CGFloat(segment2.durationPreceeding + segment2.duration / 2)
+                        let yEndPosition = rowHeight * CGFloat(segment2.rowIndex) + rowHeight / 2
+                        
+                        let startPoint = CGPoint(x: xStartPosition, y: yStartPosition)
+                        let endPoint = CGPoint(x: xEndPosition, y: yEndPosition)
+                        
+                        let intervalColorIndex = (abs(segment1.rowIndex - segment2.rowIndex) - 1) % 12
+                        let color = segment1.rowIndex == segment2.rowIndex ? RollViewModel.melodicIntervalLineColors.last : RollViewModel.melodicIntervalLineColors.indices.contains(intervalColorIndex) ? RollViewModel.melodicIntervalLineColors[intervalColorIndex] : Color.clear
+                        
+                        let line = Line(startPoint: startPoint, endPoint: endPoint, color: color ?? Color.clear)
+                        
+                        if !lines.contains(line) {
+                            lines.append(line)
+                        }
+                    }
+                }
+            }
+        }
+        
+        for segmentGroup in previousSegments {
+            var previousHarmonicSegments: [Segment] = []
+            
+            if !segmentGroup.isEmpty {
+                for i in 0..<(segmentGroup.count - 1) {
+                    for j in (i + 1)..<segmentGroup.count {
+                        let segment1 = segmentGroup[i]
+                        let segment2 = segmentGroup[j]
+                        
+                        if segmentsAreHarmonic(segment1, segment2) {
+                            previousHarmonicSegments.append(segment1)
+                            previousHarmonicSegments.append(segment2)
+                        }
+                    }
+                }
+            }
+            
+            previousMelodicSegments.append(
+                segmentGroup
+                    .filter { !previousHarmonicSegments.contains($0) }
+                    .sorted { $0.durationPreceeding < $1.durationPreceeding }
+                )
+            
+            for i in 0..<previousMelodicSegments.count {
+                if let trailingSegment = previousMelodicSegments[i].last,
+                   let leadingSegment = currentMelodicSegments[i].first {
+                    let xStartPosition = barWidth * CGFloat(trailingSegment.durationPreceeding + trailingSegment.duration / 2) - barWidth
+                    let yStartPosition = rowHeight * CGFloat(trailingSegment.rowIndex) + rowHeight / 2
+                    let xEndPosition = (barWidth * CGFloat(leadingSegment.durationPreceeding + leadingSegment.duration / 2))
+                    let yEndPosition = rowHeight * CGFloat(leadingSegment.rowIndex) + rowHeight / 2
                     
                     let startPoint = CGPoint(x: xStartPosition, y: yStartPosition)
                     let endPoint = CGPoint(x: xEndPosition, y: yEndPosition)
                     
-                    let intervalColorIndex = (abs(segment1.rowIndex - segment2.rowIndex) - 1) % 12
-                    let color = RollViewModel.melodicIntervalLineColors.indices.contains(intervalColorIndex) ? RollViewModel.melodicIntervalLineColors[intervalColorIndex] : Color.clear
+                    let intervalColorIndex = (abs(trailingSegment.rowIndex - leadingSegment.rowIndex) - 1) % 12
+                    let color = trailingSegment.rowIndex == leadingSegment.rowIndex ? RollViewModel.melodicIntervalLineColors.last : RollViewModel.melodicIntervalLineColors.indices.contains(intervalColorIndex) ? RollViewModel.melodicIntervalLineColors[intervalColorIndex] : Color.clear
                     
-                    let line = Line(startPoint: startPoint, endPoint: endPoint, color: color)
+                    let line = Line(startPoint: startPoint, endPoint: endPoint, color: color ?? Color.clear)
+                    
+                    if !lines.contains(line) {
+                        lines.append(line)
+                    }
+                }
+            }
+        }
+        
+        for segmentGroup in nextsegments {
+            var nextHarmonicSegments: [Segment] = []
+            
+            if !segmentGroup.isEmpty {
+                for i in 0..<(segmentGroup.count - 1) {
+                    for j in (i + 1)..<segmentGroup.count {
+                        let segment1 = segmentGroup[i]
+                        let segment2 = segmentGroup[j]
+                        
+                        if segmentsAreHarmonic(segment1, segment2) {
+                            nextHarmonicSegments.append(segment1)
+                            nextHarmonicSegments.append(segment2)
+                        }
+                    }
+                }
+            }
+            
+            nextMelodicSegments.append(
+                segmentGroup
+                    .filter { !nextHarmonicSegments.contains($0) }
+                    .sorted { $0.durationPreceeding < $1.durationPreceeding }
+                )
+            
+            for i in 0..<nextMelodicSegments.count {
+                if let trailingSegment = currentMelodicSegments[i].last,
+                   let leadingSegment = nextMelodicSegments[i].first {
+                    let xStartPosition = barWidth * CGFloat(trailingSegment.durationPreceeding + trailingSegment.duration / 2)
+                    let yStartPosition = rowHeight * CGFloat(trailingSegment.rowIndex) + rowHeight / 2
+                    let xEndPosition = (barWidth * CGFloat(leadingSegment.durationPreceeding + leadingSegment.duration / 2)) + barWidth
+                    let yEndPosition = rowHeight * CGFloat(leadingSegment.rowIndex) + rowHeight / 2
+                    
+                    let startPoint = CGPoint(x: xStartPosition, y: yStartPosition)
+                    let endPoint = CGPoint(x: xEndPosition, y: yEndPosition)
+                    
+                    let intervalColorIndex = (abs(trailingSegment.rowIndex - leadingSegment.rowIndex) - 1) % 12
+                    let color = trailingSegment.rowIndex == leadingSegment.rowIndex ? RollViewModel.melodicIntervalLineColors.last : RollViewModel.melodicIntervalLineColors.indices.contains(intervalColorIndex) ? RollViewModel.melodicIntervalLineColors[intervalColorIndex] : Color.clear
+                    
+                    let line = Line(startPoint: startPoint, endPoint: endPoint, color: color ?? Color.clear)
                     
                     if !lines.contains(line) {
                         lines.append(line)

@@ -22,8 +22,8 @@ class RollViewModel: ObservableObject {
     @Published var octaves: Int = 9
     @Published var harmonicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType = .none
     @Published var showMelodicIntervalLines: Bool = false
-    @Published var harmonicIntervalLineColors: [Color] = partSegmentColors
-    @Published var melodicIntervalLineColors: [Color] = partSegmentColors
+    @Published var viewableHarmonicIntervalLineColors: [Color] = partSegmentColors
+    @Published var viewableMelodicIntervalLineColors: [Color] = partSegmentColors
     
     static let partSegmentColors: [Color] = [
         Color(red: 1, green: 0, blue: 0),

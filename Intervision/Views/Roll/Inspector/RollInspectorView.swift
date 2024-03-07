@@ -171,13 +171,13 @@ struct RollInspectorView: View {
                                 "\(intervals[colorIndex])",
                                 isOn: Binding<Bool>(
                                     get: {
-                                        return rollViewModel.harmonicIntervalLineColors[colorIndex] != Color.clear
+                                        return rollViewModel.viewableHarmonicIntervalLineColors[colorIndex] != Color.clear
                                     },
                                     set: { newValue in
                                         if newValue {
-                                            rollViewModel.harmonicIntervalLineColors[colorIndex] = intervalLineColor
+                                            rollViewModel.viewableHarmonicIntervalLineColors[colorIndex] = intervalLineColor
                                         } else {
-                                            rollViewModel.harmonicIntervalLineColors[colorIndex] = Color.clear
+                                            rollViewModel.viewableHarmonicIntervalLineColors[colorIndex] = Color.clear
                                         }
                                     }
                                 )
@@ -185,12 +185,7 @@ struct RollInspectorView: View {
                             
                             Spacer()
                             
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.black)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .fill(rollViewModel.harmonicIntervalLineColors[colorIndex])
-                                )
+                            ColorPicker("", selection: $rollViewModel.viewableHarmonicIntervalLineColors[colorIndex])
                                 .frame(height: spacing)
                                 .frame(width: spacing * 2)
                         }
@@ -220,13 +215,13 @@ struct RollInspectorView: View {
                                 "\(intervals[colorIndex])",
                                 isOn: Binding<Bool>(
                                     get: {
-                                        return rollViewModel.melodicIntervalLineColors[colorIndex] != Color.clear
+                                        return rollViewModel.viewableMelodicIntervalLineColors[colorIndex] != Color.clear
                                     },
                                     set: { newValue in
                                         if newValue {
-                                            rollViewModel.melodicIntervalLineColors[colorIndex] = intervalLineColor
+                                            rollViewModel.viewableMelodicIntervalLineColors[colorIndex] = intervalLineColor
                                         } else {
-                                            rollViewModel.melodicIntervalLineColors[colorIndex] = Color.clear
+                                            rollViewModel.viewableMelodicIntervalLineColors[colorIndex] = Color.clear
                                         }
                                     }
                                 )
@@ -234,12 +229,7 @@ struct RollInspectorView: View {
                             
                             Spacer()
                             
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.black)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .fill(rollViewModel.melodicIntervalLineColors[colorIndex])
-                                )
+                            ColorPicker("", selection: $rollViewModel.viewableMelodicIntervalLineColors[colorIndex])
                                 .frame(height: spacing)
                                 .frame(width: spacing * 2)
                         }

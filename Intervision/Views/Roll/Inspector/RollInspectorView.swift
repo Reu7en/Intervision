@@ -167,22 +167,36 @@ struct RollInspectorView: View {
                         let intervalLineColor = RollViewModel.harmonicIntervalLineColors[colorIndex]
                         
                         HStack {
-                            Text("\(intervals[colorIndex])")
+                            Toggle(
+                                "\(intervals[colorIndex])",
+                                isOn: Binding<Bool>(
+                                    get: {
+                                        return rollViewModel.harmonicIntervalLineColors[colorIndex] != Color.clear
+                                    },
+                                    set: { newValue in
+                                        if newValue {
+                                            rollViewModel.harmonicIntervalLineColors[colorIndex] = intervalLineColor
+                                        } else {
+                                            rollViewModel.harmonicIntervalLineColors[colorIndex] = Color.clear
+                                        }
+                                    }
+                                )
+                            )
                             
                             Spacer()
                             
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.black)
-                                .background (
+                                .background(
                                     RoundedRectangle(cornerRadius: 20)
-                                        .fill(intervalLineColor)
+                                        .fill(rollViewModel.harmonicIntervalLineColors[colorIndex])
                                 )
                                 .frame(height: spacing)
                                 .frame(width: spacing * 2)
                         }
                     }
                 }
-                
+
                 HStack {
                     Toggle("Show Melodic Interval Lines", isOn: $rollViewModel.showMelodicIntervalLines)
                     
@@ -202,15 +216,29 @@ struct RollInspectorView: View {
                         let intervalLineColor = RollViewModel.melodicIntervalLineColors[colorIndex]
                         
                         HStack {
-                            Text("\(intervals[colorIndex])")
+                            Toggle(
+                                "\(intervals[colorIndex])",
+                                isOn: Binding<Bool>(
+                                    get: {
+                                        return rollViewModel.melodicIntervalLineColors[colorIndex] != Color.clear
+                                    },
+                                    set: { newValue in
+                                        if newValue {
+                                            rollViewModel.melodicIntervalLineColors[colorIndex] = intervalLineColor
+                                        } else {
+                                            rollViewModel.melodicIntervalLineColors[colorIndex] = Color.clear
+                                        }
+                                    }
+                                )
+                            )
                             
                             Spacer()
                             
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.black)
-                                .background (
+                                .background(
                                     RoundedRectangle(cornerRadius: 20)
-                                        .fill(intervalLineColor)
+                                        .fill(rollViewModel.melodicIntervalLineColors[colorIndex])
                                 )
                                 .frame(height: spacing)
                                 .frame(width: spacing * 2)

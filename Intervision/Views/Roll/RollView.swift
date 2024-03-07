@@ -55,7 +55,9 @@ struct RollView: View {
                                                             showMelodicIntervalLines: rollViewModel.showMelodicIntervalLines,
                                                             barIndex: barIndex,
                                                             barWidth: barWidth,
-                                                            rowHeight: rowHeight
+                                                            rowHeight: rowHeight,
+                                                            harmonicIntervalLineColors: rollViewModel.harmonicIntervalLineColors,
+                                                            melodicIntervalLineColors: rollViewModel.melodicIntervalLineColors
                                                         )
                                                     )
                                                     .id(UUID())

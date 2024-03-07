@@ -17,12 +17,16 @@ class IntervalLinesViewModel: ObservableObject {
     let barIndex: Int
     let barWidth: CGFloat
     let rowHeight: CGFloat
+    let harmonicIntervalLineColors: [Color]
+    let melodicIntervalLineColors: [Color]
     
-    init(segments: [[[[Segment]]]], harmonicIntervalLinesType: IntervalLinesType, showMelodicIntervalLines: Bool, barIndex: Int, barWidth: CGFloat, rowHeight: CGFloat) {
+    init(segments: [[[[Segment]]]], harmonicIntervalLinesType: IntervalLinesType, showMelodicIntervalLines: Bool, barIndex: Int, barWidth: CGFloat, rowHeight: CGFloat, harmonicIntervalLineColors: [Color], melodicIntervalLineColors: [Color]) {
         self.segments = segments
         self.barIndex = barIndex
         self.barWidth = barWidth
         self.rowHeight = rowHeight
+        self.harmonicIntervalLineColors = harmonicIntervalLineColors
+        self.melodicIntervalLineColors = melodicIntervalLineColors
         
         var harmonicSegments: [[Segment]]?
         
@@ -171,7 +175,7 @@ class IntervalLinesViewModel: ObservableObject {
                             let endPoint = CGPoint(x: xPosition, y: yEndPosition)
                             
                             let intervalColorIndex = (abs(segment1.rowIndex - segment2.rowIndex) - 1) % 12
-                            let color = RollViewModel.harmonicIntervalLineColors.indices.contains(intervalColorIndex) ? RollViewModel.harmonicIntervalLineColors[intervalColorIndex] : Color.clear
+                            let color = harmonicIntervalLineColors.indices.contains(intervalColorIndex) ? harmonicIntervalLineColors[intervalColorIndex] : Color.clear
                             
                             let line = Line(startPoint: startPoint, endPoint: endPoint, color: color)
                             
@@ -241,7 +245,7 @@ class IntervalLinesViewModel: ObservableObject {
                         let endPoint = CGPoint(x: xEndPosition, y: yEndPosition)
                         
                         let intervalColorIndex = (abs(segment1.rowIndex - segment2.rowIndex) - 1) % 12
-                        let color = segment1.rowIndex == segment2.rowIndex ? RollViewModel.melodicIntervalLineColors.last : RollViewModel.melodicIntervalLineColors.indices.contains(intervalColorIndex) ? RollViewModel.melodicIntervalLineColors[intervalColorIndex] : Color.clear
+                        let color = segment1.rowIndex == segment2.rowIndex ? melodicIntervalLineColors.last : melodicIntervalLineColors.indices.contains(intervalColorIndex) ? melodicIntervalLineColors[intervalColorIndex] : Color.clear
                         
                         let line = Line(startPoint: startPoint, endPoint: endPoint, color: color ?? Color.clear)
                         
@@ -288,7 +292,7 @@ class IntervalLinesViewModel: ObservableObject {
                     let endPoint = CGPoint(x: xEndPosition, y: yEndPosition)
                     
                     let intervalColorIndex = (abs(trailingSegment.rowIndex - leadingSegment.rowIndex) - 1) % 12
-                    let color = trailingSegment.rowIndex == leadingSegment.rowIndex ? RollViewModel.melodicIntervalLineColors.last : RollViewModel.melodicIntervalLineColors.indices.contains(intervalColorIndex) ? RollViewModel.melodicIntervalLineColors[intervalColorIndex] : Color.clear
+                    let color = trailingSegment.rowIndex == leadingSegment.rowIndex ? melodicIntervalLineColors.last : melodicIntervalLineColors.indices.contains(intervalColorIndex) ? melodicIntervalLineColors[intervalColorIndex] : Color.clear
                     
                     let line = Line(startPoint: startPoint, endPoint: endPoint, color: color ?? Color.clear)
                     
@@ -334,7 +338,7 @@ class IntervalLinesViewModel: ObservableObject {
                     let endPoint = CGPoint(x: xEndPosition, y: yEndPosition)
                     
                     let intervalColorIndex = (abs(trailingSegment.rowIndex - leadingSegment.rowIndex) - 1) % 12
-                    let color = trailingSegment.rowIndex == leadingSegment.rowIndex ? RollViewModel.melodicIntervalLineColors.last : RollViewModel.melodicIntervalLineColors.indices.contains(intervalColorIndex) ? RollViewModel.melodicIntervalLineColors[intervalColorIndex] : Color.clear
+                    let color = trailingSegment.rowIndex == leadingSegment.rowIndex ? melodicIntervalLineColors.last : melodicIntervalLineColors.indices.contains(intervalColorIndex) ? melodicIntervalLineColors[intervalColorIndex] : Color.clear
                     
                     let line = Line(startPoint: startPoint, endPoint: endPoint, color: color ?? Color.clear)
                     

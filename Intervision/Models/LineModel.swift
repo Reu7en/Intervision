@@ -13,6 +13,7 @@ struct Line: Identifiable, Equatable, Comparable {
     var startPoint: CGPoint
     var endPoint: CGPoint
     let color: Color
+    let inversionType: InversionType
     
     var length: CGFloat {
         let deltaX = endPoint.x - startPoint.x
@@ -37,5 +38,13 @@ struct Line: Identifiable, Equatable, Comparable {
         } else {
             return abs(lhs.endPoint.y - lhs.startPoint.y) < abs(rhs.endPoint.y - rhs.startPoint.y)
         }
+    }
+}
+
+extension Line {
+    enum InversionType {
+        case None
+        case Inverted
+        case Neither
     }
 }

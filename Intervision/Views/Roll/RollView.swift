@@ -28,83 +28,90 @@ struct RollView: View {
             let inspectorWidth = geometry.size.width / 8
             
             HStack(spacing: 0) {
-                ScrollView([.vertical, .horizontal]) {
-                    LazyHStack(spacing: 0, pinnedViews: .sectionHeaders) {
-                        Section {
-                            if let parts = rollViewModel.parts, parts.indices.contains(0),
-                               let segments = rollViewModel.segments {
-                                ForEach(0..<parts[0].bars.count, id: \.self) { barIndex in
-                                    if let bar = parts[0].bars[barIndex].first {
-                                        let (beats, noteValue) = RollViewModel.getBeatData(bar: bar)
-                                        let rowWidth = CGFloat(beats) / CGFloat(noteValue) * barWidth
-                                        
-                                        LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
-                                            Section {
-                                                ZStack {
-                                                    BarRowsView(
-                                                        rows: rows,
-                                                        rowWidth: rowWidth,
-                                                        rowHeight: rowHeight,
-                                                        beats: beats
-                                                    )
-                                                    
-                                                    IntervalLinesView(
-                                                        intervalLinesViewModel: IntervalLinesViewModel(
+                HStack(spacing: 0) {
+                    ScrollView([.vertical, .horizontal]) {
+                        LazyHStack(spacing: 0, pinnedViews: .sectionHeaders) {
+                            Section {
+                                if let parts = rollViewModel.parts, parts.indices.contains(0),
+                                   let segments = rollViewModel.segments {
+                                    ForEach(0..<parts[0].bars.count, id: \.self) { barIndex in
+                                        if let bar = parts[0].bars[barIndex].first {
+                                            let (beats, noteValue) = RollViewModel.getBeatData(bar: bar)
+                                            let rowWidth = CGFloat(beats) / CGFloat(noteValue) * barWidth
+                                            
+                                            LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
+                                                Section {
+                                                    ZStack {
+                                                        BarRowsView(
+                                                            rows: rows,
+                                                            rowWidth: rowWidth,
+                                                            rowHeight: rowHeight,
+                                                            beats: beats
+                                                        )
+                                                        
+                                                        IntervalLinesView(
+                                                            intervalLinesViewModel: IntervalLinesViewModel(
+                                                                segments: segments,
+                                                                harmonicIntervalLinesType: rollViewModel.harmonicIntervalLinesType,
+                                                                showMelodicIntervalLines: rollViewModel.showMelodicIntervalLines,
+                                                                barIndex: barIndex,
+                                                                barWidth: barWidth,
+                                                                rowHeight: rowHeight,
+                                                                harmonicIntervalLineColors: rollViewModel.viewableHarmonicIntervalLineColors,
+                                                                melodicIntervalLineColors: rollViewModel.viewableMelodicIntervalLineColors, 
+                                                                showInvertedIntervals: rollViewModel.showInvertedIntervals,
+                                                                showZigZags: rollViewModel.showZigZags
+                                                            )
+                                                        )
+                                                        .id(UUID())
+                                                        
+                                                        RollBarView(
                                                             segments: segments,
-                                                            harmonicIntervalLinesType: rollViewModel.harmonicIntervalLinesType,
-                                                            showMelodicIntervalLines: rollViewModel.showMelodicIntervalLines,
                                                             barIndex: barIndex,
                                                             barWidth: barWidth,
                                                             rowHeight: rowHeight,
-                                                            harmonicIntervalLineColors: rollViewModel.viewableHarmonicIntervalLineColors,
-                                                            melodicIntervalLineColors: rollViewModel.viewableMelodicIntervalLineColors
+                                                            colors: rollViewModel.getSegmentColors()
                                                         )
-                                                    )
-                                                    .id(UUID())
-                                                    
-                                                    RollBarView(
-                                                        segments: segments,
+                                                        .id(UUID())
+                                                    }
+                                                } header: {
+                                                    RollBarHeader(
                                                         barIndex: barIndex,
-                                                        barWidth: barWidth,
-                                                        rowHeight: rowHeight,
-                                                        colors: rollViewModel.getSegmentColors()
+                                                        headerHeight: headerHeight,
+                                                        geometry: geometry
                                                     )
-                                                    .id(UUID())
                                                 }
-                                            } header: {
-                                                RollBarHeader(
-                                                    barIndex: barIndex,
-                                                    headerHeight: headerHeight,
-                                                    geometry: geometry
-                                                )
                                             }
+                                            .frame(width: rowWidth)
                                         }
-                                        .frame(width: rowWidth)
+                                    }
+                                } else {
+                                    EmptyRollView(geometry: geometry)
+                                }
+                            } header: {
+                                LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
+                                    Section {
+                                        PianoKeysView(
+                                            geometry: geometry,
+                                            octaves: octaves,
+                                            width: pianoKeysWidth,
+                                            rowHeight: rowHeight
+                                        )
+                                    } header: {
+                                        PianoKeysHeader(
+                                            headerHeight: headerHeight
+                                        )
                                     }
                                 }
-                            } else {
-                                EmptyRollView(geometry: geometry)
+                                .frame(width: pianoKeysWidth)
                             }
-                        } header: {
-                            LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
-                                Section {
-                                    PianoKeysView(
-                                        geometry: geometry,
-                                        octaves: octaves,
-                                        width: pianoKeysWidth,
-                                        rowHeight: rowHeight
-                                    )
-                                } header: {
-                                    PianoKeysHeader(
-                                        headerHeight: headerHeight
-                                    )
-                                }
-                            }
-                            .frame(width: pianoKeysWidth)
                         }
                     }
                 }
+                .frame(width: showInspector ? geometry.size.width - inspectorWidth : geometry.size.width)
             }
+            
+            Spacer()
             .overlay(alignment: .trailing) {
                 if showInspector {
                     RollInspectorView(

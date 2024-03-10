@@ -24,24 +24,9 @@ class RollViewModel: ObservableObject {
     @Published var showMelodicIntervalLines: Bool = false
     @Published var viewableHarmonicIntervalLineColors: [Color] = partSegmentColors
     @Published var viewableMelodicIntervalLineColors: [Color] = partSegmentColors
-    
-    static let partSegmentColors: [Color] = [
-        Color(red: 1, green: 0, blue: 0),
-        Color(red: 0, green: 1, blue: 0),
-        Color(red: 0, green: 0, blue: 1),
-        Color(red: 1, green: 1, blue: 0),
-        Color(red: 1, green: 0, blue: 1),
-        Color(red: 0, green: 1, blue: 1),
-        Color(red: 1, green: 128/255, blue: 0),
-        Color(red: 0, green: 128/255, blue: 128/255),
-        Color(red: 128/255, green: 0, blue: 1),
-        Color(red: 1, green: 128/255, blue: 1),
-        Color(red: 1, green: 1, blue: 1),
-        Color(red: 128/255, green: 128/255, blue: 128/255)
-    ]
-    
-    static let harmonicIntervalLineColors: [Color] = partSegmentColors
-    static let melodicIntervalLineColors: [Color] = partSegmentColors
+    @Published var viewableIntervals: [String] = intervals
+    @Published var showInvertedIntervals: Bool = false
+    @Published var showZigZags: Bool = false
     
     func addAllParts() {
         guard let score = score, let parts = score.parts else { return }
@@ -196,4 +181,51 @@ class RollViewModel: ObservableObject {
         
         return colors
     }
+}
+
+extension RollViewModel {
+    static let intervals: [String] = [
+        "Minor 2nd", // 0
+        "Major 2nd", // 1
+        "Minor 3rd", // 2
+        "Major 3rd", // 3
+        "Perfect 4th", // 4
+        "Tritone", // 5
+        "Perfect 5th", // 6
+        "Minor 6th", // 7
+        "Major 6th", // 8
+        "Minor 7th", // 9
+        "Major 7th", // 10
+        "Octave" // 11
+    ]
+    
+    static let invertedIntervals: [String] = [
+        "Minor 2nd/Major 7th", // 0
+        "Major 2nd/Minor 7th", // 1
+        "Minor 3rd/Major 6th", // 2
+        "Major 3rd/Minor 6th", // 3
+        "Perfect 4th/Perfect 5th", // 4
+        "Tritone", // 5
+        "Octave" // 6
+    ]
+    
+    static let partSegmentColors: [Color] = [
+        Color(red: 1, green: 0, blue: 0),
+        Color(red: 0, green: 1, blue: 0),
+        Color(red: 0, green: 0, blue: 1),
+        Color(red: 1, green: 1, blue: 0),
+        Color(red: 1, green: 0, blue: 1),
+        Color(red: 0, green: 1, blue: 1),
+        Color(red: 1, green: 128/255, blue: 0),
+        Color(red: 0, green: 128/255, blue: 128/255),
+        Color(red: 128/255, green: 0, blue: 1),
+        Color(red: 1, green: 128/255, blue: 1),
+        Color(red: 1, green: 1, blue: 1),
+        Color(red: 128/255, green: 128/255, blue: 128/255)
+    ]
+    
+    static let harmonicIntervalLineColors: [Color] = partSegmentColors
+    static let melodicIntervalLineColors: [Color] = partSegmentColors
+    static let invertedHarmonicIntervalLineColors: [Color] = Array(harmonicIntervalLineColors.prefix(6)) + [harmonicIntervalLineColors.last ?? Color.black]
+    static let invertedMelodicIntervalLineColors: [Color] = Array(melodicIntervalLineColors.prefix(6)) + [melodicIntervalLineColors.last ?? Color.black]
 }

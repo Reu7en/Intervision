@@ -17,20 +17,6 @@ struct RollInspectorView: View {
     let parts: [Part]?
     
     let spacing: CGFloat = 20
-    let intervals: [String] = [
-        "Minor 2nd",
-        "Major 2nd",
-        "Minor 3rd",
-        "Major 3rd",
-        "Perfect 4th",
-        "Tritone",
-        "Perfect 5th",
-        "Minor 6th",
-        "Major 6th",
-        "Minor 7th",
-        "Major 7th",
-        "Octave"
-    ]
     
     var body: some View {
         ScrollView {
@@ -119,6 +105,7 @@ struct RollInspectorView: View {
                                         }
                                     }
                                 )
+                                .animation(.easeInOut)
                             )
                             
                             Spacer()
@@ -135,8 +122,46 @@ struct RollInspectorView: View {
                     }
                 }
                 
+                if rollViewModel.harmonicIntervalLinesType != .none || rollViewModel.showMelodicIntervalLines {
+                    HStack {
+                        Toggle(
+                            "Show Inverted Intervals",
+                            isOn: Binding<Bool>(
+                                get: {
+                                    return rollViewModel.showInvertedIntervals
+                                },
+                                set: { newValue in
+                                    withAnimation(.easeInOut) {
+                                        if newValue {
+                                            rollViewModel.showInvertedIntervals = newValue
+                                            rollViewModel.viewableIntervals = RollViewModel.invertedIntervals
+                                            rollViewModel.viewableHarmonicIntervalLineColors = RollViewModel.invertedHarmonicIntervalLineColors
+                                            rollViewModel.viewableMelodicIntervalLineColors = RollViewModel.invertedMelodicIntervalLineColors
+                                        } else {
+                                            rollViewModel.showInvertedIntervals = newValue
+                                            rollViewModel.viewableIntervals = RollViewModel.intervals
+                                            rollViewModel.viewableHarmonicIntervalLineColors = RollViewModel.harmonicIntervalLineColors
+                                            rollViewModel.viewableMelodicIntervalLineColors = RollViewModel.melodicIntervalLineColors
+                                        }
+                                    }
+                                }
+                            )
+                        )
+                        
+                        Spacer()
+                    }
+                    
+                    if rollViewModel.showInvertedIntervals {
+                        HStack {
+                            Toggle("Show Zig-Zags", isOn: $rollViewModel.showZigZags.animation(.easeInOut))
+                            
+                            Spacer()
+                        }
+                    }
+                }
+                
                 HStack {
-                    Text("Show Harmonic Interval Lines:")
+                    Text("Show Harmonic Intervals:")
                         .font(.title2)
                         .fontWeight(.bold)
                     
@@ -156,28 +181,30 @@ struct RollInspectorView: View {
                 
                 if rollViewModel.harmonicIntervalLinesType != .none {
                     HStack {
-                        Text("Harmonic Lines Colour Key:")
+                        Text("Harmonic Lines Key:")
                             .font(.title2)
                             .fontWeight(.bold)
                         
                         Spacer()
                     }
                     
-                    ForEach(0..<RollViewModel.harmonicIntervalLineColors.count, id: \.self) { colorIndex in
+                    ForEach(0..<rollViewModel.viewableIntervals.count, id: \.self) { colorIndex in
                         let intervalLineColor = RollViewModel.harmonicIntervalLineColors[colorIndex]
                         
                         HStack {
                             Toggle(
-                                "\(intervals[colorIndex])",
+                                "\(rollViewModel.viewableIntervals[colorIndex])",
                                 isOn: Binding<Bool>(
                                     get: {
                                         return rollViewModel.viewableHarmonicIntervalLineColors[colorIndex] != Color.clear
                                     },
                                     set: { newValue in
-                                        if newValue {
-                                            rollViewModel.viewableHarmonicIntervalLineColors[colorIndex] = intervalLineColor
-                                        } else {
-                                            rollViewModel.viewableHarmonicIntervalLineColors[colorIndex] = Color.clear
+                                        withAnimation(.easeInOut) {
+                                            if newValue {
+                                                rollViewModel.viewableHarmonicIntervalLineColors[colorIndex] = intervalLineColor
+                                            } else {
+                                                rollViewModel.viewableHarmonicIntervalLineColors[colorIndex] = Color.clear
+                                            }
                                         }
                                     }
                                 )
@@ -193,35 +220,37 @@ struct RollInspectorView: View {
                 }
 
                 HStack {
-                    Toggle("Show Melodic Interval Lines", isOn: $rollViewModel.showMelodicIntervalLines)
+                    Toggle("Show Melodic Intervals", isOn: $rollViewModel.showMelodicIntervalLines.animation(.easeInOut))
                     
                     Spacer()
                 }
                 
                 if rollViewModel.showMelodicIntervalLines {
                     HStack {
-                        Text("Melodic Lines Colour Key:")
+                        Text("Melodic Lines Key:")
                             .font(.title2)
                             .fontWeight(.bold)
                         
                         Spacer()
                     }
                     
-                    ForEach(0..<RollViewModel.melodicIntervalLineColors.count, id: \.self) { colorIndex in
+                    ForEach(0..<rollViewModel.viewableIntervals.count, id: \.self) { colorIndex in
                         let intervalLineColor = RollViewModel.melodicIntervalLineColors[colorIndex]
                         
                         HStack {
                             Toggle(
-                                "\(intervals[colorIndex])",
+                                "\(rollViewModel.viewableIntervals[colorIndex])",
                                 isOn: Binding<Bool>(
                                     get: {
                                         return rollViewModel.viewableMelodicIntervalLineColors[colorIndex] != Color.clear
                                     },
                                     set: { newValue in
-                                        if newValue {
-                                            rollViewModel.viewableMelodicIntervalLineColors[colorIndex] = intervalLineColor
-                                        } else {
-                                            rollViewModel.viewableMelodicIntervalLineColors[colorIndex] = Color.clear
+                                        withAnimation(.easeInOut) {
+                                            if newValue {
+                                                rollViewModel.viewableMelodicIntervalLineColors[colorIndex] = intervalLineColor
+                                            } else {
+                                                rollViewModel.viewableMelodicIntervalLineColors[colorIndex] = Color.clear
+                                            }
                                         }
                                     }
                                 )
@@ -246,6 +275,7 @@ struct RollInspectorView: View {
         .clipShape(
             UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: 8, bottomTrailingRadius: 0, topTrailingRadius: 0)
         )
+        .scrollIndicators(.never)
     }
 }
 

@@ -19,14 +19,18 @@ class IntervalLinesViewModel: ObservableObject {
     let rowHeight: CGFloat
     let harmonicIntervalLineColors: [Color]
     let melodicIntervalLineColors: [Color]
+    let showInvertedIntervals: Bool
+    let showZigZags: Bool
     
-    init(segments: [[[[Segment]]]], harmonicIntervalLinesType: IntervalLinesType, showMelodicIntervalLines: Bool, barIndex: Int, barWidth: CGFloat, rowHeight: CGFloat, harmonicIntervalLineColors: [Color], melodicIntervalLineColors: [Color]) {
+    init(segments: [[[[Segment]]]], harmonicIntervalLinesType: IntervalLinesType, showMelodicIntervalLines: Bool, barIndex: Int, barWidth: CGFloat, rowHeight: CGFloat, harmonicIntervalLineColors: [Color], melodicIntervalLineColors: [Color], showInvertedIntervals: Bool, showZigZags: Bool) {
         self.segments = segments
         self.barIndex = barIndex
         self.barWidth = barWidth
         self.rowHeight = rowHeight
         self.harmonicIntervalLineColors = harmonicIntervalLineColors
         self.melodicIntervalLineColors = melodicIntervalLineColors
+        self.showInvertedIntervals = showInvertedIntervals
+        self.showZigZags = showZigZags
         
         var harmonicSegments: [[Segment]]?
         
@@ -38,6 +42,9 @@ class IntervalLinesViewModel: ObservableObject {
             break
         case .parts:
             harmonicSegments = getPartSegments()
+            break
+        case .groups:
+            // Implement later
             break
         case .all:
             harmonicSegments = getAllSegments()
@@ -173,11 +180,10 @@ class IntervalLinesViewModel: ObservableObject {
                             
                             let startPoint = CGPoint(x: xPosition, y: yStartPosition)
                             let endPoint = CGPoint(x: xPosition, y: yEndPosition)
+                            let color = calculateColor(isHarmonic: true, segment1: segment1, segment2: segment2)
+                            let inversionType = calculateInversionType(segment1: segment1, segment2: segment2)
                             
-                            let intervalColorIndex = (abs(segment1.rowIndex - segment2.rowIndex) - 1) % 12
-                            let color = harmonicIntervalLineColors.indices.contains(intervalColorIndex) ? harmonicIntervalLineColors[intervalColorIndex] : Color.clear
-                            
-                            let line = Line(startPoint: startPoint, endPoint: endPoint, color: color)
+                            let line = Line(startPoint: startPoint, endPoint: endPoint, color: color, inversionType: inversionType)
                             
                             if !lines.contains(line) {
                                 lines.append(line)
@@ -243,11 +249,10 @@ class IntervalLinesViewModel: ObservableObject {
                         
                         let startPoint = CGPoint(x: xStartPosition, y: yStartPosition)
                         let endPoint = CGPoint(x: xEndPosition, y: yEndPosition)
+                        let color = calculateColor(isHarmonic: false, segment1: segment1, segment2: segment2)
+                        let inversionType = calculateInversionType(segment1: segment1, segment2: segment2)
                         
-                        let intervalColorIndex = (abs(segment1.rowIndex - segment2.rowIndex) - 1) % 12
-                        let color = segment1.rowIndex == segment2.rowIndex ? melodicIntervalLineColors.last : melodicIntervalLineColors.indices.contains(intervalColorIndex) ? melodicIntervalLineColors[intervalColorIndex] : Color.clear
-                        
-                        let line = Line(startPoint: startPoint, endPoint: endPoint, color: color ?? Color.clear)
+                        let line = Line(startPoint: startPoint, endPoint: endPoint, color: color, inversionType: inversionType)
                         
                         if !lines.contains(line) {
                             lines.append(line)
@@ -290,11 +295,10 @@ class IntervalLinesViewModel: ObservableObject {
                     
                     let startPoint = CGPoint(x: xStartPosition, y: yStartPosition)
                     let endPoint = CGPoint(x: xEndPosition, y: yEndPosition)
+                    let color = calculateColor(isHarmonic: false, segment1: trailingSegment, segment2: leadingSegment)
+                    let inversionType = calculateInversionType(segment1: trailingSegment, segment2: leadingSegment)
                     
-                    let intervalColorIndex = (abs(trailingSegment.rowIndex - leadingSegment.rowIndex) - 1) % 12
-                    let color = trailingSegment.rowIndex == leadingSegment.rowIndex ? melodicIntervalLineColors.last : melodicIntervalLineColors.indices.contains(intervalColorIndex) ? melodicIntervalLineColors[intervalColorIndex] : Color.clear
-                    
-                    let line = Line(startPoint: startPoint, endPoint: endPoint, color: color ?? Color.clear)
+                    let line = Line(startPoint: startPoint, endPoint: endPoint, color: color, inversionType: inversionType)
                     
                     if !lines.contains(line) {
                         lines.append(line)
@@ -336,11 +340,10 @@ class IntervalLinesViewModel: ObservableObject {
                     
                     let startPoint = CGPoint(x: xStartPosition, y: yStartPosition)
                     let endPoint = CGPoint(x: xEndPosition, y: yEndPosition)
+                    let color = calculateColor(isHarmonic: false, segment1: trailingSegment, segment2: leadingSegment)
+                    let inversionType = calculateInversionType(segment1: trailingSegment, segment2: leadingSegment)
                     
-                    let intervalColorIndex = (abs(trailingSegment.rowIndex - leadingSegment.rowIndex) - 1) % 12
-                    let color = trailingSegment.rowIndex == leadingSegment.rowIndex ? melodicIntervalLineColors.last : melodicIntervalLineColors.indices.contains(intervalColorIndex) ? melodicIntervalLineColors[intervalColorIndex] : Color.clear
-                    
-                    let line = Line(startPoint: startPoint, endPoint: endPoint, color: color ?? Color.clear)
+                    let line = Line(startPoint: startPoint, endPoint: endPoint, color: color, inversionType: inversionType)
                     
                     if !lines.contains(line) {
                         lines.append(line)
@@ -397,6 +400,43 @@ class IntervalLinesViewModel: ObservableObject {
             }
         }
     }
+    
+    func calculateColor(isHarmonic: Bool, segment1: Segment, segment2: Segment) -> Color {
+        let distance = abs(segment1.rowIndex - segment2.rowIndex)
+        
+        if distance == 0 {
+            return (isHarmonic ? harmonicIntervalLineColors.last : melodicIntervalLineColors.last) ?? Color.clear
+        }
+        
+        var index = (distance - 1) % 12
+        
+        if self.showInvertedIntervals {
+            if index == 11 {
+                index = 6
+            } else if index > 5 {
+                index = 10 - index
+            }
+        }
+        
+        if isHarmonic {
+            return harmonicIntervalLineColors.indices.contains(index) ? harmonicIntervalLineColors[index] : Color.clear
+        } else {
+            return melodicIntervalLineColors.indices.contains(index) ? melodicIntervalLineColors[index] : Color.clear
+        }
+    }
+    
+    func calculateInversionType(segment1: Segment, segment2: Segment) -> Line.InversionType {
+        let distance = abs(segment1.rowIndex - segment2.rowIndex)
+        let index = (distance - 1) % 12
+        
+        if index == 0 || index == 11 {
+            return .Neither
+        } else if index > 5 {
+            return .Inverted
+        } else {
+            return .None
+        }
+    }
 }
 
 extension IntervalLinesViewModel {
@@ -404,6 +444,7 @@ extension IntervalLinesViewModel {
         case none
         case staves
         case parts
+        case groups
         case all
     }
 }

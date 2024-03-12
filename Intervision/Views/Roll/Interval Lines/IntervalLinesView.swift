@@ -108,5 +108,5 @@ extension Color {
 }
 
 #Preview {
-    IntervalLinesView(intervalLinesViewModel: IntervalLinesViewModel(segments: [], harmonicIntervalLinesType: .none, showMelodicIntervalLines: false, barIndex: 0, barWidth: 0, rowHeight: 0, harmonicIntervalLineColors: [], melodicIntervalLineColors: [], showInvertedIntervals: false, showZigZags: false))
+    IntervalLinesView(intervalLinesViewModel: IntervalLinesViewModel(segments: [], harmonicIntervalLinesType: .none, showMelodicIntervalLines: false, barIndex: 0, barWidth: 0, rowWidth: 0, rowHeight: 0, harmonicIntervalLineColors: [], melodicIntervalLineColors: [], showInvertedIntervals: false, showZigZags: false))
 }

@@ -16,16 +16,18 @@ class IntervalLinesViewModel: ObservableObject {
     let segments: [[[[Segment]]]] // part->bar->stave->segment
     let barIndex: Int
     let barWidth: CGFloat
+    let rowWidth: CGFloat
     let rowHeight: CGFloat
     let harmonicIntervalLineColors: [Color]
     let melodicIntervalLineColors: [Color]
     let showInvertedIntervals: Bool
     let showZigZags: Bool
     
-    init(segments: [[[[Segment]]]], harmonicIntervalLinesType: IntervalLinesType, showMelodicIntervalLines: Bool, barIndex: Int, barWidth: CGFloat, rowHeight: CGFloat, harmonicIntervalLineColors: [Color], melodicIntervalLineColors: [Color], showInvertedIntervals: Bool, showZigZags: Bool) {
+    init(segments: [[[[Segment]]]], harmonicIntervalLinesType: IntervalLinesType, showMelodicIntervalLines: Bool, barIndex: Int, barWidth: CGFloat, rowWidth: CGFloat, rowHeight: CGFloat, harmonicIntervalLineColors: [Color], melodicIntervalLineColors: [Color], showInvertedIntervals: Bool, showZigZags: Bool) {
         self.segments = segments
         self.barIndex = barIndex
         self.barWidth = barWidth
+        self.rowWidth = rowWidth
         self.rowHeight = rowHeight
         self.harmonicIntervalLineColors = harmonicIntervalLineColors
         self.melodicIntervalLineColors = melodicIntervalLineColors
@@ -288,7 +290,7 @@ class IntervalLinesViewModel: ObservableObject {
             for i in 0..<previousMelodicSegments.count {
                 if let trailingSegment = previousMelodicSegments[i].last,
                    let leadingSegment = currentMelodicSegments[i].first {
-                    let xStartPosition = barWidth * CGFloat(trailingSegment.durationPreceeding + trailingSegment.duration / 2) - barWidth
+                    let xStartPosition = barWidth * CGFloat(trailingSegment.durationPreceeding + trailingSegment.duration / 2) - rowWidth
                     let yStartPosition = rowHeight * CGFloat(trailingSegment.rowIndex) + rowHeight / 2
                     let xEndPosition = (barWidth * CGFloat(leadingSegment.durationPreceeding + leadingSegment.duration / 2))
                     let yEndPosition = rowHeight * CGFloat(leadingSegment.rowIndex) + rowHeight / 2
@@ -335,7 +337,7 @@ class IntervalLinesViewModel: ObservableObject {
                    let leadingSegment = nextMelodicSegments[i].first {
                     let xStartPosition = barWidth * CGFloat(trailingSegment.durationPreceeding + trailingSegment.duration / 2)
                     let yStartPosition = rowHeight * CGFloat(trailingSegment.rowIndex) + rowHeight / 2
-                    let xEndPosition = (barWidth * CGFloat(leadingSegment.durationPreceeding + leadingSegment.duration / 2)) + barWidth
+                    let xEndPosition = (barWidth * CGFloat(leadingSegment.durationPreceeding + leadingSegment.duration / 2)) + rowWidth
                     let yEndPosition = rowHeight * CGFloat(leadingSegment.rowIndex) + rowHeight / 2
                     
                     let startPoint = CGPoint(x: xStartPosition, y: yStartPosition)

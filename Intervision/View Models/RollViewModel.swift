@@ -10,7 +10,8 @@ import SwiftUI
 
 class RollViewModel: ObservableObject {
     
-    @Published var score: Score?
+    @ObservedObject var scoreManager: ScoreManager
+    
     @Published var parts: [Part]? {
         didSet {
             calculateSegments()
@@ -19,17 +20,43 @@ class RollViewModel: ObservableObject {
     
     @Published var segments: [[[[Segment]]]]?
     
-    @Published var octaves: Int = 9
-    @Published var harmonicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType = .none
-    @Published var showMelodicIntervalLines: Bool = false
-    @Published var viewableHarmonicIntervalLineColors: [Color] = partSegmentColors
-    @Published var viewableMelodicIntervalLineColors: [Color] = partSegmentColors
-    @Published var viewableIntervals: [String] = intervals
-    @Published var showInvertedIntervals: Bool = false
-    @Published var showZigZags: Bool = false
+    @Published var octaves: Int
+    @Published var harmonicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType
+    @Published var showMelodicIntervalLines: Bool
+    @Published var viewableHarmonicIntervalLineColors: [Color]
+    @Published var viewableMelodicIntervalLineColors: [Color]
+    @Published var viewableIntervals: [String]
+    @Published var showInvertedIntervals: Bool
+    @Published var showZigZags: Bool
+    
+    init(
+        scoreManager: ScoreManager,
+        parts: [Part]? = nil,
+        segments: [[[[Segment]]]]? = nil,
+        octaves: Int = 9,
+        harmonicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType = .none,
+        showMelodicIntervalLines: Bool = false,
+        viewableHarmonicIntervalLineColors: [Color] = harmonicIntervalLineColors,
+        viewableMelodicIntervalLineColors: [Color] = melodicIntervalLineColors,
+        viewableIntervals: [String] = intervals,
+        showInvertedIntervals: Bool = false,
+        showZigZags: Bool = false
+    ) {
+        self.scoreManager = scoreManager
+        self.parts = parts
+        self.segments = segments
+        self.octaves = octaves
+        self.harmonicIntervalLinesType = harmonicIntervalLinesType
+        self.showMelodicIntervalLines = showMelodicIntervalLines
+        self.viewableHarmonicIntervalLineColors = viewableHarmonicIntervalLineColors
+        self.viewableMelodicIntervalLineColors = viewableMelodicIntervalLineColors
+        self.viewableIntervals = viewableIntervals
+        self.showInvertedIntervals = showInvertedIntervals
+        self.showZigZags = showZigZags
+    }
     
     func addAllParts() {
-        guard let score = score, let parts = score.parts else { return }
+        guard let score = scoreManager.score, let parts = score.parts else { return }
         self.parts = parts
     }
 
@@ -50,7 +77,7 @@ class RollViewModel: ObservableObject {
     }
     
     func sortPartsBasedOnScoreOrder(_ parts: [Part]) -> [Part] {
-        guard let scoreParts = score?.parts else { return parts }
+        guard let scoreParts = scoreManager.score?.parts else { return parts }
         
         var sortedParts = [Part]()
         for scorePart in scoreParts {
@@ -164,7 +191,7 @@ class RollViewModel: ObservableObject {
     func getSegmentColors() -> [Color] {
         var colors: [Color] = []
         
-        if let score = self.score, let parts = score.parts, let viewParts = self.parts {
+        if let score = self.scoreManager.score, let parts = score.parts, let viewParts = self.parts {
             for (partIndex, part) in parts.enumerated() {
                 let segmentColor: Color
                 if viewParts.contains(part) {

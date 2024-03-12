@@ -61,6 +61,7 @@
 		1BBEAE452B76DCF90033FFDA /* Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1BBEAE442B76DCF90033FFDA /* Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml */; };
 		1BBEAE482B780E720033FFDA /* Advanced_Trio.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1BBEAE462B780E720033FFDA /* Advanced_Trio.musicxml */; };
 		1BBEAE492B780E720033FFDA /* Simpsons_MultiPart.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1BBEAE472B780E720033FFDA /* Simpsons_MultiPart.musicxml */; };
+		1BBF21A32B9FFB160097D5A3 /* ScoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBF21A22B9FFB160097D5A3 /* ScoreManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -121,6 +122,7 @@
 		1BBEAE442B76DCF90033FFDA /* Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml; path = ../../../../../Desktop/Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml; sourceTree = "<group>"; };
 		1BBEAE462B780E720033FFDA /* Advanced_Trio.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Advanced_Trio.musicxml; path = ../../../../../Desktop/Advanced_Trio.musicxml; sourceTree = "<group>"; };
 		1BBEAE472B780E720033FFDA /* Simpsons_MultiPart.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Simpsons_MultiPart.musicxml; path = ../../../../../Desktop/Simpsons_MultiPart.musicxml; sourceTree = "<group>"; };
+		1BBF21A22B9FFB160097D5A3 /* ScoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -285,6 +287,7 @@
 				1BBC977F2B759D8E001C953C /* GraceModel.swift */,
 				1B0E44A12B92519800C0E12C /* SegmentModel.swift */,
 				1B0E44B72B96AE8C00C0E12C /* LineModel.swift */,
+				1BBF21A22B9FFB160097D5A3 /* ScoreManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -452,6 +455,7 @@
 				1B97BEE62B71D917007D0BE5 /* AppDelegate.swift in Sources */,
 				1B0E44B52B928A8400C0E12C /* RollBarHeader.swift in Sources */,
 				1B0E44AD2B92892800C0E12C /* PianoKeysHeader.swift in Sources */,
+				1BBF21A32B9FFB160097D5A3 /* ScoreManager.swift in Sources */,
 				1B561F7B2B793216001860E5 /* BarViewModel.swift in Sources */,
 				1B231FF52B8A5FB9003AB714 /* RollViewModel.swift in Sources */,
 				1B94359B2B7FE4F500B57DA7 /* BeamsView.swift in Sources */,

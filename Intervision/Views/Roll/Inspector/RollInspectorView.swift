@@ -70,7 +70,7 @@ struct RollInspectorView: View {
                     Spacer()
                 }
                 
-                if let score = rollViewModel.score,
+                if let score = rollViewModel.scoreManager.score,
                    let parts = score.parts {
                     ForEach(0..<parts.count, id: \.self) { partIndex in
                         let part = parts[partIndex]
@@ -280,6 +280,6 @@ struct RollInspectorView: View {
 }
 
 #Preview {
-    RollInspectorView(rollViewModel: RollViewModel(), presentedView: Binding.constant(.Roll), widthScale: Binding.constant(1), parts: [])
+    RollInspectorView(rollViewModel: RollViewModel(scoreManager: ScoreManager()), presentedView: Binding.constant(.Roll), widthScale: Binding.constant(1), parts: [])
         .frame(width: 500)
 }

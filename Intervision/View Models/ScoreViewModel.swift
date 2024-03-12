@@ -6,15 +6,17 @@
 //
 
 import Foundation
+import SwiftUI
 
 class ScoreViewModel: ObservableObject {
     
-    @Published var viewType: ViewType
-    @Published var score: Score?
+    @ObservedObject var scoreManager: ScoreManager
     
-    init(viewType: ViewType = .Horizontal, score: Score?) {
+    @Published var viewType: ViewType
+    
+    init(scoreManager: ScoreManager, viewType: ViewType = .Horizontal) {
+        self.scoreManager = scoreManager
         self.viewType = viewType
-        self.score = score
     }
 }
 

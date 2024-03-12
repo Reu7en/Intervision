@@ -16,11 +16,9 @@ struct RollView: View {
     @State var widthScale: CGFloat = 1.0
     @State var showInspector: Bool = false
     
-    let octaves: Int
-    
     var body: some View {
         GeometryReader { geometry in
-            let rows = octaves * 12
+            let rows = rollViewModel.octaves * 12
             let pianoKeysWidth = geometry.size.width / 10
             let barWidth = geometry.size.width / 3 * widthScale
             let rowHeight = geometry.size.height / CGFloat(rows / 2)
@@ -48,6 +46,7 @@ struct RollView: View {
                                                             rowHeight: rowHeight,
                                                             beats: beats
                                                         )
+                                                        .id(UUID())
                                                         
                                                         IntervalLinesView(
                                                             intervalLinesViewModel: IntervalLinesViewModel(
@@ -56,6 +55,7 @@ struct RollView: View {
                                                                 showMelodicIntervalLines: rollViewModel.showMelodicIntervalLines,
                                                                 barIndex: barIndex,
                                                                 barWidth: barWidth,
+                                                                rowWidth: rowWidth,
                                                                 rowHeight: rowHeight,
                                                                 harmonicIntervalLineColors: rollViewModel.viewableHarmonicIntervalLineColors,
                                                                 melodicIntervalLineColors: rollViewModel.viewableMelodicIntervalLineColors, 
@@ -93,7 +93,7 @@ struct RollView: View {
                                     Section {
                                         PianoKeysView(
                                             geometry: geometry,
-                                            octaves: octaves,
+                                            octaves: rollViewModel.octaves,
                                             width: pianoKeysWidth,
                                             rowHeight: rowHeight
                                         )
@@ -131,9 +131,14 @@ struct RollView: View {
                 )
             }
         }
+        .onAppear {
+            if rollViewModel.parts == nil {
+                rollViewModel.addAllParts()
+            }
+        }
     }
 }
 
 #Preview {
-    RollView(presentedView: Binding.constant(.Roll), rollViewModel: RollViewModel(), octaves: 9)
+    RollView(presentedView: Binding.constant(.Roll), rollViewModel: RollViewModel(scoreManager: ScoreManager()))
 }

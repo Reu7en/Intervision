@@ -8,21 +8,22 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-extension UTType {
-    static var musicXML: UTType {
-        UTType(exportedAs: "com.example.musicxml")
-    }
-}
-
 struct HomeView: View {
     
-    @StateObject var scoreViewModel = ScoreViewModel(score: nil)
-    @StateObject var rollViewModel = RollViewModel()
+    @ObservedObject var scoreManager: ScoreManager
     
-    @State private var showScoreView: Bool = false
-    @State private var showRollView: Bool = false
+    @StateObject var scoreViewModel: ScoreViewModel
+    @StateObject var rollViewModel: RollViewModel
+    
     @State var showView: Bool = false
     @State var presentedView: PresentedView = .Roll
+    
+    init() {
+        let scoreManager = ScoreManager()
+        _scoreViewModel = StateObject(wrappedValue: ScoreViewModel(scoreManager: scoreManager))
+        _rollViewModel = StateObject(wrappedValue: RollViewModel(scoreManager: scoreManager))
+        _scoreManager = ObservedObject(wrappedValue: scoreManager)
+    }
     
     var body: some View {
         GeometryReader { geometry in
@@ -62,19 +63,12 @@ struct HomeView: View {
                             
                             if panel.runModal() == .OK {
                                 if let fileURL = panel.urls.first {
-                                    let parsedScore = MusicXMLDataService.readXML(fileURL.standardizedFileURL.path)
-                                    
-                                    DispatchQueue.main.async {
-                                        self.scoreViewModel.score = parsedScore
+                                    MusicXMLDataService.readXML(fileURL.standardizedFileURL.path) { score in
+                                        DispatchQueue.main.async {
+                                            scoreManager.updateScore(newScore: score)
+                                            showView.toggle()
+                                        }
                                     }
-                                    
-                                    DispatchQueue.main.async {
-                                        self.rollViewModel.score = parsedScore
-                                        rollViewModel.addAllParts()
-                                        rollViewModel.calculateSegments()
-                                    }
-                                    
-                                    showView.toggle()
                                 }
                             }
                         } label: {
@@ -104,15 +98,17 @@ struct HomeView: View {
                 }
                 .position(x: width / 2, y: height / 2)
                 .navigationDestination(isPresented: $showView) {
-                    switch presentedView {
-                    case .Score:
-                        ScoreView(presentedView: $presentedView, scoreViewModel: scoreViewModel)
-                            .navigationBarBackButtonHidden()
-                    case .Roll:
-                        RollView(presentedView: $presentedView, rollViewModel: rollViewModel, octaves: 9)
-                            .navigationBarBackButtonHidden()
-                    case .None:
-                        HomeView()
+                    if scoreManager.score != nil {
+                        switch presentedView {
+                        case .Score:
+                            ScoreView(presentedView: $presentedView, scoreViewModel: scoreViewModel)
+                                .navigationBarBackButtonHidden()
+                        case .Roll:
+                            RollView(presentedView: $presentedView, rollViewModel: rollViewModel)
+                                .navigationBarBackButtonHidden()
+                        case .None:
+                            HomeView()
+                        }
                     }
                 }
             }
@@ -125,6 +121,12 @@ extension HomeView {
         case Score
         case Roll
         case None
+    }
+}
+
+extension UTType {
+    static var musicXML: UTType {
+        UTType(exportedAs: "com.example.musicxml")
     }
 }
 

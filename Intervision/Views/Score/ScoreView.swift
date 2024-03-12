@@ -17,7 +17,7 @@ struct ScoreView: View {
     @State private var showInspector: Bool = false
     
     var body: some View {
-        if let score = scoreViewModel.score,
+        if let score = scoreViewModel.scoreManager.score,
            let parts = score.parts {
             GeometryReader { geometry in
                 HStack(spacing: 0) {
@@ -58,6 +58,5 @@ struct ScoreView: View {
 }
 
 #Preview {
-    ScoreView(presentedView: Binding.constant(.Score), scoreViewModel: ScoreViewModel(score: nil))
-        .environmentObject(ScoreViewModel(score: nil))
+    ScoreView(presentedView: Binding.constant(.Score), scoreViewModel: ScoreViewModel(scoreManager: ScoreManager()))
 }

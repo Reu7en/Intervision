@@ -597,7 +597,6 @@ struct MusicXMLDataService {
                 }
                 
                 if let n = pNote {
-                    
                     if chordTag {
                         chords[currentStave - 1].notes.append(n)
                     } else {
@@ -673,24 +672,42 @@ struct MusicXMLDataService {
         return String(tagString[range])
     }
     
-    static func readXML(_ filePath: String) -> Score? {
-        guard let content = readFile(filePath) else { return nil }
-        let lines = getLines(content)
-        
-        if !isPartwise(lines) { return nil }
-        let title: String? = getTitle(lines)
-        let composer: String? = getComposer(lines)
-        var partData: [Part]? = getParts(lines)
-        let partContents = extractContentsBetweenTags(lines, startTag: "<part id=", endTag: "</part")
-        
-        for i in 0..<(partData?.count ?? 0) {
-            let bars: [[Bar]] = getBars(partContents[i])
-            partData?[i].bars = bars
+    static func readXML(_ filePath: String, completion: @escaping (Score?) -> Void) {
+        DispatchQueue.global().async {
+            guard let content = readFile(filePath) else {
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+                
+                return
+            }
             
+            let lines = getLines(content)
+            
+            guard isPartwise(lines) else {
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+                
+                return
+            }
+            
+            let title: String? = getTitle(lines)
+            let composer: String? = getComposer(lines)
+            var partData: [Part]? = getParts(lines)
+            let partContents = extractContentsBetweenTags(lines, startTag: "<part id=", endTag: "</part")
+            
+            for i in 0..<(partData?.count ?? 0) {
+                let bars: [[Bar]] = getBars(partContents[i])
+                partData?[i].bars = bars
+            }
+            
+            let score = Score(title: title, composer: composer, parts: partData)
+            
+            DispatchQueue.main.async {
+                completion(score)
+            }
         }
-        
-        let score: Score = Score(title: title, composer: composer, parts: partData)
-        
-        return score
     }
+
 }

@@ -23,6 +23,7 @@ class RollViewModel: ObservableObject {
     @Published var octaves: Int
     @Published var harmonicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType
     @Published var showMelodicIntervalLines: Bool
+    @Published var viewablePartSegmentColors: [Color]
     @Published var viewableHarmonicIntervalLineColors: [Color]
     @Published var viewableMelodicIntervalLineColors: [Color]
     @Published var viewableIntervals: [String]
@@ -36,6 +37,7 @@ class RollViewModel: ObservableObject {
         octaves: Int = 9,
         harmonicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType = .none,
         showMelodicIntervalLines: Bool = false,
+        viewablePartSegmentColors: [Color] = partSegmentColors,
         viewableHarmonicIntervalLineColors: [Color] = harmonicIntervalLineColors,
         viewableMelodicIntervalLineColors: [Color] = melodicIntervalLineColors,
         viewableIntervals: [String] = intervals,
@@ -48,6 +50,7 @@ class RollViewModel: ObservableObject {
         self.octaves = octaves
         self.harmonicIntervalLinesType = harmonicIntervalLinesType
         self.showMelodicIntervalLines = showMelodicIntervalLines
+        self.viewablePartSegmentColors = viewablePartSegmentColors
         self.viewableHarmonicIntervalLineColors = viewableHarmonicIntervalLineColors
         self.viewableMelodicIntervalLineColors = viewableMelodicIntervalLineColors
         self.viewableIntervals = viewableIntervals
@@ -195,8 +198,8 @@ class RollViewModel: ObservableObject {
             for (partIndex, part) in parts.enumerated() {
                 let segmentColor: Color
                 if viewParts.contains(part) {
-                    if partIndex < RollViewModel.partSegmentColors.count {
-                        segmentColor = RollViewModel.partSegmentColors[partIndex]
+                    if partIndex < viewablePartSegmentColors.count {
+                        segmentColor = viewablePartSegmentColors[partIndex]
                     } else {
                         segmentColor = Color.black
                     }
@@ -253,6 +256,6 @@ extension RollViewModel {
     
     static let harmonicIntervalLineColors: [Color] = partSegmentColors
     static let melodicIntervalLineColors: [Color] = partSegmentColors
-    static let invertedHarmonicIntervalLineColors: [Color] = Array(harmonicIntervalLineColors.prefix(6)) + [harmonicIntervalLineColors.last ?? Color.black]
-    static let invertedMelodicIntervalLineColors: [Color] = Array(melodicIntervalLineColors.prefix(6)) + [melodicIntervalLineColors.last ?? Color.black]
+    static let invertedHarmonicIntervalLineColors: [Color] = Array(harmonicIntervalLineColors.prefix(7))
+    static let invertedMelodicIntervalLineColors: [Color] = Array(melodicIntervalLineColors.prefix(7))
 }

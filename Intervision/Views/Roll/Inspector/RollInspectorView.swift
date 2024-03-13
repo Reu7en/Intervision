@@ -74,17 +74,7 @@ struct RollInspectorView: View {
                    let parts = score.parts {
                     ForEach(0..<parts.count, id: \.self) { partIndex in
                         let part = parts[partIndex]
-                        let segmentColor: Color = {
-                            if let viewParts = rollViewModel.parts, viewParts.contains(part) {
-                                if partIndex < RollViewModel.partSegmentColors.count {
-                                    return RollViewModel.partSegmentColors[partIndex]
-                                } else {
-                                    return Color.black
-                                }
-                            } else {
-                                return Color.clear
-                            }
-                        }()
+                        let partColor = RollViewModel.melodicIntervalLineColors[partIndex]
                         
                         HStack {
                             Toggle(
@@ -100,8 +90,10 @@ struct RollInspectorView: View {
                                     set: { newValue in
                                         if newValue {
                                             rollViewModel.addPart(part)
+                                            rollViewModel.viewablePartSegmentColors[partIndex] = partColor
                                         } else {
                                             rollViewModel.removePart(part)
+                                            rollViewModel.viewablePartSegmentColors[partIndex] = Color.clear
                                         }
                                     }
                                 )
@@ -110,14 +102,18 @@ struct RollInspectorView: View {
                             
                             Spacer()
                             
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.black)
-                                .background (
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .fill(segmentColor)
-                                )
-                                .frame(height: spacing)
-                                .frame(width: spacing * 2)
+                            ColorPicker("", selection: Binding<Color>(
+                                get: {
+                                    return rollViewModel.viewablePartSegmentColors[partIndex]
+                                },
+                                set: { newValue in
+                                    withAnimation {
+                                        rollViewModel.viewablePartSegmentColors[partIndex] = newValue
+                                    }
+                                }
+                            ))
+                            .frame(height: spacing)
+                            .frame(width: spacing * 2)
                         }
                     }
                 }

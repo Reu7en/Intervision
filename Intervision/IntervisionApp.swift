@@ -15,9 +15,6 @@ struct IntervisionApp: App {
         
         WindowGroup {
             MainWindowView()
-                .onAppear {
-                    TestLoad.testLoad()
-                }
         }
     }
 }

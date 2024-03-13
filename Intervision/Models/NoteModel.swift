@@ -15,7 +15,7 @@ struct Note: Identifiable, Equatable {
     var duration: Duration
     var durationValue: Double
     var timeModification: TimeModification?
-    var dynamic: [Dynamic]?
+    var changeDynamic: ChangeDynamic?
     var graceNotes: [Grace]?
     var tie: Tie?
     var isRest: Bool
@@ -124,19 +124,12 @@ extension Note {
         case custom(actual: Int, normal: Int)
     }
     
-    enum Dynamic {
-        case Fortississimo
-        case Fortissimo
-        case Forte
-        case MezzoForte
-        case MezzoPiano
-        case Piano
-        case Pianissimo
-        case Pianississimo
-        case CrescendoStart, CrescendoEnd
-        case DecrescendoStart, DecrescendoEnd
-        case Sforzando
+    enum ChangeDynamic {
+        case Crescendo
+        case Decrescendo
+        case Stop
     }
+
     
     enum Tie {
         case Start

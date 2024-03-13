@@ -16,6 +16,7 @@ struct Bar: Identifiable, Equatable {
     var doubleLine: Bool
     var volta: Int?
     var keySignature: KeySignature
+    var dynamics: [Dynamic]?
     
     // Identifiable
     var id = UUID()
@@ -159,6 +160,18 @@ extension Bar {
                 return false
             }
         }
+    }
+    
+    enum Dynamic {
+        case Fortississimo
+        case Fortissimo
+        case Forte
+        case MezzoForte
+        case MezzoPiano
+        case Piano
+        case Pianissimo
+        case Pianississimo
+        case Sforzando
     }
 }
 

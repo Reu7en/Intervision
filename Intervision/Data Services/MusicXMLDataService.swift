@@ -274,6 +274,30 @@ struct MusicXMLDataService {
             var currentRepeat: Bar.Repeat? = nil
             var currentVolta: Int? = nil
             var hasDoubleBarline: Bool = false
+            var currentDynamics: [[Bar.Dynamic]?] = Array.init(repeating: nil, count: currentStaves)
+            var changeDynamics: [(Note.ChangeDynamic, Int)] = []
+            var noteCount = 0
+            
+            for line in bar {
+                if line.contains("<note") {
+                    noteCount += 1
+                }
+                
+                if line.contains("<wedge") {
+                    let wedge = extractFirstAttributeValue(fromTag: line)
+                    
+                    switch wedge {
+                    case "crescendo":
+                        changeDynamics.append((.Crescendo, noteCount))
+                    case "diminuendo":
+                        changeDynamics.append((.Decrescendo, noteCount))
+                    case "stop":
+                        changeDynamics.append((.Stop, noteCount - 1))
+                    default:
+                        break
+                    }
+                }
+            }
             
             for line in bar {
                 if line.contains("<time") {
@@ -330,14 +354,80 @@ struct MusicXMLDataService {
                 }
             }
             
+            for line in bar {
+                if line.contains("<dynamics") {
+                    var currentDynamic: Bar.Dynamic?
+                    let dynamic = extractContentsBetweenTags(bar, startTag: "<dynamics", endTag: "</direction>")
+                    var stave = 1
+                    
+                    if dynamic.count > 0 {
+                        for subLine in dynamic {
+                            if subLine.count > 0 {
+                                switch subLine[0] {
+                                case "<fff/>":
+                                    currentDynamic = .Fortississimo
+                                    break
+                                case "<ff/>":
+                                    currentDynamic = .Fortissimo
+                                    break
+                                case "<f/>":
+                                    currentDynamic = .Forte
+                                    break
+                                case "<mf/>":
+                                    currentDynamic = .MezzoForte
+                                    break
+                                case "<mp/>":
+                                    currentDynamic = .MezzoPiano
+                                    break
+                                case "<p/>":
+                                    currentDynamic = .Piano
+                                    break
+                                case "<pp/>":
+                                    currentDynamic = .Pianissimo
+                                    break
+                                case "<ppp/>":
+                                    currentDynamic = .Pianississimo
+                                    break
+                                case "<sfz/>":
+                                    currentDynamic = .Sforzando
+                                    break
+                                default:
+                                    break
+                                }
+                                
+                                if let current = currentDynamic, currentDynamics.count > 0 {
+                                    if subLine.count > 3 {
+                                        stave = Int(extractContent(fromTag: subLine[3]) ?? "1") ?? 1
+                                        
+                                        if currentDynamics[stave - 1] == nil {
+                                            currentDynamics[stave - 1] = []
+                                        }
+                                        
+                                        currentDynamics[stave - 1]?.append(current)
+                                    } else {
+                                        if currentDynamics[0] == nil {
+                                            currentDynamics[0] = []
+                                        }
+                                        
+                                        currentDynamics[0]?.append(current)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    break
+                }
+            }
+            
             var chords: [Chord] = []
             
-            for i in 0..<currentStaves {
-                currentBars.append(Bar(chords: [], tempo: currentTempo, clef: currentClefs[i], timeSignature: currentTimeSignature, repeat: currentRepeat, doubleLine: hasDoubleBarline, volta: currentVolta, keySignature: currentKeySignature))
+            for i in 0..<currentStaves {  
+                currentBars.append(Bar(chords: [], tempo: currentTempo, clef: currentClefs[i], timeSignature: currentTimeSignature, repeat: currentRepeat, doubleLine: hasDoubleBarline, volta: currentVolta, keySignature: currentKeySignature, dynamics: currentDynamics[i]))
                 chords.append(Chord(notes: []))
             }
             
-            for note in notes {
+            for (noteIndex, note) in notes.enumerated() {
                 var pitch: Note.Pitch? = nil
                 var accidental: Note.Accidental? = nil
                 var octave: Note.Octave? = nil
@@ -348,6 +438,13 @@ struct MusicXMLDataService {
                 var isMeasureRest: Bool = false
                 var hasAccent: Bool = false
                 var timeModification: Note.TimeModification? = nil
+                var changeDynamic: Note.ChangeDynamic? = nil
+                
+                for change in changeDynamics {
+                    if change.1 == noteIndex {
+                        changeDynamic = change.0
+                    }
+                }
                 
                 for line in note {
                     if line.contains("<staff") {
@@ -579,7 +676,7 @@ struct MusicXMLDataService {
                         duration: d,
                         durationValue: dV,
                         timeModification: timeModification,
-                        dynamic: nil,
+                        changeDynamic: changeDynamic,
                         graceNotes: nil,
                         tie: nil,
                         isRest: isRest,

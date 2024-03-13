@@ -93,7 +93,7 @@ extension BarViewModel {
             duration: Note.Duration.bar,
             durationValue: 0,
             timeModification: nil,
-            dynamic: nil,
+            changeDynamic: nil,
             graceNotes: nil,
             tie: nil,
             isRest: false,
@@ -505,7 +505,7 @@ extension BarViewModel {
         let pitchDistanceInOctave = totalPitchDistance % 7
         newPitch = Note.Pitch.allCases[pitchDistanceInOctave]
         
-        middleStaveNote = Note(pitch: newPitch, accidental: nil, octave: Note.Octave(rawValue: newOctave), octaveShift: nil, duration: .bar, durationValue: -1, timeModification: nil, dynamic: nil, graceNotes: nil, tie: nil, isRest: false, isDotted: false, hasAccent: false)
+        middleStaveNote = Note(pitch: newPitch, accidental: nil, octave: Note.Octave(rawValue: newOctave), octaveShift: nil, duration: .bar, durationValue: -1, timeModification: nil, changeDynamic: nil, graceNotes: nil, tie: nil, isRest: false, isDotted: false, hasAccent: false)
     }
     
     static func calculateNotePosition(isRest: Bool, rowIndex: Int, columnIndex: Int, totalRows: Int, totalColumns: Int, geometry: GeometryProxy) -> CGPoint {

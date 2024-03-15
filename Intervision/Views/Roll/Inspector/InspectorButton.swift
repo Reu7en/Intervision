@@ -23,11 +23,11 @@ struct InspectorButton: View {
                 .rotationEffect(.degrees(showInspector ? -360 : 0))
         }
         .background(
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: 8)
                 .fill(showInspector ? Color.accentColor : Color.clear)
         )
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .frame(width: headerHeight * 1.5 , height: headerHeight)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .frame(width: headerHeight * 1.5, height: headerHeight * 1)
     }
 }
 

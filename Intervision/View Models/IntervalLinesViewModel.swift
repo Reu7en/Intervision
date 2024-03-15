@@ -14,6 +14,7 @@ class IntervalLinesViewModel: ObservableObject {
     @Published var melodicLines: [Line]?
     
     let segments: [[[[Segment]]]] // part->bar->stave->segment
+    let groups: [(String, [Part])]
     let barIndex: Int
     let barWidth: CGFloat
     let rowWidth: CGFloat
@@ -23,8 +24,9 @@ class IntervalLinesViewModel: ObservableObject {
     let showInvertedIntervals: Bool
     let showZigZags: Bool
     
-    init(segments: [[[[Segment]]]], harmonicIntervalLinesType: IntervalLinesType, showMelodicIntervalLines: Bool, barIndex: Int, barWidth: CGFloat, rowWidth: CGFloat, rowHeight: CGFloat, harmonicIntervalLineColors: [Color], melodicIntervalLineColors: [Color], showInvertedIntervals: Bool, showZigZags: Bool) {
+    init(segments: [[[[Segment]]]], groups: [(String, [Part])], harmonicIntervalLinesType: IntervalLinesType, showMelodicIntervalLines: Bool, barIndex: Int, barWidth: CGFloat, rowWidth: CGFloat, rowHeight: CGFloat, harmonicIntervalLineColors: [Color], melodicIntervalLineColors: [Color], showInvertedIntervals: Bool, showZigZags: Bool) {
         self.segments = segments
+        self.groups = groups
         self.barIndex = barIndex
         self.barWidth = barWidth
         self.rowWidth = rowWidth

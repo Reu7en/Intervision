@@ -20,6 +20,8 @@ class RollViewModel: ObservableObject {
     
     @Published var segments: [[[[Segment]]]]?
     
+    @Published var partGroups: [(String, [Part])] = []
+    
     @Published var octaves: Int
     @Published var harmonicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType
     @Published var showMelodicIntervalLines: Bool
@@ -56,6 +58,45 @@ class RollViewModel: ObservableObject {
         self.viewableIntervals = viewableIntervals
         self.showInvertedIntervals = showInvertedIntervals
         self.showZigZags = showZigZags
+    }
+    
+    func initialisePartGroups() {
+        guard let score = scoreManager.score, let parts = score.parts else { return }
+        let group = ("All Parts", parts)
+        
+        partGroups = []
+        partGroups.append(group)
+    }
+    
+    func createPartGroup(groupName: String) {
+        partGroups.append((groupName, []))
+    }
+    
+    func deletePartGroup(groupName: String) {
+        guard partGroups.count > 1 else { return }
+        partGroups.removeAll { $0.0 == groupName }
+    }
+    
+    func movePart(_ part: Part, from sourceGroup: String, to destinationGroup: String) {
+        if let sourceIndex = partGroups.firstIndex(where: { $0.0 == sourceGroup }) {
+            partGroups[sourceIndex].1.removeAll { $0.id == part.id }
+            
+            if partGroups[sourceIndex].1.isEmpty {
+                partGroups.remove(at: sourceIndex)
+            }
+        }
+        
+        if let destinationIndex = partGroups.firstIndex(where: { $0.0 == destinationGroup }) {
+            partGroups[destinationIndex].1.append(part)
+        } else {
+            partGroups.append((destinationGroup, [part]))
+        }
+    }
+    
+    func renamePartGroup(from oldName: String, to newName: String) {
+        guard let index = partGroups.firstIndex(where: { $0.0 == oldName }) else { return }
+        
+        partGroups[index].0 = newName
     }
     
     func addAllParts() {

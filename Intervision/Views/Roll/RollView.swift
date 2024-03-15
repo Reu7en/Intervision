@@ -15,6 +15,7 @@ struct RollView: View {
     
     @State var widthScale: CGFloat = 1.0
     @State var showInspector: Bool = false
+    @State var showPiano: Bool = true
     
     var body: some View {
         GeometryReader { geometry in
@@ -51,6 +52,7 @@ struct RollView: View {
                                                         IntervalLinesView(
                                                             intervalLinesViewModel: IntervalLinesViewModel(
                                                                 segments: segments,
+                                                                groups: rollViewModel.partGroups,
                                                                 harmonicIntervalLinesType: rollViewModel.harmonicIntervalLinesType,
                                                                 showMelodicIntervalLines: rollViewModel.showMelodicIntervalLines,
                                                                 barIndex: barIndex,
@@ -89,21 +91,24 @@ struct RollView: View {
                                     EmptyRollView(geometry: geometry)
                                 }
                             } header: {
-                                LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
-                                    Section {
-                                        PianoKeysView(
-                                            geometry: geometry,
-                                            octaves: rollViewModel.octaves,
-                                            width: pianoKeysWidth,
-                                            rowHeight: rowHeight
-                                        )
-                                    } header: {
-                                        PianoKeysHeader(
-                                            headerHeight: headerHeight
-                                        )
+                                if showPiano {
+                                    LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
+                                        Section {
+                                            PianoKeysView(
+                                                geometry: geometry,
+                                                octaves: rollViewModel.octaves,
+                                                width: pianoKeysWidth,
+                                                rowHeight: rowHeight
+                                            )
+                                            .id(UUID())
+                                        } header: {
+                                            PianoKeysHeader(
+                                                headerHeight: headerHeight
+                                            )
+                                        }
                                     }
+                                    .frame(width: pianoKeysWidth)
                                 }
-                                .frame(width: pianoKeysWidth)
                             }
                         }
                     }
@@ -118,6 +123,7 @@ struct RollView: View {
                         rollViewModel: rollViewModel,
                         presentedView: $presentedView,
                         widthScale: $widthScale,
+                        showPiano: $showPiano,
                         parts: rollViewModel.parts
                     )
                     .frame(width: inspectorWidth)
@@ -134,6 +140,10 @@ struct RollView: View {
         .onAppear {
             if rollViewModel.parts == nil {
                 rollViewModel.addAllParts()
+            }
+            
+            if rollViewModel.partGroups.isEmpty {
+                rollViewModel.initialisePartGroups()
             }
         }
     }

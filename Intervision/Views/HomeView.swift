@@ -38,7 +38,7 @@ struct HomeView: View {
                         Image(systemName: "pianokeys")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: width / 20)
+                            .frame(width: width / 30)
                         
                         Spacer()
                         
@@ -52,7 +52,7 @@ struct HomeView: View {
                             }
                             .padding()
                         }
-                        .frame(width: width / 5)
+                        .frame(width: width / 10)
                         
                         Button {
                             let panel = NSOpenPanel()
@@ -79,12 +79,12 @@ struct HomeView: View {
                             }
                             .padding()
                         }
-                        .frame(width: width / 5)
+                        .frame(width: width / 10)
                         
                         Spacer()
                     }
                     .padding()
-                    .frame(width: width / 3, height: height / 3)
+                    .frame(width: width / 5, height: height / 5)
                     .background(
                         RoundedRectangle(cornerRadius: 20)
                             .fill(Material.ultraThickMaterial)

@@ -14,6 +14,7 @@ struct RollView: View {
     @StateObject var rollViewModel: RollViewModel
     
     @State var widthScale: CGFloat = 1.0
+    @State var heightScale: CGFloat = 1.0
     @State var showInspector: Bool = false
     @State var showPiano: Bool = true
     
@@ -21,8 +22,8 @@ struct RollView: View {
         GeometryReader { geometry in
             let rows = rollViewModel.octaves * 12
             let pianoKeysWidth = geometry.size.width / 10
-            let barWidth = geometry.size.width / 3 * widthScale
-            let rowHeight = geometry.size.height / CGFloat(rows / 2)
+            let barWidth = round(geometry.size.width / 3 * widthScale)
+            let rowHeight = round(geometry.size.height / CGFloat(rows / 2) * heightScale)
             let headerHeight = geometry.size.height / 30
             let inspectorWidth = geometry.size.width / 8
             
@@ -36,7 +37,7 @@ struct RollView: View {
                                     ForEach(0..<parts[0].bars.count, id: \.self) { barIndex in
                                         if let bar = parts[0].bars[barIndex].first {
                                             let (beats, noteValue) = RollViewModel.getBeatData(bar: bar)
-                                            let rowWidth = CGFloat(beats) / CGFloat(noteValue) * barWidth
+                                            let rowWidth = round(CGFloat(beats) / CGFloat(noteValue) * barWidth)
                                             
                                             LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
                                                 Section {
@@ -123,6 +124,7 @@ struct RollView: View {
                         rollViewModel: rollViewModel,
                         presentedView: $presentedView,
                         widthScale: $widthScale,
+                        heightScale: $heightScale,
                         showPiano: $showPiano,
                         parts: rollViewModel.parts
                     )

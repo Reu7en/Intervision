@@ -13,6 +13,7 @@ struct RollInspectorView: View {
     
     @Binding var presentedView: HomeView.PresentedView
     @Binding var widthScale: CGFloat
+    @Binding var heightScale: CGFloat
     @Binding var showPiano: Bool
     
     let parts: [Part]?
@@ -73,7 +74,13 @@ struct RollInspectorView: View {
                     }
                     
                     HStack {
-                        Stepper("Width \(widthScale.formatted())", value: $widthScale, in: 0.5...2.0, step: 0.5)
+                        Stepper("Width \(widthScale.formatted())", value: $widthScale, in: 0.25...2.0, step: 0.25)
+                        
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Stepper("Height \(heightScale.formatted())", value: $heightScale, in: 0.5...2.0, step: 0.25)
                         
                         Spacer()
                     }
@@ -432,6 +439,6 @@ struct RollInspectorView: View {
 }
 
 #Preview {
-    RollInspectorView(rollViewModel: RollViewModel(scoreManager: ScoreManager()), presentedView: Binding.constant(.Roll), widthScale: Binding.constant(1), showPiano: Binding.constant(true), parts: [])
+    RollInspectorView(rollViewModel: RollViewModel(scoreManager: ScoreManager()), presentedView: Binding.constant(.Roll), widthScale: Binding.constant(1), heightScale: Binding.constant(1), showPiano: Binding.constant(true), parts: [])
         .frame(width: 500)
 }

@@ -17,7 +17,7 @@ struct IntervalLinesView: View {
                 let line = harmonicLines[lineIndex]
                 
                 if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
-                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: intervalLinesViewModel.barWidth / 256)
+                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: intervalLinesViewModel.barWidth / 128)
                         .stroke(line.color, style: StrokeStyle(lineWidth: 3, lineCap: .round))
                         .shadow(color: Color.black.opacity(0.75), radius: 5, x: 0, y: 0)
                 } else {
@@ -36,7 +36,7 @@ struct IntervalLinesView: View {
                 let line = melodicLines[lineIndex]
                 
                 if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
-                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: intervalLinesViewModel.barWidth / 256)
+                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: intervalLinesViewModel.barWidth / 128)
                         .stroke(line.color, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round, dash: [4]))
                         .shadow(color: Color.black, radius: 5, x: 0, y: 0)
                         .zIndex(.infinity)
@@ -67,7 +67,7 @@ extension IntervalLinesView {
             let deltaX = endPoint.x - startPoint.x
             let deltaY = endPoint.y - startPoint.y
             let segmentLength = hypot(deltaX, deltaY)
-            let segments = Int(segmentLength / 10) // Adjust segment length as per preference
+            let segments = Int(segmentLength / 10)
             let angle = atan2(deltaY, deltaX)
 
             for i in 1..<segments {

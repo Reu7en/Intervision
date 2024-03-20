@@ -11,6 +11,7 @@ struct Segment: Identifiable, Equatable {
     let rowIndex: Int
     let duration: Double
     let durationPreceeding: Double
+    let dynamic: Bar.Dynamic?
     
     // Identifiable
     var id = UUID()

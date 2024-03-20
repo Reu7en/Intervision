@@ -139,11 +139,16 @@ class RollViewModel: ObservableObject {
         
         for part in scoreParts {
             var partSegments: [[[Segment]]] = []
+            var currentDynamics: [Bar.Dynamic?] = Array(repeating: nil, count: part.bars.first?.count ?? 0)
             
             for staveBars in part.bars {
                 var staveSegments: [[Segment]] = []
                 
-                for bar in staveBars {
+                for (staveIndex, bar) in staveBars.enumerated() {
+                    if let dynamics = bar.dynamics {
+                        currentDynamics[staveIndex] = dynamics.first
+                    }
+                    
                     var barSegments: [Segment] = []
                     let timeSignature = bar.timeSignature
                     var barDuration: Double = -1
@@ -183,7 +188,7 @@ class RollViewModel: ObservableObject {
                                             }
                                         }
                                         
-                                        barSegments.append(Segment(rowIndex: rowIndex, duration: duration, durationPreceeding: durationPreceeding))
+                                        barSegments.append(Segment(rowIndex: rowIndex, duration: duration, durationPreceeding: durationPreceeding, dynamic: currentDynamics[staveIndex]))
                                     }
                                 }
                             }

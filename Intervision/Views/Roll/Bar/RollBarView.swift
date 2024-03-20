@@ -14,6 +14,7 @@ struct RollBarView: View {
     let barWidth: CGFloat
     let rowHeight: CGFloat
     let colors: [Color]
+    let showDynamics: Bool
     
     var body: some View {
         ForEach(0..<segments.count, id: \.self) { partIndex in
@@ -26,12 +27,16 @@ struct RollBarView: View {
                     let width = barWidth * CGFloat(segment.duration)
                     let xPosition = barWidth * CGFloat(segment.durationPreceeding)
                     let yPosition = rowHeight * CGFloat(segment.rowIndex)
+                    let brightness = segment.dynamic?.brightness ?? 0.3
+                    let saturation = segment.dynamic?.saturation ?? 0.7
                     
                     RoundedRectangle(cornerRadius: 20)
                         .stroke(Color.black)
                         .background (
                             RoundedRectangle(cornerRadius: 20)
                                 .fill(segmentColor)
+                                .brightness(showDynamics ? brightness : 0.0)
+                                .saturation(showDynamics ? saturation : 1.0)
                         )
                         .frame(width: width, height: rowHeight)
                         .position(x: xPosition + (width / 2), y: yPosition + (rowHeight / 2))
@@ -42,5 +47,5 @@ struct RollBarView: View {
 }
 
 #Preview {
-    RollBarView(segments: [], barIndex: 0, barWidth: 0, rowHeight: 0, colors: [])
+    RollBarView(segments: [], barIndex: 0, barWidth: 0, rowHeight: 0, colors: [], showDynamics: false)
 }

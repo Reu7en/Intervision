@@ -14,7 +14,7 @@ struct RollInspectorView: View {
     @Binding var presentedView: HomeView.PresentedView
     @Binding var widthScale: CGFloat
     @Binding var heightScale: CGFloat
-    @Binding var showPiano: Bool
+    @Binding var showDynamics: Bool
     
     let parts: [Part]?
     
@@ -74,13 +74,13 @@ struct RollInspectorView: View {
                     }
                     
                     HStack {
-                        Stepper("Width \(widthScale.formatted())", value: $widthScale, in: 0.25...2.0, step: 0.25)
+                        Stepper("Width:  " + (String(format: "%.2f", widthScale)), value: $widthScale, in: 0.25...2.0, step: 0.25)
                         
                         Spacer()
                     }
                     
                     HStack {
-                        Stepper("Height \(heightScale.formatted())", value: $heightScale, in: 0.5...2.0, step: 0.25)
+                        Stepper("Height: " + (String(format: "%.2f", heightScale)), value: $heightScale, in: 0.5...2.0, step: 0.25)
                         
                         Spacer()
                     }
@@ -92,14 +92,14 @@ struct RollInspectorView: View {
                 VStack(alignment: .leading, spacing: spacing) {
                     HStack {
                         Toggle(
-                            "Show Piano",
+                            "Show Dynamics",
                             isOn: Binding<Bool>(
                                 get: {
-                                    return showPiano
+                                    return showDynamics
                                 },
                                 set: { newValue in
                                     withAnimation(.easeInOut) {
-                                        showPiano = newValue
+                                        showDynamics = newValue
                                     }
                                 }
                             )
@@ -439,6 +439,6 @@ struct RollInspectorView: View {
 }
 
 #Preview {
-    RollInspectorView(rollViewModel: RollViewModel(scoreManager: ScoreManager()), presentedView: Binding.constant(.Roll), widthScale: Binding.constant(1), heightScale: Binding.constant(1), showPiano: Binding.constant(true), parts: [])
+    RollInspectorView(rollViewModel: RollViewModel(scoreManager: ScoreManager()), presentedView: Binding.constant(.Roll), widthScale: Binding.constant(1), heightScale: Binding.constant(1), showDynamics: Binding.constant(true), parts: [])
         .frame(width: 500)
 }

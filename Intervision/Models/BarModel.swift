@@ -172,6 +172,52 @@ extension Bar {
         case Pianissimo
         case Pianississimo
         case Sforzando
+        
+        var brightness: Double {
+            switch self {
+            case .Fortississimo:
+                return 0.0
+            case .Fortissimo:
+                return 0.1
+            case .Forte:
+                return 0.2
+            case .MezzoForte:
+                return 0.3
+            case .MezzoPiano:
+                return 0.4
+            case .Piano:
+                return 0.5
+            case .Pianissimo:
+                return 0.6
+            case .Pianississimo:
+                return 0.7
+            case .Sforzando:
+                return 0.1
+            }
+        }
+        
+        var saturation: Double {
+            switch self {
+            case .Fortississimo:
+                return 1.0
+            case .Fortissimo:
+                return 0.9
+            case .Forte:
+                return 0.8
+            case .MezzoForte:
+                return 0.7
+            case .MezzoPiano:
+                return 0.6
+            case .Piano:
+                return 0.5
+            case .Pianissimo:
+                return 0.4
+            case .Pianississimo:
+                return 0.3
+            case .Sforzando:
+                return 0.9
+            }
+        }
     }
 }
 

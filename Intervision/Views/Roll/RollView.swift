@@ -17,6 +17,7 @@ struct RollView: View {
     @State var heightScale: CGFloat = 1.0
     @State var showInspector: Bool = false
     @State var showPiano: Bool = true
+    @State var showDynamics: Bool = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -73,7 +74,8 @@ struct RollView: View {
                                                             barIndex: barIndex,
                                                             barWidth: barWidth,
                                                             rowHeight: rowHeight,
-                                                            colors: rollViewModel.getSegmentColors()
+                                                            colors: rollViewModel.getSegmentColors(),
+                                                            showDynamics: showDynamics
                                                         )
                                                         .id(UUID())
                                                     }
@@ -109,6 +111,7 @@ struct RollView: View {
                                         }
                                     }
                                     .frame(width: pianoKeysWidth)
+                                    .transition(.move(edge: .leading))
                                 }
                             }
                         }
@@ -118,26 +121,34 @@ struct RollView: View {
             }
             
             Spacer()
-            .overlay(alignment: .trailing) {
-                if showInspector {
-                    RollInspectorView(
-                        rollViewModel: rollViewModel,
-                        presentedView: $presentedView,
-                        widthScale: $widthScale,
-                        heightScale: $heightScale,
+                .overlay(alignment: .topLeading) {
+                    PianoButton(
                         showPiano: $showPiano,
-                        parts: rollViewModel.parts
+                        headerHeight: headerHeight
                     )
-                    .frame(width: inspectorWidth)
-                    .transition(.move(edge: .trailing))
                 }
-            }
-            .overlay(alignment: .topTrailing) {
-                InspectorButton(
-                    showInspector: $showInspector,
-                    headerHeight: headerHeight
-                )
-            }
+            
+            Spacer()
+                .overlay(alignment: .trailing) {
+                    if showInspector {
+                        RollInspectorView(
+                            rollViewModel: rollViewModel,
+                            presentedView: $presentedView,
+                            widthScale: $widthScale,
+                            heightScale: $heightScale,
+                            showDynamics: $showDynamics,
+                            parts: rollViewModel.parts
+                        )
+                        .frame(width: inspectorWidth)
+                        .transition(.move(edge: .trailing))
+                    }
+                }
+                .overlay(alignment: .topTrailing) {
+                    InspectorButton(
+                        showInspector: $showInspector,
+                        headerHeight: headerHeight
+                    )
+                }
         }
         .onAppear {
             if rollViewModel.parts == nil {

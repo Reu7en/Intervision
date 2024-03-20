@@ -54,6 +54,7 @@ struct RollView: View {
                                                         IntervalLinesView(
                                                             intervalLinesViewModel: IntervalLinesViewModel(
                                                                 segments: segments,
+                                                                parts: parts,
                                                                 groups: rollViewModel.partGroups,
                                                                 harmonicIntervalLinesType: rollViewModel.harmonicIntervalLinesType,
                                                                 showMelodicIntervalLines: rollViewModel.showMelodicIntervalLines,
@@ -62,7 +63,8 @@ struct RollView: View {
                                                                 rowWidth: rowWidth,
                                                                 rowHeight: rowHeight,
                                                                 harmonicIntervalLineColors: rollViewModel.viewableHarmonicIntervalLineColors,
-                                                                melodicIntervalLineColors: rollViewModel.viewableMelodicIntervalLineColors, 
+                                                                melodicIntervalLineColors: rollViewModel.viewableMelodicIntervalLineColors,
+                                                                viewableMelodicLines: rollViewModel.viewableMelodicLines,
                                                                 showInvertedIntervals: rollViewModel.showInvertedIntervals,
                                                                 showZigZags: rollViewModel.showZigZags
                                                             )

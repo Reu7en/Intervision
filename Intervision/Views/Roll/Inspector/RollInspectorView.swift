@@ -74,22 +74,17 @@ struct RollInspectorView: View {
                     }
                     
                     HStack {
-                        Stepper("Width:  " + (String(format: "%.2f", widthScale)), value: $widthScale, in: 0.25...2.0, step: 0.25)
+                        Stepper("Width:  " + (String(format: "%.3f", widthScale)), value: $widthScale, in: 0.125...2.0, step: 0.125)
                         
                         Spacer()
                     }
                     
                     HStack {
-                        Stepper("Height: " + (String(format: "%.2f", heightScale)), value: $heightScale, in: 0.5...2.0, step: 0.25)
+                        Stepper("Height: " + (String(format: "%.3f", heightScale)), value: $heightScale, in: 0.5...2.0, step: 0.25)
                         
                         Spacer()
                     }
-                }
-                .padding()
-                .background(sectionBackgroundColor)
-                .cornerRadius(8)
-                
-                VStack(alignment: .leading, spacing: spacing) {
+                    
                     HStack {
                         Toggle(
                             "Show Dynamics",
@@ -104,6 +99,9 @@ struct RollInspectorView: View {
                                 }
                             )
                         )
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .toggleStyle(RightSwitchToggleStyle())
                         
                         Spacer()
                     }
@@ -177,9 +175,11 @@ struct RollInspectorView: View {
                                                     if newValue {
                                                         rollViewModel.addPart(part)
                                                         rollViewModel.viewablePartSegmentColors[partIndex] = partColor
+                                                        rollViewModel.addViewableMelodicLine(partIndex)
                                                     } else {
                                                         rollViewModel.removePart(part)
                                                         rollViewModel.viewablePartSegmentColors[partIndex] = Color.clear
+                                                        rollViewModel.removeViewableMelodicLine(partIndex)
                                                     }
                                                 }
                                             }
@@ -292,6 +292,9 @@ struct RollInspectorView: View {
                                     }
                                 )
                             )
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .toggleStyle(RightSwitchToggleStyle())
                             
                             Spacer()
                         }
@@ -299,6 +302,9 @@ struct RollInspectorView: View {
                         if rollViewModel.showInvertedIntervals {
                             HStack {
                                 Toggle("Show Zig-Zags Lines", isOn: $rollViewModel.showZigZags.animation(.easeInOut))
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .toggleStyle(RightSwitchToggleStyle())
                                 
                                 Spacer()
                             }
@@ -375,12 +381,60 @@ struct RollInspectorView: View {
                 
                 VStack(alignment: .leading, spacing: spacing) {
                     HStack {
-                        Toggle("Show Melodic Intervals", isOn: $rollViewModel.showMelodicIntervalLines.animation(.easeInOut))
+                        Toggle(
+                            "Show Melodic Intervals",
+                            isOn: Binding<Bool>(
+                                get: {
+                                    return rollViewModel.showMelodicIntervalLines
+                                },
+                                set: { newValue in
+                                    withAnimation(.easeInOut) {
+                                        rollViewModel.showMelodicIntervalLines = newValue
+                                        
+                                        if newValue && rollViewModel.viewableMelodicLines.isEmpty {
+                                            rollViewModel.addAllViewableMelodicLines()
+                                        }
+                                    }
+                                }
+                            )
+                        )
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .toggleStyle(RightSwitchToggleStyle())
                         
                         Spacer()
                     }
                 
                     if rollViewModel.showMelodicIntervalLines {
+                        if let score = rollViewModel.scoreManager.score,
+                           let scoreParts = score.parts,
+                           let parts = parts {
+                            ForEach(0..<scoreParts.count, id:\.self) { scorePartIndex in
+                                Toggle(
+                                    "\(scoreParts[scorePartIndex].name ?? "Part \(scorePartIndex)")",
+                                    isOn: Binding<Bool>(
+                                        get: {
+                                            return rollViewModel.viewableMelodicLines.contains(scorePartIndex)
+                                        },
+                                        set: { newValue in
+                                            withAnimation(.easeInOut) {
+                                                if newValue {
+                                                    rollViewModel.addViewableMelodicLine(scorePartIndex)
+                                                } else {
+                                                    rollViewModel.removeViewableMelodicLine(scorePartIndex)
+                                                    
+                                                    if rollViewModel.viewableMelodicLines.isEmpty {
+                                                        rollViewModel.showMelodicIntervalLines = false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    )
+                                )
+                                .disabled(!parts.contains(scoreParts[scorePartIndex]))
+                            }
+                        }
+                        
                         HStack {
                             Text("Melodic Lines Key")
                                 .font(.title2)
@@ -435,6 +489,16 @@ struct RollInspectorView: View {
             UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: 8, bottomTrailingRadius: 0, topTrailingRadius: 0)
         )
         .scrollIndicators(.never)
+    }
+}
+
+struct RightSwitchToggleStyle: ToggleStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack {
+            configuration.label
+            Toggle("", isOn: configuration.$isOn)
+                .labelsHidden()
+        }
     }
 }
 

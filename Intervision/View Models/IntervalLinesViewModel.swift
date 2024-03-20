@@ -14,6 +14,7 @@ class IntervalLinesViewModel: ObservableObject {
     @Published var melodicLines: [Line]?
     
     let segments: [[[[Segment]]]] // part->bar->stave->segment
+    let parts: [Part]
     let groups: [(String, [Part])]
     let barIndex: Int
     let barWidth: CGFloat
@@ -21,11 +22,28 @@ class IntervalLinesViewModel: ObservableObject {
     let rowHeight: CGFloat
     let harmonicIntervalLineColors: [Color]
     let melodicIntervalLineColors: [Color]
+    let viewableMelodicLines: [Int]
     let showInvertedIntervals: Bool
     let showZigZags: Bool
     
-    init(segments: [[[[Segment]]]], groups: [(String, [Part])], harmonicIntervalLinesType: IntervalLinesType, showMelodicIntervalLines: Bool, barIndex: Int, barWidth: CGFloat, rowWidth: CGFloat, rowHeight: CGFloat, harmonicIntervalLineColors: [Color], melodicIntervalLineColors: [Color], showInvertedIntervals: Bool, showZigZags: Bool) {
+    init(
+        segments: [[[[Segment]]]],
+        parts: [Part],
+        groups: [(String, [Part])],
+        harmonicIntervalLinesType: IntervalLinesType,
+        showMelodicIntervalLines: Bool,
+        barIndex: Int,
+        barWidth: CGFloat,
+        rowWidth: CGFloat,
+        rowHeight: CGFloat,
+        harmonicIntervalLineColors: [Color],
+        melodicIntervalLineColors: [Color],
+        viewableMelodicLines: [Int],
+        showInvertedIntervals: Bool,
+        showZigZags: Bool
+    ) {
         self.segments = segments
+        self.parts = parts
         self.groups = groups
         self.barIndex = barIndex
         self.barWidth = barWidth
@@ -33,6 +51,7 @@ class IntervalLinesViewModel: ObservableObject {
         self.rowHeight = rowHeight
         self.harmonicIntervalLineColors = harmonicIntervalLineColors
         self.melodicIntervalLineColors = melodicIntervalLineColors
+        self.viewableMelodicLines = viewableMelodicLines
         self.showInvertedIntervals = showInvertedIntervals
         self.showZigZags = showZigZags
         
@@ -48,7 +67,7 @@ class IntervalLinesViewModel: ObservableObject {
             harmonicSegments = getPartSegments()
             break
         case .groups:
-            // Implement later
+            harmonicSegments = getGroupSegments()
             break
         case .all:
             harmonicSegments = getAllSegments()
@@ -102,6 +121,35 @@ class IntervalLinesViewModel: ObservableObject {
         return partSegments
     }
     
+    func getGroupSegments() -> [[Segment]]? {
+        guard segments.indices.contains(0), segments[0].indices.contains(barIndex) else { return nil }
+        
+        var allGroupSegments: [[Segment]] = []
+        
+        for group in groups {
+            var groupSegments: [Segment] = []
+            
+            for part in group.1 {
+                if let index = parts.firstIndex(where: { $0 == part }) {
+                    if segments.indices.contains(index) {
+                        let partSegments = segments[index]
+                        let bar = partSegments[barIndex]
+                        
+                        for stave in bar {
+                            for segment in stave {
+                                groupSegments.append(segment)
+                            }
+                        }
+                    }
+                }
+            }
+            
+            allGroupSegments.append(groupSegments)
+        }
+        
+        return allGroupSegments
+    }
+    
     func getAllSegments() -> [[Segment]]? {
         guard segments.indices.contains(0), segments[0].indices.contains(barIndex) else { return nil }
         
@@ -132,30 +180,36 @@ class IntervalLinesViewModel: ObservableObject {
         var currentSegments: [[Segment]] = []
         var nextSegments: [[Segment]] = []
         
-        for part in self.segments {
-            let currentBar = part[barIndex]
-            
-            for stave in currentBar {
-                currentSegments.append(stave)
+        for (partIndex, part) in self.segments.enumerated() {
+            if viewableMelodicLines.contains(partIndex) {
+                let currentBar = part[barIndex]
+                
+                for stave in currentBar {
+                    currentSegments.append(stave)
+                }
             }
         }
         
         if segments[0].indices.contains(barIndex - 1) {
-            for part in self.segments {
-                let previousBar = part[barIndex - 1]
-                
-                for stave in previousBar {
-                    previousSegments.append(stave)
+            for (partIndex, part) in self.segments.enumerated() {
+                if viewableMelodicLines.contains(partIndex) {
+                    let previousBar = part[barIndex - 1]
+                    
+                    for stave in previousBar {
+                        previousSegments.append(stave)
+                    }
                 }
             }
         }
         
         if segments[0].indices.contains(barIndex + 1) {
-            for part in self.segments {
-                let nextBar = part[barIndex + 1]
-                
-                for stave in nextBar {
-                    nextSegments.append(stave)
+            for (partIndex, part) in self.segments.enumerated() {
+                if viewableMelodicLines.contains(partIndex) {
+                    let nextBar = part[barIndex + 1]
+                    
+                    for stave in nextBar {
+                        nextSegments.append(stave)
+                    }
                 }
             }
         }
@@ -171,6 +225,8 @@ class IntervalLinesViewModel: ObservableObject {
         var lines: [Line] = []
         
         for segmentGroup in segments {
+            var groupLines: [Line] = []
+            
             if !segmentGroup.isEmpty {
                 for i in 0..<(segmentGroup.count - 1) {
                     for j in (i + 1)..<segmentGroup.count {
@@ -189,17 +245,19 @@ class IntervalLinesViewModel: ObservableObject {
                             
                             let line = Line(startPoint: startPoint, endPoint: endPoint, color: color, inversionType: inversionType)
                             
-                            if !lines.contains(line) {
-                                lines.append(line)
+                            if !groupLines.contains(line) {
+                                groupLines.append(line)
                             }
                         }
                     }
                 }
             }
+            
+            groupLines.sort()
+            removeOverlappingLines(&groupLines)
+            
+            lines.append(contentsOf: groupLines)
         }
-        
-        lines.sort()
-        removeOverlappingLines(&lines)
 
         return lines
     }

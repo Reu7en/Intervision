@@ -29,6 +29,7 @@ class RollViewModel: ObservableObject {
     @Published var viewableHarmonicIntervalLineColors: [Color]
     @Published var viewableMelodicIntervalLineColors: [Color]
     @Published var viewableIntervals: [String]
+    @Published var viewableMelodicLines: [Int]
     @Published var showInvertedIntervals: Bool
     @Published var showZigZags: Bool
     
@@ -43,6 +44,7 @@ class RollViewModel: ObservableObject {
         viewableHarmonicIntervalLineColors: [Color] = harmonicIntervalLineColors,
         viewableMelodicIntervalLineColors: [Color] = melodicIntervalLineColors,
         viewableIntervals: [String] = intervals,
+        viewableMelodicLines: [Int] = [],
         showInvertedIntervals: Bool = false,
         showZigZags: Bool = false
     ) {
@@ -56,6 +58,7 @@ class RollViewModel: ObservableObject {
         self.viewableHarmonicIntervalLineColors = viewableHarmonicIntervalLineColors
         self.viewableMelodicIntervalLineColors = viewableMelodicIntervalLineColors
         self.viewableIntervals = viewableIntervals
+        self.viewableMelodicLines = viewableMelodicLines
         self.showInvertedIntervals = showInvertedIntervals
         self.showZigZags = showZigZags
     }
@@ -131,6 +134,28 @@ class RollViewModel: ObservableObject {
         }
         
         return sortedParts
+    }
+    
+    func addViewableMelodicLine(_ index: Int) {
+        if !viewableMelodicLines.contains(index) {
+            viewableMelodicLines.append(index)
+        }
+    }
+    
+    func removeViewableMelodicLine(_ index: Int) {
+        viewableMelodicLines.removeAll(where: { $0 == index })
+    }
+    
+    func addAllViewableMelodicLines() {
+        if let score = scoreManager.score,
+           let scoreParts = score.parts,
+           let parts = self.parts {
+            for (index, _) in scoreParts.enumerated() {
+                if parts.contains(scoreParts[index]) {
+                    addViewableMelodicLine(index)
+                }
+            }
+        }
     }
     
     func calculateSegments() {

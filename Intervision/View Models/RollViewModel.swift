@@ -20,7 +20,7 @@ class RollViewModel: ObservableObject {
     
     @Published var segments: [[[[Segment]]]]?
     
-    @Published var partGroups: [(String, [Part])] = []
+    @Published var partGroups: [(String, [Part])]
     
     @Published var octaves: Int
     @Published var harmonicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType
@@ -29,7 +29,7 @@ class RollViewModel: ObservableObject {
     @Published var viewableHarmonicIntervalLineColors: [Color]
     @Published var viewableMelodicIntervalLineColors: [Color]
     @Published var viewableIntervals: [String]
-    @Published var viewableMelodicLines: [Part] = []
+    @Published var viewableMelodicLines: [Part]
     @Published var showInvertedIntervals: Bool
     @Published var showZigZags: Bool
     
@@ -37,6 +37,7 @@ class RollViewModel: ObservableObject {
         scoreManager: ScoreManager,
         parts: [Part]? = nil,
         segments: [[[[Segment]]]]? = nil,
+        partGroups: [(String, [Part])] = [],
         octaves: Int = 9,
         harmonicIntervalLinesType: IntervalLinesViewModel.IntervalLinesType = .none,
         showMelodicIntervalLines: Bool = false,
@@ -44,13 +45,14 @@ class RollViewModel: ObservableObject {
         viewableHarmonicIntervalLineColors: [Color] = harmonicIntervalLineColors,
         viewableMelodicIntervalLineColors: [Color] = melodicIntervalLineColors,
         viewableIntervals: [String] = intervals,
-        viewableMelodicLines: [Int] = [],
+        viewableMelodicLines: [Part] = [],
         showInvertedIntervals: Bool = false,
         showZigZags: Bool = false
     ) {
         self.scoreManager = scoreManager
         self.parts = parts
         self.segments = segments
+        self.partGroups = partGroups
         self.octaves = octaves
         self.harmonicIntervalLinesType = harmonicIntervalLinesType
         self.showMelodicIntervalLines = showMelodicIntervalLines
@@ -58,6 +60,7 @@ class RollViewModel: ObservableObject {
         self.viewableHarmonicIntervalLineColors = viewableHarmonicIntervalLineColors
         self.viewableMelodicIntervalLineColors = viewableMelodicIntervalLineColors
         self.viewableIntervals = viewableIntervals
+        self.viewableMelodicLines = viewableMelodicLines
         self.showInvertedIntervals = showInvertedIntervals
         self.showZigZags = showZigZags
     }

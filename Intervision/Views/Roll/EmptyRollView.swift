@@ -12,7 +12,7 @@ struct EmptyRollView: View {
     let geometry: GeometryProxy
     
     var body: some View {
-        Color.clear
+        Spacer()
             .frame(width: geometry.size.width)
     }
 }

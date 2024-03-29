@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B0B52362BB75B0000225A11 /* Advanced_Trio.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B52352BB75AFF00225A11 /* Advanced_Trio.musicxml */; };
+		1B0B52382BB75B6A00225A11 /* Simpsons_MultiPart.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B52372BB75B6A00225A11 /* Simpsons_MultiPart.musicxml */; };
+		1B0B523A2BB75BC400225A11 /* Canon_in_D.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B52392BB75BC400225A11 /* Canon_in_D.musicxml */; };
+		1B0B523C2BB75EF800225A11 /* Flight_of_the_Bumblebee.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B523B2BB75EF800225A11 /* Flight_of_the_Bumblebee.musicxml */; };
+		1B0B523E2BB75F6500225A11 /* Fur_Elise.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B523D2BB75F6500225A11 /* Fur_Elise.musicxml */; };
 		1B0E449E2B92510F00C0E12C /* IntervalLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E449D2B92510F00C0E12C /* IntervalLinesView.swift */; };
 		1B0E44A02B92516500C0E12C /* IntervalLinesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E449F2B92516500C0E12C /* IntervalLinesViewModel.swift */; };
 		1B0E44A22B92519800C0E12C /* SegmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44A12B92519800C0E12C /* SegmentModel.swift */; };
@@ -27,7 +32,6 @@
 		1B561F772B784CF3001860E5 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F762B784CF3001860E5 /* HomeView.swift */; };
 		1B561F792B79219F001860E5 /* BarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F782B79219F001860E5 /* BarView.swift */; };
 		1B561F7B2B793216001860E5 /* BarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F7A2B793216001860E5 /* BarViewModel.swift */; };
-		1B5A4F272B76C479007F16ED /* My_Love_Mine_All_Mine__Mitski_My_Love_Mine_All_Mine.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B5A4F262B76C479007F16ED /* My_Love_Mine_All_Mine__Mitski_My_Love_Mine_All_Mine.musicxml */; };
 		1B8522742BAAF2CA005E53E4 /* PianoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8522732BAAF2CA005E53E4 /* PianoButton.swift */; };
 		1B9435932B7EBFF900B57DA7 /* StaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435922B7EBFF900B57DA7 /* StaveView.swift */; };
 		1B9435952B7ED65B00B57DA7 /* NoteHeadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435942B7ED65B00B57DA7 /* NoteHeadView.swift */; };
@@ -54,18 +58,17 @@
 		1B97BEED2B7279CF007D0BE5 /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEEC2B7279CF007D0BE5 /* PageView.swift */; };
 		1BBC97802B759D8E001C953C /* GraceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC977F2B759D8E001C953C /* GraceModel.swift */; };
 		1BBC97842B7699EB001C953C /* MusicXMLDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC97832B7699EB001C953C /* MusicXMLDataService.swift */; };
-		1BBC97872B769AEB001C953C /* Fur_Elise.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1BBC97862B769AEB001C953C /* Fur_Elise.musicxml */; };
-		1BBC97892B769B4C001C953C /* Canon_in_D.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1BBC97882B769B4C001C953C /* Canon_in_D.musicxml */; };
 		1BBC978B2B76A3C7001C953C /* TestLoad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC978A2B76A3C7001C953C /* TestLoad.swift */; };
 		1BBC978D2B76A50D001C953C /* ScoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC978C2B76A50D001C953C /* ScoreViewModel.swift */; };
-		1BBEAE432B76D8F20033FFDA /* ShortTestScore.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1BBEAE422B76D8F20033FFDA /* ShortTestScore.musicxml */; };
-		1BBEAE452B76DCF90033FFDA /* Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1BBEAE442B76DCF90033FFDA /* Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml */; };
-		1BBEAE482B780E720033FFDA /* Advanced_Trio.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1BBEAE462B780E720033FFDA /* Advanced_Trio.musicxml */; };
-		1BBEAE492B780E720033FFDA /* Simpsons_MultiPart.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1BBEAE472B780E720033FFDA /* Simpsons_MultiPart.musicxml */; };
 		1BBF21A32B9FFB160097D5A3 /* ScoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBF21A22B9FFB160097D5A3 /* ScoreManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B0B52352BB75AFF00225A11 /* Advanced_Trio.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Advanced_Trio.musicxml; sourceTree = "<group>"; };
+		1B0B52372BB75B6A00225A11 /* Simpsons_MultiPart.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Simpsons_MultiPart.musicxml; sourceTree = "<group>"; };
+		1B0B52392BB75BC400225A11 /* Canon_in_D.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Canon_in_D.musicxml; sourceTree = "<group>"; };
+		1B0B523B2BB75EF800225A11 /* Flight_of_the_Bumblebee.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Flight_of_the_Bumblebee.musicxml; sourceTree = "<group>"; };
+		1B0B523D2BB75F6500225A11 /* Fur_Elise.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Fur_Elise.musicxml; sourceTree = "<group>"; };
 		1B0E449D2B92510F00C0E12C /* IntervalLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervalLinesView.swift; sourceTree = "<group>"; };
 		1B0E449F2B92516500C0E12C /* IntervalLinesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervalLinesViewModel.swift; sourceTree = "<group>"; };
 		1B0E44A12B92519800C0E12C /* SegmentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentModel.swift; sourceTree = "<group>"; };
@@ -86,7 +89,6 @@
 		1B561F762B784CF3001860E5 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		1B561F782B79219F001860E5 /* BarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarView.swift; sourceTree = "<group>"; };
 		1B561F7A2B793216001860E5 /* BarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarViewModel.swift; sourceTree = "<group>"; };
-		1B5A4F262B76C479007F16ED /* My_Love_Mine_All_Mine__Mitski_My_Love_Mine_All_Mine.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = My_Love_Mine_All_Mine__Mitski_My_Love_Mine_All_Mine.musicxml; path = ../../../../../Desktop/My_Love_Mine_All_Mine__Mitski_My_Love_Mine_All_Mine.musicxml; sourceTree = "<group>"; };
 		1B8522732BAAF2CA005E53E4 /* PianoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoButton.swift; sourceTree = "<group>"; };
 		1B9435922B7EBFF900B57DA7 /* StaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaveView.swift; sourceTree = "<group>"; };
 		1B9435942B7ED65B00B57DA7 /* NoteHeadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteHeadView.swift; sourceTree = "<group>"; };
@@ -116,14 +118,8 @@
 		1B97BEEC2B7279CF007D0BE5 /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
 		1BBC977F2B759D8E001C953C /* GraceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraceModel.swift; sourceTree = "<group>"; };
 		1BBC97832B7699EB001C953C /* MusicXMLDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicXMLDataService.swift; sourceTree = "<group>"; };
-		1BBC97862B769AEB001C953C /* Fur_Elise.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Fur_Elise.musicxml; path = ../../../../../Desktop/Fur_Elise.musicxml; sourceTree = "<group>"; };
-		1BBC97882B769B4C001C953C /* Canon_in_D.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Canon_in_D.musicxml; path = ../../../../../Desktop/Canon_in_D.musicxml; sourceTree = "<group>"; };
 		1BBC978A2B76A3C7001C953C /* TestLoad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestLoad.swift; sourceTree = "<group>"; };
 		1BBC978C2B76A50D001C953C /* ScoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreViewModel.swift; sourceTree = "<group>"; };
-		1BBEAE422B76D8F20033FFDA /* ShortTestScore.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = ShortTestScore.musicxml; path = ../../../../../Desktop/ShortTestScore.musicxml; sourceTree = "<group>"; };
-		1BBEAE442B76DCF90033FFDA /* Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml; path = ../../../../../Desktop/Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml; sourceTree = "<group>"; };
-		1BBEAE462B780E720033FFDA /* Advanced_Trio.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Advanced_Trio.musicxml; path = ../../../../../Desktop/Advanced_Trio.musicxml; sourceTree = "<group>"; };
-		1BBEAE472B780E720033FFDA /* Simpsons_MultiPart.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Simpsons_MultiPart.musicxml; path = ../../../../../Desktop/Simpsons_MultiPart.musicxml; sourceTree = "<group>"; };
 		1BBF21A22B9FFB160097D5A3 /* ScoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -335,13 +331,11 @@
 		1BBC97852B769ACA001C953C /* Test Scores */ = {
 			isa = PBXGroup;
 			children = (
-				1BBEAE462B780E720033FFDA /* Advanced_Trio.musicxml */,
-				1BBEAE472B780E720033FFDA /* Simpsons_MultiPart.musicxml */,
-				1BBEAE442B76DCF90033FFDA /* Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml */,
-				1BBEAE422B76D8F20033FFDA /* ShortTestScore.musicxml */,
-				1B5A4F262B76C479007F16ED /* My_Love_Mine_All_Mine__Mitski_My_Love_Mine_All_Mine.musicxml */,
-				1BBC97882B769B4C001C953C /* Canon_in_D.musicxml */,
-				1BBC97862B769AEB001C953C /* Fur_Elise.musicxml */,
+				1B0B52352BB75AFF00225A11 /* Advanced_Trio.musicxml */,
+				1B0B523D2BB75F6500225A11 /* Fur_Elise.musicxml */,
+				1B0B52392BB75BC400225A11 /* Canon_in_D.musicxml */,
+				1B0B523B2BB75EF800225A11 /* Flight_of_the_Bumblebee.musicxml */,
+				1B0B52372BB75B6A00225A11 /* Simpsons_MultiPart.musicxml */,
 				1BBC978A2B76A3C7001C953C /* TestLoad.swift */,
 			);
 			path = "Test Scores";
@@ -405,15 +399,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B5A4F272B76C479007F16ED /* My_Love_Mine_All_Mine__Mitski_My_Love_Mine_All_Mine.musicxml in Resources */,
-				1BBEAE492B780E720033FFDA /* Simpsons_MultiPart.musicxml in Resources */,
-				1BBEAE482B780E720033FFDA /* Advanced_Trio.musicxml in Resources */,
+				1B0B523C2BB75EF800225A11 /* Flight_of_the_Bumblebee.musicxml in Resources */,
+				1B0B52382BB75B6A00225A11 /* Simpsons_MultiPart.musicxml in Resources */,
 				1B97BED12B71C168007D0BE5 /* Preview Assets.xcassets in Resources */,
 				1B97BECE2B71C168007D0BE5 /* Assets.xcassets in Resources */,
-				1BBEAE432B76D8F20033FFDA /* ShortTestScore.musicxml in Resources */,
-				1BBC97872B769AEB001C953C /* Fur_Elise.musicxml in Resources */,
-				1BBC97892B769B4C001C953C /* Canon_in_D.musicxml in Resources */,
-				1BBEAE452B76DCF90033FFDA /* Prlude_Opus_28_No._4_in_E_Minor__Chopin.musicxml in Resources */,
+				1B0B523E2BB75F6500225A11 /* Fur_Elise.musicxml in Resources */,
+				1B0B523A2BB75BC400225A11 /* Canon_in_D.musicxml in Resources */,
+				1B0B52362BB75B0000225A11 /* Advanced_Trio.musicxml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

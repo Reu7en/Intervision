@@ -223,42 +223,6 @@ class IntervalLinesViewModel: ObservableObject {
             }
         }
         
-        /*
-        for (partIndex, part) in self.segments.enumerated() {
-            if viewableMelodicLines.contains(partIndex) {
-                let currentBar = part[barIndex]
-                
-                for stave in currentBar {
-                    currentSegments.append(stave)
-                }
-            }
-        }
-        
-        if segments[0].indices.contains(barIndex - 1) {
-            for (partIndex, part) in self.segments.enumerated() {
-                if viewableMelodicLines.contains(partIndex) {
-                    let previousBar = part[barIndex - 1]
-                    
-                    for stave in previousBar {
-                        previousSegments.append(stave)
-                    }
-                }
-            }
-        }
-        
-        if segments[0].indices.contains(barIndex + 1) {
-            for (partIndex, part) in self.segments.enumerated() {
-                if viewableMelodicLines.contains(partIndex) {
-                    let nextBar = part[barIndex + 1]
-                    
-                    for stave in nextBar {
-                        nextSegments.append(stave)
-                    }
-                }
-            }
-        }
-         */
-        
         melodicSegments.append(previousSegments)
         melodicSegments.append(currentSegments)
         melodicSegments.append(nextSegments)

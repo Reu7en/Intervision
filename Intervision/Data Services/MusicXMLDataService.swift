@@ -61,7 +61,6 @@ struct MusicXMLDataService {
         var parts: [Part] = [Part]()
         var partIds: [String] = [String]()
         var partNames: [String] = [String]()
-        var partAbbreviations: [String] = [String]()
         
         for line in lines {
             if line.contains("<score-part id") {
@@ -75,27 +74,17 @@ struct MusicXMLDataService {
                     partNames.append(name)
                 }
             }
-            
-            if line.contains("<part-abbreviation") {
-                if let abbreviation = extractContent(fromTag: line) {
-                    partAbbreviations.append(abbreviation)
-                }
-            }
         }
         
-        if !(partIds.count == partNames.count && partNames.count == partAbbreviations.count) { return nil }
+        if !(partIds.count == partNames.count) { return nil }
         
         for i in 0..<partIds.count {
-            parts.append(Part(name: partNames[i], abbreviation: partAbbreviations[i], identifier: partIds[i], bars: [[Bar]]()))
+            parts.append(Part(name: partNames[i], identifier: partIds[i], bars: [[Bar]]()))
         }
         
         return parts
     }
     
-    /*
-     This works for parsing most info required to construct a score, but is horrific and must be refactored
-     add dynamics, also should be array incase doubles
-     */
     static func getBars(_ partContents: [String]) -> [[Bar]] {
         var bars: [[Bar]] = []
         

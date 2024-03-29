@@ -407,37 +407,6 @@ struct RollInspectorView: View {
                     }
                 
                     if rollViewModel.showMelodicIntervalLines {
-                        /*
-                        if let score = rollViewModel.scoreManager.score,
-                           let scoreParts = score.parts,
-                           let parts = parts {
-                            ForEach(0..<scoreParts.count, id:\.self) { scorePartIndex in
-                                Toggle(
-                                    "\(scoreParts[scorePartIndex].name ?? "Part \(scorePartIndex)")",
-                                    isOn: Binding<Bool>(
-                                        get: {
-                                            return rollViewModel.viewableMelodicLines.contains(scorePartIndex)
-                                        },
-                                        set: { newValue in
-                                            withAnimation(.easeInOut) {
-                                                if newValue {
-                                                    rollViewModel.addViewableMelodicLine(scorePartIndex)
-                                                } else {
-                                                    rollViewModel.removeViewableMelodicLine(scorePartIndex)
-                                                    
-                                                    if rollViewModel.viewableMelodicLines.isEmpty {
-                                                        rollViewModel.showMelodicIntervalLines = false
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    )
-                                )
-                                .disabled(!parts.contains(scoreParts[scorePartIndex]))
-                            }
-                        }
-                         */
-                        
                         if let score = rollViewModel.scoreManager.score,
                            let scoreParts = score.parts,
                            let parts = parts {

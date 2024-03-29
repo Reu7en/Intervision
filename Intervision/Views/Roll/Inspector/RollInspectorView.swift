@@ -241,6 +241,7 @@ struct RollInspectorView: View {
                                     if !newGroupName.isEmpty {
                                         withAnimation(.easeInOut) {
                                             rollViewModel.createPartGroup(groupName: newGroupName)
+                                            newGroupName = ""
                                         }
                                     }
                                 }

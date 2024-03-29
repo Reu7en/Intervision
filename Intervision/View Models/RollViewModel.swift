@@ -29,7 +29,11 @@ class RollViewModel: ObservableObject {
     @Published var viewableHarmonicIntervalLineColors: [Color]
     @Published var viewableMelodicIntervalLineColors: [Color]
     @Published var viewableIntervals: [String]
-    @Published var viewableMelodicLines: [Int]
+    @Published var viewableMelodicLines: [Int] {
+        didSet {
+            print(self.viewableMelodicLines)
+        }
+    }
     @Published var showInvertedIntervals: Bool
     @Published var showZigZags: Bool
     

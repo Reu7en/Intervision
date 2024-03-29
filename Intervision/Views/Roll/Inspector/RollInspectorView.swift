@@ -157,7 +157,7 @@ struct RollInspectorView: View {
                         ForEach(groupParts, id: \.id) { part in
                             if let score = rollViewModel.scoreManager.score,
                                let partIndex = score.parts?.firstIndex(of: part) {
-                                let partColor = RollViewModel.melodicIntervalLineColors[partIndex]
+                                let partColor = RollViewModel.partSegmentColors.indices.contains(partIndex) ? RollViewModel.partSegmentColors[partIndex] : Color.clear
                                 
                                 HStack {
                                     Toggle(

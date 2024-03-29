@@ -107,6 +107,12 @@ class RollViewModel: ObservableObject {
     func addAllParts() {
         guard let score = scoreManager.score, let parts = score.parts else { return }
         self.parts = parts
+        
+        if parts.count > viewablePartSegmentColors.count {
+            for _ in 0..<(parts.count - viewablePartSegmentColors.count) {
+                viewablePartSegmentColors.append(Color.clear)
+            }
+        }
     }
 
     func removeAllParts() {

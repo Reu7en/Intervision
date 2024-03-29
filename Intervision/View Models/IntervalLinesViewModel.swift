@@ -22,7 +22,7 @@ class IntervalLinesViewModel: ObservableObject {
     let rowHeight: CGFloat
     let harmonicIntervalLineColors: [Color]
     let melodicIntervalLineColors: [Color]
-    let viewableMelodicLines: [Int]
+    let viewableMelodicLines: [Part]
     let showInvertedIntervals: Bool
     let showZigZags: Bool
     
@@ -38,7 +38,7 @@ class IntervalLinesViewModel: ObservableObject {
         rowHeight: CGFloat,
         harmonicIntervalLineColors: [Color],
         melodicIntervalLineColors: [Color],
-        viewableMelodicLines: [Int],
+        viewableMelodicLines: [Part],
         showInvertedIntervals: Bool,
         showZigZags: Bool
     ) {
@@ -180,6 +180,50 @@ class IntervalLinesViewModel: ObservableObject {
         var currentSegments: [[Segment]] = []
         var nextSegments: [[Segment]] = []
         
+        for part in viewableMelodicLines {
+            if let index = parts.firstIndex(where: { $0 == part }) {
+                if segments.indices.contains(index) {
+                    let partSegments = segments[index]
+                    let currentBar = partSegments[barIndex]
+                    
+                    for stave in currentBar {
+                        currentSegments.append(stave)
+                    }
+                }
+            }
+        }
+        
+        if segments[0].indices.contains(barIndex - 1) {
+            for part in viewableMelodicLines {
+                if let index = parts.firstIndex(where: { $0 == part }) {
+                    if segments.indices.contains(index) {
+                        let partSegments = segments[index]
+                        let previousBar = partSegments[barIndex - 1]
+                        
+                        for stave in previousBar {
+                            previousSegments.append(stave)
+                        }
+                    }
+                }
+            }
+        }
+        
+        if segments[0].indices.contains(barIndex + 1) {
+            for part in viewableMelodicLines {
+                if let index = parts.firstIndex(where: { $0 == part }) {
+                    if segments.indices.contains(index) {
+                        let partSegments = segments[index]
+                        let nextBar = partSegments[barIndex + 1]
+                        
+                        for stave in nextBar {
+                            nextSegments.append(stave)
+                        }
+                    }
+                }
+            }
+        }
+        
+        /*
         for (partIndex, part) in self.segments.enumerated() {
             if viewableMelodicLines.contains(partIndex) {
                 let currentBar = part[barIndex]
@@ -213,6 +257,7 @@ class IntervalLinesViewModel: ObservableObject {
                 }
             }
         }
+         */
         
         melodicSegments.append(previousSegments)
         melodicSegments.append(currentSegments)

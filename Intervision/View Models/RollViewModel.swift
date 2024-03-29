@@ -29,11 +29,7 @@ class RollViewModel: ObservableObject {
     @Published var viewableHarmonicIntervalLineColors: [Color]
     @Published var viewableMelodicIntervalLineColors: [Color]
     @Published var viewableIntervals: [String]
-    @Published var viewableMelodicLines: [Int] {
-        didSet {
-            print(self.viewableMelodicLines)
-        }
-    }
+    @Published var viewableMelodicLines: [Part] = []
     @Published var showInvertedIntervals: Bool
     @Published var showZigZags: Bool
     
@@ -62,7 +58,6 @@ class RollViewModel: ObservableObject {
         self.viewableHarmonicIntervalLineColors = viewableHarmonicIntervalLineColors
         self.viewableMelodicIntervalLineColors = viewableMelodicIntervalLineColors
         self.viewableIntervals = viewableIntervals
-        self.viewableMelodicLines = viewableMelodicLines
         self.showInvertedIntervals = showInvertedIntervals
         self.showZigZags = showZigZags
     }
@@ -140,24 +135,21 @@ class RollViewModel: ObservableObject {
         return sortedParts
     }
     
-    func addViewableMelodicLine(_ index: Int) {
-        if !viewableMelodicLines.contains(index) {
-            viewableMelodicLines.append(index)
+    func addViewableMelodicLine(_ part: Part) {
+        if !viewableMelodicLines.contains(part) {
+            viewableMelodicLines.append(part)
         }
     }
     
-    func removeViewableMelodicLine(_ index: Int) {
-        viewableMelodicLines.removeAll(where: { $0 == index })
+    func removeViewableMelodicLine(_ part: Part) {
+        viewableMelodicLines.removeAll(where: { $0 == part })
     }
     
     func addAllViewableMelodicLines() {
         if let score = scoreManager.score,
-           let scoreParts = score.parts,
-           let parts = self.parts {
-            for (index, _) in scoreParts.enumerated() {
-                if parts.contains(scoreParts[index]) {
-                    addViewableMelodicLine(index)
-                }
+           let scoreParts = score.parts {
+            for part in scoreParts {
+                addViewableMelodicLine(part)
             }
         }
     }

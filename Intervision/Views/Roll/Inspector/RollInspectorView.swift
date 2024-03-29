@@ -175,11 +175,11 @@ struct RollInspectorView: View {
                                                     if newValue {
                                                         rollViewModel.addPart(part)
                                                         rollViewModel.viewablePartSegmentColors[partIndex] = partColor
-                                                        rollViewModel.addViewableMelodicLine(partIndex)
+                                                        rollViewModel.addViewableMelodicLine(part)
                                                     } else {
                                                         rollViewModel.removePart(part)
                                                         rollViewModel.viewablePartSegmentColors[partIndex] = Color.clear
-                                                        rollViewModel.removeViewableMelodicLine(partIndex)
+                                                        rollViewModel.removeViewableMelodicLine(part)
                                                     }
                                                 }
                                             }
@@ -407,6 +407,7 @@ struct RollInspectorView: View {
                     }
                 
                     if rollViewModel.showMelodicIntervalLines {
+                        /*
                         if let score = rollViewModel.scoreManager.score,
                            let scoreParts = score.parts,
                            let parts = parts {
@@ -433,6 +434,36 @@ struct RollInspectorView: View {
                                     )
                                 )
                                 .disabled(!parts.contains(scoreParts[scorePartIndex]))
+                            }
+                        }
+                         */
+                        
+                        if let score = rollViewModel.scoreManager.score,
+                           let scoreParts = score.parts,
+                           let parts = parts {
+                            ForEach(scoreParts) { part in
+                                Toggle(
+                                    "\(part.name ?? "Part \(String(describing: scoreParts.firstIndex(of: part)))")",
+                                    isOn: Binding<Bool>(
+                                        get: {
+                                            return rollViewModel.viewableMelodicLines.contains(part)
+                                        },
+                                        set: { newValue in
+                                            withAnimation(.easeInOut) {
+                                                if newValue {
+                                                    rollViewModel.addViewableMelodicLine(part)
+                                                } else {
+                                                    rollViewModel.removeViewableMelodicLine(part)
+                                                    
+                                                    if rollViewModel.viewableMelodicLines.isEmpty {
+                                                        rollViewModel.showMelodicIntervalLines = false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    )
+                                )
+                                .disabled(!parts.contains(part))
                             }
                         }
                         

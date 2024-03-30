@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 class RollViewModel: ObservableObject {
     
@@ -33,6 +34,14 @@ class RollViewModel: ObservableObject {
     @Published var showInvertedIntervals: Bool
     @Published var showZigZags: Bool
     
+    @Published var selectedSegments: [Segment] {
+        didSet {
+            for segment in selectedSegments {
+                print(segment.id)
+            }
+        }
+    }
+    
     init(
         scoreManager: ScoreManager,
         parts: [Part]? = nil,
@@ -47,7 +56,8 @@ class RollViewModel: ObservableObject {
         viewableIntervals: [String] = intervals,
         viewableMelodicLines: [Part] = [],
         showInvertedIntervals: Bool = false,
-        showZigZags: Bool = false
+        showZigZags: Bool = false,
+        selectedSegments: [Segment] = []
     ) {
         self.scoreManager = scoreManager
         self.parts = parts
@@ -63,7 +73,49 @@ class RollViewModel: ObservableObject {
         self.viewableMelodicLines = viewableMelodicLines
         self.showInvertedIntervals = showInvertedIntervals
         self.showZigZags = showZigZags
+        self.selectedSegments = selectedSegments
     }
+    
+    func refresh() {
+        objectWillChange.send()
+    }
+    
+    func handleSegmentClicked(segment: Segment, isCommandKeyDown: Bool) {
+        if isCommandKeyDown {
+            if selectedSegments.contains(segment) {
+                segment.isSelected = false
+                selectedSegments.removeAll(where: { $0 == segment })
+            } else {
+                segment.isSelected = true
+                selectedSegments.append(segment)
+            }
+        } else {
+            if selectedSegments.contains(segment) {
+                segment.isSelected = false
+                selectedSegments.removeAll(where: { $0 == segment})
+            } else {
+                segment.isSelected = true
+                
+                for selectedSegment in selectedSegments {
+                    selectedSegment.isSelected = false
+                }
+                
+                selectedSegments = [segment]
+            }
+        }
+    }
+    
+    func clearSelectedSegments() {
+        for segment in selectedSegments {
+            segment.isSelected = false
+        }
+        
+        self.selectedSegments = []
+    }
+    
+//    func removeSegment(segment: Segment) {
+//        object
+//    }
     
     func initialisePartGroups() {
         guard let score = scoreManager.score, let parts = score.parts else { return }
@@ -218,7 +270,15 @@ class RollViewModel: ObservableObject {
                                             }
                                         }
                                         
-                                        barSegments.append(Segment(rowIndex: rowIndex, duration: duration, durationPreceeding: durationPreceeding, dynamic: currentDynamics[staveIndex]))
+                                        barSegments.append(
+                                            Segment(
+                                                rowIndex: rowIndex,
+                                                duration: duration,
+                                                durationPreceeding: durationPreceeding,
+                                                dynamic: currentDynamics[staveIndex],
+                                                note: note
+                                            )
+                                        )
                                     }
                                 }
                             }

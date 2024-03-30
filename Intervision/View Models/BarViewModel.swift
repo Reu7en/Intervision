@@ -86,7 +86,7 @@ extension BarViewModel {
     }
     
     func calculateLowestGapNote() {
-        var note = Note(
+        let note = Note(
             pitch: nil,
             accidental: nil,
             octave: nil,
@@ -431,12 +431,12 @@ extension BarViewModel {
                             var index = lowestGapIndex + (distance * (step == .Semitone ? 2 : 1))
                             
                             if index < 0 {
-                                var modifiedNote = note
+                                let modifiedNote = note
                                 modifiedNote.increaseOctave()
                                 splitChords[groupIndex][chordIndex].notes[noteIndex] = modifiedNote
                                 index += 7
                             } else if index > gridRows - 1 {
-                                var modifiedNote = note
+                                let modifiedNote = note
                                 modifiedNote.decreaseOctave()
                                 splitChords[groupIndex][chordIndex].notes[noteIndex] = modifiedNote
                                 index -= 7

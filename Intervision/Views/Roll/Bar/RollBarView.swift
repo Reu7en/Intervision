@@ -9,6 +9,8 @@ import SwiftUI
 
 struct RollBarView: View {
     
+    @StateObject var rollViewModel: RollViewModel
+    
     let segments: [[[[Segment]]]]
     let barIndex: Int
     let barWidth: CGFloat
@@ -31,7 +33,7 @@ struct RollBarView: View {
                     let saturation = segment.dynamic?.saturation ?? 0.7
                     
                     RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.black)
+                        .stroke(segment.isSelected ? Color.white : Color.black, style: segment.isSelected ? StrokeStyle(lineWidth: 2, lineCap: .round, dash: [5]) : StrokeStyle())
                         .background (
                             RoundedRectangle(cornerRadius: 20)
                                 .fill(segmentColor)
@@ -40,12 +42,16 @@ struct RollBarView: View {
                         )
                         .frame(width: width, height: rowHeight)
                         .position(x: xPosition + (width / 2), y: yPosition + (rowHeight / 2))
+                        .onTapGesture {
+                            guard let currentEvent = NSApp.currentEvent else { return }
+                            rollViewModel.handleSegmentClicked(segment: segment, isCommandKeyDown: currentEvent.modifierFlags.contains(.command))
+                        }
                 }
             }
         }
     }
 }
 
-#Preview {
-    RollBarView(segments: [], barIndex: 0, barWidth: 0, rowHeight: 0, colors: [], showDynamics: false)
-}
+//#Preview {
+//    RollBarView(rollViewModel: RollViewModel(), segments: [], barIndex: 0, barWidth: 0, rowHeight: 0, colors: [], showDynamics: false)
+//}

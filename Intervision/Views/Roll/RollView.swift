@@ -72,6 +72,7 @@ struct RollView: View {
                                                         .id(UUID())
                                                         
                                                         RollBarView(
+                                                            rollViewModel: rollViewModel,
                                                             segments: segments,
                                                             barIndex: barIndex,
                                                             barWidth: barWidth,
@@ -160,6 +161,17 @@ struct RollView: View {
             if rollViewModel.partGroups.isEmpty {
                 rollViewModel.initialisePartGroups()
             }
+            
+            NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+                if event.keyCode == 53 {
+                    rollViewModel.clearSelectedSegments()
+                }
+                
+                return event
+            }
+        }
+        .onTapGesture {
+            rollViewModel.clearSelectedSegments()
         }
     }
 }

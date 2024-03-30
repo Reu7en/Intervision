@@ -7,7 +7,25 @@
 
 import Foundation
 
-struct Note: Identifiable, Equatable {
+class Note: Identifiable, Equatable {
+    
+    init(pitch: Pitch? = nil, accidental: Accidental? = nil, octave: Octave? = nil, octaveShift: OctaveShift? = nil, duration: Duration, durationValue: Double, timeModification: TimeModification? = nil, changeDynamic: ChangeDynamic? = nil, graceNotes: [Grace]? = nil, tie: Tie? = nil, isRest: Bool, isDotted: Bool, hasAccent: Bool, id: UUID = UUID()) {
+        self.pitch = pitch
+        self.accidental = accidental
+        self.octave = octave
+        self.octaveShift = octaveShift
+        self.duration = duration
+        self.durationValue = durationValue
+        self.timeModification = timeModification
+        self.changeDynamic = changeDynamic
+        self.graceNotes = graceNotes
+        self.tie = tie
+        self.isRest = isRest
+        self.isDotted = isDotted
+        self.hasAccent = hasAccent
+        self.id = id
+    }
+    
     var pitch: Pitch?
     var accidental: Accidental?
     var octave: Octave?
@@ -143,14 +161,14 @@ extension Note {
 }
 
 extension Note {
-    mutating func increaseOctave() {
+    func increaseOctave() {
         if let nextOctave = octave?.next {
             octave = nextOctave
             octaveShift = .below
         }
     }
 
-    mutating func decreaseOctave() {
+    func decreaseOctave() {
         if let prevOctave = octave?.prev {
             octave = prevOctave
             octaveShift = .above
@@ -177,5 +195,11 @@ extension Note: CustomStringConvertible {
         description += "\(pitch?.rawValue ?? "")\(accidental?.rawValue ?? 0)\(octave?.rawValue.description ?? "")"
         description += " D: \(duration) Dot: \(isDotted) Rest: \(isRest) Accent: \(hasAccent) Tie: \(String(describing: tie)) TMod: \(String(describing: timeModification))\n"
         return description
+    }
+}
+
+extension Note {
+    func increasePitch() {
+        pitch = .C
     }
 }

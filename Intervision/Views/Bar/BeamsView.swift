@@ -21,7 +21,7 @@ struct BeamsView: View {
             
             ForEach(0..<beamViewModel.positions[beamIndex].count, id: \.self) { chordIndex in
                 ForEach(0..<beamViewModel.positions[beamIndex][chordIndex].count, id: \.self) { noteIndex in
-                    let position = beamViewModel.positions[beamIndex][chordIndex][noteIndex]
+//                    let position = beamViewModel.positions[beamIndex][chordIndex][noteIndex]
                     
                     if let duration = beamViewModel.beamGroups[beamIndex][chordIndex].notes.first?.duration {
                         if !(duration == .bar || duration == .breve || duration == .whole) {

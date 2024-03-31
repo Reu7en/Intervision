@@ -13,8 +13,8 @@ struct RollView: View {
     
     @StateObject var rollViewModel: RollViewModel
     
-    @State var widthScale: CGFloat = 1.0
-    @State var heightScale: CGFloat = 1.0
+    @State var widthScale: CGFloat = 0.5
+    @State var heightScale: CGFloat = 0.75
     @State var showInspector: Bool = false
     @State var showPiano: Bool = true
     @State var showDynamics: Bool = false
@@ -122,6 +122,9 @@ struct RollView: View {
                 }
                 .frame(width: showInspector ? geometry.size.width - inspectorWidth : geometry.size.width)
             }
+            .onAppear {
+                rollViewModel.updateRowHeight(rowHeight)
+            }
             
             Spacer()
                 .overlay(alignment: .topLeading) {
@@ -162,13 +165,11 @@ struct RollView: View {
                 rollViewModel.initialisePartGroups()
             }
             
-            NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-                if event.keyCode == 53 {
-                    rollViewModel.clearSelectedSegments()
-                }
-                
-                return event
-            }
+            rollViewModel.setupEventMonitoring()
+        }
+        .onDisappear {
+            rollViewModel.stopEventMonitoring()
+            rollViewModel.clearSelectedSegments()
         }
         .onTapGesture {
             rollViewModel.clearSelectedSegments()

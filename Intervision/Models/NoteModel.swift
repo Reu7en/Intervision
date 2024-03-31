@@ -60,6 +60,20 @@ extension Note {
     enum Pitch: String, CaseIterable {
         case C, D, E, F, G, A, B
         
+        var nextPitch: Note.Pitch {
+            let allPitches = Note.Pitch.allCases
+            guard let currentIndex = allPitches.firstIndex(of: self) else { return self }
+            let nextIndex = (currentIndex + 1) % allPitches.count
+            return allPitches[nextIndex]
+        }
+        
+        var previousPitch: Note.Pitch {
+            let allPitches = Note.Pitch.allCases
+            guard let currentIndex = allPitches.firstIndex(of: self) else { return self }
+            let previousIndex = (currentIndex + allPitches.count - 1) % allPitches.count
+            return allPitches[previousIndex]
+        }
+        
         func distanceFromC() -> Int {
             switch self {
             case .C: return 0
@@ -199,7 +213,122 @@ extension Note: CustomStringConvertible {
 }
 
 extension Note {
-    func increasePitch() {
-        pitch = .C
+    func increaseSemitone() {
+        guard let currentPitch = self.pitch, let currentOctave = self.octave else { return }
+        guard currentPitch != currentPitch.nextPitch, currentPitch != currentPitch.previousPitch else { return }
+        
+        var newAccidental: Accidental?
+        var newPitch: Pitch?
+        var newOctave: Octave?
+        
+        if let currentAccidental = self.accidental {
+            switch currentAccidental {
+            case .Sharp:
+                if currentPitch == .B || currentPitch == .E {
+                    newAccidental = .Sharp
+                } else {
+                    newAccidental = nil
+                }
+                
+                newPitch = currentPitch.nextPitch
+                break
+            case .Flat:
+                newAccidental = nil
+                newPitch = currentPitch
+                break
+            case .Natural:
+                if currentPitch == .B || currentPitch == .E {
+                    newAccidental = nil
+                    newPitch = currentPitch.nextPitch
+                } else {
+                    newAccidental = .Sharp
+                    newPitch = currentPitch
+                }
+                
+                break
+            case .DoubleSharp:
+                break
+            case .DoubleFlat:
+                break
+            }
+        } else {
+            if currentPitch == .B || currentPitch == .E {
+                newAccidental = nil
+                newPitch = currentPitch.nextPitch
+            } else {
+                newAccidental = .Sharp
+                newPitch = currentPitch
+            }
+        }
+        
+        if currentPitch == .B && newPitch == .C {
+            newOctave = currentOctave.next
+        } else {
+            newOctave = currentOctave
+        }
+        
+        self.accidental = newAccidental
+        self.pitch = newPitch
+        self.octave = newOctave
+    }
+    
+    func decreaseSemitone() {
+        guard let currentPitch = self.pitch, let currentOctave = self.octave else { return }
+        guard currentPitch != currentPitch.nextPitch, currentPitch != currentPitch.previousPitch else { return }
+        
+        var newAccidental: Accidental?
+        var newPitch: Pitch?
+        var newOctave: Octave?
+        
+        if let currentAccidental = self.accidental {
+            switch currentAccidental {
+            case .Sharp:
+                newAccidental = nil
+                newPitch = currentPitch
+                break
+            case .Flat:
+                if currentPitch == .C || currentPitch == .F {
+                    newAccidental = .Flat
+                } else {
+                    newAccidental = nil
+                }
+                
+                newPitch = currentPitch.previousPitch
+                
+                break
+            case .Natural:
+                if currentPitch == .C || currentPitch == .F {
+                    newAccidental = nil
+                    newPitch = currentPitch.previousPitch
+                } else {
+                    newAccidental = .Flat
+                    newPitch = currentPitch
+                }
+                
+                break
+            case .DoubleSharp:
+                break
+            case .DoubleFlat:
+                break
+            }
+        } else {
+            if currentPitch == .C || currentPitch == .F {
+                newAccidental = nil
+                newPitch = currentPitch.previousPitch
+            } else {
+                newAccidental = .Flat
+                newPitch = currentPitch
+            }
+        }
+        
+        if currentPitch == .C && newPitch == .B {
+            newOctave = currentOctave.prev
+        } else {
+            newOctave = currentOctave
+        }
+        
+        self.accidental = newAccidental
+        self.pitch = newPitch
+        self.octave = newOctave
     }
 }

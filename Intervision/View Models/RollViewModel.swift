@@ -34,13 +34,14 @@ class RollViewModel: ObservableObject {
     @Published var showInvertedIntervals: Bool
     @Published var showZigZags: Bool
     
-    @Published var selectedSegments: [Segment] {
-        didSet {
-            for segment in selectedSegments {
-                print(segment.id)
-            }
-        }
-    }
+    @Published var selectedSegments: [Segment]
+    
+    @Published var isSegmentHeld: Bool
+    
+    private var keyboardEventMonitor: Any?
+    private var mouseEventMonitor: Any?
+    private var rowHeight: CGFloat?
+    private var lastMouseLocation: CGPoint?
     
     init(
         scoreManager: ScoreManager,
@@ -57,7 +58,8 @@ class RollViewModel: ObservableObject {
         viewableMelodicLines: [Part] = [],
         showInvertedIntervals: Bool = false,
         showZigZags: Bool = false,
-        selectedSegments: [Segment] = []
+        selectedSegments: [Segment] = [],
+        isSegmentHeld: Bool = false
     ) {
         self.scoreManager = scoreManager
         self.parts = parts
@@ -74,11 +76,114 @@ class RollViewModel: ObservableObject {
         self.showInvertedIntervals = showInvertedIntervals
         self.showZigZags = showZigZags
         self.selectedSegments = selectedSegments
+        self.isSegmentHeld = isSegmentHeld
+    }
+    
+    func updateRowHeight(_ height: CGFloat) {
+        self.rowHeight = height
+    }
+    
+    func setupEventMonitoring() {
+        keyboardEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { [weak self] event in
+            self?.handleKeyEvent(event)
+            return event
+        }
+        
+        mouseEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDragged, .leftMouseUp]) { [weak self] event in
+            self?.handleMouseEvent(event)
+            return event
+        }
+    }
+    
+    func stopEventMonitoring() {
+        if let keyboardEventMonitor = keyboardEventMonitor {
+            NSEvent.removeMonitor(keyboardEventMonitor)
+        }
+        
+        if let mouseEventMonitor = mouseEventMonitor {
+            NSEvent.removeMonitor(mouseEventMonitor)
+        }
+    }
+    
+    private func handleKeyEvent(_ event: NSEvent) {
+        if event.keyCode == 53 { // esc
+            clearSelectedSegments()
+        } else if event.keyCode == 126 { // up
+            handleKeyUp()
+        } else if event.keyCode == 125 { // down
+            handleKeyDown()
+        }
+    }
+    
+    private func handleMouseEvent(_ event: NSEvent) {
+        guard let rowHeight = rowHeight else { return }
+        
+        switch event.type {
+        case .leftMouseDragged:
+            guard let lastLocation = lastMouseLocation else {
+                lastMouseLocation = event.locationInWindow
+                return
+            }
+            
+            let currentLocation = event.locationInWindow
+            let deltaY = currentLocation.y - lastLocation.y
+            
+            if abs(deltaY) >= rowHeight && isSegmentHeld {
+                if deltaY > 0 {
+                    handleKeyUp()
+                } else {
+                    handleKeyDown()
+                }
+                
+                lastMouseLocation = currentLocation
+            }
+        case .leftMouseUp:
+            isSegmentHeld = false
+        default:
+            lastMouseLocation = nil
+        }
     }
     
     func refresh() {
         objectWillChange.send()
     }
+    
+    func handleKeyUp() {
+        for segment in selectedSegments {
+            segment.increaseSemitone()
+        }
+        
+        updateScoreParts()
+    }
+    
+    func handleKeyDown() {
+        for segment in selectedSegments {
+            segment.decreaseSemitone()
+        }
+        
+        updateScoreParts()
+    }
+    
+    func updateScoreParts() {
+        guard let score = scoreManager.score, let updatedParts = parts else { return }
+        
+        if var existingParts = score.parts {
+            for part in updatedParts {
+                if let index = existingParts.firstIndex(where: { $0.id == part.id }) {
+                    existingParts[index] = part
+                } else {
+                    existingParts.append(part)
+                }
+            }
+            
+            score.parts = existingParts
+        } else {
+            score.parts = updatedParts
+        }
+        
+        refresh()
+    }
+
     
     func handleSegmentClicked(segment: Segment, isCommandKeyDown: Bool) {
         if isCommandKeyDown {
@@ -112,10 +217,6 @@ class RollViewModel: ObservableObject {
         
         self.selectedSegments = []
     }
-    
-//    func removeSegment(segment: Segment) {
-//        object
-//    }
     
     func initialisePartGroups() {
         guard let score = scoreManager.score, let parts = score.parts else { return }

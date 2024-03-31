@@ -35,8 +35,13 @@ class Segment: Identifiable, Equatable, ObservableObject {
         lhs.id == rhs.id
     }
     
-    func increasePitch() {
-        note?.increasePitch()
+    func increaseSemitone() {
+        note?.increaseSemitone()
+        rowIndex -= 1
+    }
+    
+    func decreaseSemitone() {
+        note?.decreaseSemitone()
         rowIndex += 1
     }
     

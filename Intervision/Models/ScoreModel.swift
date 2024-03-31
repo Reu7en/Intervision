@@ -7,7 +7,15 @@
 
 import Foundation
 
-struct Score: Identifiable, Equatable {
+class Score: Identifiable, Equatable {
+    
+    init(title: String? = nil, composer: String? = nil, parts: [Part]? = nil, id: UUID = UUID()) {
+        self.title = title
+        self.composer = composer
+        self.parts = parts
+        self.id = id
+    }
+    
     var title: String?
     var composer: String?
     var parts: [Part]?

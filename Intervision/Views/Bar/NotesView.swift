@@ -43,10 +43,11 @@ struct NotesView: View {
             ForEach(0..<noteGrid.count, id: \.self) { beatIndex in
                 HStack(spacing: 0) {
                     GeometryReader { beatGeometry in
+                        let noteSize = 2 * (geometry.size.height / CGFloat(rows - 1))
+                        
                         ForEach(0..<noteGrid[beatIndex].count, id: \.self) { rowIndex in
                             ForEach(0..<noteGrid[beatIndex][rowIndex].count, id: \.self) { columnIndex in
                                 if let note = noteGrid[beatIndex][rowIndex][columnIndex] {
-                                    let noteSize = 2 * (geometry.size.height / CGFloat(rows - 1))
                                     let notePosition =
                                     BarViewModel.calculateNotePosition(
                                         isRest: note.isRest,
@@ -63,14 +64,21 @@ struct NotesView: View {
                                     } else {
                                         NoteHeadView(size: noteSize, isHollow: note.duration.isHollow, isDotted: note.isDotted)
                                             .position(notePosition)
-                                        BeamsView(beamViewModel: BeamViewModel(beamGroups: barViewModel.beamSplitChords, noteGrid: noteGrid[beatIndex], geometry: geometry, beatGeometry: beatGeometry, middleStaveNote: barViewModel.middleStaveNote, rows: rows, noteSize: noteSize), scale: scale)
+                                        
+                                        if let accidental =  barViewModel.shouldRenderAccidental(note) {
+                                            AccidentalView(accidental: accidental)
+                                                .frame(width: noteSize * 1.25, height: noteSize * 1.25)
+                                                .position(notePosition)
+                                                .offset(x: -noteSize * 1.1)
+                                        }
                                     }
                                 }
                             }
                         }
+                        
+                        BeamsView(beamViewModel: BeamViewModel(beamGroups: barViewModel.beamSplitChords[beatIndex], noteGrid: noteGrid, geometry: geometry, beatGeometry: beatGeometry, middleStaveNote: barViewModel.middleStaveNote, rows: rows, noteSize: noteSize, beatIndex: beatIndex), scale: scale)
                     }
                     .padding(.horizontal, geometry.size.width / 50)
-//                    .border(.green)
                 }
                 .padding(.horizontal, geometry.size.width / 50)
             }

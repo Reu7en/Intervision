@@ -21,12 +21,12 @@ struct BeamsView: View {
             
             ForEach(0..<beamViewModel.positions[beamIndex].count, id: \.self) { chordIndex in
                 ForEach(0..<beamViewModel.positions[beamIndex][chordIndex].count, id: \.self) { noteIndex in
-//                    let position = beamViewModel.positions[beamIndex][chordIndex][noteIndex]
+                    let position = beamViewModel.positions[beamIndex][chordIndex][noteIndex]
                     
-                    if let duration = beamViewModel.beamGroups[beamIndex][chordIndex].notes.first?.duration {
-                        if !(duration == .bar || duration == .breve || duration == .whole) {
-//                            StemView(position: position, direction: direction, stemLength: stemLength, xOffset: xOffset, scale: scale)
-                        }
+                    let duration = beamViewModel.beamGroups[beamIndex][chordIndex].notes[noteIndex].duration
+                    
+                    if !(duration == .bar || duration == .breve || duration == .whole) {
+                        StemView(position: position, direction: direction, stemLength: stemLength, xOffset: xOffset, scale: scale)
                     }
                 }
                 
@@ -42,7 +42,7 @@ struct BeamsView: View {
                    let furthestEndPosition = beamViewModel.findFurthestPosition(in: beamViewModel.positions[beamIndex][beamViewModel.positions[beamIndex].count - 1], direction: direction) {
                     
 //                    Circle()
-//                        .fill(.red)
+//                        .fill(.green)
 //                        .frame(width: 5, height: 5)
 //                        .position(furthestStartPosition)
 //                    
@@ -62,6 +62,6 @@ struct BeamsView: View {
 
 #Preview {
     GeometryReader { geometry in
-        BeamsView(beamViewModel: BeamViewModel(beamGroups: [], noteGrid: [], geometry: geometry, beatGeometry: geometry, middleStaveNote: Note(duration: Note.Duration.bar, durationValue: -1, isRest: true, isDotted: false, hasAccent: false), rows: 23, noteSize: 10), scale: 1.0)
+        BeamsView(beamViewModel: BeamViewModel(beamGroups: [], noteGrid: [], geometry: geometry, beatGeometry: geometry, middleStaveNote: Note(duration: Note.Duration.bar, durationValue: -1, isRest: true, isDotted: false, hasAccent: false), rows: 23, noteSize: 10, beatIndex: 0), scale: 1.0)
     }
 }

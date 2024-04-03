@@ -40,6 +40,13 @@ struct PageView: View {
                             
                         }
                     }
+                    
+//                    ForEach(0..<bars[0].count, id: \.self) { voiceIndex in
+//                        BarView(barViewModel: BarViewModel(bar: bars[18][voiceIndex], gaps: 4, step: .Note, ledgerLines: 3), showClef: true, showKey: true, showTime: true)
+//                            .frame(width: width * 0.9, height: height / 6)
+//                            .id(UUID())
+//                        
+//                    }
                 }
             }
         }

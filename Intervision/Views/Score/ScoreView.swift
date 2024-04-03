@@ -24,33 +24,35 @@ struct ScoreView: View {
                     ScrollView([.vertical, .horizontal]) {
                         HStack(spacing: 0) {
                             ForEach(0..<parts.count, id: \.self) { partIndex in
-                                PageView(geometry: Binding.constant(geometry), zoomLevel: $zoomLevel, bars: parts[partIndex].bars, part: parts[partIndex])
+                                PageView(
+                                    geometry: Binding.constant(geometry),
+                                    zoomLevel: $zoomLevel,
+                                    bars: parts[partIndex].bars,
+                                    part: parts[partIndex]
+//                                    bars: parts[2].bars,
+//                                    part: parts[2]
+                                )
                             }
                         }
-                    }
-                    
-                    if showInspector {
-                        ScoreInspectorView(presentedView: $presentedView)
-                            .frame(width: geometry.size.width / 10)
                     }
                 }
                 .overlay(alignment: .topTrailing) {
                     Button {
                         withAnimation(.easeInOut) {
-                            showInspector.toggle()
+                            presentedView = .Roll
                         }
                     } label: {
-                        Image(systemName: "arrowshape.left.fill")
-                            .rotationEffect(.degrees(showInspector ? 180 : 0))
+                        Image(systemName: "pianokeys")
                             .frame(width: 40, height: 20)
                     }
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(showInspector ? Color.accentColor : Color.clear)
-                    )
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                     .padding(.trailing)
                     .padding(.top, 5)
+                    .onChange(of: presentedView) { newValue, _ in
+                        withAnimation(.easeInOut) {
+                            presentedView = newValue
+                        }
+                    }
                 }
             }
         }

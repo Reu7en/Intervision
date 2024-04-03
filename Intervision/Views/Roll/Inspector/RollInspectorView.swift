@@ -52,7 +52,7 @@ struct RollInspectorView: View {
                         }
                         .pickerStyle(RadioGroupPickerStyle())
                         .onChange(of: presentedView) { newValue, _ in
-                            withAnimation(.easeInOut(duration: 0.75)) {
+                            withAnimation(.easeInOut) {
                                 presentedView = newValue
                             }
                         }

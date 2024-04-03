@@ -21,7 +21,7 @@ class BarViewModel: ObservableObject {
     @Published var lowestGapNote: Note?
     @Published var beatSplitChords: [[Chord]]
     @Published var beatSplitNoteGrid: [[[Note?]]] = [[[Note?]]]()
-    @Published var beamSplitChords: [[Chord]]
+    @Published var beamSplitChords: [[[Chord]]]
     @Published var beamSplitNoteGrid: [[[Note?]]] = [[[Note?]]]()
     @Published var middleStaveNote: Note?
     
@@ -31,7 +31,7 @@ class BarViewModel: ObservableObject {
         self.step = step
         self.ledgerLines = ledgerLines
         self.beatSplitChords = [[Chord]]()
-        self.beamSplitChords = [[Chord]]()
+        self.beamSplitChords = [[[Chord]]]()
         
         calculateIsBarRest()
         calculateBeats()
@@ -44,7 +44,11 @@ class BarViewModel: ObservableObject {
             isBarRest = true
         }
         
-        if !populateNoteGrid(splitChords: &beatSplitChords, noteGrid: &beatSplitNoteGrid) || !populateNoteGrid(splitChords: &beamSplitChords, noteGrid: &beamSplitNoteGrid) {
+//        if !populateNoteGrid(splitChords: &beatSplitChords, noteGrid: &beatSplitNoteGrid) || !populateNoteGrid(splitChords: &beamSplitChords, noteGrid: &beamSplitNoteGrid) {
+//            isBarRest = true
+//        }
+        
+        if !populateNoteGrid(splitChords: &beatSplitChords, noteGrid: &beatSplitNoteGrid) {
             isBarRest = true
         }
         
@@ -141,120 +145,6 @@ extension BarViewModel {
         }
     }
     
-    /*
-    func splitChordsIntoBeats() -> Bool {
-        var timeLeft: Double = beatValue ?? -1
-        var chordGroup: [Chord] = [Chord]()
-        
-        for chord in bar.chords {
-            if timeLeft == -1 { return false }
-            
-            if let duration = chord.notes.first?.duration.rawValue,
-               let isDotted = chord.notes.first?.isDotted {
-                let actualDuration = isDotted ? duration * 1.5 : duration
-                let timeModification = chord.notes.first?.timeModification
-                
-                if timeModification == nil {
-                    if actualDuration <= timeLeft {
-                        chordGroup.append(chord)
-                        timeLeft -= actualDuration
-                    } else {
-                        let newDurationRaw = timeLeft
-                        let carryDurationRaw = actualDuration - newDurationRaw
-                        var newDuration: Note.Duration?
-                        var carryDuration: Note.Duration?
-                        var newDotted: Bool = false
-                        var carryDotted: Bool = false
-                        
-                        if let duration = Note.Duration.init(rawValue: newDurationRaw) {
-                            newDuration = duration
-                        } else if let duration = Note.Duration.init(rawValue: newDurationRaw / 1.5) {
-                            newDuration = duration
-                            newDotted = true
-                        } else { return false }
-                        
-                        if let duration = Note.Duration.init(rawValue: carryDurationRaw) {
-                            carryDuration = duration
-                        } else if let duration = Note.Duration.init(rawValue: carryDurationRaw / 1.5) {
-                            carryDuration = duration
-                            carryDotted = true
-                        } else { return false }
-                        
-                        var newChord = Chord(notes: [])
-                        var newCarry = Chord(notes: [])
-                        
-                        for note in chord.notes {
-                            newChord.notes.append(
-                                Note(
-                                    pitch: note.pitch,
-                                    accidental: note.accidental,
-                                    octave: note.octave,
-                                    duration: newDuration!,
-                                    durationValue: note.durationValue * (Double(newDuration!.rawValue) / Double(note.duration.rawValue)),
-                                    timeModification: note.timeModification,
-                                    dynamic: note.dynamic,
-                                    graceNotes: note.graceNotes,
-                                    tie: Note.Tie.Start,
-                                    isRest: note.isRest,
-                                    isDotted: newDotted,
-                                    hasAccent: note.hasAccent
-                                )
-                            )
-                            
-                            newCarry.notes.append(
-                                Note(
-                                    pitch: note.pitch,
-                                    accidental: note.accidental,
-                                    octave: note.octave,
-                                    duration: carryDuration!,
-                                    durationValue: note.durationValue * (Double(carryDuration!.rawValue) / Double(note.duration.rawValue)),
-                                    timeModification: note.timeModification,
-                                    dynamic: note.dynamic,
-                                    graceNotes: note.graceNotes,
-                                    tie: Note.Tie.Stop,
-                                    isRest: note.isRest,
-                                    isDotted: carryDotted,
-                                    hasAccent: note.hasAccent
-                                )
-                            )
-                        }
-                        
-                        chordGroup.append(newChord)
-                        beatSplitChords.append(chordGroup)
-                        chordGroup = [Chord]()
-                        chordGroup.append(newCarry)
-                        timeLeft = beatValue ?? -1
-                        timeLeft -= carryDurationRaw
-                    }
-                } else {
-                    chordGroup.append(chord)
-                    
-                    if case .custom(let actual, let normal) = chord.notes.first?.timeModification {
-                        if let duration = chord.notes.first?.duration.rawValue {
-                            let actualDuration = duration * (Double(normal) / Double(actual))
-                            timeLeft -= actualDuration
-                        } else { return false }
-                    } else { return false }
-                }
-                
-                let epsilon = 0.00001
-                
-                if abs(timeLeft) < epsilon {
-                    timeLeft = beatValue ?? -1
-                    beatSplitChords.append(chordGroup)
-                    chordGroup = [Chord]()
-                }
-            } else { return false }
-        }
-        
-        if !chordGroup.isEmpty {
-            beatSplitChords.append(chordGroup)
-        }
-        
-        return true
-    }
-     */
-    
     func splitChordsIntoBeats() -> Bool {
         var timeLeft: Double = beatValue ?? -999
         var chordGroup: [Chord] = [Chord]()
@@ -311,109 +201,43 @@ extension BarViewModel {
     }
     
     func splitChordsIntoBeams() -> Bool {
-        var beamGroup: [Chord] = []
-        var timeModificationGroup: [Chord] = []
-        var remainingNotesToAdd = 0
-
         for chordGroup in beatSplitChords {
+            var beamGroup: [[Chord]] = []
+            var standardGroup: [Chord] = []
+            var timeModificationGroup: [Chord] = []
+            
             for chord in chordGroup {
-                if remainingNotesToAdd == 0 {
-                    if !beamGroup.isEmpty {
-                        beamSplitChords.append(beamGroup)
-                        beamGroup = []
+                if let timeModification = chord.notes.first?.timeModification {
+                    if !standardGroup.isEmpty {
+                        beamGroup.append(standardGroup)
+                        standardGroup = []
                     }
                     
-                    if !timeModificationGroup.isEmpty {
-                        beamSplitChords.append(timeModificationGroup)
-                        timeModificationGroup = []
-                    }
-
-                    if let timeModification = chord.notes.first?.timeModification,
-                       case .custom(let actual, _) = timeModification {
-                        remainingNotesToAdd = actual
-                    }
-                }
-
-                if chord.notes.first?.timeModification != nil {
                     timeModificationGroup.append(chord)
                 } else {
-                    beamGroup.append(chord)
-                    remainingNotesToAdd -= 1
+                    if !timeModificationGroup.isEmpty {
+                        beamGroup.append(timeModificationGroup)
+                        timeModificationGroup = []
+                    }
+                    
+                    standardGroup.append(chord)
                 }
             }
-
-            if !beamGroup.isEmpty {
-                beamSplitChords.append(beamGroup)
-                beamGroup = []
+            
+            
+            if !standardGroup.isEmpty {
+                beamGroup.append(standardGroup)
             }
-        }
-
-        if !timeModificationGroup.isEmpty {
-            beamSplitChords.append(timeModificationGroup)
+            
+            if !timeModificationGroup.isEmpty {
+                beamGroup.append(timeModificationGroup)
+            }
+            
+            beamSplitChords.append(beamGroup)
         }
 
         return true
     }
-    
-    /*
-    func splitChordsIntoBeams() -> Bool {
-        var beamGroup: [Chord] = []
-        var timeModificationGroup: [Chord] = []
-        var remainingNotesToAdd = 0
-
-        for chordGroup in beatSplitChords {
-            for chord in chordGroup {
-                if remainingNotesToAdd == 0 {
-                    if !beamGroup.isEmpty {
-                        beamSplitChords.append(beamGroup)
-                        beamGroup = []
-                    }
-                    
-                    if !timeModificationGroup.isEmpty {
-                        beamSplitChords.append(timeModificationGroup)
-                        timeModificationGroup = []
-                    }
-
-                    if let timeModification = chord.notes.first?.timeModification,
-                       case .custom(let actual, _) = timeModification {
-                        remainingNotesToAdd = actual
-                    }
-                }
-
-                if let firstNote = chord.notes.first, firstNote.isRest {
-                    if !beamGroup.isEmpty {
-                        beamSplitChords.append(beamGroup)
-                        beamGroup = []
-                    }
-                    
-                    if !timeModificationGroup.isEmpty {
-                        beamSplitChords.append(timeModificationGroup)
-                        timeModificationGroup = []
-                    }
-
-                    beamSplitChords.append([chord])
-                    remainingNotesToAdd = 0
-                } else if chord.notes.first?.timeModification != nil {
-                    timeModificationGroup.append(chord)
-                } else {
-                    beamGroup.append(chord)
-                    remainingNotesToAdd -= 1
-                }
-            }
-
-            if !beamGroup.isEmpty {
-                beamSplitChords.append(beamGroup)
-                beamGroup = []
-            }
-        }
-
-        if !timeModificationGroup.isEmpty {
-            beamSplitChords.append(timeModificationGroup)
-        }
-
-        return true
-    }
-     */
 
     func populateNoteGrid(splitChords: inout [[Chord]], noteGrid: inout [[[Note?]]]) -> Bool {
         if let gridRows = rows {
@@ -475,17 +299,17 @@ extension BarViewModel {
         return distance
     }
     
-    func shouldRenderAccidental(_ note: Note) -> Bool {
+    func shouldRenderAccidental(_ note: Note) -> Note.Accidental? {
         if let pitch = note.pitch,
            let accidental = note.accidental {
             for alteredNote in bar.keySignature.alteredNotes {
                 if alteredNote == (pitch, accidental) {
-                    return false
+                    return nil
                 }
             }
         }
         
-        return true
+        return note.accidental
     }
     
     func calculateMiddleStaveNote() {

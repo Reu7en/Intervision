@@ -13,6 +13,7 @@
 		1B0B523C2BB75EF800225A11 /* Flight_of_the_Bumblebee.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B523B2BB75EF800225A11 /* Flight_of_the_Bumblebee.musicxml */; };
 		1B0B523E2BB75F6500225A11 /* Fur_Elise.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B523D2BB75F6500225A11 /* Fur_Elise.musicxml */; };
 		1B0B52402BB7877800225A11 /* RollBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B523F2BB7877800225A11 /* RollBarViewModel.swift */; };
+		1B0B52422BBC4CBA00225A11 /* AccidentalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B52412BBC4CBA00225A11 /* AccidentalView.swift */; };
 		1B0E449E2B92510F00C0E12C /* IntervalLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E449D2B92510F00C0E12C /* IntervalLinesView.swift */; };
 		1B0E44A02B92516500C0E12C /* IntervalLinesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E449F2B92516500C0E12C /* IntervalLinesViewModel.swift */; };
 		1B0E44A22B92519800C0E12C /* SegmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44A12B92519800C0E12C /* SegmentModel.swift */; };
@@ -29,7 +30,6 @@
 		1B231FF52B8A5FB9003AB714 /* RollViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FF42B8A5FB9003AB714 /* RollViewModel.swift */; };
 		1B231FF72B8A6C2B003AB714 /* RollBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FF62B8A6C2B003AB714 /* RollBarView.swift */; };
 		1B231FFB2B8E10B9003AB714 /* RollInspectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FFA2B8E10B8003AB714 /* RollInspectorView.swift */; };
-		1B231FFD2B8EA746003AB714 /* ScoreInspectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FFC2B8EA746003AB714 /* ScoreInspectorView.swift */; };
 		1B561F772B784CF3001860E5 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F762B784CF3001860E5 /* HomeView.swift */; };
 		1B561F792B79219F001860E5 /* BarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F782B79219F001860E5 /* BarView.swift */; };
 		1B561F7B2B793216001860E5 /* BarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F7A2B793216001860E5 /* BarViewModel.swift */; };
@@ -71,6 +71,7 @@
 		1B0B523B2BB75EF800225A11 /* Flight_of_the_Bumblebee.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Flight_of_the_Bumblebee.musicxml; sourceTree = "<group>"; };
 		1B0B523D2BB75F6500225A11 /* Fur_Elise.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Fur_Elise.musicxml; sourceTree = "<group>"; };
 		1B0B523F2BB7877800225A11 /* RollBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollBarViewModel.swift; sourceTree = "<group>"; };
+		1B0B52412BBC4CBA00225A11 /* AccidentalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccidentalView.swift; sourceTree = "<group>"; };
 		1B0E449D2B92510F00C0E12C /* IntervalLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervalLinesView.swift; sourceTree = "<group>"; };
 		1B0E449F2B92516500C0E12C /* IntervalLinesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervalLinesViewModel.swift; sourceTree = "<group>"; };
 		1B0E44A12B92519800C0E12C /* SegmentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentModel.swift; sourceTree = "<group>"; };
@@ -87,7 +88,6 @@
 		1B231FF42B8A5FB9003AB714 /* RollViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollViewModel.swift; sourceTree = "<group>"; };
 		1B231FF62B8A6C2B003AB714 /* RollBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollBarView.swift; sourceTree = "<group>"; };
 		1B231FFA2B8E10B8003AB714 /* RollInspectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollInspectorView.swift; sourceTree = "<group>"; };
-		1B231FFC2B8EA746003AB714 /* ScoreInspectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreInspectorView.swift; sourceTree = "<group>"; };
 		1B561F762B784CF3001860E5 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		1B561F782B79219F001860E5 /* BarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarView.swift; sourceTree = "<group>"; };
 		1B561F7A2B793216001860E5 /* BarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarViewModel.swift; sourceTree = "<group>"; };
@@ -216,6 +216,7 @@
 				1B9435A42B856D5900B57DA7 /* ClefView.swift */,
 				1B9435A62B85703600B57DA7 /* KeyView.swift */,
 				1B9435A82B857A8D00B57DA7 /* TimeSignatureView.swift */,
+				1B0B52412BBC4CBA00225A11 /* AccidentalView.swift */,
 			);
 			path = Bar;
 			sourceTree = "<group>";
@@ -324,7 +325,6 @@
 		1B97BEEB2B7279C3007D0BE5 /* Score */ = {
 			isa = PBXGroup;
 			children = (
-				1B231FFC2B8EA746003AB714 /* ScoreInspectorView.swift */,
 				1B97BEE92B726CC1007D0BE5 /* ScoreView.swift */,
 				1B97BEEC2B7279CF007D0BE5 /* PageView.swift */,
 			);
@@ -436,8 +436,8 @@
 				1B9435972B7F122A00B57DA7 /* NotesView.swift in Sources */,
 				1B97BEEA2B726CC1007D0BE5 /* ScoreView.swift in Sources */,
 				1B12C9E72B75472200DC87DC /* StaveModel.swift in Sources */,
-				1B231FFD2B8EA746003AB714 /* ScoreInspectorView.swift in Sources */,
 				1B12C9E52B753EBE00DC87DC /* PartModel.swift in Sources */,
+				1B0B52422BBC4CBA00225A11 /* AccidentalView.swift in Sources */,
 				1B0E44A02B92516500C0E12C /* IntervalLinesViewModel.swift in Sources */,
 				1B0E44AB2B9284E600C0E12C /* BarRowsView.swift in Sources */,
 				1B94359F2B80655D00B57DA7 /* BeamLineView.swift in Sources */,

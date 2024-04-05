@@ -71,7 +71,7 @@ class BeamViewModel: ObservableObject {
                 var chordPositions: [CGPoint] = []
                 
                 for note in chord.notes {
-                    if let (rowIndex, columnIndex) = findNoteIndex(note) {
+                    if let (rowIndex, _) = findNoteIndex(note) {
                         let notePosition =
                         BarViewModel.calculateNotePosition(
                             isRest: note.isRest,

@@ -353,7 +353,7 @@ class RollViewModel: ObservableObject {
                             
                             if let timeModification = firstNote.timeModification {
                                 switch timeModification {
-                                case .custom(let actual, let normal):
+                                case .custom(let actual, let normal, _): // investigate normalDuration
                                     chordDuration /= (Double(actual) / Double(normal))
                                 }
                             }
@@ -366,7 +366,7 @@ class RollViewModel: ObservableObject {
                                         
                                         if let timeModification = note.timeModification {
                                             switch timeModification {
-                                            case .custom(let actual, let normal):
+                                            case .custom(let actual, let normal, _): // investigate normalDuration
                                                 duration /= (Double(actual) / Double(normal))
                                             }
                                         }

@@ -116,7 +116,7 @@ struct BeamLineView: View {
             let midpointY = (furthestStartPosition.y + furthestEndPosition.y) / 2
             
             let timeModificationValue: Int? = {
-                if let timeModification = timeModification, case .custom(let actual, _) = timeModification {
+                if let timeModification = timeModification, case .custom(let actual, _, _) = timeModification {
                     return actual
                 }
                 

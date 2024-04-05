@@ -62,7 +62,7 @@ struct NotesView: View {
                                         RestView(size: noteSize, duration: note.duration, isDotted: note.isDotted, scale: scale)
                                             .position(notePosition)
                                     } else {
-                                        NoteHeadView(size: noteSize, isHollow: note.duration.isHollow, isDotted: note.isDotted)
+                                        NoteHeadView(size: noteSize, isHollow: note.duration.isHollow, isDotted: note.isDotted, tie: note.tie)
                                             .position(notePosition)
                                         
                                         if let accidental =  barViewModel.shouldRenderAccidental(note) {
@@ -88,6 +88,6 @@ struct NotesView: View {
 
 #Preview {
     GeometryReader { geometry in
-        NotesView(barViewModel: BarViewModel(bar: Bar(chords: [], clef: Bar.Clef.Neutral, timeSignature: Bar.TimeSignature.common, doubleLine: false, keySignature: Bar.KeySignature.CMajor), gaps: 4, step: .Note, ledgerLines: 3), noteGrid: [[[Note?]]](), rows: 23, geometry: geometry, scale: 1.0, showClef: true, showKey: true, showTime: true, staveThickness: 3)
+        NotesView(barViewModel: BarViewModel(bar: Bar(chords: [], clef: Bar.Clef.Neutral, timeSignature: Bar.TimeSignature.common, doubleLine: false, keySignature: Bar.KeySignature.CMajor), gaps: 4, ledgerLines: 3), noteGrid: [[[Note?]]](), rows: 23, geometry: geometry, scale: 1.0, showClef: true, showKey: true, showTime: true, staveThickness: 3)
     }
 }

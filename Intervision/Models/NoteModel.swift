@@ -153,7 +153,7 @@ extension Note {
     }
     
     enum TimeModification: Equatable {
-        case custom(actual: Int, normal: Int)
+        case custom(actual: Int, normal: Int, normalDuration: Duration)
     }
     
     enum ChangeDynamic {

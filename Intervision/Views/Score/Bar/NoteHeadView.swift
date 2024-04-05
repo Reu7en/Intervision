@@ -14,13 +14,30 @@ struct NoteHeadView: View {
     let bottomColor: Color
     let isHollow: Bool
     let isDotted: Bool
+    let tie: Note.Tie?
     
-    init(size: CGFloat, topColor: Color = Color.black, bottomColor: Color = Color.black, isHollow: Bool, isDotted: Bool) {
+    init(size: CGFloat, topColor: Color = Color.black, bottomColor: Color = Color.black, isHollow: Bool, isDotted: Bool, tie: Note.Tie?) {
         self.size = size
-        self.topColor = topColor
-        self.bottomColor = bottomColor
+//        self.topColor = topColor
+//        self.bottomColor = bottomColor
         self.isHollow = isHollow
         self.isDotted = isDotted
+        self.tie = tie
+        
+        switch tie {
+        case .Start:
+            self.topColor = .red
+            self.bottomColor = .red
+            break
+        case .Stop:
+            self.topColor = .yellow
+            self.bottomColor = .yellow
+            break
+        case nil:
+            self.topColor = topColor
+            self.bottomColor = bottomColor
+            break
+        }
     }
     
     var body: some View {
@@ -55,7 +72,7 @@ struct NoteHeadView: View {
 }
 
 #Preview {
-    NoteHeadView(size: 500, topColor: Color.green, bottomColor: Color.blue, isHollow: true, isDotted: true)
+    NoteHeadView(size: 500, topColor: Color.green, bottomColor: Color.blue, isHollow: true, isDotted: true, tie: nil)
 }
 
 extension View {

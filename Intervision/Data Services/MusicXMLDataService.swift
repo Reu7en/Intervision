@@ -428,6 +428,7 @@ struct MusicXMLDataService {
                 var hasAccent: Bool = false
                 var timeModification: Note.TimeModification? = nil
                 var changeDynamic: Note.ChangeDynamic? = nil
+                var tie: Note.Tie? = nil
                 
                 for change in changeDynamics {
                     if change.1 == noteIndex {
@@ -475,31 +476,24 @@ struct MusicXMLDataService {
                     if line.contains("<accent") {
                         hasAccent = true
                     }
-                    
-                    if line.contains("<time-modification") {
-                        let timeMod = extractContentsBetweenTags(note, startTag: "<time-modification", endTag: "</time-modification")
-                        var actual: Int = -1
-                        var normal: Int = -1
-                        
-                        if timeMod.count > 0 {
-                            for subLine in timeMod[0] {
-                                if subLine.contains("<actual-notes") {
-                                    actual = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
-                                }
-                                
-                                if subLine.contains("<normal-notes") {
-                                    normal = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
-                                }
-                            }
-                        }
-                        
-                        if actual != -1 && normal != -1 {
-                            timeModification = Note.TimeModification.custom(actual: actual, normal: normal)
-                        }
-                    }
                 }
                 
                 for line in note {
+                    if line.contains("<tie") || line.contains("<slur") {
+                        let t = extractFirstAttributeValue(fromTag: line)
+                        
+                        switch t {
+                        case "start":
+                            tie = .Start
+                            break
+                        case "stop":
+                            tie = .Stop
+                            break
+                        default:
+                            break
+                        }
+                    }
+                    
                     if line.contains("<duration") {
                         let dur = Double(extractContent(fromTag: line) ?? "-1") ?? -1
                         durationValue = dur
@@ -535,6 +529,62 @@ struct MusicXMLDataService {
                             break
                         default:
                             break
+                        }
+                    }
+                    
+                    if line.contains("<time-modification") {
+                        let timeMod = extractContentsBetweenTags(note, startTag: "<time-modification", endTag: "</time-modification")
+                        var actual: Int = -1
+                        var normal: Int = -1
+                        var normalType: Note.Duration? = duration
+                        
+                        if timeMod.count > 0 {
+                            for subLine in timeMod[0] {
+                                if subLine.contains("<actual-notes") {
+                                    actual = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
+                                }
+                                
+                                if subLine.contains("<normal-notes") {
+                                    normal = Int(extractContent(fromTag: subLine) ?? "-1") ?? -1
+                                }
+                                
+                                if subLine.contains("<normal-type") {
+                                    let normalTypeVerbose = extractContent(fromTag: subLine)
+                                    
+                                    switch normalTypeVerbose {
+                                    case "breve":
+                                        normalType = Note.Duration.breve
+                                        break
+                                    case "whole":
+                                        normalType = Note.Duration.whole
+                                        break
+                                    case "half":
+                                        normalType = Note.Duration.half
+                                        break
+                                    case "quarter":
+                                        normalType = Note.Duration.quarter
+                                        break
+                                    case "eighth":
+                                        normalType = Note.Duration.eighth
+                                        break
+                                    case "16th":
+                                        normalType = Note.Duration.sixteenth
+                                        break
+                                    case "32nd":
+                                        normalType = Note.Duration.thirtySecond
+                                        break
+                                    case "64th":
+                                        normalType = Note.Duration.sixtyFourth
+                                        break
+                                    default:
+                                        break
+                                    }
+                                }
+                            }
+                        }
+                        
+                        if actual != -1 && normal != -1 {
+                            timeModification = Note.TimeModification.custom(actual: actual, normal: normal, normalDuration: normalType ?? .bar)
                         }
                     }
                     
@@ -667,7 +717,7 @@ struct MusicXMLDataService {
                         timeModification: timeModification,
                         changeDynamic: changeDynamic,
                         graceNotes: nil,
-                        tie: nil,
+                        tie: tie,
                         isRest: isRest,
                         isDotted: isDotted,
                         hasAccent: hasAccent

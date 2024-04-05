@@ -11,13 +11,13 @@ struct PageView: View {
     
     @Binding var geometry: GeometryProxy
     @Binding var zoomLevel: CGFloat
-    let aspectRatio: CGFloat = 210 / 297 // A4 paper aspect ratio
+    
     let bars: [[Bar]]
     let part: Part
     
     var body: some View {
         
-        let width = geometry.size.height * aspectRatio * zoomLevel
+        let width = geometry.size.height * ScoreViewModel.pageAspectRatio * zoomLevel
         let height = geometry.size.height * zoomLevel
         
         ZStack {
@@ -34,9 +34,18 @@ struct PageView: View {
                 LazyVStack(spacing: 0) {
                     ForEach(0..<bars.count, id: \.self) { barIndex in
                         ForEach(0..<bars[barIndex].count, id: \.self) { voiceIndex in
-                            BarView(barViewModel: BarViewModel(bar: bars[barIndex][voiceIndex], gaps: 4, step: .Note, ledgerLines: 3), showClef: true, showKey: true, showTime: true)
-                                .frame(width: width * 0.9, height: height / 6)
-                                .id(UUID())
+                            BarView(
+                                barViewModel: BarViewModel(
+                                    bar: bars[barIndex][voiceIndex],
+                                    gaps: 4,
+                                    ledgerLines: 3,
+                                    showClef: true,
+                                    showKey: true,
+                                    showTime: true
+                                )
+                            )
+                            .frame(width: width * 0.9, height: height / 6)
+                            .id(UUID())
                             
                         }
                     }

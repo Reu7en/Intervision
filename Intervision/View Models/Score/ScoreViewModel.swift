@@ -14,6 +14,8 @@ class ScoreViewModel: ObservableObject {
     
     @Published var viewType: ViewType
     
+    static let pageAspectRatio: CGFloat = 210 / 297
+    
     init(scoreManager: ScoreManager, viewType: ViewType = .Horizontal) {
         self.scoreManager = scoreManager
         self.viewType = viewType

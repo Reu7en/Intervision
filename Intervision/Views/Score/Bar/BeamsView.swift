@@ -37,24 +37,22 @@ struct BeamsView: View {
                 }
             }
             
-            if beamViewModel.positions[beamIndex].count > 1 {
-                if let furthestStartPosition = beamViewModel.findFurthestPosition(in: beamViewModel.positions[beamIndex][0], direction: direction),
-                   let furthestEndPosition = beamViewModel.findFurthestPosition(in: beamViewModel.positions[beamIndex][beamViewModel.positions[beamIndex].count - 1], direction: direction) {
-                    
+            if let furthestStartPosition = beamViewModel.findFurthestPosition(in: beamViewModel.positions[beamIndex][0], direction: direction),
+               let furthestEndPosition = beamViewModel.findFurthestPosition(in: beamViewModel.positions[beamIndex][beamViewModel.positions[beamIndex].count - 1], direction: direction) {
+                
 //                    Circle()
 //                        .fill(.green)
 //                        .frame(width: 5, height: 5)
 //                        .position(furthestStartPosition)
-//                    
+//
 //                    Circle()
 //                        .fill(.red)
 //                        .frame(width: 5, height: 5)
 //                        .position(furthestEndPosition)
-                    
-                    let durations = beamViewModel.beamGroups[beamIndex].map { $0.notes.first?.duration ?? Note.Duration.bar }
-                    
-                    BeamLineView(furthestStartPosition: furthestStartPosition, furthestEndPosition: furthestEndPosition, durations: durations, timeModification: beamViewModel.beamGroups[beamIndex][0].notes.first?.timeModification, stemLength: stemLength, direction: direction, xOffset: xOffset, scale: scale)
-                }
+                
+                let durations = beamViewModel.beamGroups[beamIndex].map { $0.notes.first?.duration ?? Note.Duration.bar }
+                
+                BeamLineView(furthestStartPosition: furthestStartPosition, furthestEndPosition: furthestEndPosition, durations: durations, timeModification: beamViewModel.beamGroups[beamIndex][0].notes.first?.timeModification, stemLength: stemLength, direction: direction, xOffset: xOffset, scale: scale)
             }
         }
     }

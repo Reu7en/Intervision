@@ -13,7 +13,15 @@ struct Line: Identifiable, Equatable, Comparable {
     var startPoint: CGPoint
     var endPoint: CGPoint
     let color: Color
-    let inversionType: InversionType
+    let inversionType: InversionType?
+    
+    init(startPoint: CGPoint, endPoint: CGPoint, color: Color = .black, inversionType: InversionType? = nil, id: UUID = UUID()) {
+        self.startPoint = startPoint
+        self.endPoint = endPoint
+        self.color = color
+        self.inversionType = inversionType
+        self.id = id
+    }
     
     var length: CGFloat {
         let deltaX = endPoint.x - startPoint.x

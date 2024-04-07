@@ -9,7 +9,23 @@ import Foundation
 
 class Note: Identifiable, Equatable {
     
-    init(pitch: Pitch? = nil, accidental: Accidental? = nil, octave: Octave? = nil, octaveShift: OctaveShift? = nil, duration: Duration, durationValue: Double, timeModification: TimeModification? = nil, changeDynamic: ChangeDynamic? = nil, graceNotes: [Grace]? = nil, tie: Tie? = nil, isRest: Bool, isDotted: Bool, hasAccent: Bool, id: UUID = UUID()) {
+    init(
+        pitch: Pitch? = nil,
+        accidental: Accidental? = nil,
+        octave: Octave? = nil,
+        octaveShift: OctaveShift? = nil,
+        duration: Duration,
+        durationValue: Double,
+        timeModification: TimeModification? = nil,
+        changeDynamic: ChangeDynamic? = nil,
+        graceNotes: [Grace]? = nil,
+        tie: Tie? = nil,
+        slur: Slur? = nil,
+        isRest: Bool,
+        isDotted: Bool,
+        hasAccent: Bool,
+        id: UUID = UUID()
+    ) {
         self.pitch = pitch
         self.accidental = accidental
         self.octave = octave
@@ -20,6 +36,7 @@ class Note: Identifiable, Equatable {
         self.changeDynamic = changeDynamic
         self.graceNotes = graceNotes
         self.tie = tie
+        self.slur = slur
         self.isRest = isRest
         self.isDotted = isDotted
         self.hasAccent = hasAccent
@@ -36,6 +53,7 @@ class Note: Identifiable, Equatable {
     var changeDynamic: ChangeDynamic?
     var graceNotes: [Grace]?
     var tie: Tie?
+    var slur: Slur?
     var isRest: Bool
     var isDotted: Bool
     var hasAccent: Bool
@@ -164,6 +182,11 @@ extension Note {
 
     
     enum Tie {
+        case Start
+        case Stop
+    }
+    
+    enum Slur {
         case Start
         case Stop
     }

@@ -38,7 +38,7 @@ struct PageView: View {
                                 barViewModel: BarViewModel(
                                     bar: bars[barIndex][voiceIndex],
                                     gaps: 4,
-                                    ledgerLines: 3,
+                                    ledgerLines: 4,
                                     showClef: true,
                                     showKey: true,
                                     showTime: true
@@ -46,16 +46,12 @@ struct PageView: View {
                             )
                             .frame(width: width * 0.9, height: height / 6)
                             .id(UUID())
-                            
+                            .overlay(alignment: .topLeading) {
+                                Text("\(barIndex + 1)")
+                                    .foregroundStyle(Color.black)
+                            }
                         }
                     }
-                    
-//                    ForEach(0..<bars[0].count, id: \.self) { voiceIndex in
-//                        BarView(barViewModel: BarViewModel(bar: bars[18][voiceIndex], gaps: 4, step: .Note, ledgerLines: 3), showClef: true, showKey: true, showTime: true)
-//                            .frame(width: width * 0.9, height: height / 6)
-//                            .id(UUID())
-//                        
-//                    }
                 }
             }
         }

@@ -29,8 +29,6 @@ struct ScoreView: View {
                                     zoomLevel: $zoomLevel,
                                     bars: parts[partIndex].bars,
                                     part: parts[partIndex]
-//                                    bars: parts[2].bars,
-//                                    part: parts[2]
                                 )
                             }
                         }

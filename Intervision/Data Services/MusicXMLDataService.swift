@@ -211,48 +211,6 @@ struct MusicXMLDataService {
                         }
                     }
                 }
-                
-                if line.contains("<clef") {
-                    clefData = extractContentsBetweenTags(bar, startTag: "<clef", endTag: "</clef")
-                }
-            }
-            
-            for clef in clefData {
-                var sign: String? = nil
-                var line: String? = nil
-                
-                for subLine in clef {
-                    if subLine.contains("<sign") {
-                        sign = extractContent(fromTag: subLine)
-                    }
-                    
-                    if subLine.contains("<line") {
-                        line = extractContent(fromTag: subLine)
-                    }
-                }
-                
-                if currentClefs.count < currentStaves {
-                    switch (sign, line) {
-                    case ("G", _):
-                        currentClefs.append(Bar.Clef.Treble)
-                        break
-                    case ("F", _):
-                        currentClefs.append(Bar.Clef.Bass)
-                        break
-                    case ("C", "1"):
-                        currentClefs.append(Bar.Clef.Soprano)
-                        break
-                    case ("C", "3"):
-                        currentClefs.append(Bar.Clef.Alto)
-                        break
-                    case ("C", "4"):
-                        currentClefs.append(Bar.Clef.Tenor)
-                        break
-                    default:
-                        currentClefs.append(Bar.Clef.Neutral)
-                        break
-                    }
-                }
             }
         }
         
@@ -268,6 +226,55 @@ struct MusicXMLDataService {
             var noteCount = 0
             
             for line in bar {
+                if line.contains("<clef") {
+                    clefData = extractContentsBetweenTags(bar, startTag: "<clef", endTag: "</clef")
+                    let measureNumber = Int(extractFirstAttributeValue(fromTag: line) ?? "-1") ?? -1
+                    
+                    for clef in clefData {
+                        var sign: String? = nil
+                        var line: String? = nil
+                        
+                        for subLine in clef {
+                            if subLine.contains("<sign") {
+                                sign = extractContent(fromTag: subLine)
+                            }
+                            
+                            if subLine.contains("<line") {
+                                line = extractContent(fromTag: subLine)
+                            }
+                        }
+                        
+                        var pClef = Bar.Clef.Treble
+                        
+                        switch (sign, line) {
+                        case ("G", _):
+                            pClef = (Bar.Clef.Treble)
+                            break
+                        case ("F", _):
+                            pClef = (Bar.Clef.Bass)
+                            break
+                        case ("C", "1"):
+                            pClef = (Bar.Clef.Soprano)
+                            break
+                        case ("C", "3"):
+                            pClef = (Bar.Clef.Alto)
+                            break
+                        case ("C", "4"):
+                            pClef = (Bar.Clef.Tenor)
+                            break
+                        default:
+                            pClef = (Bar.Clef.Neutral)
+                            break
+                        }
+                        
+                        if currentClefs.count < currentStaves {
+                            currentClefs.append(pClef)
+                        } else {
+                            currentClefs[measureNumber == -1 ? 0 : measureNumber - 1] = pClef
+                        }
+                    }
+                }
+                
                 if line.contains("<note") {
                     noteCount += 1
                 }
@@ -429,6 +436,7 @@ struct MusicXMLDataService {
                 var timeModification: Note.TimeModification? = nil
                 var changeDynamic: Note.ChangeDynamic? = nil
                 var tie: Note.Tie? = nil
+                var slur: Note.Slur? = nil
                 
                 for change in changeDynamics {
                     if change.1 == noteIndex {
@@ -479,7 +487,7 @@ struct MusicXMLDataService {
                 }
                 
                 for line in note {
-                    if line.contains("<tie") || line.contains("<slur") {
+                    if line.contains("<tie") {
                         let t = extractFirstAttributeValue(fromTag: line)
                         
                         switch t {
@@ -488,6 +496,21 @@ struct MusicXMLDataService {
                             break
                         case "stop":
                             tie = .Stop
+                            break
+                        default:
+                            break
+                        }
+                    }
+                    
+                    if line.contains("<slur") {
+                        let s = extractFirstAttributeValue(fromTag: line)
+                        
+                        switch s {
+                        case "start":
+                            slur = .Start
+                            break
+                        case "stop":
+                            slur = .Stop
                             break
                         default:
                             break
@@ -718,6 +741,7 @@ struct MusicXMLDataService {
                         changeDynamic: changeDynamic,
                         graceNotes: nil,
                         tie: tie,
+                        slur: slur,
                         isRest: isRest,
                         isDotted: isDotted,
                         hasAccent: hasAccent
@@ -733,15 +757,17 @@ struct MusicXMLDataService {
                 }
                 
                 if let n = pNote {
-                    if chordTag {
-                        chords[currentStave - 1].notes.append(n)
-                    } else {
-                        if !chords[currentStave - 1].notes.isEmpty {
-                            currentBars[currentStave - 1].chords.append(chords[currentStave - 1])
+                    if n.isRest || (!n.isRest && n.pitch != nil && n.octave != nil) {
+                        if chordTag {
+                            chords[currentStave - 1].notes.append(n)
+                        } else {
+                            if !chords[currentStave - 1].notes.isEmpty {
+                                currentBars[currentStave - 1].chords.append(chords[currentStave - 1])
+                            }
+                            
+                            chords[currentStave - 1] = Chord(notes: [])
+                            chords[currentStave - 1].notes.append(n)
                         }
-                        
-                        chords[currentStave - 1] = Chord(notes: [])
-                        chords[currentStave - 1].notes.append(n)
                     }
                 }
             }
@@ -839,6 +865,7 @@ struct MusicXMLDataService {
             }
             
             let score = Score(title: title, composer: composer, parts: partData)
+            score.parts = purgePercussion(parts: score.parts)
             
             DispatchQueue.main.async {
                 completion(score)
@@ -846,4 +873,21 @@ struct MusicXMLDataService {
         }
     }
 
+    static func purgePercussion(parts: [Part]?) -> [Part]? {
+        if let oldParts = parts {
+            var newParts: [Part] = []
+            
+            for part in oldParts {
+                if part.bars.count > 0 && part.bars[0].first?.clef == .Neutral {
+                    continue
+                } else {
+                    newParts.append(part)
+                }
+            }
+            
+            return newParts
+        } else {
+            return parts
+        }
+    }
 }

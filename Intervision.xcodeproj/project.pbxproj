@@ -208,6 +208,7 @@
 		1B0E44B62B9298BA00C0E12C /* Global */ = {
 			isa = PBXGroup;
 			children = (
+				1B561F762B784CF3001860E5 /* HomeView.swift */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -294,7 +295,6 @@
 				1B0E44B62B9298BA00C0E12C /* Global */,
 				1B231FEF2B8950D2003AB714 /* Roll */,
 				1B97BEEB2B7279C3007D0BE5 /* Score */,
-				1B561F762B784CF3001860E5 /* HomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";

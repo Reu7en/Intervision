@@ -19,7 +19,7 @@ class RollViewModel: ObservableObject {
         }
     }
     
-    @Published var segments: [[[[Segment]]]]?
+    @Published var segments: [[[[Segment]]]]? // part->bar->stave->segment
     
     @Published var partGroups: [(String, [Part])]
     
@@ -34,13 +34,14 @@ class RollViewModel: ObservableObject {
     @Published var showInvertedIntervals: Bool
     @Published var showZigZags: Bool
     
-    @Published var selectedSegments: [Segment]
+    @Published var selectedSegments: [(Segment, Bar)]
     
     @Published var isSegmentHeld: Bool
     
     private var keyboardEventMonitor: Any?
     private var mouseEventMonitor: Any?
     private var rowHeight: CGFloat?
+    private var barWidth: CGFloat?
     private var lastMouseLocation: CGPoint?
     
     init(
@@ -58,7 +59,7 @@ class RollViewModel: ObservableObject {
         viewableMelodicLines: [Part] = [],
         showInvertedIntervals: Bool = false,
         showZigZags: Bool = false,
-        selectedSegments: [Segment] = [],
+        selectedSegments: [(Segment, Bar)] = [],
         isSegmentHeld: Bool = false
     ) {
         self.scoreManager = scoreManager
@@ -81,6 +82,10 @@ class RollViewModel: ObservableObject {
     
     func updateRowHeight(_ height: CGFloat) {
         self.rowHeight = height
+    }
+    
+    func updateBarWidth(_ width: CGFloat) {
+        self.barWidth = width
     }
     
     func setupEventMonitoring() {
@@ -106,17 +111,33 @@ class RollViewModel: ObservableObject {
     }
     
     private func handleKeyEvent(_ event: NSEvent) {
-        if event.keyCode == 53 { // esc
-            clearSelectedSegments()
-        } else if event.keyCode == 126 { // up
-            handleKeyUp()
-        } else if event.keyCode == 125 { // down
-            handleKeyDown()
+//        if event.keyCode == 53 { // esc
+//            clearSelectedSegments()
+//        } else if event.keyCode == 126 { // up
+//            handleKeyUp()
+//        } else if event.keyCode == 125 { // down
+//            handleKeyDown()
+//        }
+        
+        switch event.keyCode {
+            case 53: // esc
+                clearSelectedSegments()
+            case 126: // up
+                handleKeyUp()
+            case 125: // down
+                handleKeyDown()
+            case 123: // left
+                handleKeyLeft()
+            case 124: // right
+                handleKeyRight()
+            default:
+                break
         }
     }
     
     private func handleMouseEvent(_ event: NSEvent) {
-        guard let rowHeight = rowHeight else { return }
+        guard let rowHeight = rowHeight,
+              let barWidth = barWidth else { return }
         
         switch event.type {
         case .leftMouseDragged:
@@ -126,16 +147,35 @@ class RollViewModel: ObservableObject {
             }
             
             let currentLocation = event.locationInWindow
+            let deltaX = currentLocation.x - lastLocation.x
             let deltaY = currentLocation.y - lastLocation.y
             
-            if abs(deltaY) >= rowHeight && isSegmentHeld {
-                if deltaY > 0 {
-                    handleKeyUp()
-                } else {
-                    handleKeyDown()
-                }
-                
+            /*
+            if abs(deltaX) >= barWidth * 0.0625 && isSegmentHeld {
                 lastMouseLocation = currentLocation
+                let i = abs(Int(deltaX / (barWidth * 0.0625)))
+                
+                for _ in 0..<i {
+                    if deltaX > 0 {
+                        handleKeyRight()
+                    } else {
+                        handleKeyLeft()
+                    }
+                }
+            }
+             */
+            
+            if abs(deltaY) >= rowHeight && isSegmentHeld {
+                lastMouseLocation = currentLocation
+                let i = abs(Int(deltaY / rowHeight))
+                
+                for _ in 0..<i {
+                    if deltaY > 0 {
+                        handleKeyUp()
+                    } else {
+                        handleKeyDown()
+                    }
+                }
             }
         case .leftMouseUp:
             isSegmentHeld = false
@@ -150,7 +190,7 @@ class RollViewModel: ObservableObject {
     
     func handleKeyUp() {
         for segment in selectedSegments {
-            segment.increaseSemitone()
+            segment.0.increaseSemitone()
         }
         
         updateScoreParts()
@@ -158,12 +198,367 @@ class RollViewModel: ObservableObject {
     
     func handleKeyDown() {
         for segment in selectedSegments {
-            segment.decreaseSemitone()
+            segment.0.decreaseSemitone()
         }
         
         updateScoreParts()
     }
     
+    func handleKeyLeft() {
+        var minDuration = 0.0625
+        
+        for segment in selectedSegments {
+            minDuration = min(minDuration, segment.0.duration)
+        }
+        
+        for segment in selectedSegments {
+            segment.0.moveLeft(moveAmount: minDuration)
+        }
+        
+        for segment in selectedSegments {
+//            updateBar(barToUpdate: segment.1)
+        }
+        
+        updateScoreParts()
+    }
+    
+    func handleKeyRight() {
+        var minDuration = 0.0625
+        
+        for segment in selectedSegments {
+            minDuration = min(minDuration, segment.0.duration)
+        }
+        
+        for segment in selectedSegments {
+            var barDuration: Double = -1
+            
+            switch segment.1.timeSignature {
+            case .common:
+                barDuration = 1
+            case .cut:
+                barDuration = 1
+            case .custom(let beats, let noteValue):
+                barDuration = Double(beats) / Double(noteValue)
+            }
+            
+            if barDuration != -1 {
+                segment.0.moveRight(moveAmount: minDuration, barDuration: barDuration)
+            }
+        }
+        
+        for segment in selectedSegments {
+//            updateBar(barToUpdate: segment.1)
+        }
+        
+        updateScoreParts()
+    }
+    
+    func updateBar(barToUpdate: Bar) {
+        guard let currentParts = self.parts else { return }
+        
+        for partIndex in 0..<currentParts.count {
+            for barIndex in 0..<currentParts[partIndex].bars.count {
+                for (staveIndex, bar) in currentParts[partIndex].bars[barIndex].enumerated() {
+                    if bar == barToUpdate {
+                        if let segments = self.segments {
+                            var sortedSegments = segments[partIndex][barIndex][staveIndex].sorted { $0.durationPreceeding < $1.durationPreceeding }
+                            removeCoveredSegments(&sortedSegments)
+                            
+                            let newBar = Bar(chords: [], tempo: barToUpdate.tempo, clef: barToUpdate.clef, timeSignature: barToUpdate.timeSignature, repeat: barToUpdate.repeat, doubleLine: barToUpdate.doubleLine, volta: barToUpdate.volta, keySignature: barToUpdate.keySignature, dynamics: barToUpdate.dynamics, id: barToUpdate.id)
+                            
+                            var barDuration: Double = -1
+                            
+                            switch barToUpdate.timeSignature {
+                            case .common:
+                                barDuration = 1
+                            case .cut:
+                                barDuration = 1
+                            case .custom(let beats, let noteValue):
+                                barDuration = Double(beats) / Double(noteValue)
+                            }
+                            
+                            var groups: [[Segment]] = []
+                            var currentGroup: [Segment] = []
+                            var currentLongestDurationPoint: Double = 0
+                            
+                            for segment in sortedSegments {
+                                if segment.durationPreceeding + segment.duration > barDuration {
+                                    segment.duration = barDuration - segment.durationPreceeding
+                                }
+                                
+                                if segment.durationPreceeding != 0 && groups.isEmpty {
+                                    groups.append([Segment(rowIndex: -1, duration: segment.durationPreceeding, durationPreceeding: 0, dynamic: nil, note: nil)])
+                                }
+                                
+                                if segment.durationPreceeding < currentLongestDurationPoint {
+                                    currentGroup.append(segment)
+                                } else {
+                                    if !currentGroup.isEmpty {
+                                        groups.append(currentGroup)
+                                        
+                                        if let lastSegment = currentGroup.last {
+                                            let delta = segment.durationPreceeding - (lastSegment.duration + lastSegment.durationPreceeding)
+                                            
+                                            if delta > 0 {
+                                                groups.append([Segment(rowIndex: -1, duration: delta, durationPreceeding: lastSegment.duration + lastSegment.durationPreceeding, dynamic: nil, note: nil)]) // rest segment
+                                            }
+                                        }
+                                    }
+                                    
+                                    currentGroup = [segment]
+                                }
+                                
+                                currentLongestDurationPoint = max(currentLongestDurationPoint, segment.duration + segment.durationPreceeding)
+                            }
+                            
+                            if !currentGroup.isEmpty {
+                                groups.append(currentGroup)
+                            }
+                            
+                            if barDuration != -1 {
+                                if let lastSegment = currentGroup.last {
+                                    let delta = barDuration - (lastSegment.duration + lastSegment.durationPreceeding)
+                                    
+                                    if delta > 0 {
+                                        groups.append([Segment(rowIndex: -1, duration: delta, durationPreceeding: lastSegment.duration + lastSegment.durationPreceeding, dynamic: nil, note: nil)]) // rest segment
+                                    }
+                                }
+                            }
+                            
+                            var chordGroups: [[(Segment, Note.Tie?)]] = []
+                            
+                            for group in groups {
+                                let sortedGroup = group.sorted { $0.durationPreceeding < $1.durationPreceeding }
+                                var times: [Double] = []
+                                
+                                if let firstSegment = sortedGroup.first, firstSegment.rowIndex == -1 {
+                                    chordGroups.append([(firstSegment, nil)])
+                                    continue
+                                }
+                                
+                                for segment in sortedGroup {
+                                    if !times.contains(segment.durationPreceeding) {
+                                        times.append(segment.durationPreceeding)
+                                    }
+                                    
+                                    if !times.contains(segment.durationPreceeding + segment.duration) {
+                                        times.append(segment.durationPreceeding + segment.duration)
+                                    }
+                                }
+                                
+                                let sortedTimes = times.sorted()
+                                var currentChords: [[(Segment, Note.Tie?)]] = Array(repeating: [], count: sortedTimes.count)
+                                
+                                for segment in sortedSegments {
+                                    var startChordIndex: Int?
+                                    var endChordIndex: Int?
+                                    var tie: Note.Tie?
+                                    
+                                    for (index, time) in sortedTimes.enumerated() {
+                                        if time == segment.durationPreceeding {
+                                            startChordIndex = index
+                                        }
+                                        
+                                        if time == segment.durationPreceeding + segment.duration {
+                                            endChordIndex = index
+                                        }
+                                    }
+                                    
+                                    if let start = startChordIndex,
+                                       let end = endChordIndex {
+                                        if end - start == 1 {
+                                            currentChords[start].append((segment, tie))
+                                        } else {
+                                            for i in start..<end {
+                                                if i == start {
+                                                    tie = .Start
+                                                } else if i == end - 1 {
+                                                    tie = .Stop
+                                                } else {
+                                                    tie = .Both
+                                                }
+                                                
+                                                currentChords[i].append((Segment(rowIndex: segment.rowIndex, duration: times[i + 1] - times[i], durationPreceeding: times[i], dynamic: segment.dynamic, note: segment.note), tie))
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                for chord in currentChords {
+                                    if !chord.isEmpty {
+                                        chordGroups.append(chord)
+                                    }
+                                }
+                            }
+                            
+                            
+                            if chordGroups.isEmpty {
+                                newBar.chords = [Chord(notes: [Note(duration: .bar, durationValue: -1, isRest: true, isDotted: false, hasAccent: false)])]
+                            } else {
+                                for chord in chordGroups {
+                                    var newChord = Chord(notes: [])
+                                    
+                                    for segment in chord {
+                                        if segment.0.rowIndex == -1 {
+                                            if let duration = Note.Duration(rawValue: segment.0.duration) {
+                                                newChord = Chord(notes: [Note(duration: duration, durationValue: -1, isRest: true, isDotted: false, hasAccent: false)])
+                                            } else if let duration = Note.Duration(rawValue: segment.0.duration / 1.5) {
+                                                newChord = Chord(notes: [Note(duration: duration, durationValue: -1, isRest: true, isDotted: true, hasAccent: false)])
+                                            } else {
+                                                var timeLeft = segment.0.duration
+                                                var durations: [Note.Duration] = []
+                                                
+                                                while timeLeft > 0 {
+                                                    var minDelta = Double.infinity
+                                                    var durationToAdd = Double.infinity
+                                                    
+                                                    for durationValue in Note.Duration.allCases {
+                                                        let raw = durationValue.rawValue
+                                                        let delta = timeLeft - raw
+
+                                                        if delta >= 0 && delta < minDelta {
+                                                            minDelta = delta
+                                                            durationToAdd = raw
+                                                        }
+                                                    }
+                                                    
+                                                    if minDelta == .infinity {
+                                                        newBar.chords = [Chord(notes: [Note(duration: .bar, durationValue: -1, isRest: true, isDotted: false, hasAccent: false)])]
+                                                        break
+                                                    }
+                                                    
+                                                    if let duration = Note.Duration(rawValue: durationToAdd), durationToAdd != 0 {
+                                                        durations.append(duration)
+                                                        timeLeft -= durationToAdd
+                                                    } else {
+                                                        break
+                                                    }
+                                                }
+                                                
+                                                for duration in durations {
+                                                    newBar.chords.append(Chord(notes: [Note(duration: duration, durationValue: -1, isRest: true, isDotted: false, hasAccent: false)]))
+                                                }
+                                            }
+                                        } else {
+                                            if let (pitch, accidental, octave) = calculatePitchAccidentalOctave(rowIndex: segment.0.rowIndex, sharps: newBar.keySignature.sharps) {
+                                                if let duration = Note.Duration(rawValue: segment.0.duration) {
+                                                    newChord.notes.append(Note(pitch: pitch, accidental: accidental, octave: octave, octaveShift: nil, duration: duration, durationValue: -1, timeModification: segment.0.note?.timeModification, changeDynamic: segment.0.note?.changeDynamic, graceNotes: nil, tie: segment.1, slur: nil, isRest: false, isDotted: false, hasAccent: segment.0.note?.hasAccent ?? false, id: UUID()))
+                                                } else if let duration = Note.Duration(rawValue: segment.0.duration / 1.5) {
+                                                    newChord.notes.append(Note(pitch: pitch, accidental: accidental, octave: octave, octaveShift: nil, duration: duration, durationValue: -1, timeModification: segment.0.note?.timeModification, changeDynamic: segment.0.note?.changeDynamic, graceNotes: nil, tie: segment.1, slur: nil, isRest: false, isDotted: true, hasAccent: segment.0.note?.hasAccent ?? false, id: UUID()))
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    newBar.chords.append(newChord)
+                                }
+                            }
+                            
+                            self.parts?[partIndex].bars[barIndex][staveIndex] = newBar
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func calculatePitchAccidentalOctave(rowIndex: Int, sharps: Bool) -> (Note.Pitch, Note.Accidental?, Note.Octave)? {
+        let octave: Note.Octave? = Note.Octave(rawValue: self.octaves - ((1 + rowIndex) / 12) - 1)
+        let pitchValue = rowIndex % 12
+        var pitch: Note.Pitch?
+        var accidental: Note.Accidental?
+        
+        switch pitchValue {
+        case 11:
+            pitch = .C
+        case 10:
+            if sharps {
+                pitch = .C
+                accidental = .Sharp
+            } else {
+                pitch = .D
+                accidental = .Flat
+            }
+        case 9:
+            pitch = .D
+        case 8:
+            if sharps {
+                pitch = .D
+                accidental = .Sharp
+            } else {
+                pitch = .E
+                accidental = .Flat
+            }
+        case 7:
+            pitch = .E
+        case 6:
+            pitch = .F
+        case 5:
+            if sharps {
+                pitch = .F
+                accidental = .Sharp
+            } else {
+                pitch = .G
+                accidental = .Flat
+            }
+        case 4:
+            pitch = .G
+        case 3:
+            if sharps {
+                pitch = .G
+                accidental = .Sharp
+            } else {
+                pitch = .A
+                accidental = .Flat
+            }
+        case 2:
+            pitch = .A
+        case 1:
+            if sharps {
+                pitch = .A
+                accidental = .Sharp
+            } else {
+                pitch = .B
+                accidental = .Flat
+            }
+        case 0:
+            pitch = .B
+        default:
+            break
+        }
+        
+        if let pitch = pitch,
+           let octave = octave {
+            return (pitch, accidental, octave)
+        }
+        
+        return nil
+    }
+    
+    func removeCoveredSegments(_ segments: inout [Segment]) {
+        var segmentsToRemove: [Segment] = []
+
+        for i in 0..<segments.count {
+            let currentSegment = segments[i]
+            
+            for j in (i+1)..<segments.count {
+                let otherSegment = segments[j]
+                
+                if currentSegment.rowIndex == otherSegment.rowIndex {
+                    if currentSegment.durationPreceeding <= otherSegment.durationPreceeding &&
+                       (currentSegment.durationPreceeding + currentSegment.duration) >= (otherSegment.durationPreceeding + otherSegment.duration) {
+                        segmentsToRemove.append(otherSegment)
+                    } else if otherSegment.durationPreceeding <= currentSegment.durationPreceeding &&
+                              (otherSegment.durationPreceeding + otherSegment.duration) >= (currentSegment.durationPreceeding + currentSegment.duration) {
+                        segmentsToRemove.append(currentSegment)
+                    }
+                }
+            }
+        }
+
+        segments = segments.filter { !segmentsToRemove.contains($0) }
+    }
+
     func updateScoreParts() {
         guard let score = scoreManager.score, let updatedParts = parts else { return }
         
@@ -185,34 +580,36 @@ class RollViewModel: ObservableObject {
     }
 
     
-    func handleSegmentClicked(segment: Segment, isCommandKeyDown: Bool) {
+    func handleSegmentClicked(segment: Segment, bar: Bar?, isCommandKeyDown: Bool) {
+        guard let currentBar = bar else { return }
+        
         if isCommandKeyDown {
-            if selectedSegments.contains(segment) {
+            if selectedSegments.contains(where: { $0 == (segment, currentBar) }) {
                 segment.isSelected = false
-                selectedSegments.removeAll(where: { $0 == segment })
+                selectedSegments.removeAll(where: { $0 == (segment, currentBar) })
             } else {
                 segment.isSelected = true
-                selectedSegments.append(segment)
+                selectedSegments.append((segment, currentBar))
             }
         } else {
-            if selectedSegments.contains(segment) {
+            if selectedSegments.contains(where: { $0 == (segment, currentBar) }) {
                 segment.isSelected = false
-                selectedSegments.removeAll(where: { $0 == segment})
+                selectedSegments.removeAll(where: { $0 == (segment, currentBar) })
             } else {
                 segment.isSelected = true
                 
                 for selectedSegment in selectedSegments {
-                    selectedSegment.isSelected = false
+                    selectedSegment.0.isSelected = false
                 }
                 
-                selectedSegments = [segment]
+                selectedSegments = [(segment, currentBar)]
             }
         }
     }
     
     func clearSelectedSegments() {
         for segment in selectedSegments {
-            segment.isSelected = false
+            segment.0.isSelected = false
         }
         
         self.selectedSegments = []

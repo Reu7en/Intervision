@@ -25,6 +25,16 @@ struct BarView: View {
                     thickness: staveThickness
                 )
                 
+                if barViewModel.isBarRest {
+                    RestView(
+                        size: 2 * (geometry.size.height / CGFloat(barViewModel.rows - 1)),
+                        duration: Note.Duration.bar,
+                        isDotted: false,
+                        scale: scale
+                    )
+                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                }
+                
                 HStack(spacing: 0) {
                     if barViewModel.showClef {
                         let clefHeight: CGFloat = (geometry.size.height / CGFloat(barViewModel.rows)) * CGFloat(barViewModel.gaps * 2) + (2 * staveThickness)
@@ -45,13 +55,7 @@ struct BarView: View {
                     }
                     
                     if barViewModel.isBarRest {
-                        RestView(
-                            size: 2 * (geometry.size.height / CGFloat(barViewModel.rows - 1)),
-                            duration: Note.Duration.bar,
-                            isDotted: false,
-                            scale: scale
-                        )
-                        .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                        Spacer()
                     } else {
                         HStack(spacing: 0) {
                             ForEach(0..<barViewModel.noteGrid.count, id: \.self) { beatIndex in
@@ -91,5 +95,5 @@ struct BarView: View {
 }
 
 #Preview {
-    BarView(barViewModel: BarViewModel(bar: Bar(chords: [], clef: .Treble, timeSignature: .common, doubleLine: false, keySignature: .CMajor)))
+    BarView(barViewModel: BarViewModel(bar: Bar(chords: [], clef: .Treble, timeSignature: .common, repeat: nil, doubleLine: false, keySignature: .CMajor)))
 }

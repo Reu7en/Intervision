@@ -21,8 +21,8 @@ struct BeatView: View {
                     
                     NoteHeadView(
                         size: beatViewModel.noteSize,
-                        isHollow: false,
-                        isDotted: false
+                        isHollow: beatViewModel.isHollow[chordIndex][noteIndex],
+                        isDotted: beatViewModel.noteIsDotted[chordIndex][noteIndex]
                     )
                     .position(notePosition)
                 }

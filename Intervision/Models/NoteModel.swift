@@ -145,7 +145,7 @@ extension Note {
         }
     }
     
-    enum Duration: Double {
+    enum Duration: Double, CaseIterable {
         case breve = 2.0
         case whole = 1.0
         case half = 0.5
@@ -184,6 +184,7 @@ extension Note {
     enum Tie {
         case Start
         case Stop
+        case Both
     }
     
     enum Slur {

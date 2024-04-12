@@ -21,8 +21,8 @@ class Segment: Identifiable, Equatable, ObservableObject {
     
     @Published var rowIndex: Int
     
-    let duration: Double
-    let durationPreceeding: Double
+    var duration: Double
+    var durationPreceeding: Double
     let dynamic: Bar.Dynamic?
     let note: Note?
     var isSelected: Bool
@@ -37,12 +37,33 @@ class Segment: Identifiable, Equatable, ObservableObject {
     
     func increaseSemitone() {
         note?.increaseSemitone()
-        rowIndex -= 1
+        self.rowIndex -= 1
     }
     
     func decreaseSemitone() {
         note?.decreaseSemitone()
-        rowIndex += 1
+        self.rowIndex += 1
+    }
+    
+    func moveLeft(moveAmount: Double) {
+        if self.durationPreceeding == 0 && self.duration == moveAmount {
+            return
+        } else if self.durationPreceeding == 0 {
+            self.duration -= moveAmount
+        } else {
+            self.durationPreceeding -= moveAmount
+        }
+    }
+    
+    func moveRight(moveAmount: Double, barDuration: Double) {
+        if self.durationPreceeding + self.duration == barDuration && self.duration == moveAmount {
+            return
+        } else if self.durationPreceeding + self.duration == barDuration {
+            self.durationPreceeding += moveAmount
+            self.duration -= moveAmount
+        } else {
+            self.durationPreceeding += moveAmount
+        }
     }
     
     func toggleIsSelected() {

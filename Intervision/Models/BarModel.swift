@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Bar: Identifiable, Equatable {
+class Bar: Identifiable, Equatable {
     var chords: [Chord]
     var tempo: Tempo?
     var clef: Clef
@@ -24,6 +24,18 @@ struct Bar: Identifiable, Equatable {
     // Equatable
     static func == (lhs: Bar, rhs: Bar) -> Bool {
         lhs.id == rhs.id
+    }
+    
+    init(chords: [Chord], tempo: Tempo? = nil, clef: Clef, timeSignature: TimeSignature, repeat: Repeat?, doubleLine: Bool, volta: Int? = nil, keySignature: KeySignature, dynamics: [Dynamic]? = nil, id: UUID = UUID()) {
+        self.chords = chords
+        self.tempo = tempo
+        self.clef = clef
+        self.timeSignature = timeSignature
+        self.doubleLine = doubleLine
+        self.volta = volta
+        self.keySignature = keySignature
+        self.dynamics = dynamics
+        self.id = id
     }
 }
 

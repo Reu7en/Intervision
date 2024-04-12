@@ -124,6 +124,7 @@ struct RollView: View {
             }
             .onAppear {
                 rollViewModel.updateRowHeight(rowHeight)
+                rollViewModel.updateBarWidth(barWidth)
             }
             
             Spacer()

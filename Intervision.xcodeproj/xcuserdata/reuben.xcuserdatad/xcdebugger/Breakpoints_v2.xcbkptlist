@@ -84,5 +84,192 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Intervision/View Models/Roll/RollViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "456"
+            endingLineNumber = "456"
+            landmarkName = "handleMouseEvent(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d33511da"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "418"
+                  endingLineNumber = "418"
+                  offsetFromSymbolStart = "12884">
+               </Location>
+               <Location
+                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d33511bb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "419"
+                  endingLineNumber = "419"
+                  offsetFromSymbolStart = "13388">
+               </Location>
+               <Location
+                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d33511bb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "419"
+                  endingLineNumber = "419"
+                  offsetFromSymbolStart = "13340">
+               </Location>
+               <Location
+                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d3351008"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "432"
+                  endingLineNumber = "432"
+                  offsetFromSymbolStart = "13572">
+               </Location>
+               <Location
+                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d3356df8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "448"
+                  endingLineNumber = "448"
+                  offsetFromSymbolStart = "13572">
+               </Location>
+               <Location
+                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d3356dba"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "450"
+                  endingLineNumber = "450"
+                  offsetFromSymbolStart = "13572">
+               </Location>
+               <Location
+                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d335121f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "447"
+                  endingLineNumber = "447"
+                  offsetFromSymbolStart = "13572">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B2FF68B8-BD75-4EC4-8C54-B94C1B9FBE57"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Intervision/View Models/Roll/RollViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "266"
+            endingLineNumber = "266"
+            landmarkName = "handleMouseEvent(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FE7D3B21-BB56-4778-BB8C-A834AFEE5B2B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Intervision/View Models/Roll/RollViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "327"
+            endingLineNumber = "327"
+            landmarkName = "handleMouseEvent(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A5161167-406E-4C0E-B7FA-CA7377516D7E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Intervision/View Models/Roll/RollViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "351"
+            endingLineNumber = "351"
+            landmarkName = "handleMouseEvent(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D3FA9790-03E0-442E-B5E9-F83F85A07AB6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Intervision/View Models/Roll/RollViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "394"
+            endingLineNumber = "394"
+            landmarkName = "handleMouseEvent(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

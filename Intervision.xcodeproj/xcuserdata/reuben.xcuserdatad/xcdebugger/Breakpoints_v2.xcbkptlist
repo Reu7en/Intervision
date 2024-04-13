@@ -78,8 +78,8 @@
             filePath = "Intervision/View Models/Score/BeatViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
             landmarkName = "calculatePositions()"
             landmarkType = "7">
          </BreakpointContent>
@@ -268,6 +268,22 @@
             startingLineNumber = "394"
             endingLineNumber = "394"
             landmarkName = "handleMouseEvent(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EEDA0821-D569-4D6E-A5E8-94E8E0E1748D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Intervision/View Models/Score/BeatViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "init(noteGrid:barGeometry:beatGeometry:beamGroupChords:middleStaveNote:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

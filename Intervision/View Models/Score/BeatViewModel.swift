@@ -10,17 +10,17 @@ import SwiftUI
 
 class BeatViewModel: ObservableObject {
     
-    let noteGrid: [[Note?]]
+    let beatNoteGrid: [[[Note]?]]
     let barGeometry: GeometryProxy
     let beatGeometry: GeometryProxy
-    let beamGroupChords: [[Chord]]
+    let beatBeamGroupChords: [[Chord]]
     let middleStaveNote: Note?
     
     var noteSize: CGFloat {
         calculateNoteSize()
     }
     
-    var notePositions: [[[CGPoint]]] {
+    var notePositions: [[CGPoint]] {
         calculatePositions().0
     }
     
@@ -28,11 +28,15 @@ class BeatViewModel: ObservableObject {
         calculatePositions().1
     }
     
-    var isHollow: [[Bool]] {
+    var groupPositions: [[[CGPoint]]] {
+        calculateGroupPositions()
+    }
+    
+    var isHollow: [Bool] {
         calculateIsHollow()
     }
     
-    var noteIsDotted: [[Bool]] {
+    var noteIsDotted: [Bool] {
         calculateIsDotted().0
     }
     
@@ -46,46 +50,46 @@ class BeatViewModel: ObservableObject {
     
     init
     (
-        noteGrid: [[Note?]],
+        noteGrid: [[[Note]?]],
         barGeometry: GeometryProxy,
         beatGeometry: GeometryProxy,
         beamGroupChords: [[Chord]],
         middleStaveNote: Note?
     ) {
-        self.noteGrid = noteGrid
+        self.beatNoteGrid = noteGrid
         self.barGeometry = barGeometry
         self.beatGeometry = beatGeometry
-        self.beamGroupChords = beamGroupChords
+        self.beatBeamGroupChords = beamGroupChords
         self.middleStaveNote = middleStaveNote
+        
     }
 }
 
 extension BeatViewModel {
     private func calculateNoteSize() -> CGFloat {
-        return 2 * (self.beatGeometry.size.height / CGFloat(self.noteGrid[0].count - 1))
+        return 2 * (self.beatGeometry.size.height / CGFloat(self.beatNoteGrid[0].count - 1))
     }
     
-    private func calculatePositions() -> ([[[CGPoint]]], [CGPoint]) {
+    private func calculatePositions() -> ([[CGPoint]], [CGPoint]) {
         var notePositions: [[CGPoint]] = []
         var restPositions: [CGPoint] = []
         
-        let rows = noteGrid.count
-        
-        for rowIndex in 0..<rows {
-            let columns = noteGrid[rowIndex].count
+        for (columnIndex, column) in self.beatNoteGrid.enumerated() {
             var chordPositions: [CGPoint] = []
             
-            for columnIndex in 0..<columns {
-                if let note = noteGrid[rowIndex][columnIndex] {
-                    let isRest = note.isRest
-                    let xPosition = (rows == 1) ? 0 : (self.beatGeometry.size.width / CGFloat(rows - 1)) * CGFloat(rowIndex)
-                    let yPosition = isRest ? self.beatGeometry.size.height / 2 : (self.beatGeometry.size.height / CGFloat(columns - 1)) * CGFloat(columnIndex)
-                    let position = CGPoint(x: xPosition, y: yPosition)
-                    
-                    if isRest {
-                        restPositions.append(position)
-                    } else {
-                        chordPositions.append(position)
+            for (rowIndex, row) in column.enumerated() {
+                if let notes = row {
+                    for note in notes {
+                        let isRest = note.isRest
+                        let xPosition = (self.beatNoteGrid.count == 1) ? 0 : (self.beatGeometry.size.width / CGFloat(self.beatNoteGrid.count - 1)) * CGFloat(columnIndex)
+                        let yPosition = isRest ? self.beatGeometry.size.height / 2 : (self.beatGeometry.size.height / CGFloat(column.count - 1)) * CGFloat(rowIndex)
+                        let position = CGPoint(x: xPosition, y: yPosition)
+                        
+                        if isRest {
+                            restPositions.append(position)
+                        } else {
+                            chordPositions.append(position)
+                        }
                     }
                 }
             }
@@ -98,7 +102,7 @@ extension BeatViewModel {
         var groupPositions: [[[CGPoint]]] = []
         var currentIndex = 0
         
-        for group in self.beamGroupChords {
+        for group in self.beatBeamGroupChords {
             let groupCount = group.count
             var currentPositions: [[CGPoint]] = []
             
@@ -110,67 +114,69 @@ extension BeatViewModel {
             groupPositions.append(currentPositions)
         }
         
-        return (groupPositions, restPositions)
+        return (notePositions, restPositions)
     }
     
-    private func calculateIsHollow() -> [[Bool]] {
-        var isHollow: [[Bool]] = []
+    private func calculateGroupPositions() -> [[[CGPoint]]] {
+        var groupPositions: [[[CGPoint]]] = []
+        var currentIndex = 0
         
-        let rows = noteGrid.count
-        
-        for rowIndex in 0..<rows {
-            let columns = noteGrid[rowIndex].count
-            var chordIsHollow: [Bool] = []
+        for group in self.beatBeamGroupChords {
+            var currentPositions: [[CGPoint]] = []
             
-            for columnIndex in 0..<columns {
-                if let note = noteGrid[rowIndex][columnIndex] {
-                    if !note.isRest {
-                        if note.duration.rawValue >= 0.5 {
-                            chordIsHollow.append(true)
-                        } else {
-                            chordIsHollow.append(false)
+            for _ in 0..<group.count {
+                currentPositions.append(self.notePositions[currentIndex])
+                currentIndex += 1
+            }
+            
+            groupPositions.append(currentPositions)
+        }
+        
+        return groupPositions
+    }
+    
+    private func calculateIsHollow() -> [Bool] {
+        var isHollow: [Bool] = []
+        
+        for column in self.beatNoteGrid {
+            var chordIsHollow = false
+            
+            for row in column {
+                if let notes = row {
+                    for note in notes {
+                        if !note.isRest && note.duration.rawValue >= 0.5 {
+                            chordIsHollow = true
                         }
                     }
                 }
             }
-            
-            if !chordIsHollow.isEmpty {
-                isHollow.append(chordIsHollow)
-            }
+
+            isHollow.append(chordIsHollow)
         }
         
         return isHollow
     }
     
-    private func calculateIsDotted() -> ([[Bool]], [Bool]) {
-        var noteIsDotted: [[Bool]] = []
+    private func calculateIsDotted() -> ([Bool], [Bool]) {
+        var noteIsDotted: [Bool] = []
         var restIsDotted: [Bool] = []
         
-        let rows = noteGrid.count
-        
-        for rowIndex in 0..<rows {
-            let columns = noteGrid[rowIndex].count
-            var chordIsDotted: [Bool] = []
+        for column in self.beatNoteGrid {
+            var chordIsDotted: Bool?
             
-            for columnIndex in 0..<columns {
-                if let note = noteGrid[rowIndex][columnIndex] {
-                    if !note.isRest {
-                        if note.isDotted {
-                            chordIsDotted.append(true)
+            for row in column {
+                if let notes = row {
+                    for note in notes {
+                        if note.isRest {
+                            restIsDotted.append(note.isDotted)
                         } else {
-                            chordIsDotted.append(false)
-                        }
-                    } else {
-                        if note.isDotted {
-                            restIsDotted.append(true)
-                        } else {
-                            restIsDotted.append(false)
+                            chordIsDotted = note.isDotted
                         }
                     }
                 }
             }
             
-            if !chordIsDotted.isEmpty {
+            if let chordIsDotted = chordIsDotted {
                 noteIsDotted.append(chordIsDotted)
             }
         }
@@ -180,16 +186,14 @@ extension BeatViewModel {
     
     private func calculateRestDurations() -> [Note.Duration] {
         var restDurations: [Note.Duration] = []
-        
-        let rows = noteGrid.count
-        
-        for rowIndex in 0..<rows {
-            let columns = noteGrid[rowIndex].count
-            
-            for columnIndex in 0..<columns {
-                if let note = noteGrid[rowIndex][columnIndex] {
-                    if note.isRest {
-                        restDurations.append(note.duration)
+
+        for column in self.beatNoteGrid {
+            for row in column {
+                if let notes = row {
+                    for note in notes {
+                        if note.isRest {
+                            restDurations.append(note.duration)
+                        }
                     }
                 }
             }

@@ -14,18 +14,16 @@ struct BeatView: View {
     let scale: CGFloat
     
     var body: some View {
-        ForEach(0..<beatViewModel.notePositions.count, id: \.self) { groupIndex in
-            ForEach(0..<beatViewModel.notePositions[groupIndex].count, id: \.self) { chordIndex in
-                ForEach(0..<beatViewModel.notePositions[groupIndex][chordIndex].count, id: \.self) { noteIndex in
-                    let notePosition = beatViewModel.notePositions[groupIndex][chordIndex][noteIndex]
-                    
-                    NoteHeadView(
-                        size: beatViewModel.noteSize,
-                        isHollow: beatViewModel.isHollow[chordIndex][noteIndex],
-                        isDotted: beatViewModel.noteIsDotted[chordIndex][noteIndex]
-                    )
-                    .position(notePosition)
-                }
+        ForEach(0..<beatViewModel.notePositions.count, id: \.self) { chordIndex in
+            ForEach(0..<beatViewModel.notePositions[chordIndex].count, id: \.self) { noteIndex in
+                let notePosition = beatViewModel.notePositions[chordIndex][noteIndex]
+                
+                NoteHeadView(
+                    size: beatViewModel.noteSize,
+                    isHollow: beatViewModel.isHollow[chordIndex],
+                    isDotted: beatViewModel.noteIsDotted[chordIndex]
+                )
+                .position(notePosition)
             }
         }
         
@@ -41,11 +39,11 @@ struct BeatView: View {
             .position(restPosition)
         }
         
-        if !beatViewModel.beamGroupChords.isEmpty && !beatViewModel.notePositions.isEmpty {
+        if !beatViewModel.beatBeamGroupChords.isEmpty && !beatViewModel.notePositions.isEmpty {
             LinesView(
                 linesViewModel: LinesViewModel(
-                    beamGroups: beatViewModel.beamGroupChords,
-                    positions: beatViewModel.notePositions,
+                    beamGroups: beatViewModel.beatBeamGroupChords,
+                    positions: beatViewModel.groupPositions,
                     middleStaveNote: beatViewModel.middleStaveNote,
                     barGeometry: beatViewModel.barGeometry,
                     beatGeometry: beatViewModel.beatGeometry, 

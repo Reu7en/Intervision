@@ -859,9 +859,11 @@ struct MusicXMLDataService {
             var partData: [Part]? = getParts(lines)
             let partContents = extractContentsBetweenTags(lines, startTag: "<part id=", endTag: "</part")
             
-            for i in 0..<(partData?.count ?? 0) {
-                let bars: [[Bar]] = getBars(partContents[i])
-                partData?[i].bars = bars
+            if !(partContents.isEmpty) {
+                for i in 0..<(partData?.count ?? 0) {
+                    let bars: [[Bar]] = getBars(partContents[i])
+                    partData?[i].bars = bars
+                }
             }
             
             let score = Score(title: title, composer: composer, parts: partData)

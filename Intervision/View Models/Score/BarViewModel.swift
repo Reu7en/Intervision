@@ -49,7 +49,7 @@ class BarViewModel: ObservableObject {
         calculateBeamGroupChords()
     }
     
-    var noteGrid: [[[Note?]]] {
+    var noteGrid: [[[[Note]?]]] {
         calculateNoteGrid()
     }
     
@@ -57,7 +57,7 @@ class BarViewModel: ObservableObject {
     (
         bar: Bar,
         gaps: Int = 4,
-        ledgerLines: Int = 3,
+        ledgerLines: Int = 4,
         showClef: Bool = false,
         showKey: Bool = false,
         showTime: Bool = false
@@ -100,15 +100,19 @@ extension BarViewModel {
     }
     
     private func calculateIsBarRest() -> Bool {
+        if self.bar.chords.isEmpty {
+            return true
+        }
+        
         for chord in self.bar.chords {
-            guard let firstNote = chord.notes.first else { return false }
+            guard let firstNote = chord.notes.first else { return true }
             
             if firstNote.duration == Note.Duration.bar && firstNote.isRest {
                 return true
             }
         }
         
-        return self.bar.chords.isEmpty
+        return false
     }
     
     private func calculateLowestGapNote() -> Note? {
@@ -175,14 +179,14 @@ extension BarViewModel {
         return middleStaveNote
     }
     
-    func calculateSplitChords() -> [[Chord]] {
+    private func calculateSplitChords() -> [[Chord]] {
         var splitChords: [[Chord]] = []
         var timeLeft: Double = beatValue
         var timeModificationTimeLeft: Double = 0
         var chordGroup: [Chord] = []
         let epsilon = 0.00001
         
-        for chord in bar.chords {
+        for chord in self.bar.chords {
             guard let duration = chord.notes.first?.duration.rawValue,
                   let isDotted = chord.notes.first?.isDotted
             else { return [] }
@@ -190,9 +194,9 @@ extension BarViewModel {
             let actualDuration = isDotted ? duration * 1.5 : duration
             
             if let timeModification = chord.notes.first?.timeModification {
-                if case .custom(let actual, let normal, let normalType) = timeModification {
+                if case .custom(let actual, let normal, let normalDuration) = timeModification {
                     if abs(timeModificationTimeLeft) < epsilon {
-                        timeModificationTimeLeft = Double(actual) * Double(normalType.rawValue)
+                        timeModificationTimeLeft = Double(actual) * Double(normalDuration.rawValue)
                     }
                     
                     let actualTimeModificationDuration = actualDuration * (Double(normal) / Double(actual))
@@ -206,12 +210,12 @@ extension BarViewModel {
                 timeLeft -= actualDuration
             }
             
-            while timeLeft < 0 - epsilon {
-                timeLeft += beatValue
+            while timeLeft < -epsilon {
+                timeLeft += self.beatValue
             }
             
             if abs(timeLeft) < epsilon && abs(timeModificationTimeLeft) < epsilon {
-                timeLeft = beatValue
+                timeLeft = self.beatValue
                 splitChords.append(chordGroup)
                 chordGroup = []
             }
@@ -224,7 +228,7 @@ extension BarViewModel {
         return splitChords
     }
     
-    func calculateBeamGroupChords() -> [[[Chord]]] {
+    private func calculateBeamGroupChords() -> [[[Chord]]] {
         var beamGroupChords: [[[Chord]]] = []
         
         for chordGroup in self.splitChords {
@@ -233,38 +237,57 @@ extension BarViewModel {
             var currentTimeModificationGroup: [Chord] = []
             
             for chord in chordGroup {
-                if let firstNote = chord.notes.first, !firstNote.isRest {
-                    let duration = firstNote.duration.rawValue
-                    
-                    if firstNote.timeModification != nil {
+                if let firstNote = chord.notes.first {
+                    if firstNote.isRest {
                         if !currentStandardGroup.isEmpty {
-                            currentBeamGroup.append(currentStandardGroup)
+                            let splitStandardGroups = splitStandardGroup(currentStandardGroup)
+                            
+                            for standardGroup in splitStandardGroups {
+                                if !standardGroup.isEmpty {
+                                    currentBeamGroup.append(standardGroup)
+                                }
+                            }
+                            
                             currentStandardGroup = []
                         }
-                        
-                        currentTimeModificationGroup.append(chord)
                     } else {
-                        if !currentTimeModificationGroup.isEmpty {
-                            currentBeamGroup.append(currentTimeModificationGroup)
-                            currentTimeModificationGroup = []
-                        }
-                        
-                        if duration >= self.beatValue {
+                        if firstNote.timeModification != nil {
                             if !currentStandardGroup.isEmpty {
                                 currentBeamGroup.append(currentStandardGroup)
                                 currentStandardGroup = []
                             }
                             
-                            currentBeamGroup.append([chord])
+                            currentTimeModificationGroup.append(chord)
                         } else {
-                            currentStandardGroup.append(chord)
+                            
+                            if !currentTimeModificationGroup.isEmpty {
+                                currentBeamGroup.append(currentTimeModificationGroup)
+                                currentTimeModificationGroup = []
+                            }
+                            
+                            if firstNote.duration.rawValue >= self.beatValue {
+                                if !currentStandardGroup.isEmpty {
+                                    currentBeamGroup.append(currentStandardGroup)
+                                    currentStandardGroup = []
+                                }
+                                
+                                currentBeamGroup.append([chord])
+                            } else {
+                                currentStandardGroup.append(chord)
+                            }
                         }
                     }
                 }
             }
             
             if !currentStandardGroup.isEmpty {
-                currentBeamGroup.append(currentStandardGroup)
+                let splitStandardGroups = splitStandardGroup(currentStandardGroup)
+                
+                for standardGroup in splitStandardGroups {
+                    if !standardGroup.isEmpty {
+                        currentBeamGroup.append(standardGroup)
+                    }
+                }
             }
             
             if !currentTimeModificationGroup.isEmpty {
@@ -276,99 +299,124 @@ extension BarViewModel {
         
         return beamGroupChords
     }
-
-    /*
-    func calculateNoteGrid() -> [[[Note?]]] {
-        var noteGrid: [[[Note?]]] = []
+    
+    private func splitStandardGroup(_ group: [Chord]) -> [[Chord]] {
+        if group.count <= 4 {
+            return [group]
+        }
         
-        let gridRows = rows
-        let lowestGapIndex = (ledgerLines * 2) + 2
-            
-        for (groupIndex, chordGroup) in self.splitChords.enumerated() {
-            var groupGrid: [[Note?]] = Array(repeating: Array(repeating: nil, count: chordGroup.count), count: gridRows)
-            
-            for (chordIndex, chord) in chordGroup.enumerated() {
-                for (noteIndex, note) in chord.notes.enumerated() {
-                    if note.isRest {
-                        groupGrid[0][chordIndex] = note
-                    } else {
-                        guard let distance = calculateGapBetweenLowestGapNote(note: note) else { continue }
-                        var index = lowestGapIndex + distance
-                        
-                        if index < 0 {
-                            self.splitChords[groupIndex][chordIndex].notes[noteIndex].increaseOctave()
-                            index += 7
-                        } else if index > gridRows - 1 {
-                            self.splitChords[groupIndex][chordIndex].notes[noteIndex].decreaseOctave()
-                            index -= 7
-                        }
-                        
-                        if index < 0 || index > gridRows - 1 { continue }
-                        
-                        groupGrid[gridRows - 1 - index][chordIndex] = self.splitChords[groupIndex][chordIndex].notes[noteIndex]
-                    }
+        var standardGroupTargetDuration = Note.Duration.quarter.rawValue
+        var standardGroupActualDuration: Double = 0
+        
+        for chord in group {
+            if let firstNote = chord.notes.first {
+                standardGroupActualDuration += firstNote.duration.rawValue
+                
+                if firstNote.duration == .thirtySecond {
+                    standardGroupTargetDuration = Note.Duration.eighth.rawValue
+                } else if firstNote.duration == .sixtyFourth {
+                    standardGroupTargetDuration = Note.Duration.sixteenth.rawValue
                 }
             }
-            
-            noteGrid.append(groupGrid)
         }
-     
-        return noteGrid
+        
+        if standardGroupTargetDuration == Note.Duration.quarter.rawValue {
+            return [group]
+        }
+        
+        var groups: [[Chord]] = Array(repeating: [], count: Int(standardGroupActualDuration / standardGroupTargetDuration))
+        var timeLeft = standardGroupTargetDuration
+        var currentIndex = 0
+        
+        for chord in group {
+            if let firstNote = chord.notes.first, groups.indices.contains(currentIndex) {
+                if firstNote.duration.rawValue > timeLeft {
+                    timeLeft += firstNote.duration.rawValue
+                    groups.append([])
+                    currentIndex += 1
+                }
+                
+                groups[currentIndex].append(chord)
+                timeLeft -= firstNote.duration.rawValue
+                
+                if timeLeft == 0 {
+                    timeLeft = standardGroupTargetDuration
+                    currentIndex += 1
+                }
+            }
+        }
+        
+        return groups
     }
-     */
     
-    func calculateNoteGrid() -> [[[Note?]]] {
-        var noteGrid: [[[Note?]]] = []
-        let lowestGapIndex = (self.ledgerLines * 2) + 2
+    private func calculateNoteGrid() -> [[[[Note]?]]] {
+        var noteGrid: [[[[Note]?]]] = []
+        let lowestGapIndex = (self.ledgerLines * 2) + (self.gaps * 2)
         
         for chordGroup in self.splitChords {
-            var groupGrid: [[Note?]] = Array(repeating: Array(repeating: nil, count: self.rows), count: chordGroup.count)
+            var groupGrid: [[[Note]?]] = Array(repeating: Array(repeating: nil, count: self.rows), count: chordGroup.count)
             
             for (chordIndex, chord) in chordGroup.enumerated() {
                 for note in chord.notes {
                     if note.isRest {
-                        groupGrid[chordIndex][0] = note
+                        if groupGrid[chordIndex][0] == nil {
+                            groupGrid[chordIndex][0] = [note]
+                        } else {
+                            groupGrid[chordIndex][0]?.append(note)
+                        }
                     } else {
-                        guard let distance = calculateGapBetweenLowestGapNote(note: note) else {
-                            for i in 0..<groupGrid[chordIndex].count {
-                                if groupGrid[chordIndex][i] == nil {
-                                    groupGrid[chordIndex][0] = note
-                                }
+                        guard let distance = calculateGapBetweenLowestGapNote(note) else {
+                            let rest = Note(
+                                duration: note.duration,
+                                durationValue: -1,
+                                isRest: true,
+                                isDotted: note.isDotted,
+                                hasAccent: false
+                            )
+                            
+                            if groupGrid[chordIndex][0] == nil {
+                                groupGrid[chordIndex][0] = [rest]
+                            } else {
+                                groupGrid[chordIndex][0]?.append(rest)
                             }
                             
                             continue
                         }
                         
-                        var index = lowestGapIndex + distance + 1
+                        var index = lowestGapIndex - distance
                         
-                        while index <= 0 {
-                            note.increaseOctave()
-                            index += 7
-                            
-                            while groupGrid[chordIndex].indices.contains(index) && groupGrid[chordIndex][self.rows - index] != nil {
-                                note.increaseOctave()
-                                index += 7
-                            }
-                        }
-                        
-                        while index > self.rows {
+                        if index < 0 {
                             note.decreaseOctave()
-                            index -= 7
-                            
-                            while groupGrid[chordIndex].indices.contains(index) && groupGrid[chordIndex][self.rows - index] != nil {
-                                note.decreaseOctave()
-                                index -= 7
-                            }
+                            index += 7
                         }
                         
-                        if groupGrid[chordIndex][self.rows - index] == nil {
-                            groupGrid[chordIndex][self.rows - index] = note
-                        } else {
-                            for i in 0..<groupGrid[chordIndex].count {
-                                if groupGrid[chordIndex][i] == nil {
-                                    groupGrid[chordIndex][0] = note
-                                }
+                        if index > self.rows - 1 {
+                            note.increaseOctave()
+                            index -= 7
+                        }
+                        
+                        if index < 0 || index > self.rows - 1 {
+                            let rest = Note(
+                                duration: note.duration,
+                                durationValue: -1,
+                                isRest: true,
+                                isDotted: note.isDotted,
+                                hasAccent: false
+                            )
+                            
+                            if groupGrid[chordIndex][0] == nil {
+                                groupGrid[chordIndex][0] = [rest]
+                            } else {
+                                groupGrid[chordIndex][0]?.append(rest)
                             }
+                            
+                            continue
+                        }
+                        
+                        if groupGrid[chordIndex][index] == nil {
+                            groupGrid[chordIndex][index] = [note]
+                        } else {
+                            groupGrid[chordIndex][index]?.append(note)
                         }
                     }
                 }
@@ -380,7 +428,7 @@ extension BarViewModel {
         return noteGrid
     }
     
-    private func calculateGapBetweenLowestGapNote(note: Note) -> Int? {
+    private func calculateGapBetweenLowestGapNote(_ note: Note) -> Int? {
         if let lowest = self.lowestGapNote,
            let lowestPitch = lowest.pitch,
            let notePitch = note.pitch,
@@ -418,13 +466,4 @@ extension BarViewModel {
         
         return note.accidental
     }
-    
-    static func calculateNotePosition(isRest: Bool, rowIndex: Int, columnIndex: Int, totalRows: Int, totalColumns: Int, geometry: GeometryProxy) -> CGPoint {
-        let xPosition = (totalColumns == 1) ? 0 : (geometry.size.width / CGFloat(totalColumns - 1)) * CGFloat(columnIndex)
-        let yPosition = isRest ? geometry.size.height / 2 : (geometry.size.height / CGFloat(totalRows - 1)) * CGFloat(rowIndex)
-        
-        return CGPoint(x: xPosition, y: yPosition)
-    }
-    
-//    static func calculateNotePositions(chords: [Chord])
 }

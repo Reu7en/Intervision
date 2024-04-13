@@ -42,9 +42,6 @@
 		1B9435932B7EBFF900B57DA7 /* StaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435922B7EBFF900B57DA7 /* StaveView.swift */; };
 		1B9435952B7ED65B00B57DA7 /* NoteHeadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435942B7ED65B00B57DA7 /* NoteHeadView.swift */; };
 		1B9435992B7F153100B57DA7 /* RestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435982B7F153100B57DA7 /* RestView.swift */; };
-		1B94359D2B7FE58800B57DA7 /* BeamViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B94359C2B7FE58800B57DA7 /* BeamViewModel.swift */; };
-		1B94359F2B80655D00B57DA7 /* BeamLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B94359E2B80655D00B57DA7 /* BeamLineView.swift */; };
-		1B9435A12B80657900B57DA7 /* NoteTailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A02B80657900B57DA7 /* NoteTailView.swift */; };
 		1B9435A52B856D5900B57DA7 /* ClefView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A42B856D5900B57DA7 /* ClefView.swift */; };
 		1B9435A72B85703600B57DA7 /* KeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A62B85703600B57DA7 /* KeyView.swift */; };
 		1B9435A92B857A8D00B57DA7 /* TimeSignatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A82B857A8D00B57DA7 /* TimeSignatureView.swift */; };
@@ -101,9 +98,6 @@
 		1B9435922B7EBFF900B57DA7 /* StaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaveView.swift; sourceTree = "<group>"; };
 		1B9435942B7ED65B00B57DA7 /* NoteHeadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteHeadView.swift; sourceTree = "<group>"; };
 		1B9435982B7F153100B57DA7 /* RestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestView.swift; sourceTree = "<group>"; };
-		1B94359C2B7FE58800B57DA7 /* BeamViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeamViewModel.swift; sourceTree = "<group>"; };
-		1B94359E2B80655D00B57DA7 /* BeamLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeamLineView.swift; sourceTree = "<group>"; };
-		1B9435A02B80657900B57DA7 /* NoteTailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTailView.swift; sourceTree = "<group>"; };
 		1B9435A42B856D5900B57DA7 /* ClefView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClefView.swift; sourceTree = "<group>"; };
 		1B9435A62B85703600B57DA7 /* KeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyView.swift; sourceTree = "<group>"; };
 		1B9435A82B857A8D00B57DA7 /* TimeSignatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignatureView.swift; sourceTree = "<group>"; };
@@ -143,7 +137,6 @@
 			children = (
 				1BBC978C2B76A50D001C953C /* ScoreViewModel.swift */,
 				1B561F7A2B793216001860E5 /* BarViewModel.swift */,
-				1B94359C2B7FE58800B57DA7 /* BeamViewModel.swift */,
 				1B0B52462BBF1FB200225A11 /* StaveViewModel.swift */,
 				1B0B524A2BC165D600225A11 /* LinesViewModel.swift */,
 				1B0B524C2BC1685500225A11 /* BeatViewModel.swift */,
@@ -234,8 +227,6 @@
 				1B9435922B7EBFF900B57DA7 /* StaveView.swift */,
 				1B9435942B7ED65B00B57DA7 /* NoteHeadView.swift */,
 				1B9435982B7F153100B57DA7 /* RestView.swift */,
-				1B94359E2B80655D00B57DA7 /* BeamLineView.swift */,
-				1B9435A02B80657900B57DA7 /* NoteTailView.swift */,
 				1B9435A42B856D5900B57DA7 /* ClefView.swift */,
 				1B9435A62B85703600B57DA7 /* KeyView.swift */,
 				1B9435A82B857A8D00B57DA7 /* TimeSignatureView.swift */,
@@ -459,7 +450,6 @@
 				1B0B524D2BC1685500225A11 /* BeatViewModel.swift in Sources */,
 				1B0E44A02B92516500C0E12C /* IntervalLinesViewModel.swift in Sources */,
 				1B0E44AB2B9284E600C0E12C /* BarRowsView.swift in Sources */,
-				1B94359F2B80655D00B57DA7 /* BeamLineView.swift in Sources */,
 				1B0E44A72B9260A900C0E12C /* InspectorButton.swift in Sources */,
 				1B0B524B2BC165D600225A11 /* LinesViewModel.swift in Sources */,
 				1B97BEE22B71C617007D0BE5 /* NoteModel.swift in Sources */,
@@ -468,7 +458,6 @@
 				1B97BEE02B71C607007D0BE5 /* ChordModel.swift in Sources */,
 				1B0E449E2B92510F00C0E12C /* IntervalLinesView.swift in Sources */,
 				1B9435932B7EBFF900B57DA7 /* StaveView.swift in Sources */,
-				1B9435A12B80657900B57DA7 /* NoteTailView.swift in Sources */,
 				1B0E44B82B96AE8C00C0E12C /* LineModel.swift in Sources */,
 				1B97BEE62B71D917007D0BE5 /* AppDelegate.swift in Sources */,
 				1B0E44B52B928A8400C0E12C /* RollBarHeader.swift in Sources */,
@@ -484,7 +473,6 @@
 				1BBC978D2B76A50D001C953C /* ScoreViewModel.swift in Sources */,
 				1B97BEDE2B71C59B007D0BE5 /* BarModel.swift in Sources */,
 				1B8522742BAAF2CA005E53E4 /* PianoButton.swift in Sources */,
-				1B94359D2B7FE58800B57DA7 /* BeamViewModel.swift in Sources */,
 				1B0B52472BBF1FB200225A11 /* StaveViewModel.swift in Sources */,
 				1B231FF72B8A6C2B003AB714 /* RollBarView.swift in Sources */,
 			);

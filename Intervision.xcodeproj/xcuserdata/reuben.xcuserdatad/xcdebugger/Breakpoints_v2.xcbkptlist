@@ -62,8 +62,8 @@
             filePath = "Intervision/View Models/Score/LinesViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
             landmarkName = "init(beamGroups:positions:middleStaveNote:barGeometry:beatGeometry:noteSize:)"
             landmarkType = "7">
          </BreakpointContent>

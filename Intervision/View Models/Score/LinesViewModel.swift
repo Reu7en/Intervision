@@ -29,8 +29,12 @@ class LinesViewModel: ObservableObject {
         calculateLines().1
     }
     
-    var timeModifications: [(CGPoint, Int)] {
+    var tailLines: [Line] {
         calculateLines().2
+    }
+    
+    var timeModifications: [(CGPoint, Int)] {
+        calculateLines().3
     }
     
     var idealStemLength: CGFloat {
@@ -47,6 +51,10 @@ class LinesViewModel: ObservableObject {
     
     var stemThickness: CGFloat {
         calculateStemThickness()
+    }
+    
+    var tailThickness: CGFloat {
+        calculateTailThickness()
     }
     
     var beamSpacing: CGFloat {
@@ -101,9 +109,10 @@ extension LinesViewModel {
         return directions
     }
     
-    private func calculateLines() -> ([Line], [Line], [(CGPoint, Int)]) {
+    private func calculateLines() -> ([Line], [Line], [Line], [(CGPoint, Int)]) {
         var beamLines: [Line] = []
         var stemLines: [Line] = []
+        var tailLines: [Line] = []
         var timeModifications: [(CGPoint, Int)] = []
         
         for groupIndex in 0..<self.beatBeamGroupChords.count {
@@ -142,7 +151,21 @@ extension LinesViewModel {
                             let stemEndPoint = CGPoint(x: closestToBeam.x + xOffset, y: closestToBeam.y + stemOffset)
                             
                             stemLines.append(Line(startPoint: stemStartPoint, endPoint: stemEndPoint))
-                            // draw tail
+                            
+                            if let numberOfTailLines = self.numberOfBeamLines[groupIndex].first {
+                                var beamYOffset: CGFloat = .zero
+                                
+                                for _ in 0..<numberOfTailLines {
+                                    let tailStartPosition = CGPoint(x: stemEndPoint.x, y: stemEndPoint.y + beamYOffset)
+                                    let tailEndX = stemEndPoint.x + self.noteSize
+                                    let tailEndY = stemEndPoint.y + ((direction == .Upward) ? self.noteSize : -self.noteSize) + beamYOffset
+                                    let tailEndPosition = CGPoint(x: tailEndX, y: tailEndY)
+                                    
+                                    tailLines.append(Line(startPoint: tailStartPosition, endPoint: tailEndPosition))
+                                    
+                                    beamYOffset += (direction == .Upward) ? self.beamSpacing : -self.beamSpacing
+                                }
+                            }
                         }
                     }
                 } else {
@@ -293,7 +316,7 @@ extension LinesViewModel {
             }
         }
         
-        return (beamLines, stemLines, timeModifications)
+        return (beamLines, stemLines, tailLines, timeModifications)
     }
     
     private func calculateYValue(atX x: CGFloat, forLineWithPoints point1: CGPoint, and point2: CGPoint) -> CGFloat? {
@@ -326,6 +349,10 @@ extension LinesViewModel {
     
     private func calculateStemThickness() -> CGFloat {
         return self.barGeometry.size.width / 250
+    }
+    
+    private func calculateTailThickness() -> CGFloat {
+        return self.beamThickness * 0.75
     }
     
     private func calculateBeamSpacing() -> CGFloat {

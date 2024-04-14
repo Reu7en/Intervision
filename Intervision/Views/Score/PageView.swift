@@ -12,8 +12,7 @@ struct PageView: View {
     @Binding var geometry: GeometryProxy
     @Binding var zoomLevel: CGFloat
     
-    let bars: [[Bar]]
-    let part: Part
+    let bars: [[(Bar, Int, Bool, Bool, Bool)]]
     
     var body: some View {
         
@@ -24,36 +23,34 @@ struct PageView: View {
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.white)
             
-            ScrollView {
-                if let name = part.name {
-                    Text("\(name)")
-                        .font(.title)
-                        .foregroundStyle(Color.black)
-                }
-                
-                LazyVStack(spacing: 0) {
-                    ForEach(0..<bars.count, id: \.self) { barIndex in
-                        ForEach(0..<bars[barIndex].count, id: \.self) { voiceIndex in
+            VStack(spacing: 0) {
+                ForEach(0..<bars.count, id: \.self) { lineIndex in
+                    HStack(spacing: 0) {
+                        ForEach(0..<bars[lineIndex].count, id: \.self) { barIndex in
+                            let bar = bars[lineIndex][barIndex]
+                            
                             BarView(
                                 barViewModel: BarViewModel(
-                                    bar: bars[barIndex][voiceIndex],
+                                    bar: bar.0,
                                     gaps: 4,
                                     ledgerLines: 4,
-                                    showClef: true,
-                                    showKey: true,
-                                    showTime: true
+                                    showClef: bar.2,
+                                    showKey: bar.3,
+                                    showTime: bar.4
                                 )
                             )
-                            .frame(width: width * 0.9, height: height / 6)
-                            .id(UUID())
                             .overlay(alignment: .topLeading) {
-                                Text("\(barIndex + 1)")
-                                    .foregroundStyle(Color.black)
+                                if bar.1 != -1 {
+                                    Text("\(bar.1)")
+                                        .foregroundStyle(Color.black)
+                                }
                             }
                         }
                     }
+                    .frame(width: width * 0.9)
                 }
             }
+            .frame(height: height * 0.9)
         }
         .frame(width: width, height: height)
         .padding()
@@ -62,6 +59,6 @@ struct PageView: View {
 
 #Preview {
     GeometryReader { geometry in
-        PageView(geometry: Binding.constant(geometry), zoomLevel: Binding.constant(1.0), bars: [], part: Part(bars: []))
+        PageView(geometry: Binding.constant(geometry), zoomLevel: Binding.constant(1.0), bars: [])
     }
 }

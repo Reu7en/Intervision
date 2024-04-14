@@ -17,18 +17,16 @@ struct ScoreView: View {
     @State private var showInspector: Bool = false
     
     var body: some View {
-        if let score = scoreViewModel.scoreManager.score,
-           let parts = score.parts {
+        if let pages = scoreViewModel.pages {
             GeometryReader { geometry in
                 HStack(spacing: 0) {
                     ScrollView([.vertical, .horizontal]) {
-                        HStack(spacing: 0) {
-                            ForEach(0..<parts.count, id: \.self) { partIndex in
+                        LazyHStack(spacing: 0) {
+                            ForEach(0..<pages.count, id: \.self) { pageIndex in
                                 PageView(
                                     geometry: Binding.constant(geometry),
                                     zoomLevel: $zoomLevel,
-                                    bars: parts[partIndex].bars,
-                                    part: parts[partIndex]
+                                    bars: pages[pageIndex]
                                 )
                             }
                         }

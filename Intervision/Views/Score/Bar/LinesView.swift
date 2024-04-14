@@ -32,6 +32,16 @@ struct LinesView: View {
             .stroke(line.color, lineWidth: linesViewModel.stemThickness)
         }
         
+        ForEach(0..<linesViewModel.tailLines.count, id: \.self) { lineIndex in
+            let line = linesViewModel.tailLines[lineIndex]
+            
+            Path { path in
+                path.move(to: line.startPoint)
+                path.addLine(to: line.endPoint)
+            }
+            .stroke(line.color, lineWidth: linesViewModel.tailThickness)
+        }
+        
         ForEach(0..<linesViewModel.timeModifications.count, id: \.self) { timeModificationIndex in
             let timeModification = linesViewModel.timeModifications[timeModificationIndex]
             
@@ -47,5 +57,30 @@ struct LinesView: View {
 #Preview {
     GeometryReader { geometry in
         LinesView(linesViewModel: LinesViewModel(beamGroups: [], positions: [], middleStaveNote: nil, barGeometry: geometry, beatGeometry: geometry, noteSize: .zero))
+    }
+}
+
+struct InternalRoundedLine: Shape {
+    var startPoint: CGPoint
+    var endPoint: CGPoint
+    var lineWidth: CGFloat
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        
+        let halfLineWidth = lineWidth / 2.0
+        let dx = endPoint.x - startPoint.x
+        let dy = endPoint.y - startPoint.y
+        let angle = atan2(dy, dx)
+        
+        let newStartPoint = CGPoint(x: startPoint.x + cos(angle) * halfLineWidth,
+                                    y: startPoint.y + sin(angle) * halfLineWidth)
+        let newEndPoint = CGPoint(x: endPoint.x - cos(angle) * halfLineWidth,
+                                  y: endPoint.y - sin(angle) * halfLineWidth)
+        
+        path.move(to: newStartPoint)
+        path.addLine(to: newEndPoint)
+        
+        return path
     }
 }

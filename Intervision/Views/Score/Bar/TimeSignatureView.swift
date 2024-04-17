@@ -11,8 +11,9 @@ struct TimeSignatureView: View {
     
     @State var doubleDigit: Bool = false
     
-    let height: CGFloat
     let timeSignature: Bar.TimeSignature
+    let gapHeight: CGFloat
+    let gaps: Int
     
     var body: some View {
         ZStack {
@@ -591,10 +592,10 @@ struct TimeSignatureView: View {
                 }
             }
         }
-        .frame(height: height)
+        .frame(height: gapHeight * CGFloat(gaps))
     }
 }
 
 #Preview {
-    TimeSignatureView(height: 100, timeSignature: .custom(beats: 12, noteValue: 8))
+    TimeSignatureView(timeSignature: .custom(beats: 12, noteValue: 8), gapHeight: .zero, gaps: 0)
 }

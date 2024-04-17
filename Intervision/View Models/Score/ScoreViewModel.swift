@@ -17,9 +17,10 @@ class ScoreViewModel: ObservableObject {
     static let pageAspectRatio: CGFloat = 210 / 297
     
     let maximumChordsPerWidth: Int
+    let maximumBarsPerWidth: Int
     let maximumStavesPerPage: Int
     
-    var pages: [[[(Bar, Int, Bool, Bool, Bool)]]]? {
+    var pages: [[[(Bar, Int, Bool, Bool, Bool, Bool, String)]]]? {
         calculatePages()
     }
     
@@ -28,15 +29,17 @@ class ScoreViewModel: ObservableObject {
         scoreManager: ScoreManager,
         viewType: ViewType = .Horizontal,
         maximumChordsPerWidth: Int = 16,
+        maximumBarsPerWidth: Int = 4,
         maximumStavesPerPage: Int = 10
     ) {
         self.scoreManager = scoreManager
         self.viewType = viewType
         self.maximumChordsPerWidth = maximumChordsPerWidth
+        self.maximumBarsPerWidth = maximumBarsPerWidth
         self.maximumStavesPerPage = maximumStavesPerPage
     }
     
-    private func calculatePages() -> [[[(Bar, Int, Bool, Bool, Bool)]]]? {
+    private func calculatePages() -> [[[(Bar, Int, Bool, Bool, Bool, Bool, String)]]]? {
         guard let score = self.scoreManager.score,
               let parts = score.parts else { return nil }
         
@@ -62,11 +65,12 @@ class ScoreViewModel: ObservableObject {
             }
         }
         
-        var pages: [[[(Bar, Int, Bool, Bool, Bool)]]] = []
-        var currentPage: [[(Bar, Int, Bool, Bool, Bool)]] = []
-        var currentLines: [[(Bar, Int, Bool, Bool, Bool)]] = Array(repeating: [], count: staveCount)
+        var pages: [[[(Bar, Int, Bool, Bool, Bool, Bool, String)]]] = []
+        var currentPage: [[(Bar, Int, Bool, Bool, Bool, Bool, String)]] = []
+        var currentLines: [[(Bar, Int, Bool, Bool, Bool, Bool, String)]] = Array(repeating: [], count: staveCount)
         
         var currentChordsPerWidth = 0
+        var currentBarsPerWidth = 0
         var currentStavesPerPage = 0
         
         for currentBarIndex in 0..<maximumBarIndex {
@@ -84,7 +88,7 @@ class ScoreViewModel: ObservableObject {
                 currentStavesPerPage = 0
             }
             
-            if currentChordsPerWidth + maximumChordCount > self.maximumChordsPerWidth {
+            if currentChordsPerWidth + maximumChordCount > self.maximumChordsPerWidth || currentBarsPerWidth == maximumBarsPerWidth {
                 for line in currentLines {
                     currentPage.append(line)
                     currentLines = Array(repeating: [], count: staveCount)
@@ -92,6 +96,7 @@ class ScoreViewModel: ObservableObject {
                 
                 currentStavesPerPage += staveCount
                 currentChordsPerWidth = 0
+                currentBarsPerWidth = 0
             }
             
             var currentStaveIndex = 0
@@ -100,13 +105,28 @@ class ScoreViewModel: ObservableObject {
                 for bar in part.bars[currentBarIndex] {
                     let barNumber = (currentLines[currentStaveIndex].isEmpty && currentStaveIndex == 0) ? currentBarIndex + 1 : -1
                     let shouldShowLeadingInformation = currentLines[currentStaveIndex].isEmpty
+                    let shouldShowClef = currentBarIndex == 0 ? false : part.bars[currentBarIndex].first?.clef != part.bars[currentBarIndex - 1].first?.clef
+                    let shouldShowKey = currentBarIndex == 0 ? false : part.bars[currentBarIndex].first?.keySignature != part.bars[currentBarIndex - 1].first?.keySignature
+                    let shouldShowTime = currentBarIndex == 0 ? false : part.bars[currentBarIndex].first?.timeSignature != part.bars[currentBarIndex - 1].first?.timeSignature
                     
-                    currentLines[currentStaveIndex].append((bar, barNumber, shouldShowLeadingInformation, shouldShowLeadingInformation, shouldShowLeadingInformation))
+                    currentLines[currentStaveIndex].append(
+                        (
+                            bar,
+                            barNumber,
+                            shouldShowLeadingInformation || shouldShowClef,
+                            shouldShowLeadingInformation || shouldShowKey,
+                            shouldShowLeadingInformation || shouldShowTime,
+                            shouldShowLeadingInformation,
+                            part.name ?? ""
+                        )
+                    )
+                    
                     currentStaveIndex += 1
                 }
             }
             
             currentChordsPerWidth += maximumChordCount
+            currentBarsPerWidth += 1
         }
         
         return pages

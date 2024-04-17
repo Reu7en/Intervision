@@ -42,6 +42,16 @@ struct LinesView: View {
             .stroke(line.color, lineWidth: linesViewModel.tailThickness)
         }
         
+        ForEach(0..<linesViewModel.ledgerLines.count, id: \.self) { lineIndex in
+            let line = linesViewModel.ledgerLines[lineIndex]
+            
+            Path { path in
+                path.move(to: line.startPoint)
+                path.addLine(to: line.endPoint)
+            }
+            .stroke(line.color, lineWidth: linesViewModel.ledgerThickness)
+        }
+        
         ForEach(0..<linesViewModel.timeModifications.count, id: \.self) { timeModificationIndex in
             let timeModification = linesViewModel.timeModifications[timeModificationIndex]
             
@@ -56,7 +66,7 @@ struct LinesView: View {
 
 #Preview {
     GeometryReader { geometry in
-        LinesView(linesViewModel: LinesViewModel(beamGroups: [], positions: [], middleStaveNote: nil, barGeometry: geometry, beatGeometry: geometry, noteSize: .zero))
+        LinesView(linesViewModel: LinesViewModel(beamGroups: [], positions: [], middleStaveNote: nil, barGeometry: geometry, beatGeometry: geometry, noteSize: .zero, pageWidth: .zero))
     }
 }
 

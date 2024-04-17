@@ -9,10 +9,13 @@ import SwiftUI
 
 struct PageView: View {
     
-    @Binding var geometry: GeometryProxy
+    let geometry: GeometryProxy
     @Binding var zoomLevel: CGFloat
     
-    let bars: [[(Bar, Int, Bool, Bool, Bool)]]
+    let bars: [[(Bar, Int, Bool, Bool, Bool, Bool, String)]]
+    let showScoreInformation: Bool
+    let scoreTitle: String
+    let scoreComposer: String
     
     var body: some View {
         
@@ -24,6 +27,20 @@ struct PageView: View {
                 .fill(Color.white)
             
             VStack(spacing: 0) {
+                if showScoreInformation {
+                    VStack {
+                        Text("\(scoreTitle)")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundStyle(Color.black)
+                        
+                        Text("\(scoreComposer)")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundStyle(Color.black)
+                    }
+                }
+                
                 ForEach(0..<bars.count, id: \.self) { lineIndex in
                     HStack(spacing: 0) {
                         ForEach(0..<bars[lineIndex].count, id: \.self) { barIndex in
@@ -36,7 +53,10 @@ struct PageView: View {
                                     ledgerLines: 4,
                                     showClef: bar.2,
                                     showKey: bar.3,
-                                    showTime: bar.4
+                                    showTime: bar.4,
+                                    showName: bar.5,
+                                    partName: bar.6,
+                                    pageWidth: width
                                 )
                             )
                             .overlay(alignment: .topLeading) {
@@ -59,6 +79,6 @@ struct PageView: View {
 
 #Preview {
     GeometryReader { geometry in
-        PageView(geometry: Binding.constant(geometry), zoomLevel: Binding.constant(1.0), bars: [])
+        PageView(geometry: geometry, zoomLevel: Binding.constant(1.0), bars: [], showScoreInformation: false, scoreTitle: "", scoreComposer: "")
     }
 }

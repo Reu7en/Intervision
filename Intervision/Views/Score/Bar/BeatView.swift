@@ -11,8 +11,6 @@ struct BeatView: View {
     
     @ObservedObject var beatViewModel: BeatViewModel
     
-    let scale: CGFloat
-    
     var body: some View {
         ForEach(0..<beatViewModel.notePositions.count, id: \.self) { chordIndex in
             ForEach(0..<beatViewModel.notePositions[chordIndex].count, id: \.self) { noteIndex in
@@ -31,10 +29,9 @@ struct BeatView: View {
             let restPosition = beatViewModel.restPositions[positionIndex]
             
             RestView(
-                size: beatViewModel.noteSize,
+                gapHeight: beatViewModel.noteSize,
                 duration: beatViewModel.restDurations[positionIndex],
-                isDotted: beatViewModel.restIsDotted[positionIndex],
-                scale: scale
+                isDotted: beatViewModel.restIsDotted[positionIndex]
             )
             .position(restPosition)
         }
@@ -47,7 +44,8 @@ struct BeatView: View {
                     middleStaveNote: beatViewModel.middleStaveNote,
                     barGeometry: beatViewModel.barGeometry,
                     beatGeometry: beatViewModel.beatGeometry, 
-                    noteSize: beatViewModel.noteSize
+                    noteSize: beatViewModel.noteSize, 
+                    pageWidth: beatViewModel.pageWidth
                 )
             )
         }
@@ -56,6 +54,6 @@ struct BeatView: View {
 
 #Preview {
     GeometryReader { geometry in
-        BeatView(beatViewModel: BeatViewModel(noteGrid: [], barGeometry: geometry, beatGeometry: geometry, beamGroupChords: [], middleStaveNote: nil), scale: 0)
+        BeatView(beatViewModel: BeatViewModel(noteGrid: [], barGeometry: geometry, beatGeometry: geometry, beamGroupChords: [], middleStaveNote: nil, pageWidth: .zero))
     }
 }

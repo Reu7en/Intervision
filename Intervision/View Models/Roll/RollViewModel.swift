@@ -216,7 +216,7 @@ class RollViewModel: ObservableObject {
         }
         
         for segment in selectedSegments {
-//            updateBar(barToUpdate: segment.1)
+            updateBar(barToUpdate: segment.1)
         }
         
         updateScoreParts()
@@ -247,7 +247,7 @@ class RollViewModel: ObservableObject {
         }
         
         for segment in selectedSegments {
-//            updateBar(barToUpdate: segment.1)
+            updateBar(barToUpdate: segment.1)
         }
         
         updateScoreParts()

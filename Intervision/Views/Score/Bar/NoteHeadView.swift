@@ -10,15 +10,16 @@ import SwiftUI
 struct NoteHeadView: View {
     
     let size: CGFloat
-    let topColor: Color
-    let bottomColor: Color
     let isHollow: Bool
     let isDotted: Bool
     
-    init(size: CGFloat, topColor: Color = Color.black, bottomColor: Color = Color.black, isHollow: Bool, isDotted: Bool) {
+    init
+    (
+        size: CGFloat, 
+        isHollow: Bool,
+        isDotted: Bool
+    ) {
         self.size = size
-        self.topColor = topColor
-        self.bottomColor = bottomColor
         self.isHollow = isHollow
         self.isDotted = isDotted
     }
@@ -26,14 +27,14 @@ struct NoteHeadView: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(topColor)
+                .fill(Color.black)
                 .reverseMask {
                     Circle()
                         .scale(isHollow ? 0.7 : 0)
                 }
             
             Circle()
-                .fill(bottomColor)
+                .fill(Color.black)
                 .clipShape(
                     Rectangle()
                         .offset(y: -size / 2)
@@ -45,9 +46,9 @@ struct NoteHeadView: View {
             
             if isDotted {
                 Circle()
-                    .scale(0.25)
+                    .scale(0.375)
                     .fill(Color.black)
-                    .offset(x: size * 1.1)
+                    .offset(x: size)
             }
         }
         .frame(width: size, height: size)
@@ -55,7 +56,7 @@ struct NoteHeadView: View {
 }
 
 #Preview {
-    NoteHeadView(size: 500, topColor: Color.green, bottomColor: Color.blue, isHollow: true, isDotted: true)
+    NoteHeadView(size: 500, isHollow: true, isDotted: true)
 }
 
 extension View {

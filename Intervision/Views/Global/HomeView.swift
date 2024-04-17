@@ -16,7 +16,7 @@ struct HomeView: View {
     @StateObject var rollViewModel: RollViewModel
     
     @State var showView: Bool = false
-    @State var presentedView: PresentedView = .Score
+    @State var presentedView: PresentedView = .Roll
     
     init() {
         let scoreManager = ScoreManager()

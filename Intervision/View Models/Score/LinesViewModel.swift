@@ -16,6 +16,7 @@ class LinesViewModel: ObservableObject {
     let barGeometry: GeometryProxy
     let beatGeometry: GeometryProxy
     let noteSize: CGFloat
+    let pageWidth: CGFloat
     
     var beamDirections: [Direction] {
         calculateDirections()
@@ -33,8 +34,12 @@ class LinesViewModel: ObservableObject {
         calculateLines().2
     }
     
-    var timeModifications: [(CGPoint, Int)] {
+    var ledgerLines: [Line] {
         calculateLines().3
+    }
+    
+    var timeModifications: [(CGPoint, Int)] {
+        calculateLines().4
     }
     
     var idealStemLength: CGFloat {
@@ -57,6 +62,10 @@ class LinesViewModel: ObservableObject {
         calculateTailThickness()
     }
     
+    var ledgerThickness: CGFloat {
+        calculateLedgerThickness()
+    }
+    
     var beamSpacing: CGFloat {
         calculateBeamSpacing()
     }
@@ -76,7 +85,8 @@ class LinesViewModel: ObservableObject {
         middleStaveNote: Note?,
         barGeometry: GeometryProxy,
         beatGeometry: GeometryProxy,
-        noteSize: CGFloat
+        noteSize: CGFloat,
+        pageWidth: CGFloat
     ) {
         self.beatBeamGroupChords = beamGroups
         self.positions = positions
@@ -84,7 +94,7 @@ class LinesViewModel: ObservableObject {
         self.barGeometry = barGeometry
         self.beatGeometry = beatGeometry
         self.noteSize = noteSize
-        
+        self.pageWidth = pageWidth
     }
 }
 
@@ -109,10 +119,11 @@ extension LinesViewModel {
         return directions
     }
     
-    private func calculateLines() -> ([Line], [Line], [Line], [(CGPoint, Int)]) {
+    private func calculateLines() -> ([Line], [Line], [Line], [Line], [(CGPoint, Int)]) {
         var beamLines: [Line] = []
         var stemLines: [Line] = []
         var tailLines: [Line] = []
+        var ledgerLines: [Line] = []
         var timeModifications: [(CGPoint, Int)] = []
         
         for groupIndex in 0..<self.beatBeamGroupChords.count {
@@ -122,11 +133,44 @@ extension LinesViewModel {
             let timeModificationOffset = (direction == .Upward) ? -self.noteSize : self.noteSize
             var groupTimeModification: Int = -1
             
-            for chord in beatBeamGroupChords[groupIndex] {
+            for chord in self.beatBeamGroupChords[groupIndex] {
                 if let firstNote = chord.notes.first,
                    let timeModification = firstNote.timeModification {
                     if case .custom(let actual, _, _) = timeModification {
                         groupTimeModification = actual
+                    }
+                }
+            }
+            
+            for chordPositions in self.positions[groupIndex] {
+                for position in chordPositions {
+                    var currentLedgerPoint = CGPoint(x: position.x, y: barGeometry.size.height / 2)
+                    var currentLinesAwayFromMiddle = 0
+                    
+                    if position.y > self.barGeometry.size.height / 2 {
+                        while currentLedgerPoint.y <= position.y {
+                            if currentLinesAwayFromMiddle > 2 {
+                                let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - self.noteSize, y: currentLedgerPoint.y)
+                                let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + self.noteSize, y: currentLedgerPoint.y)
+                                
+                                ledgerLines.append(Line(startPoint: ledgerStartPoint, endPoint: ledgerEndPoint))
+                            }
+                            
+                            currentLedgerPoint.y += self.noteSize
+                            currentLinesAwayFromMiddle += 1
+                        }
+                    } else {
+                        while currentLedgerPoint.y >= position.y {
+                            if currentLinesAwayFromMiddle > 2 {
+                                let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - self.noteSize, y: currentLedgerPoint.y)
+                                let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + self.noteSize, y: currentLedgerPoint.y)
+                                
+                                ledgerLines.append(Line(startPoint: ledgerStartPoint, endPoint: ledgerEndPoint))
+                            }
+                            
+                            currentLedgerPoint.y -= self.noteSize
+                            currentLinesAwayFromMiddle += 1
+                        }
                     }
                 }
             }
@@ -305,7 +349,7 @@ extension LinesViewModel {
                                 
                                 timeModifications.append((timeModificationPosition, groupTimeModification))
                                 
-                                let stemStartPosition = CGPoint(x: closestToBeam.x + xOffset, y: closestToBeam.y)
+                                let stemStartPosition = CGPoint(x: furthestFromBeam.x + xOffset, y: furthestFromBeam.y)
                                 let stemEndPosition = CGPoint(x: midPoint.x, y: closestToBeam.y + stemOffset)
                                 
                                 stemLines.append(Line(startPoint: stemStartPosition, endPoint: stemEndPosition))
@@ -316,7 +360,7 @@ extension LinesViewModel {
             }
         }
         
-        return (beamLines, stemLines, tailLines, timeModifications)
+        return (beamLines, stemLines, tailLines, ledgerLines, timeModifications)
     }
     
     private func calculateYValue(atX x: CGFloat, forLineWithPoints point1: CGPoint, and point2: CGPoint) -> CGFloat? {
@@ -344,15 +388,19 @@ extension LinesViewModel {
     }
     
     private func calculateBeamThickness() -> CGFloat {
-        return self.beatGeometry.size.height / 35
+        return self.barGeometry.size.height / 35
     }
     
     private func calculateStemThickness() -> CGFloat {
-        return self.barGeometry.size.width / 250
+        return self.pageWidth / 500
     }
     
     private func calculateTailThickness() -> CGFloat {
         return self.beamThickness * 0.75
+    }
+    
+    private func calculateLedgerThickness() -> CGFloat {
+        return self.barGeometry.size.height / 100
     }
     
     private func calculateBeamSpacing() -> CGFloat {

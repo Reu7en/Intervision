@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Line: Identifiable, Equatable, Comparable {
+class Line: Identifiable, Equatable, Comparable {
     
     var startPoint: CGPoint
     var endPoint: CGPoint

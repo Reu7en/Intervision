@@ -10,90 +10,98 @@ import SwiftUI
 struct BarView: View {
     
     @StateObject var barViewModel: BarViewModel
-    @State private var scale: CGFloat = 1.0
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                let staveThickness = 3 * scale
-                
-                StaveView(
-                    rows: barViewModel.rows,
-                    ledgerLines: barViewModel.ledgerLines,
-                    geometry: geometry,
-                    scale: scale,
-                    thickness: staveThickness
-                )
-                
-                if barViewModel.isBarRest {
-                    RestView(
-                        size: 2 * (geometry.size.height / CGFloat(barViewModel.rows - 1)),
-                        duration: Note.Duration.bar,
-                        isDotted: false,
-                        scale: scale
-                    )
-                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+        GeometryReader { wholeGeometry in
+            HStack(spacing: 0) {
+                if barViewModel.showName {
+                    Text("\(barViewModel.partName)")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.black)
+                        .padding(.horizontal, wholeGeometry.size.width / 50)
                 }
                 
-                HStack(spacing: 0) {
-                    if barViewModel.showClef {
-                        let clefHeight: CGFloat = (geometry.size.height / CGFloat(barViewModel.rows)) * CGFloat(barViewModel.gaps * 2) + (2 * staveThickness)
+                GeometryReader { geometry in
+                    ZStack {
+                        let staveThickness = geometry.size.height / 100
+                        let gapHeight = 2 * (geometry.size.height / CGFloat(barViewModel.rows))
                         
-                        ClefView(width: geometry.size.width / 15, height: clefHeight, clef: barViewModel.bar.clef)
-                    }
-                    
-                    if barViewModel.showKey {
-                        let keyHeight: CGFloat = (geometry.size.height / CGFloat(barViewModel.rows)) * CGFloat(barViewModel.gaps * 2) + (2 * staveThickness)
-                    
-                        KeyView(width: geometry.size.width / 10, height: keyHeight, key: barViewModel.bar.keySignature, gaps: barViewModel.gaps, lowestGapNote: barViewModel.lowestGapNote)
-                    }
-                    
-                    if barViewModel.showTime {
-                        let timeHeight: CGFloat = (geometry.size.height / CGFloat(barViewModel.rows)) * CGFloat(barViewModel.gaps * 2) + (2 * staveThickness)
+                        StaveView(
+                            rows: barViewModel.rows,
+                            ledgerLines: barViewModel.ledgerLines,
+                            geometry: geometry,
+                            thickness: staveThickness
+                        )
                         
-                        TimeSignatureView(height: timeHeight, timeSignature: barViewModel.bar.timeSignature)
-                    }
-                    
-                    if barViewModel.isBarRest {
-                        Spacer()
-                    } else {
                         HStack(spacing: 0) {
-                            ForEach(0..<barViewModel.noteGrid.count, id: \.self) { beatIndex in
+                            if barViewModel.showClef {
+                                ClefView(
+                                    clef: barViewModel.bar.clef,
+                                    gapHeight: gapHeight
+                                )
+                                .padding(.horizontal, geometry.size.width / 50)
+                            }
+                            
+                            if barViewModel.showKey {
+                                KeyView(
+                                    key: barViewModel.bar.keySignature,
+                                    gapHeight: gapHeight,
+                                    gaps: barViewModel.gaps,
+                                    middleStaveNote: barViewModel.middleStaveNote
+                                )
+                                .padding(.horizontal, geometry.size.width / 50)
+                            }
+                            
+                            if barViewModel.showTime {
+                                TimeSignatureView(
+                                    timeSignature: barViewModel.bar.timeSignature,
+                                    gapHeight: gapHeight,
+                                    gaps: barViewModel.gaps
+                                )
+                                .padding(.horizontal, geometry.size.width / 50)
+                            }
+                            
+                            Spacer()
+                            
+                            if barViewModel.isBarRest {
+                                RestView(
+                                    gapHeight: gapHeight,
+                                    duration: Note.Duration.bar,
+                                    isDotted: false
+                                )
+                                
+                                Spacer()
+                            } else {
                                 HStack(spacing: 0) {
-                                    GeometryReader { beatGeometry in
-                                        BeatView(
-                                            beatViewModel: BeatViewModel(
-                                                noteGrid: barViewModel.noteGrid[beatIndex],
-                                                barGeometry: geometry,
-                                                beatGeometry: beatGeometry,
-                                                beamGroupChords: barViewModel.beamGroupChords[beatIndex],
-                                                middleStaveNote: barViewModel.middleStaveNote
-                                            ),
-                                            scale: scale
-                                        )
+                                    ForEach(0..<barViewModel.noteGrid.count, id: \.self) { beatIndex in
+                                        HStack(spacing: 0) {
+                                            GeometryReader { beatGeometry in
+                                                BeatView(
+                                                    beatViewModel: BeatViewModel(
+                                                        noteGrid: barViewModel.noteGrid[beatIndex],
+                                                        barGeometry: geometry,
+                                                        beatGeometry: beatGeometry,
+                                                        beamGroupChords: barViewModel.beamGroupChords[beatIndex],
+                                                        middleStaveNote: barViewModel.middleStaveNote,
+                                                        pageWidth: barViewModel.pageWidth
+                                                    )
+                                                )
+                                            }
+                                        }
+                                        .padding(.horizontal, geometry.size.width / 25)
                                     }
                                 }
-                                .padding(.horizontal, geometry.size.width / 25)
+                                .padding(.horizontal, geometry.size.width / 50)
                             }
                         }
-                        .padding(.horizontal, geometry.size.width / 50)
                     }
                 }
             }
-            .onChange(of: geometry.size) {
-                updateScale(with: geometry.size)
-            }
-            .onAppear {
-                updateScale(with: geometry.size)
-            }
         }
-    }
-    
-    private func updateScale(with newSize: CGSize) {
-        scale = newSize.height / 500
     }
 }
 
 #Preview {
-    BarView(barViewModel: BarViewModel(bar: Bar(chords: [], clef: .Treble, timeSignature: .common, repeat: nil, doubleLine: false, keySignature: .CMajor)))
+    BarView(barViewModel: BarViewModel(bar: Bar(chords: [], clef: .Treble, timeSignature: .common, repeat: nil, doubleLine: false, keySignature: .CMajor), pageWidth: .zero))
 }

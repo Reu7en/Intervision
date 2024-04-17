@@ -51,10 +51,23 @@ extension Bar {
         case Treble, Soprano, Alto, Tenor, Bass, Neutral
     }
     
-    enum TimeSignature {
+    enum TimeSignature: Equatable {
         case common
         case cut
         case custom(beats: Int, noteValue: Int)
+        
+        static func == (lhs: TimeSignature, rhs: TimeSignature) -> Bool {
+            switch (lhs, rhs) {
+            case (.common, .common):
+                return true
+            case (.cut, .cut):
+                return true
+            case let (.custom(beats1, noteValue1), .custom(beats2, noteValue2)):
+                return beats1 == beats2 && noteValue1 == noteValue2
+            default:
+                return false
+            }
+        }
     }
     
     enum Repeat {

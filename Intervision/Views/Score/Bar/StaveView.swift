@@ -6,12 +6,12 @@
 //
 
 import SwiftUI
+import Cocoa
 
 struct StaveView: View {
     let rows: Int
     let ledgerLines: Int
     let geometry: GeometryProxy
-    let scale: CGFloat
     let thickness: CGFloat
     
     var body: some View {
@@ -46,6 +46,6 @@ struct StaveView: View {
 
 #Preview {
     GeometryReader { geometry in
-        StaveView(rows: 23, ledgerLines: 3, geometry: geometry, scale: 1.0, thickness: 3)
+        StaveView(rows: 23, ledgerLines: 3, geometry: geometry, thickness: 3)
     }
 }

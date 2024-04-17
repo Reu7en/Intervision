@@ -9,39 +9,33 @@ import SwiftUI
 
 struct KeyView: View {
     
-    let width: CGFloat
-    let height: CGFloat
     let key: Bar.KeySignature
+    let gapHeight: CGFloat
     let gaps: Int
-    let lowestGapNote: Note?
+    let middleStaveNote: Note?
     
     var body: some View {
-        
-        let maxSharpsOrFlats = key.alteredNotes.count
-        let horizontalSpacing = width / CGFloat(maxSharpsOrFlats + 1)
-        
-        ZStack {
-            if let lowestGapNote = lowestGapNote,
-               let lowestPitch = lowestGapNote.pitch {
+        HStack(spacing: 0) {
+            if let middleStaveNote = middleStaveNote,
+               let middlePitch = middleStaveNote.pitch {
                 ForEach(0..<key.alteredNotes.count, id: \.self) { noteIndex in
                     let pitch = key.alteredNotes[noteIndex].0
-                    let distance = lowestPitch.distanceFromC() - pitch.distanceFromC()
-                    let yPosition = key.sharps ? CGFloat(distance < -1 ? distance + 7 : distance) * height / (CGFloat(gaps * 2)) : CGFloat(distance < 1 ? distance + 7 : distance) * height / (CGFloat(gaps * 2))
-                    let yOffset = key.sharps ? 0 : -height / 10
+                    let distance = middlePitch.distanceFromC() - pitch.distanceFromC()
+                    let yOffset = CGFloat(distance - 1) * (gapHeight / 2)
                     
                     Image(key.sharps ? "Sharp" : "Flat")
                         .interpolation(.high)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: height / CGFloat(CGFloat(gaps) / CGFloat(1.75)))
-                        .position(x: CGFloat(noteIndex + 1) * horizontalSpacing, y: yPosition + yOffset)
+                        .frame(height: gapHeight * 2)
+                        .offset(y: yOffset)
                 }
             }
         }
-        .frame(width: width, height: height)
     }
 }
 
 #Preview {
-    KeyView(width: 50, height: 100, key: .AFlatMajor, gaps: 4, lowestGapNote: nil)
+    KeyView(key: .CSharpMajor, gapHeight: 50, gaps: 4, middleStaveNote: Note(pitch: .B, accidental: nil, octave: nil, octaveShift: nil, duration: .bar, durationValue: -1, timeModification: nil, changeDynamic: nil, graceNotes: nil, tie: nil, slur: nil, isRest: true, isDotted: false, hasAccent: false, id: UUID()))
+        .frame(width: 1000, height: 500)
 }

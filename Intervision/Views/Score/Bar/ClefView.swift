@@ -9,9 +9,8 @@ import SwiftUI
 
 struct ClefView: View {
     
-    let width: CGFloat
-    let height: CGFloat
     let clef: Bar.Clef
+    let gapHeight: CGFloat
     
     var body: some View {
         ZStack {
@@ -21,36 +20,36 @@ struct ClefView: View {
                     Image("ClefTreble")
                         .interpolation(.high)
                         .resizable()
-                        .scaledToFit()
+                        .frame(height: gapHeight * 7)
                 }
             case .Soprano:
                 ZStack {
                     Image("ClefSATB")
                         .interpolation(.high)
                         .resizable()
-                        .scaledToFit()
+                        .frame(height: gapHeight * 4)
                 }
             case .Alto:
                 ZStack {
                     Image("ClefSATB")
                         .interpolation(.high)
                         .resizable()
-                        .scaledToFit()
+                        .frame(height: gapHeight * 4)
                 }
             case .Tenor:
                 ZStack {
                     Image("ClefSATB")
                         .interpolation(.high)
                         .resizable()
-                        .scaledToFit()
+                        .frame(height: gapHeight * 4)
                 }
             case .Bass:
                 ZStack {
                     Image("ClefBass")
                         .interpolation(.high)
                         .resizable()
-                        .scaledToFit()
-                        .scaleEffect(0.5)
+                        .frame(height: gapHeight * 3.5)
+                        .offset(y: -gapHeight / 4)
                 }
             case .Neutral:
                 ZStack {
@@ -58,13 +57,14 @@ struct ClefView: View {
                         .interpolation(.high)
                         .resizable()
                         .scaledToFit()
+                        .frame(height: gapHeight * 4)
                 }
             }
         }
-        .frame(width: width, height: height)
+        .frame(maxWidth: gapHeight * 2.5)
     }
 }
 
 #Preview {
-    ClefView(width: 50, height: 100, clef: .Treble)
+    ClefView(clef: .Treble, gapHeight: .zero)
 }

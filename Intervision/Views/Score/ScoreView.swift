@@ -24,9 +24,12 @@ struct ScoreView: View {
                         LazyHStack(spacing: 0) {
                             ForEach(0..<pages.count, id: \.self) { pageIndex in
                                 PageView(
-                                    geometry: Binding.constant(geometry),
+                                    geometry: geometry,
                                     zoomLevel: $zoomLevel,
-                                    bars: pages[pageIndex]
+                                    bars: pages[pageIndex], 
+                                    showScoreInformation: pageIndex == 0,
+                                    scoreTitle: scoreViewModel.scoreManager.score?.title ?? "",
+                                    scoreComposer: scoreViewModel.scoreManager.score?.composer ?? ""
                                 )
                             }
                         }

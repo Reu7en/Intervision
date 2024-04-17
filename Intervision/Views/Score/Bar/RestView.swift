@@ -9,156 +9,124 @@ import SwiftUI
 
 struct RestView: View {
     
-    let size: CGFloat
+    let gapHeight: CGFloat
     let duration: Note.Duration
     let isDotted: Bool
-    let scale: CGFloat
     
     var body: some View {
-        ZStack {
-            switch duration {
-            case .bar, .breve, .whole:
-                ZStack {
-                    Image("RestWhole")
-                        .interpolation(.high)
-                        .resizable()
-                        .scaledToFit()
-                    
-                    if isDotted {
-                        HStack {
-                            Spacer()
-                            
-                            Circle()
-                                .fill(Color.black)
-                                .frame(width: size / 4)
-                                .padding(-5 * scale)
-                        }
-                    }
+        switch duration {
+        case .bar, .breve, .whole:
+            ZStack {
+                Image("RestWhole")
+                    .interpolation(.high)
+                    .resizable()
+                    .scaledToFit()
+                
+                if isDotted {
+                    Circle()
+                        .fill(Color.black)
+                        .frame(height: gapHeight * 0.375)
+                        .offset(x: gapHeight * 2)
                 }
-                .offset(y: -size / 5)
-                .scaleEffect(2.0)
-            case .half:
-                ZStack {
-                    Image("RestHalf")
-                        .interpolation(.high)
-                        .resizable()
-                        .scaledToFit()
-                    
-                    if isDotted {
-                        HStack {
-                            Spacer()
-                            
-                            Circle()
-                                .fill(Color.black)
-                                .frame(width: size / 4)
-                                .padding(-5 * scale)
-                        }
-                    }
-                }
-                .offset(y: -size / 5)
-                .scaleEffect(2.0)
-            case .quarter:
-                ZStack {
-                    Image("RestQuarter")
-                        .interpolation(.high)
-                        .resizable()
-                        .scaledToFit()
-                    
-                    if isDotted {
-                        HStack {
-                            Spacer()
-                            
-                            Circle()
-                                .fill(Color.black)
-                                .frame(width: size / 4)
-                                .padding(-5 * scale)
-                        }
-                    }
-                }
-                .offset(y: -size / 5)
-            case .eighth:
-                ZStack {
-                    Image("RestEighth")
-                        .interpolation(.high)
-                        .resizable()
-                        .scaledToFit()
-                    
-                    if isDotted {
-                        HStack {
-                            Spacer()
-                            
-                            Circle()
-                                .fill(Color.black)
-                                .frame(width: size / 4)
-                                .padding(-5 * scale)
-                        }
-                    }
-                }
-                .offset(y: -size / 5)
-            case .sixteenth:
-                ZStack {
-                    Image("RestSixteenth")
-                        .interpolation(.high)
-                        .resizable()
-                        .scaledToFit()
-                    
-                    if isDotted {
-                        HStack {
-                            Spacer()
-                            
-                            Circle()
-                                .fill(Color.black)
-                                .frame(width: size / 4)
-                                .padding(-5 * scale)
-                        }
-                    }
-                }
-                .offset(y: -size / 5)
-            case .thirtySecond:
-                ZStack {
-                    Image("RestThirtySecond")
-                        .interpolation(.high)
-                        .resizable()
-                        .scaledToFit()
-                    
-                    if isDotted {
-                        HStack {
-                            Spacer()
-                            
-                            Circle()
-                                .fill(Color.black)
-                                .frame(width: size / 4)
-                                .padding(-5 * scale)
-                        }
-                    }
-                }
-                .offset(y: -size / 5)
-            case .sixtyFourth:
-                ZStack {
-                    Image("RestSixtyFourth")
-                        .interpolation(.high)
-                        .resizable()
-                        .scaledToFit()
-                    
-                    if isDotted {
-                        HStack {
-                            Spacer()
-                            
-                            Circle()
-                                .fill(Color.black)
-                                .frame(width: size / 4)
-                                .padding(-5 * scale)
-                        }
-                    }
-                }
-                .offset(y: -size / 5)
             }
+            .frame(height: gapHeight * 0.75)
+            .offset(y: -gapHeight / 1.5)
+        case .half:
+            ZStack {
+                Image("RestHalf")
+                    .interpolation(.high)
+                    .resizable()
+                    .scaledToFit()
+                
+                if isDotted {
+                    Circle()
+                        .fill(Color.black)
+                        .frame(height: gapHeight * 0.375)
+                        .offset(x: gapHeight * 2)
+                }
+            }
+            .frame(height: gapHeight * 0.75)
+            .offset(y: -gapHeight / 2.75)
+        case .quarter:
+            ZStack {
+                Image("RestQuarter")
+                    .interpolation(.high)
+                    .resizable()
+                    .scaledToFit()
+                
+                if isDotted {
+                    Circle()
+                        .fill(Color.black)
+                        .frame(height: gapHeight * 0.375)
+                        .offset(x: gapHeight, y: -gapHeight / 2)
+                }
+            }
+            .frame(height: gapHeight * 3)
+        case .eighth:
+            ZStack {
+                Image("RestEighth")
+                    .interpolation(.high)
+                    .resizable()
+                    .scaledToFit()
+                
+                if isDotted {
+                    Circle()
+                        .fill(Color.black)
+                        .frame(height: gapHeight * 0.375)
+                        .offset(x: gapHeight, y: -gapHeight / 2)
+                }
+            }
+            .frame(height: gapHeight * 2)
+        case .sixteenth:
+            ZStack {
+                Image("RestSixteenth")
+                    .interpolation(.high)
+                    .resizable()
+                    .scaledToFit()
+                
+                if isDotted {
+                    Circle()
+                        .fill(Color.black)
+                        .frame(height: gapHeight * 0.375)
+                        .offset(x: gapHeight, y: -gapHeight)
+                }
+            }
+            .offset(y: gapHeight / 2)
+            .frame(height: gapHeight * 3)
+        case .thirtySecond:
+            ZStack {
+                Image("RestThirtySecond")
+                    .interpolation(.high)
+                    .resizable()
+                    .scaledToFit()
+                
+                if isDotted {
+                    Circle()
+                        .fill(Color.black)
+                        .frame(height: gapHeight * 0.375)
+                        .offset(x: gapHeight, y: -gapHeight / 1.5)
+                }
+            }
+            .frame(height: gapHeight * 4)
+        case .sixtyFourth:
+            ZStack {
+                Image("RestSixtyFourth")
+                    .interpolation(.high)
+                    .resizable()
+                    .scaledToFit()
+                
+                if isDotted {
+                    Circle()
+                        .fill(Color.black)
+                        .frame(height: gapHeight * 0.375)
+                        .offset(x: gapHeight, y: -gapHeight / 1.5)
+                }
+            }
+            .frame(height: gapHeight * 4)
         }
-        .frame(width: size)
-        .scaleEffect(0.85)
     }
 }
 
 #Preview {
-    RestView(size: 50, duration: Note.Duration.eighth, isDotted: true, scale: 1.0)
+    RestView(gapHeight: 500, duration: Note.Duration.half, isDotted: true)
 }

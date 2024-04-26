@@ -14,6 +14,7 @@ struct HomeView: View {
     
     @StateObject var scoreViewModel: ScoreViewModel
     @StateObject var rollViewModel: RollViewModel
+    @StateObject var testingViewModel: TestingViewModel
     
     @State var showView: Bool = false
     @State var presentedView: PresentedView = .Roll
@@ -22,6 +23,7 @@ struct HomeView: View {
         let scoreManager = ScoreManager()
         _scoreViewModel = StateObject(wrappedValue: ScoreViewModel(scoreManager: scoreManager))
         _rollViewModel = StateObject(wrappedValue: RollViewModel(scoreManager: scoreManager))
+        _testingViewModel = StateObject(wrappedValue: TestingViewModel())
         _scoreManager = ObservedObject(wrappedValue: scoreManager)
     }
     
@@ -81,6 +83,19 @@ struct HomeView: View {
                         }
                         .frame(width: width / 10)
                         
+                        Button {
+                            presentedView = .Testing
+                            showView.toggle()
+                        } label: {
+                            HStack {
+                                Text("Testing")
+                                Spacer()
+                                Image(systemName: "graduationcap")
+                            }
+                            .padding()
+                        }
+                        .frame(width: width / 10)
+                        
                         Spacer()
                     }
                     .padding()
@@ -108,6 +123,18 @@ struct HomeView: View {
                                 .navigationBarBackButtonHidden()
                         case .None:
                             HomeView()
+                        default:
+                            HomeView()
+                        }
+                    } else {   
+                        switch presentedView {
+                        case .Testing:
+                            TestingHomeView(testingViewModel: testingViewModel)
+                                .navigationBarBackButtonHidden()
+                        case .None:
+                            HomeView()
+                        default:
+                            HomeView()
                         }
                     }
                 }
@@ -120,6 +147,7 @@ extension HomeView {
     enum PresentedView: String, CaseIterable {
         case Score
         case Roll
+        case Testing
         case None
     }
 }

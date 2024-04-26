@@ -45,6 +45,7 @@
 		1B370D892BDC3F6B00F21E39 /* PracticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D882BDC3F6B00F21E39 /* PracticeView.swift */; };
 		1B370D8B2BDC3F7500F21E39 /* QuestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D8A2BDC3F7500F21E39 /* QuestionsView.swift */; };
 		1B370D8D2BDC3F7C00F21E39 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D8C2BDC3F7C00F21E39 /* ResultsView.swift */; };
+		1B370D8F2BDC4C4E00F21E39 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B370D8E2BDC4C4E00F21E39 /* LaunchScreen.storyboard */; };
 		1B561F772B784CF3001860E5 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F762B784CF3001860E5 /* HomeView.swift */; };
 		1B561F792B79219F001860E5 /* BarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F782B79219F001860E5 /* BarView.swift */; };
 		1B561F7B2B793216001860E5 /* BarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F7A2B793216001860E5 /* BarViewModel.swift */; };
@@ -111,6 +112,7 @@
 		1B370D882BDC3F6B00F21E39 /* PracticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeView.swift; sourceTree = "<group>"; };
 		1B370D8A2BDC3F7500F21E39 /* QuestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsView.swift; sourceTree = "<group>"; };
 		1B370D8C2BDC3F7C00F21E39 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
+		1B370D8E2BDC4C4E00F21E39 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1B561F762B784CF3001860E5 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		1B561F782B79219F001860E5 /* BarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarView.swift; sourceTree = "<group>"; };
 		1B561F7A2B793216001860E5 /* BarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarViewModel.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 				1B97BECD2B71C168007D0BE5 /* Assets.xcassets */,
 				1B97BED22B71C168007D0BE5 /* Intervision.entitlements */,
 				1B97BECF2B71C168007D0BE5 /* Preview Content */,
+				1B370D8E2BDC4C4E00F21E39 /* LaunchScreen.storyboard */,
 			);
 			path = Intervision;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B0B523C2BB75EF800225A11 /* Flight_of_the_Bumblebee.musicxml in Resources */,
+				1B370D8F2BDC4C4E00F21E39 /* LaunchScreen.storyboard in Resources */,
 				1B0B52382BB75B6A00225A11 /* Simpsons_MultiPart.musicxml in Resources */,
 				1B97BED12B71C168007D0BE5 /* Preview Assets.xcassets in Resources */,
 				1B97BECE2B71C168007D0BE5 /* Assets.xcassets in Resources */,
@@ -697,6 +701,7 @@
 				INFOPLIST_FILE = Intervision/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -728,6 +733,7 @@
 				INFOPLIST_FILE = Intervision/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

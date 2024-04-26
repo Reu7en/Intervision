@@ -94,8 +94,8 @@
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "456"
-            endingLineNumber = "456"
+            startingLineNumber = "520"
+            endingLineNumber = "520"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
             <Locations>
@@ -204,6 +204,36 @@
                   endingLineNumber = "447"
                   offsetFromSymbolStart = "13572">
                </Location>
+               <Location
+                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d33568b1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "489"
+                  endingLineNumber = "489"
+                  offsetFromSymbolStart = "17588">
+               </Location>
+               <Location
+                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d33568b1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "489"
+                  endingLineNumber = "489"
+                  offsetFromSymbolStart = "17772">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -217,10 +247,42 @@
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "266"
-            endingLineNumber = "266"
+            startingLineNumber = "273"
+            endingLineNumber = "273"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B2FF68B8-BD75-4EC4-8C54-B94C1B9FBE57 - 7b739345d335088a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "242"
+                  endingLineNumber = "242"
+                  offsetFromSymbolStart = "2456">
+               </Location>
+               <Location
+                  uuid = "B2FF68B8-BD75-4EC4-8C54-B94C1B9FBE57 - 7b739345d335046a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "274"
+                  endingLineNumber = "274"
+                  offsetFromSymbolStart = "2908">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -233,8 +295,8 @@
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "327"
-            endingLineNumber = "327"
+            startingLineNumber = "334"
+            endingLineNumber = "334"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
             <Locations>
@@ -281,8 +343,8 @@
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "351"
-            endingLineNumber = "351"
+            startingLineNumber = "358"
+            endingLineNumber = "358"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
             <Locations>
@@ -323,48 +385,16 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "D3FA9790-03E0-442E-B5E9-F83F85A07AB6"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "394"
-            endingLineNumber = "394"
+            startingLineNumber = "400"
+            endingLineNumber = "400"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "D3FA9790-03E0-442E-B5E9-F83F85A07AB6 - 7b739345d335180a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "370"
-                  endingLineNumber = "370"
-                  offsetFromSymbolStart = "8544">
-               </Location>
-               <Location
-                  uuid = "D3FA9790-03E0-442E-B5E9-F83F85A07AB6 - 7b739345d33514d3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "395"
-                  endingLineNumber = "395"
-                  offsetFromSymbolStart = "8544">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

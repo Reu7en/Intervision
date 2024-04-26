@@ -46,23 +46,18 @@ class Segment: Identifiable, Equatable, ObservableObject {
     }
     
     func moveLeft(moveAmount: Double) {
-        if self.durationPreceeding == 0 && self.duration == moveAmount {
+        if self.durationPreceeding == 0 {
             return
-        } else if self.durationPreceeding == 0 {
-            self.duration -= moveAmount
         } else {
-            self.durationPreceeding -= moveAmount
+            self.durationPreceeding -= min(moveAmount, self.durationPreceeding)
         }
     }
     
     func moveRight(moveAmount: Double, barDuration: Double) {
-        if self.durationPreceeding + self.duration == barDuration && self.duration == moveAmount {
+        if self.durationPreceeding + self.duration == barDuration {
             return
-        } else if self.durationPreceeding + self.duration == barDuration {
-            self.durationPreceeding += moveAmount
-            self.duration -= moveAmount
         } else {
-            self.durationPreceeding += moveAmount
+            self.durationPreceeding += min(moveAmount, barDuration - (self.durationPreceeding + self.duration))
         }
     }
     

@@ -150,8 +150,8 @@ extension LinesViewModel {
                     if position.y > self.barGeometry.size.height / 2 {
                         while currentLedgerPoint.y <= position.y {
                             if currentLinesAwayFromMiddle > 2 {
-                                let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - self.noteSize, y: currentLedgerPoint.y)
-                                let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + self.noteSize, y: currentLedgerPoint.y)
+                                let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - self.noteSize * 0.75, y: currentLedgerPoint.y)
+                                let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + self.noteSize * 0.75, y: currentLedgerPoint.y)
                                 
                                 ledgerLines.append(Line(startPoint: ledgerStartPoint, endPoint: ledgerEndPoint))
                             }
@@ -162,8 +162,8 @@ extension LinesViewModel {
                     } else {
                         while currentLedgerPoint.y >= position.y {
                             if currentLinesAwayFromMiddle > 2 {
-                                let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - self.noteSize, y: currentLedgerPoint.y)
-                                let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + self.noteSize, y: currentLedgerPoint.y)
+                                let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - self.noteSize * 0.75, y: currentLedgerPoint.y)
+                                let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + self.noteSize * 0.75, y: currentLedgerPoint.y)
                                 
                                 ledgerLines.append(Line(startPoint: ledgerStartPoint, endPoint: ledgerEndPoint))
                             }

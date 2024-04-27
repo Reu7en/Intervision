@@ -55,8 +55,7 @@ struct PageView: View {
                                     showKey: bar.3,
                                     showTime: bar.4,
                                     showName: bar.5,
-                                    partName: bar.6,
-                                    pageWidth: width
+                                    partName: bar.6
                                 )
                             )
                             .overlay(alignment: .topLeading) {

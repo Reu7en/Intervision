@@ -1,5 +1,5 @@
 //
-//  ScoreChordsAreInversionsView.swift
+//  ScoreTwoNoteIntervalsAreEqualView.swift
 //  Intervision
 //
 //  Created by Reuben on 27/04/2024.
@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct ScoreChordsAreInversionsView: View {
+struct ScoreTwoNoteIntervalsAreEqualView: View {
     
     @StateObject var testingViewModel: TestingViewModel
     
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                Text("ScoreChordsAreInversions")
+                Text("ScoreTwoNoteIntervalsAreEqual")
                     .font(.title)
                 
                 if let session = testingViewModel.testSession {
@@ -56,7 +56,7 @@ struct ScoreChordsAreInversionsView: View {
                 HStack {
                     Spacer()
                     
-                    Text("Are these two chords inversions of each other?")
+                    Text("Do these two chords contain the same interval?")
                         .font(.title2)
                     
                     Spacer()
@@ -80,5 +80,5 @@ struct ScoreChordsAreInversionsView: View {
 }
 
 #Preview {
-    ScoreChordsAreInversionsView(testingViewModel: TestingViewModel())
+    ScoreTwoNoteIntervalsAreEqualView(testingViewModel: TestingViewModel())
 }

@@ -15,7 +15,6 @@ class BeatViewModel: ObservableObject {
     let beatGeometry: GeometryProxy
     let beatBeamGroupChords: [[Chord]]
     let middleStaveNote: Note?
-    let pageWidth: CGFloat
     
     var noteSize: CGFloat {
         calculateNoteSize()
@@ -55,15 +54,13 @@ class BeatViewModel: ObservableObject {
         barGeometry: GeometryProxy,
         beatGeometry: GeometryProxy,
         beamGroupChords: [[Chord]],
-        middleStaveNote: Note?,
-        pageWidth: CGFloat
+        middleStaveNote: Note?
     ) {
         self.beatNoteGrid = noteGrid
         self.barGeometry = barGeometry
         self.beatGeometry = beatGeometry
         self.beatBeamGroupChords = beamGroupChords
         self.middleStaveNote = middleStaveNote
-        self.pageWidth = pageWidth
     }
 }
 

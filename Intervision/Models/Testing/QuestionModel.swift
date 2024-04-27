@@ -9,14 +9,17 @@ import Foundation
 
 struct Question: Identifiable {
     let type: QuestionType
+    let intervalLinesType: IntervalLinesType
     
     // Identifiable
     let id: UUID
     
     init(
-        type: QuestionType
+        type: QuestionType,
+        intervalLinesType: IntervalLinesType
     ) {
         self.type = type
+        self.intervalLinesType = intervalLinesType
         self.id = UUID()
     }
 }
@@ -27,37 +30,31 @@ extension Question {
         case ScoreThreeNoteInnerIntervalsIdentification
         case ScoreThreeNoteOuterIntervalIdentification
         case ScoreChordsAreInversions
+        case ScoreTwoNoteIntervalsAreEqual
         
-        case RollTwoNoteIntervalIdentificationNoLines
-        case RollTwoNoteIntervalIdentificationWithLines
-        case RollTwoNoteIntervalIdentificationWithInvertedLines
-        case RollThreeNoteInnerIntervalsIdentificationNoLines
-        case RollThreeNoteInnerIntervalsIdentificationWithLines
-        case RollThreeNoteInnerIntervalsIdentificationWithInvertedLines
-        case RollThreeNoteOuterIntervalIdentificationNoLines
-        case RollThreeNoteOuterIntervalIdentificationWithLines
-        case RollThreeNoteOuterIntervalIdentificationWithInvertedLines
-        case RollChordsAreInversionsNoLines
-        case RollChordsAreInversionsWithLines
-        case RollChordsAreInversionsWithInvertedLines
-        
-        case BothTwoNoteChordsAreEqualNoLines
-        case BothTwoNoteChordsAreEqualWithLines
-        case BothTwoNoteChordsAreEqualWithInvertedLines
-        case BothThreeNoteChordsAreEqualNoLines
-        case BothThreeNoteChordsAreEqualWithLines
-        case BothThreeNoteChordsAreEqualWithInvertedLines
+        case RollTwoNoteIntervalIdentification
+        case RollThreeNoteInnerIntervalsIdentification
+        case RollThreeNoteOuterIntervalIdentification
+        case RollChordsAreInversions
+        case RollTwoNoteIntervalsAreEqual
         
         var isScoreQuestion: Bool {
             switch self {
             case .ScoreTwoNoteIntervalIdentification,
                  .ScoreThreeNoteInnerIntervalsIdentification,
                  .ScoreThreeNoteOuterIntervalIdentification,
-                 .ScoreChordsAreInversions:
+                 .ScoreChordsAreInversions,
+                 .ScoreTwoNoteIntervalsAreEqual:
                 return true
             default:
                 return false
             }
         }
+    }
+    
+    enum IntervalLinesType: CaseIterable {
+        case None
+        case Lines
+        case InvertedLines
     }
 }

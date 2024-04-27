@@ -16,7 +16,6 @@ class LinesViewModel: ObservableObject {
     let barGeometry: GeometryProxy
     let beatGeometry: GeometryProxy
     let noteSize: CGFloat
-    let pageWidth: CGFloat
     
     var beamDirections: [Direction] {
         calculateDirections()
@@ -85,8 +84,7 @@ class LinesViewModel: ObservableObject {
         middleStaveNote: Note?,
         barGeometry: GeometryProxy,
         beatGeometry: GeometryProxy,
-        noteSize: CGFloat,
-        pageWidth: CGFloat
+        noteSize: CGFloat
     ) {
         self.beatBeamGroupChords = beamGroups
         self.positions = positions
@@ -94,7 +92,6 @@ class LinesViewModel: ObservableObject {
         self.barGeometry = barGeometry
         self.beatGeometry = beatGeometry
         self.noteSize = noteSize
-        self.pageWidth = pageWidth
     }
 }
 
@@ -392,7 +389,7 @@ extension LinesViewModel {
     }
     
     private func calculateStemThickness() -> CGFloat {
-        return self.pageWidth / 500
+        return self.beamThickness * 0.5
     }
     
     private func calculateTailThickness() -> CGFloat {

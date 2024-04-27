@@ -199,17 +199,23 @@ extension Note {
 }
 
 extension Note {
-    func increaseOctave() {
+    func increaseOctave(applyOctaveShift: Bool = true) {
         if let nextOctave = octave?.next {
             octave = nextOctave
-            octaveShift = .below
+            
+            if applyOctaveShift {
+                octaveShift = .below
+            }
         }
     }
 
-    func decreaseOctave() {
+    func decreaseOctave(applyOctaveShift: Bool = true) {
         if let prevOctave = octave?.prev {
             octave = prevOctave
-            octaveShift = .above
+            
+            if applyOctaveShift {
+                octaveShift = .above
+            }
         }
     }
 }

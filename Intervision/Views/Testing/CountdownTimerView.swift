@@ -12,11 +12,30 @@ struct CountdownTimerView: View {
     @StateObject var testingViewModel: TestingViewModel
     
     var body: some View {
-        Text("\(testingViewModel.countdown)")
-            .font(.largeTitle)
-            .onAppear {
-                testingViewModel.startCountdown()
+        ZStack {
+            Circle()
+                .stroke(lineWidth: 20)
+                .opacity(0.3)
+                .foregroundColor(Color.gray)
+
+            Circle()
+                .trim(from: 0, to: testingViewModel.progress)
+                .stroke(Color(red: 2 * (1 - testingViewModel.progress), green: 2 * testingViewModel.progress, blue: 0), lineWidth: 20)
+                .rotationEffect(Angle(degrees: -90))
+
+            if testingViewModel.countdown == 0 {
+                Image(systemName: "play.fill")
+                    .font(.largeTitle)
+            } else {
+                Text("\(testingViewModel.countdown)")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
             }
+        }
+        .padding()
+        .onAppear {
+            testingViewModel.startCountdown()
+        }
     }
 }
 

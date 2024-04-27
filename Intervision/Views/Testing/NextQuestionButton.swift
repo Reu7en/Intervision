@@ -17,12 +17,16 @@ struct NextQuestionButton: View {
                 testingViewModel.goToResults()
             } label: {
                 Image(systemName: "flag.checkered")
+                    .font(.title)
+                    .padding()
             }
         } else {
             Button {
                 testingViewModel.goToNextQuestion()
             } label: {
                 Image(systemName: "arrow.right")
+                    .font(.title)
+                    .padding()
             }
         }
     }

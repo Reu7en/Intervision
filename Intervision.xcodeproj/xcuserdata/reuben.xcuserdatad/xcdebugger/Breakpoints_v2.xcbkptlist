@@ -55,22 +55,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "2FBF6198-146E-4DA1-AC2B-4D1E8D5D8A2F"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Intervision/View Models/Score/LinesViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
-            landmarkName = "init(beamGroups:positions:middleStaveNote:barGeometry:beatGeometry:noteSize:pageWidth:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "2C1EB21D-18C6-42D4-9299-8108615D6ACA"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -78,8 +62,8 @@
             filePath = "Intervision/View Models/Score/BeatViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
             landmarkName = "calculatePositions()"
             landmarkType = "7">
          </BreakpointContent>
@@ -394,22 +378,6 @@
             startingLineNumber = "400"
             endingLineNumber = "400"
             landmarkName = "updateBar(barToUpdate:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "EEDA0821-D569-4D6E-A5E8-94E8E0E1748D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Intervision/View Models/Score/BeatViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
-            landmarkName = "init(noteGrid:barGeometry:beatGeometry:beamGroupChords:middleStaveNote:pageWidth:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -47,11 +47,11 @@ struct TestingHomeView: View {
                             )
                             .shadow(radius: 10)
                     case .Practice:
-                        Text("Practice")
+                        PracticeView()
                     case .Questions:
                         QuestionsView(testingViewModel: testingViewModel)
                     case .Results:
-                        Text("Results")
+                        ResultsView()
                     }
                     
                     Spacer()

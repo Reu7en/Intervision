@@ -22,6 +22,7 @@ struct QuestionsView: View {
                     switch testingViewModel.presentedQuestionView {
                     case .CountdownTimer:
                         CountdownTimerView(testingViewModel: testingViewModel)
+                            .frame(width: geometry.size.width / 3, height: geometry.size.height / 3)
                     case .Question:
                         if let testSession = testingViewModel.testSession {
                             switch testSession.questions[testingViewModel.currentQuestion].type {
@@ -33,42 +34,18 @@ struct QuestionsView: View {
                                 ScoreThreeNoteOuterIntervalIdentificationView(testingViewModel: testingViewModel)
                             case .ScoreChordsAreInversions:
                                 ScoreChordsAreInversionsView(testingViewModel: testingViewModel)
-                            case .RollTwoNoteIntervalIdentificationNoLines:
-                                RollTwoNoteIntervalIdentificationNoLinesView(testingViewModel: testingViewModel)
-                            case .RollTwoNoteIntervalIdentificationWithLines:
-                                RollTwoNoteIntervalIdentificationWithLinesView(testingViewModel: testingViewModel)
-                            case .RollTwoNoteIntervalIdentificationWithInvertedLines:
-                                RollTwoNoteIntervalIdentificationWithInvertedLinesView(testingViewModel: testingViewModel)
-                            case .RollThreeNoteInnerIntervalsIdentificationNoLines:
-                                RollThreeNoteInnerIntervalsIdentificationNoLinesView(testingViewModel: testingViewModel)
-                            case .RollThreeNoteInnerIntervalsIdentificationWithLines:
-                                RollThreeNoteInnerIntervalsIdentificationWithLinesView(testingViewModel: testingViewModel)
-                            case .RollThreeNoteInnerIntervalsIdentificationWithInvertedLines:
-                                RollThreeNoteInnerIntervalsIdentificationWithInvertedLinesView(testingViewModel: testingViewModel)
-                            case .RollThreeNoteOuterIntervalIdentificationNoLines:
-                                RollThreeNoteOuterIntervalIdentificationNoLinesView(testingViewModel: testingViewModel)
-                            case .RollThreeNoteOuterIntervalIdentificationWithLines:
-                                RollThreeNoteOuterIntervalIdentificationWithLinesView(testingViewModel: testingViewModel)
-                            case .RollThreeNoteOuterIntervalIdentificationWithInvertedLines:
-                                RollThreeNoteOuterIntervalIdentificationWithInvertedLinesView(testingViewModel: testingViewModel)
-                            case .RollChordsAreInversionsNoLines:
-                                RollChordsAreInversionsNoLinesView(testingViewModel: testingViewModel)
-                            case .RollChordsAreInversionsWithLines:
-                                RollChordsAreInversionsWithLinesView(testingViewModel: testingViewModel)
-                            case .RollChordsAreInversionsWithInvertedLines:
-                                RollChordsAreInversionsWithInvertedLinesView(testingViewModel: testingViewModel)
-                            case .BothTwoNoteChordsAreEqualNoLines:
-                                BothTwoNoteChordsAreEqualNoLinesView(testingViewModel: testingViewModel)
-                            case .BothTwoNoteChordsAreEqualWithLines:
-                                BothTwoNoteChordsAreEqualWithLinesView(testingViewModel: testingViewModel)
-                            case .BothTwoNoteChordsAreEqualWithInvertedLines:
-                                BothTwoNoteChordsAreEqualWithInvertedLinesView(testingViewModel: testingViewModel)
-                            case .BothThreeNoteChordsAreEqualNoLines:
-                                BothThreeNoteChordsAreEqualNoLinesView(testingViewModel: testingViewModel)
-                            case .BothThreeNoteChordsAreEqualWithLines:
-                                BothThreeNoteChordsAreEqualWithLinesView(testingViewModel: testingViewModel)
-                            case .BothThreeNoteChordsAreEqualWithInvertedLines:
-                                BothThreeNoteChordsAreEqualWithInvertedLinesView(testingViewModel: testingViewModel)
+                            case .ScoreTwoNoteIntervalsAreEqual:
+                                ScoreTwoNoteIntervalsAreEqualView(testingViewModel: testingViewModel)
+                            case .RollTwoNoteIntervalIdentification:
+                                RollTwoNoteIntervalIdentificationView(testingViewModel: testingViewModel)
+                            case .RollThreeNoteInnerIntervalsIdentification:
+                                RollThreeNoteInnerIntervalsIdentificationView(testingViewModel: testingViewModel)
+                            case .RollThreeNoteOuterIntervalIdentification:
+                                RollThreeNoteOuterIntervalIdentificationView(testingViewModel: testingViewModel)
+                            case .RollChordsAreInversions:
+                                RollChordsAreInversionsView(testingViewModel: testingViewModel)
+                            case .RollTwoNoteIntervalsAreEqual:
+                                RollTwoNoteIntervalsAreEqualView(testingViewModel: testingViewModel)
                             }
                         }
                     }

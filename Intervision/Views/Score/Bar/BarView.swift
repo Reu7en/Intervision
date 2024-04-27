@@ -83,8 +83,7 @@ struct BarView: View {
                                                         barGeometry: geometry,
                                                         beatGeometry: beatGeometry,
                                                         beamGroupChords: barViewModel.beamGroupChords[beatIndex],
-                                                        middleStaveNote: barViewModel.middleStaveNote,
-                                                        pageWidth: barViewModel.pageWidth
+                                                        middleStaveNote: barViewModel.middleStaveNote
                                                     )
                                                 )
                                             }
@@ -103,5 +102,5 @@ struct BarView: View {
 }
 
 #Preview {
-    BarView(barViewModel: BarViewModel(bar: Bar(chords: [], clef: .Treble, timeSignature: .common, repeat: nil, doubleLine: false, keySignature: .CMajor), pageWidth: .zero))
+    BarView(barViewModel: BarViewModel(bar: Bar(chords: [], clef: .Treble, timeSignature: .common, repeat: nil, doubleLine: false, keySignature: .CMajor)))
 }

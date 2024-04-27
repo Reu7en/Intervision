@@ -44,8 +44,7 @@ struct BeatView: View {
                     middleStaveNote: beatViewModel.middleStaveNote,
                     barGeometry: beatViewModel.barGeometry,
                     beatGeometry: beatViewModel.beatGeometry, 
-                    noteSize: beatViewModel.noteSize, 
-                    pageWidth: beatViewModel.pageWidth
+                    noteSize: beatViewModel.noteSize
                 )
             )
         }
@@ -54,6 +53,6 @@ struct BeatView: View {
 
 #Preview {
     GeometryReader { geometry in
-        BeatView(beatViewModel: BeatViewModel(noteGrid: [], barGeometry: geometry, beatGeometry: geometry, beamGroupChords: [], middleStaveNote: nil, pageWidth: .zero))
+        BeatView(beatViewModel: BeatViewModel(noteGrid: [], barGeometry: geometry, beatGeometry: geometry, beamGroupChords: [], middleStaveNote: nil))
     }
 }

@@ -11,8 +11,8 @@ struct TestingRegistrationView: View {
     
     @StateObject var testingViewModel: TestingViewModel
     
-    @State private var showTesterIdInformation = false
     @State private var isSliding = false
+    @State private var showTesterIdAlert = false
     @State private var showTutorialAlert = false
     @State private var showPracticeAlert = false
     
@@ -26,14 +26,20 @@ struct TestingRegistrationView: View {
                     .padding()
                 
                 HStack {
-                    TextField("Tester ID", text: $testingViewModel.id, prompt: Text(showTesterIdInformation ? "If you have completed any tests before input your Tester ID here, OTHERWISE LEAVE BLANK!" : "Example: 12345678-abcd-4ef0-9876-0123456789ab"))
+                    TextField("Tester ID", text: $testingViewModel.id, prompt: Text("Example: 12345678-abcd-4ef0-9876-0123456789ab"))
                         .focused($testerIdFieldFocused)
                     
                     Button {
                         testerIdFieldFocused = false
-                        showTesterIdInformation.toggle()
+                        showTesterIdAlert = true
                     } label: {
                         Image(systemName: "questionmark")
+                    }
+                    .alert(isPresented: $showTesterIdAlert) {
+                        Alert(
+                            title: Text("Input Your Tester ID Here"),
+                            message: Text("If this is your first time completing any tests, you should leave this field blank! A unique Tester ID will be generated for you automatically.\n\nIf you have completed any tests before, you can find your Tester ID within your results data.")
+                        )
                     }
                 }
                 
@@ -161,6 +167,7 @@ struct TestingRegistrationView: View {
                 } label: {
                     Text("Start Tests")
                         .font(.title2)
+                        .padding()
                 }
                 .alert("Would you like to view the tutorial first?", isPresented: $showTutorialAlert) {
                     Button {

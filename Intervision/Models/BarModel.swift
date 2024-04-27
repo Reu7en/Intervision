@@ -75,7 +75,7 @@ extension Bar {
         case RepeatEnd
     }
     
-    enum KeySignature {
+    enum KeySignature: CaseIterable {
         // Major keys
         case CMajor
         case GMajor

@@ -18,7 +18,6 @@ class BarViewModel: ObservableObject {
     let showTime: Bool
     let showName: Bool
     let partName: String
-    let pageWidth: CGFloat
     
     var rows: Int {
         calculateRows()
@@ -65,8 +64,7 @@ class BarViewModel: ObservableObject {
         showKey: Bool = false,
         showTime: Bool = false,
         showName: Bool = false,
-        partName: String = "",
-        pageWidth: CGFloat
+        partName: String = ""
     ) {
         self.bar = bar
         self.gaps = gaps
@@ -76,7 +74,6 @@ class BarViewModel: ObservableObject {
         self.showTime = showTime
         self.showName = showName
         self.partName = partName
-        self.pageWidth = pageWidth
     }
 }
 

@@ -46,6 +46,30 @@
 		1B370D8B2BDC3F7500F21E39 /* QuestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D8A2BDC3F7500F21E39 /* QuestionsView.swift */; };
 		1B370D8D2BDC3F7C00F21E39 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D8C2BDC3F7C00F21E39 /* ResultsView.swift */; };
 		1B370D8F2BDC4C4E00F21E39 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B370D8E2BDC4C4E00F21E39 /* LaunchScreen.storyboard */; };
+		1B370D912BDD245E00F21E39 /* CountdownTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D902BDD245E00F21E39 /* CountdownTimerView.swift */; };
+		1B370D942BDD294A00F21E39 /* ScoreTwoNoteIntervalIdentificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D932BDD294A00F21E39 /* ScoreTwoNoteIntervalIdentificationView.swift */; };
+		1B370D962BDD295D00F21E39 /* ScoreThreeNoteInnerIntervalsIdentificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D952BDD295D00F21E39 /* ScoreThreeNoteInnerIntervalsIdentificationView.swift */; };
+		1B370D982BDD297600F21E39 /* ScoreThreeNoteOuterIntervalIdentificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D972BDD297600F21E39 /* ScoreThreeNoteOuterIntervalIdentificationView.swift */; };
+		1B370D9A2BDD298400F21E39 /* ScoreChordsAreInversionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D992BDD298400F21E39 /* ScoreChordsAreInversionsView.swift */; };
+		1B370D9C2BDD299A00F21E39 /* RollTwoNoteIntervalIdentificationNoLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D9B2BDD299A00F21E39 /* RollTwoNoteIntervalIdentificationNoLinesView.swift */; };
+		1B370D9E2BDD29AD00F21E39 /* RollTwoNoteIntervalIdentificationWithLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D9D2BDD29AD00F21E39 /* RollTwoNoteIntervalIdentificationWithLinesView.swift */; };
+		1B370DA02BDD29B800F21E39 /* RollTwoNoteIntervalIdentificationWithInvertedLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D9F2BDD29B800F21E39 /* RollTwoNoteIntervalIdentificationWithInvertedLinesView.swift */; };
+		1B370DA22BDD29C400F21E39 /* RollThreeNoteInnerIntervalsIdentificationNoLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DA12BDD29C400F21E39 /* RollThreeNoteInnerIntervalsIdentificationNoLinesView.swift */; };
+		1B370DA42BDD29DB00F21E39 /* RollThreeNoteInnerIntervalsIdentificationWithLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DA32BDD29DB00F21E39 /* RollThreeNoteInnerIntervalsIdentificationWithLinesView.swift */; };
+		1B370DA62BDD2A2100F21E39 /* RollThreeNoteInnerIntervalsIdentificationWithInvertedLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DA52BDD2A2100F21E39 /* RollThreeNoteInnerIntervalsIdentificationWithInvertedLinesView.swift */; };
+		1B370DA82BDD2A2F00F21E39 /* RollThreeNoteOuterIntervalIdentificationNoLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DA72BDD2A2F00F21E39 /* RollThreeNoteOuterIntervalIdentificationNoLinesView.swift */; };
+		1B370DAA2BDD2A3E00F21E39 /* RollThreeNoteOuterIntervalIdentificationWithLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DA92BDD2A3E00F21E39 /* RollThreeNoteOuterIntervalIdentificationWithLinesView.swift */; };
+		1B370DAC2BDD2A4900F21E39 /* RollThreeNoteOuterIntervalIdentificationWithInvertedLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DAB2BDD2A4900F21E39 /* RollThreeNoteOuterIntervalIdentificationWithInvertedLinesView.swift */; };
+		1B370DAE2BDD2A5300F21E39 /* RollChordsAreInversionsNoLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DAD2BDD2A5300F21E39 /* RollChordsAreInversionsNoLinesView.swift */; };
+		1B370DB02BDD2A5F00F21E39 /* RollChordsAreInversionsWithLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DAF2BDD2A5F00F21E39 /* RollChordsAreInversionsWithLinesView.swift */; };
+		1B370DB22BDD2A6A00F21E39 /* RollChordsAreInversionsWithInvertedLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DB12BDD2A6A00F21E39 /* RollChordsAreInversionsWithInvertedLinesView.swift */; };
+		1B370DB42BDD2A7900F21E39 /* BothTwoNoteChordsAreEqualNoLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DB32BDD2A7900F21E39 /* BothTwoNoteChordsAreEqualNoLinesView.swift */; };
+		1B370DB62BDD2A8600F21E39 /* BothTwoNoteChordsAreEqualWithLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DB52BDD2A8600F21E39 /* BothTwoNoteChordsAreEqualWithLinesView.swift */; };
+		1B370DB82BDD2A9100F21E39 /* BothTwoNoteChordsAreEqualWithInvertedLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DB72BDD2A9100F21E39 /* BothTwoNoteChordsAreEqualWithInvertedLinesView.swift */; };
+		1B370DBA2BDD2A9D00F21E39 /* BothThreeNoteChordsAreEqualNoLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DB92BDD2A9D00F21E39 /* BothThreeNoteChordsAreEqualNoLinesView.swift */; };
+		1B370DBC2BDD2AAA00F21E39 /* BothThreeNoteChordsAreEqualWithLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DBB2BDD2AAA00F21E39 /* BothThreeNoteChordsAreEqualWithLinesView.swift */; };
+		1B370DBE2BDD2AB400F21E39 /* BothThreeNoteChordsAreEqualWithInvertedLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DBD2BDD2AB400F21E39 /* BothThreeNoteChordsAreEqualWithInvertedLinesView.swift */; };
+		1B370DC02BDD2DC200F21E39 /* NextQuestionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DBF2BDD2DC200F21E39 /* NextQuestionButton.swift */; };
 		1B561F772B784CF3001860E5 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F762B784CF3001860E5 /* HomeView.swift */; };
 		1B561F792B79219F001860E5 /* BarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F782B79219F001860E5 /* BarView.swift */; };
 		1B561F7B2B793216001860E5 /* BarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F7A2B793216001860E5 /* BarViewModel.swift */; };
@@ -113,6 +137,30 @@
 		1B370D8A2BDC3F7500F21E39 /* QuestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsView.swift; sourceTree = "<group>"; };
 		1B370D8C2BDC3F7C00F21E39 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 		1B370D8E2BDC4C4E00F21E39 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1B370D902BDD245E00F21E39 /* CountdownTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownTimerView.swift; sourceTree = "<group>"; };
+		1B370D932BDD294A00F21E39 /* ScoreTwoNoteIntervalIdentificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreTwoNoteIntervalIdentificationView.swift; sourceTree = "<group>"; };
+		1B370D952BDD295D00F21E39 /* ScoreThreeNoteInnerIntervalsIdentificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreThreeNoteInnerIntervalsIdentificationView.swift; sourceTree = "<group>"; };
+		1B370D972BDD297600F21E39 /* ScoreThreeNoteOuterIntervalIdentificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreThreeNoteOuterIntervalIdentificationView.swift; sourceTree = "<group>"; };
+		1B370D992BDD298400F21E39 /* ScoreChordsAreInversionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreChordsAreInversionsView.swift; sourceTree = "<group>"; };
+		1B370D9B2BDD299A00F21E39 /* RollTwoNoteIntervalIdentificationNoLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollTwoNoteIntervalIdentificationNoLinesView.swift; sourceTree = "<group>"; };
+		1B370D9D2BDD29AD00F21E39 /* RollTwoNoteIntervalIdentificationWithLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollTwoNoteIntervalIdentificationWithLinesView.swift; sourceTree = "<group>"; };
+		1B370D9F2BDD29B800F21E39 /* RollTwoNoteIntervalIdentificationWithInvertedLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollTwoNoteIntervalIdentificationWithInvertedLinesView.swift; sourceTree = "<group>"; };
+		1B370DA12BDD29C400F21E39 /* RollThreeNoteInnerIntervalsIdentificationNoLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollThreeNoteInnerIntervalsIdentificationNoLinesView.swift; sourceTree = "<group>"; };
+		1B370DA32BDD29DB00F21E39 /* RollThreeNoteInnerIntervalsIdentificationWithLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollThreeNoteInnerIntervalsIdentificationWithLinesView.swift; sourceTree = "<group>"; };
+		1B370DA52BDD2A2100F21E39 /* RollThreeNoteInnerIntervalsIdentificationWithInvertedLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollThreeNoteInnerIntervalsIdentificationWithInvertedLinesView.swift; sourceTree = "<group>"; };
+		1B370DA72BDD2A2F00F21E39 /* RollThreeNoteOuterIntervalIdentificationNoLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollThreeNoteOuterIntervalIdentificationNoLinesView.swift; sourceTree = "<group>"; };
+		1B370DA92BDD2A3E00F21E39 /* RollThreeNoteOuterIntervalIdentificationWithLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollThreeNoteOuterIntervalIdentificationWithLinesView.swift; sourceTree = "<group>"; };
+		1B370DAB2BDD2A4900F21E39 /* RollThreeNoteOuterIntervalIdentificationWithInvertedLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollThreeNoteOuterIntervalIdentificationWithInvertedLinesView.swift; sourceTree = "<group>"; };
+		1B370DAD2BDD2A5300F21E39 /* RollChordsAreInversionsNoLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollChordsAreInversionsNoLinesView.swift; sourceTree = "<group>"; };
+		1B370DAF2BDD2A5F00F21E39 /* RollChordsAreInversionsWithLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollChordsAreInversionsWithLinesView.swift; sourceTree = "<group>"; };
+		1B370DB12BDD2A6A00F21E39 /* RollChordsAreInversionsWithInvertedLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollChordsAreInversionsWithInvertedLinesView.swift; sourceTree = "<group>"; };
+		1B370DB32BDD2A7900F21E39 /* BothTwoNoteChordsAreEqualNoLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BothTwoNoteChordsAreEqualNoLinesView.swift; sourceTree = "<group>"; };
+		1B370DB52BDD2A8600F21E39 /* BothTwoNoteChordsAreEqualWithLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BothTwoNoteChordsAreEqualWithLinesView.swift; sourceTree = "<group>"; };
+		1B370DB72BDD2A9100F21E39 /* BothTwoNoteChordsAreEqualWithInvertedLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BothTwoNoteChordsAreEqualWithInvertedLinesView.swift; sourceTree = "<group>"; };
+		1B370DB92BDD2A9D00F21E39 /* BothThreeNoteChordsAreEqualNoLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BothThreeNoteChordsAreEqualNoLinesView.swift; sourceTree = "<group>"; };
+		1B370DBB2BDD2AAA00F21E39 /* BothThreeNoteChordsAreEqualWithLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BothThreeNoteChordsAreEqualWithLinesView.swift; sourceTree = "<group>"; };
+		1B370DBD2BDD2AB400F21E39 /* BothThreeNoteChordsAreEqualWithInvertedLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BothThreeNoteChordsAreEqualWithInvertedLinesView.swift; sourceTree = "<group>"; };
+		1B370DBF2BDD2DC200F21E39 /* NextQuestionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextQuestionButton.swift; sourceTree = "<group>"; };
 		1B561F762B784CF3001860E5 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		1B561F782B79219F001860E5 /* BarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarView.swift; sourceTree = "<group>"; };
 		1B561F7A2B793216001860E5 /* BarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarViewModel.swift; sourceTree = "<group>"; };
@@ -263,12 +311,15 @@
 		1B0FEE452BDC07DD00068B3F /* Testing */ = {
 			isa = PBXGroup;
 			children = (
+				1B370D922BDD250700F21E39 /* Questions */,
 				1B0FEE462BDC082D00068B3F /* TestingHomeView.swift */,
 				1B0FEE4E2BDC140300068B3F /* TestingRegistrationView.swift */,
 				1B370D862BDC3E6B00F21E39 /* TutorialView.swift */,
 				1B370D882BDC3F6B00F21E39 /* PracticeView.swift */,
 				1B370D8A2BDC3F7500F21E39 /* QuestionsView.swift */,
 				1B370D8C2BDC3F7C00F21E39 /* ResultsView.swift */,
+				1B370D902BDD245E00F21E39 /* CountdownTimerView.swift */,
+				1B370DBF2BDD2DC200F21E39 /* NextQuestionButton.swift */,
 			);
 			path = Testing;
 			sourceTree = "<group>";
@@ -285,6 +336,35 @@
 				1B0E44B12B928A1600C0E12C /* RollView.swift */,
 			);
 			path = Roll;
+			sourceTree = "<group>";
+		};
+		1B370D922BDD250700F21E39 /* Questions */ = {
+			isa = PBXGroup;
+			children = (
+				1B370D932BDD294A00F21E39 /* ScoreTwoNoteIntervalIdentificationView.swift */,
+				1B370D952BDD295D00F21E39 /* ScoreThreeNoteInnerIntervalsIdentificationView.swift */,
+				1B370D972BDD297600F21E39 /* ScoreThreeNoteOuterIntervalIdentificationView.swift */,
+				1B370D992BDD298400F21E39 /* ScoreChordsAreInversionsView.swift */,
+				1B370D9B2BDD299A00F21E39 /* RollTwoNoteIntervalIdentificationNoLinesView.swift */,
+				1B370D9D2BDD29AD00F21E39 /* RollTwoNoteIntervalIdentificationWithLinesView.swift */,
+				1B370D9F2BDD29B800F21E39 /* RollTwoNoteIntervalIdentificationWithInvertedLinesView.swift */,
+				1B370DA12BDD29C400F21E39 /* RollThreeNoteInnerIntervalsIdentificationNoLinesView.swift */,
+				1B370DA32BDD29DB00F21E39 /* RollThreeNoteInnerIntervalsIdentificationWithLinesView.swift */,
+				1B370DA52BDD2A2100F21E39 /* RollThreeNoteInnerIntervalsIdentificationWithInvertedLinesView.swift */,
+				1B370DA72BDD2A2F00F21E39 /* RollThreeNoteOuterIntervalIdentificationNoLinesView.swift */,
+				1B370DA92BDD2A3E00F21E39 /* RollThreeNoteOuterIntervalIdentificationWithLinesView.swift */,
+				1B370DAB2BDD2A4900F21E39 /* RollThreeNoteOuterIntervalIdentificationWithInvertedLinesView.swift */,
+				1B370DAD2BDD2A5300F21E39 /* RollChordsAreInversionsNoLinesView.swift */,
+				1B370DAF2BDD2A5F00F21E39 /* RollChordsAreInversionsWithLinesView.swift */,
+				1B370DB12BDD2A6A00F21E39 /* RollChordsAreInversionsWithInvertedLinesView.swift */,
+				1B370DB32BDD2A7900F21E39 /* BothTwoNoteChordsAreEqualNoLinesView.swift */,
+				1B370DB52BDD2A8600F21E39 /* BothTwoNoteChordsAreEqualWithLinesView.swift */,
+				1B370DB72BDD2A9100F21E39 /* BothTwoNoteChordsAreEqualWithInvertedLinesView.swift */,
+				1B370DB92BDD2A9D00F21E39 /* BothThreeNoteChordsAreEqualNoLinesView.swift */,
+				1B370DBB2BDD2AAA00F21E39 /* BothThreeNoteChordsAreEqualWithLinesView.swift */,
+				1B370DBD2BDD2AB400F21E39 /* BothThreeNoteChordsAreEqualWithInvertedLinesView.swift */,
+			);
+			path = Questions;
 			sourceTree = "<group>";
 		};
 		1B9435912B7EBFEA00B57DA7 /* Bar */ = {
@@ -503,20 +583,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B370DA82BDD2A2F00F21E39 /* RollThreeNoteOuterIntervalIdentificationNoLinesView.swift in Sources */,
+				1B370DBC2BDD2AAA00F21E39 /* BothThreeNoteChordsAreEqualWithLinesView.swift in Sources */,
 				1BBC978B2B76A3C7001C953C /* TestLoad.swift in Sources */,
 				1B0E44B02B92899400C0E12C /* EmptyRollView.swift in Sources */,
 				1B231FFB2B8E10B9003AB714 /* RollInspectorView.swift in Sources */,
 				1BBC97802B759D8E001C953C /* GraceModel.swift in Sources */,
+				1B370D962BDD295D00F21E39 /* ScoreThreeNoteInnerIntervalsIdentificationView.swift in Sources */,
 				1B561F792B79219F001860E5 /* BarView.swift in Sources */,
 				1B9435A72B85703600B57DA7 /* KeyView.swift in Sources */,
 				1BBC97842B7699EB001C953C /* MusicXMLDataService.swift in Sources */,
+				1B370DA42BDD29DB00F21E39 /* RollThreeNoteInnerIntervalsIdentificationWithLinesView.swift in Sources */,
 				1B9435A92B857A8D00B57DA7 /* TimeSignatureView.swift in Sources */,
 				1B9435952B7ED65B00B57DA7 /* NoteHeadView.swift in Sources */,
 				1B9435A52B856D5900B57DA7 /* ClefView.swift in Sources */,
 				1B370D872BDC3E6B00F21E39 /* TutorialView.swift in Sources */,
+				1B370DA22BDD29C400F21E39 /* RollThreeNoteInnerIntervalsIdentificationNoLinesView.swift in Sources */,
 				1B0B52492BC1657400225A11 /* LinesView.swift in Sources */,
+				1B370DAA2BDD2A3E00F21E39 /* RollThreeNoteOuterIntervalIdentificationWithLinesView.swift in Sources */,
+				1B370D982BDD297600F21E39 /* ScoreThreeNoteOuterIntervalIdentificationView.swift in Sources */,
 				1B0B52402BB7877800225A11 /* RollBarViewModel.swift in Sources */,
 				1B97BEDC2B71C58E007D0BE5 /* ScoreModel.swift in Sources */,
+				1B370DBA2BDD2A9D00F21E39 /* BothThreeNoteChordsAreEqualNoLinesView.swift in Sources */,
+				1B370DAE2BDD2A5300F21E39 /* RollChordsAreInversionsNoLinesView.swift in Sources */,
 				1B0E44B22B928A1600C0E12C /* RollView.swift in Sources */,
 				1B97BEEA2B726CC1007D0BE5 /* ScoreView.swift in Sources */,
 				1B12C9E72B75472200DC87DC /* StaveModel.swift in Sources */,
@@ -526,31 +615,46 @@
 				1B0FEE512BDC152800068B3F /* TestingViewModel.swift in Sources */,
 				1B0FEE472BDC082D00068B3F /* TestingHomeView.swift in Sources */,
 				1B0FEE492BDC0A9D00068B3F /* TesterModel.swift in Sources */,
+				1B370DB82BDD2A9100F21E39 /* BothTwoNoteChordsAreEqualWithInvertedLinesView.swift in Sources */,
 				1B0E44A02B92516500C0E12C /* IntervalLinesViewModel.swift in Sources */,
 				1B0FEE4F2BDC140300068B3F /* TestingRegistrationView.swift in Sources */,
+				1B370D942BDD294A00F21E39 /* ScoreTwoNoteIntervalIdentificationView.swift in Sources */,
+				1B370DB22BDD2A6A00F21E39 /* RollChordsAreInversionsWithInvertedLinesView.swift in Sources */,
+				1B370DAC2BDD2A4900F21E39 /* RollThreeNoteOuterIntervalIdentificationWithInvertedLinesView.swift in Sources */,
+				1B370DC02BDD2DC200F21E39 /* NextQuestionButton.swift in Sources */,
 				1B370D8D2BDC3F7C00F21E39 /* ResultsView.swift in Sources */,
 				1B370D892BDC3F6B00F21E39 /* PracticeView.swift in Sources */,
 				1B0E44AB2B9284E600C0E12C /* BarRowsView.swift in Sources */,
 				1B0FEE4B2BDC0C5500068B3F /* TestSessionModel.swift in Sources */,
 				1B0E44A72B9260A900C0E12C /* InspectorButton.swift in Sources */,
+				1B370DB42BDD2A7900F21E39 /* BothTwoNoteChordsAreEqualNoLinesView.swift in Sources */,
 				1B0B524B2BC165D600225A11 /* LinesViewModel.swift in Sources */,
+				1B370DA02BDD29B800F21E39 /* RollTwoNoteIntervalIdentificationWithInvertedLinesView.swift in Sources */,
 				1B97BEE22B71C617007D0BE5 /* NoteModel.swift in Sources */,
+				1B370DBE2BDD2AB400F21E39 /* BothThreeNoteChordsAreEqualWithInvertedLinesView.swift in Sources */,
+				1B370DA62BDD2A2100F21E39 /* RollThreeNoteInnerIntervalsIdentificationWithInvertedLinesView.swift in Sources */,
 				1B561F772B784CF3001860E5 /* HomeView.swift in Sources */,
 				1B9435992B7F153100B57DA7 /* RestView.swift in Sources */,
 				1B97BEE02B71C607007D0BE5 /* ChordModel.swift in Sources */,
 				1B0E449E2B92510F00C0E12C /* IntervalLinesView.swift in Sources */,
+				1B370D9A2BDD298400F21E39 /* ScoreChordsAreInversionsView.swift in Sources */,
+				1B370DB62BDD2A8600F21E39 /* BothTwoNoteChordsAreEqualWithLinesView.swift in Sources */,
 				1B9435932B7EBFF900B57DA7 /* StaveView.swift in Sources */,
 				1B0E44B82B96AE8C00C0E12C /* LineModel.swift in Sources */,
 				1B97BEE62B71D917007D0BE5 /* AppDelegate.swift in Sources */,
+				1B370DB02BDD2A5F00F21E39 /* RollChordsAreInversionsWithLinesView.swift in Sources */,
 				1B0E44B52B928A8400C0E12C /* RollBarHeader.swift in Sources */,
 				1B0E44AD2B92892800C0E12C /* PianoKeysHeader.swift in Sources */,
+				1B370D912BDD245E00F21E39 /* CountdownTimerView.swift in Sources */,
 				1BBF21A32B9FFB160097D5A3 /* ScoreManager.swift in Sources */,
 				1B561F7B2B793216001860E5 /* BarViewModel.swift in Sources */,
 				1B231FF52B8A5FB9003AB714 /* RollViewModel.swift in Sources */,
 				1B0B524F2BC16DE800225A11 /* BeatView.swift in Sources */,
+				1B370D9C2BDD299A00F21E39 /* RollTwoNoteIntervalIdentificationNoLinesView.swift in Sources */,
 				1B97BECA2B71C167007D0BE5 /* IntervisionApp.swift in Sources */,
 				1B0E44A22B92519800C0E12C /* SegmentModel.swift in Sources */,
 				1B97BEED2B7279CF007D0BE5 /* PageView.swift in Sources */,
+				1B370D9E2BDD29AD00F21E39 /* RollTwoNoteIntervalIdentificationWithLinesView.swift in Sources */,
 				1B231FF32B895153003AB714 /* PianoKeysView.swift in Sources */,
 				1B370D8B2BDC3F7500F21E39 /* QuestionsView.swift in Sources */,
 				1BBC978D2B76A50D001C953C /* ScoreViewModel.swift in Sources */,

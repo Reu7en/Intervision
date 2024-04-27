@@ -24,14 +24,40 @@ struct Question: Identifiable {
 extension Question {
     enum QuestionType: CaseIterable {
         case ScoreTwoNoteIntervalIdentification
-        case RollTwoNoteIntervalIdentification
         case ScoreThreeNoteInnerIntervalsIdentification
-        case RollThreeNoteInnerIntervalsIdentification
         case ScoreThreeNoteOuterIntervalIdentification
-        case RollThreeNoteOuterIntervalIdentification
         case ScoreChordsAreInversions
-        case RollChordsAreInversions
-        case BothTwoNoteIntervalsAreEqual
-        case BothChordsAreEqual
+        
+        case RollTwoNoteIntervalIdentificationNoLines
+        case RollTwoNoteIntervalIdentificationWithLines
+        case RollTwoNoteIntervalIdentificationWithInvertedLines
+        case RollThreeNoteInnerIntervalsIdentificationNoLines
+        case RollThreeNoteInnerIntervalsIdentificationWithLines
+        case RollThreeNoteInnerIntervalsIdentificationWithInvertedLines
+        case RollThreeNoteOuterIntervalIdentificationNoLines
+        case RollThreeNoteOuterIntervalIdentificationWithLines
+        case RollThreeNoteOuterIntervalIdentificationWithInvertedLines
+        case RollChordsAreInversionsNoLines
+        case RollChordsAreInversionsWithLines
+        case RollChordsAreInversionsWithInvertedLines
+        
+        case BothTwoNoteChordsAreEqualNoLines
+        case BothTwoNoteChordsAreEqualWithLines
+        case BothTwoNoteChordsAreEqualWithInvertedLines
+        case BothThreeNoteChordsAreEqualNoLines
+        case BothThreeNoteChordsAreEqualWithLines
+        case BothThreeNoteChordsAreEqualWithInvertedLines
+        
+        var isScoreQuestion: Bool {
+            switch self {
+            case .ScoreTwoNoteIntervalIdentification,
+                 .ScoreThreeNoteInnerIntervalsIdentification,
+                 .ScoreThreeNoteOuterIntervalIdentification,
+                 .ScoreChordsAreInversions:
+                return true
+            default:
+                return false
+            }
+        }
     }
 }

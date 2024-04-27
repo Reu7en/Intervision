@@ -72,9 +72,7 @@ struct TutorialView: View {
                 Button {
                     testingViewModel.practice = false
                     
-                    withAnimation(.easeInOut) {
-                        testingViewModel.presentedView = .Questions
-                    }
+                    testingViewModel.startTests()
                 } label: {
                     Text("No")
                 }

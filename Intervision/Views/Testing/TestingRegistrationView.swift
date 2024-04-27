@@ -26,7 +26,7 @@ struct TestingRegistrationView: View {
                     .padding()
                 
                 HStack {
-                    TextField("Tester ID", text: $testingViewModel.testerId, prompt: Text(showTesterIdInformation ? "If you have completed any tests before input your Tester ID here, OTHERWISE LEAVE BLANK!" : "Example: 12345678-abcd-4ef0-9876-0123456789ab"))
+                    TextField("Tester ID", text: $testingViewModel.id, prompt: Text(showTesterIdInformation ? "If you have completed any tests before input your Tester ID here, OTHERWISE LEAVE BLANK!" : "Example: 12345678-abcd-4ef0-9876-0123456789ab"))
                         .focused($testerIdFieldFocused)
                     
                     Button {
@@ -135,14 +135,14 @@ struct TestingRegistrationView: View {
                         get: { Double(testingViewModel.questionCount) },
                         set: { testingViewModel.questionCount = Int($0) }
                     ),
-                    in: Double(Question.QuestionType.allCases.count)...Double(5 * Question.QuestionType.allCases.count),
-                    step: Double(Question.QuestionType.allCases.count)
+                    in: 30...150,
+                    step: 30
                 ) {
                     Text("")
                 } minimumValueLabel: {
-                    Text(String(describing: Question.QuestionType.allCases.count))
+                    Text("\(30)")
                 } maximumValueLabel: {
-                    Text(String(describing: 5 * Question.QuestionType.allCases.count))
+                    Text("\(150)")
                 } onEditingChanged: { sliding in
                     isSliding = sliding
                 }
@@ -189,9 +189,7 @@ struct TestingRegistrationView: View {
                     Button {
                         testingViewModel.practice = false
                         
-                        withAnimation(.easeInOut) {
-                            testingViewModel.presentedView = .Questions
-                        }
+                        testingViewModel.startTests()
                     } label: {
                         Text("No")
                     }

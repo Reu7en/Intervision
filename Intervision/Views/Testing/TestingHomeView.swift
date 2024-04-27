@@ -49,7 +49,7 @@ struct TestingHomeView: View {
                     case .Practice:
                         Text("Practice")
                     case .Questions:
-                        Text("Questions")
+                        QuestionsView(testingViewModel: testingViewModel)
                     case .Results:
                         Text("Results")
                     }

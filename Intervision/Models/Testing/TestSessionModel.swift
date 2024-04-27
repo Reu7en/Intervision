@@ -9,9 +9,12 @@ import Foundation
 
 struct TestSession: Identifiable {
     let tester: Tester
-    let testCount: Int
+    let questionCount: Int
     
-    var questionsRemaining: [(Question.QuestionType, Int)]
+    var questions: [Question] {
+        generateQuestions()
+    }
+    
     var results: [(Question, Bool, Double)]
     
     // Identifiable
@@ -19,12 +22,29 @@ struct TestSession: Identifiable {
 
     init(
         tester: Tester,
-        testCount: Int
+        questionCount: Int
     ) {
         self.tester = tester
-        self.testCount = testCount
+        self.questionCount = questionCount
         self.results = []
-        self.questionsRemaining = Question.QuestionType.allCases.map { ($0, testCount / Question.QuestionType.allCases.count) }
         self.id = UUID()
+    }
+    
+    private func generateQuestions() -> [Question] {
+        var questions: [Question] = []
+        
+        for _ in 0..<(questionCount / 30) {
+            let scoreQuestions = Question.QuestionType.allCases.filter { $0.isScoreQuestion }
+            questions.append(contentsOf: scoreQuestions.flatMap { questionType in
+                Array(repeating: Question(type: questionType), count: 3)
+            })
+
+            let otherQuestions = Question.QuestionType.allCases.filter { !$0.isScoreQuestion }
+            questions.append(contentsOf: otherQuestions.map { Question(type: $0) })
+        }
+        
+        questions.shuffle()
+        
+        return questions
     }
 }

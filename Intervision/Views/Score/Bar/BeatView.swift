@@ -21,7 +21,8 @@ struct BeatView: View {
                     isHollow: beatViewModel.isHollow[chordIndex],
                     isDotted: beatViewModel.noteIsDotted[chordIndex]
                 )
-                .position(notePosition)
+                .position(notePosition.0)
+                .offset(x: beatViewModel.noteSize * CGFloat(notePosition.1) - CGFloat(notePosition.1) * beatViewModel.barGeometry.size.height / 70)
             }
         }
         

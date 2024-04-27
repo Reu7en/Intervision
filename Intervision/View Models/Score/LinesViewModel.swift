@@ -17,65 +17,21 @@ class LinesViewModel: ObservableObject {
     let beatGeometry: GeometryProxy
     let noteSize: CGFloat
     
-    var beamDirections: [Direction] {
-        calculateDirections()
-    }
-    
-    var beamLines: [Line] {
-        calculateLines().0
-    }
-    
-    var stemLines: [Line] {
-        calculateLines().1
-    }
-    
-    var tailLines: [Line] {
-        calculateLines().2
-    }
-    
-    var ledgerLines: [Line] {
-        calculateLines().3
-    }
-    
-    var timeModifications: [(CGPoint, Int)] {
-        calculateLines().4
-    }
-    
-    var idealStemLength: CGFloat {
-        calculateIdealStemLength()
-    }
-    
-    var minimumStemLength: CGFloat {
-        calculateMinimumStemLength()
-    }
-    
-    var beamThickness: CGFloat {
-        calculateBeamThickness()
-    }
-    
-    var stemThickness: CGFloat {
-        calculateStemThickness()
-    }
-    
-    var tailThickness: CGFloat {
-        calculateTailThickness()
-    }
-    
-    var ledgerThickness: CGFloat {
-        calculateLedgerThickness()
-    }
-    
-    var beamSpacing: CGFloat {
-        calculateBeamSpacing()
-    }
-    
-    var durations: [[Note.Duration]] {
-        calculateDurations()
-    }
-    
-    var numberOfBeamLines: [[Int]] {
-        calculateNumberOfBeamLines()
-    }
+    let beamDirections: [Direction]
+    let idealStemLength: CGFloat
+    let minimumStemLength: CGFloat
+    let beamThickness: CGFloat
+    let stemThickness: CGFloat
+    let tailThickness: CGFloat
+    let ledgerThickness: CGFloat
+    let beamSpacing: CGFloat
+    let durations: [[Note.Duration]]
+    let numberOfBeamLines: [[Int]]
+    let beamLines: [Line]
+    let stemLines: [Line]
+    let tailLines: [Line]
+    let ledgerLines: [Line]
+    let timeModifications: [(CGPoint, Int)]
     
     init
     (
@@ -92,12 +48,31 @@ class LinesViewModel: ObservableObject {
         self.barGeometry = barGeometry
         self.beatGeometry = beatGeometry
         self.noteSize = noteSize
+        
+        self.beamDirections = LinesViewModel.calculateDirections(beatBeamGroupChords: self.beatBeamGroupChords, middleStaveNote: self.middleStaveNote)
+        self.idealStemLength = LinesViewModel.calculateIdealStemLength(noteSize: self.noteSize)
+        self.minimumStemLength = LinesViewModel.calculateMinimumStemLength(idealStemLength: self.idealStemLength)
+        self.beamThickness = LinesViewModel.calculateBeamThickness(barGeometry: self.barGeometry)
+        self.stemThickness = LinesViewModel.calculateStemThickness(beamThickness: self.beamThickness)
+        self.tailThickness = LinesViewModel.calculateTailThickness(beamThickness: self.beamThickness)
+        self.ledgerThickness = LinesViewModel.calculateLedgerThickness(barGeometry: self.barGeometry)
+        self.beamSpacing = LinesViewModel.calculateBeamSpacing(idealStemLength: self.idealStemLength)
+        self.durations = LinesViewModel.calculateDurations(beatBeamGroupChords: self.beatBeamGroupChords)
+        self.numberOfBeamLines = LinesViewModel.calculateNumberOfBeamLines(durations: self.durations)
+        
+        let lines = LinesViewModel.calculateLines(beatBeamGroupChords: self.beatBeamGroupChords, beamDirections: self.beamDirections, positions: self.positions, numberOfBeamLines: self.numberOfBeamLines, barGeometry: self.barGeometry, idealStemLength: self.idealStemLength, stemThickness: self.stemThickness, noteSize: self.noteSize, beamSpacing: self.beamSpacing, minimumStemLength: self.minimumStemLength)
+        
+        self.beamLines = lines.0
+        self.stemLines = lines.1
+        self.tailLines = lines.2
+        self.ledgerLines = lines.3
+        self.timeModifications = lines.4
     }
 }
 
 // Functions
 extension LinesViewModel {
-    private func calculateDirections() -> [Direction] {
+    private static func calculateDirections(beatBeamGroupChords: [[Chord]], middleStaveNote: Note?) -> [Direction] {
         var directions: [Direction] = []
         
         for chordGroup in beatBeamGroupChords {
@@ -116,21 +91,21 @@ extension LinesViewModel {
         return directions
     }
     
-    private func calculateLines() -> ([Line], [Line], [Line], [Line], [(CGPoint, Int)]) {
+    private static func calculateLines(beatBeamGroupChords: [[Chord]], beamDirections: [Direction], positions: [[[CGPoint]]], numberOfBeamLines: [[Int]], barGeometry: GeometryProxy, idealStemLength: CGFloat, stemThickness: CGFloat, noteSize: CGFloat, beamSpacing: CGFloat, minimumStemLength: CGFloat) -> ([Line], [Line], [Line], [Line], [(CGPoint, Int)]) {
         var beamLines: [Line] = []
         var stemLines: [Line] = []
         var tailLines: [Line] = []
         var ledgerLines: [Line] = []
         var timeModifications: [(CGPoint, Int)] = []
         
-        for groupIndex in 0..<self.beatBeamGroupChords.count {
-            let direction = self.beamDirections[groupIndex]
-            let stemOffset = (direction == .Upward) ? -self.idealStemLength : self.idealStemLength
-            let xOffset = (direction == .Upward) ? ((self.noteSize / 2) - (self.stemThickness / 2)) : ((-self.noteSize / 2) + (self.stemThickness / 2))
-            let timeModificationOffset = (direction == .Upward) ? -self.noteSize : self.noteSize
+        for groupIndex in 0..<beatBeamGroupChords.count {
+            let direction = beamDirections[groupIndex]
+            let stemOffset = (direction == .Upward) ? -idealStemLength : idealStemLength
+            let xOffset = (direction == .Upward) ? ((noteSize / 2) - (stemThickness / 2)) : ((-noteSize / 2) + (stemThickness / 2))
+            let timeModificationOffset = (direction == .Upward) ? -noteSize : noteSize
             var groupTimeModification: Int = -1
             
-            for chord in self.beatBeamGroupChords[groupIndex] {
+            for chord in beatBeamGroupChords[groupIndex] {
                 if let firstNote = chord.notes.first,
                    let timeModification = firstNote.timeModification {
                     if case .custom(let actual, _, _) = timeModification {
@@ -139,83 +114,83 @@ extension LinesViewModel {
                 }
             }
             
-            for chordPositions in self.positions[groupIndex] {
+            for chordPositions in positions[groupIndex] {
                 for position in chordPositions {
                     var currentLedgerPoint = CGPoint(x: position.x, y: barGeometry.size.height / 2)
                     var currentLinesAwayFromMiddle = 0
                     
-                    if position.y > self.barGeometry.size.height / 2 {
+                    if position.y > barGeometry.size.height / 2 {
                         while currentLedgerPoint.y <= position.y {
                             if currentLinesAwayFromMiddle > 2 {
-                                let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - self.noteSize * 0.75, y: currentLedgerPoint.y)
-                                let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + self.noteSize * 0.75, y: currentLedgerPoint.y)
+                                let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - noteSize * 0.75, y: currentLedgerPoint.y)
+                                let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + noteSize * 0.75, y: currentLedgerPoint.y)
                                 
                                 ledgerLines.append(Line(startPoint: ledgerStartPoint, endPoint: ledgerEndPoint))
                             }
                             
-                            currentLedgerPoint.y += self.noteSize
+                            currentLedgerPoint.y += noteSize
                             currentLinesAwayFromMiddle += 1
                         }
                     } else {
                         while currentLedgerPoint.y >= position.y {
                             if currentLinesAwayFromMiddle > 2 {
-                                let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - self.noteSize * 0.75, y: currentLedgerPoint.y)
-                                let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + self.noteSize * 0.75, y: currentLedgerPoint.y)
+                                let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - noteSize * 0.75, y: currentLedgerPoint.y)
+                                let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + noteSize * 0.75, y: currentLedgerPoint.y)
                                 
                                 ledgerLines.append(Line(startPoint: ledgerStartPoint, endPoint: ledgerEndPoint))
                             }
                             
-                            currentLedgerPoint.y -= self.noteSize
+                            currentLedgerPoint.y -= noteSize
                             currentLinesAwayFromMiddle += 1
                         }
                     }
                 }
             }
             
-            if let firstNotePosition = findClosestPositionToBeam(positions: self.positions[groupIndex][0], direction: direction),
-               let lastNotePosition = findClosestPositionToBeam(positions: self.positions[groupIndex][self.positions[groupIndex].count - 1], direction: direction) {
+            if let firstNotePosition = LinesViewModel.findClosestPositionToBeam(positions: positions[groupIndex][0], direction: direction),
+               let lastNotePosition = LinesViewModel.findClosestPositionToBeam(positions: positions[groupIndex][positions[groupIndex].count - 1], direction: direction) {
                 
                 let startPosition = CGPoint(x: firstNotePosition.x, y: firstNotePosition.y + stemOffset)
                 let endPosition = CGPoint(x: lastNotePosition.x, y: lastNotePosition.y + stemOffset)
                 
                 var yOffset: CGFloat = .zero
                 
-                let groupPositions = self.positions[groupIndex]
+                let groupPositions = positions[groupIndex]
                 
                 if groupPositions.count == 1 && groupTimeModification == -1 {
-                    if let firstNote = self.beatBeamGroupChords[groupIndex].first?.notes.first, firstNote.duration.rawValue < 1.0 {
+                    if let firstNote = beatBeamGroupChords[groupIndex].first?.notes.first, firstNote.duration.rawValue < 1.0 {
                         let positions = groupPositions[0]
                         
-                        if let closestToBeam = findClosestPositionToBeam(positions: positions, direction: direction),
-                           let furthestFromBeam = findFurthestPositionFromBeam(positions: positions, direction: direction) {
+                        if let closestToBeam = LinesViewModel.findClosestPositionToBeam(positions: positions, direction: direction),
+                           let furthestFromBeam = LinesViewModel.findFurthestPositionFromBeam(positions: positions, direction: direction) {
                             let stemStartPoint = CGPoint(x: furthestFromBeam.x + xOffset, y: furthestFromBeam.y)
                             let stemEndPoint = CGPoint(x: closestToBeam.x + xOffset, y: closestToBeam.y + stemOffset)
                             
                             stemLines.append(Line(startPoint: stemStartPoint, endPoint: stemEndPoint))
                             
-                            if let numberOfTailLines = self.numberOfBeamLines[groupIndex].first {
+                            if let numberOfTailLines = numberOfBeamLines[groupIndex].first {
                                 var beamYOffset: CGFloat = .zero
                                 
                                 for _ in 0..<numberOfTailLines {
                                     let tailStartPosition = CGPoint(x: stemEndPoint.x, y: stemEndPoint.y + beamYOffset)
-                                    let tailEndX = stemEndPoint.x + self.noteSize
-                                    let tailEndY = stemEndPoint.y + ((direction == .Upward) ? self.noteSize : -self.noteSize) + beamYOffset
+                                    let tailEndX = stemEndPoint.x + noteSize
+                                    let tailEndY = stemEndPoint.y + ((direction == .Upward) ? noteSize : -noteSize) + beamYOffset
                                     let tailEndPosition = CGPoint(x: tailEndX, y: tailEndY)
                                     
                                     tailLines.append(Line(startPoint: tailStartPosition, endPoint: tailEndPosition))
                                     
-                                    beamYOffset += (direction == .Upward) ? self.beamSpacing : -self.beamSpacing
+                                    beamYOffset += (direction == .Upward) ? beamSpacing : -beamSpacing
                                 }
                             }
                         }
                     }
                 } else {
                     for positions in groupPositions {
-                        if let closestToBeam = findClosestPositionToBeam(positions: positions, direction: direction),
-                           let yValueAtClosest = calculateYValue(atX: closestToBeam.x, forLineWithPoints: startPosition, and: endPosition) {
+                        if let closestToBeam = LinesViewModel.findClosestPositionToBeam(positions: positions, direction: direction),
+                           let yValueAtClosest = LinesViewModel.calculateYValue(atX: closestToBeam.x, forLineWithPoints: startPosition, and: endPosition) {
                             let delta = abs(yValueAtClosest - closestToBeam.y)
                             
-                            if delta < self.minimumStemLength {
+                            if delta < minimumStemLength {
                                 yOffset = max(yOffset, minimumStemLength - delta)
                             }
                         }
@@ -225,27 +200,27 @@ extension LinesViewModel {
                     
                     let adjustedStartPosition = CGPoint(x: startPosition.x, y: startPosition.y + yOffset)
                     let adjustedEndPosition = CGPoint(x: endPosition.x, y: endPosition.y + yOffset)
-                    let numberOfBeamLines = self.numberOfBeamLines[groupIndex]
+                    let numberOfBeamLines = numberOfBeamLines[groupIndex]
                     
                     for (positionsIndex, positions) in groupPositions.enumerated() {
-                        if let closestToBeam = findClosestPositionToBeam(positions: positions, direction: direction),
-                           let furthestFromBeam = findFurthestPositionFromBeam(positions: positions, direction: direction) {
+                        if let closestToBeam = LinesViewModel.findClosestPositionToBeam(positions: positions, direction: direction),
+                           let furthestFromBeam = LinesViewModel.findFurthestPositionFromBeam(positions: positions, direction: direction) {
                             if positionsIndex > 0 {
                                 var beamYOffset: CGFloat = .zero
                                 var startIndex: Int = 0
                                 
                                 if numberOfBeamLines[positionsIndex] == 0 && groupTimeModification != -1 {
-                                    beamYOffset = (direction == .Upward) ? -self.beamSpacing : self.beamSpacing
+                                    beamYOffset = (direction == .Upward) ? -beamSpacing : beamSpacing
                                     startIndex = -1
                                 }
                                 
                                 for i in startIndex..<numberOfBeamLines[positionsIndex] {
-                                    if let previousClosestToBeam = findClosestPositionToBeam(positions: groupPositions[positionsIndex - 1], direction: direction),
-                                       let startYPosition = calculateYValue(atX: closestToBeam.x, forLineWithPoints: adjustedStartPosition, and: adjustedEndPosition),
-                                       let endYPosition = calculateYValue(atX: previousClosestToBeam.x, forLineWithPoints: adjustedStartPosition, and: adjustedEndPosition) {
+                                    if let previousClosestToBeam = LinesViewModel.findClosestPositionToBeam(positions: groupPositions[positionsIndex - 1], direction: direction),
+                                       let startYPosition = LinesViewModel.calculateYValue(atX: closestToBeam.x, forLineWithPoints: adjustedStartPosition, and: adjustedEndPosition),
+                                       let endYPosition = LinesViewModel.calculateYValue(atX: previousClosestToBeam.x, forLineWithPoints: adjustedStartPosition, and: adjustedEndPosition) {
                                         let beamStartPosition = CGPoint(x: closestToBeam.x + xOffset, y: startYPosition + beamYOffset)
                                         let beamEndPosition = CGPoint(x: previousClosestToBeam.x + xOffset, y: endYPosition + beamYOffset)
-                                        let midPoint = calculateMidpoint(forLineWithPoints: beamStartPosition, and: beamEndPosition)
+                                        let midPoint = LinesViewModel.calculateMidpoint(forLineWithPoints: beamStartPosition, and: beamEndPosition)
                                         let stemStartPosition = CGPoint(x: beamStartPosition.x, y: startIndex == -1 ? beamStartPosition.y - beamYOffset : beamStartPosition.y)
                                         let stemEndPosition = CGPoint(x: furthestFromBeam.x + xOffset, y: furthestFromBeam.y)
                                         
@@ -268,9 +243,9 @@ extension LinesViewModel {
                                         }
                                         
                                         if positionsIndex == groupPositions.count - 1 && startIndex == -1 {
-                                            let beamExtensionX = beamStartPosition.x + self.noteSize
+                                            let beamExtensionX = beamStartPosition.x + noteSize
                                             
-                                            if let beamExtensionY = calculateYValue(atX: beamExtensionX, forLineWithPoints: beamStartPosition, and: beamEndPosition) {
+                                            if let beamExtensionY = LinesViewModel.calculateYValue(atX: beamExtensionX, forLineWithPoints: beamStartPosition, and: beamEndPosition) {
                                                 let beamExtensionPoint = CGPoint(x: beamExtensionX, y: beamExtensionY)
                                                 let beamExtensionTowardsStemPoint = CGPoint(x: beamExtensionX, y: beamExtensionY - 1.5 * beamYOffset)
                                                 
@@ -280,7 +255,7 @@ extension LinesViewModel {
                                         }
                                     }
                                     
-                                    beamYOffset += (direction == .Upward) ? self.beamSpacing : -self.beamSpacing
+                                    beamYOffset += (direction == .Upward) ? beamSpacing : -beamSpacing
                                 }
                             }
                             
@@ -289,17 +264,17 @@ extension LinesViewModel {
                                 var startIndex: Int = 0
                                 
                                 if numberOfBeamLines[positionsIndex] == 0 && groupTimeModification != -1 {
-                                    beamYOffset = (direction == .Upward) ? -self.beamSpacing : self.beamSpacing
+                                    beamYOffset = (direction == .Upward) ? -beamSpacing : beamSpacing
                                     startIndex = -1
                                 }
                                 
                                 for i in startIndex..<numberOfBeamLines[positionsIndex] {
-                                    if let nextClosestToBeam = findClosestPositionToBeam(positions: groupPositions[positionsIndex + 1], direction: direction),
-                                       let startYPosition = calculateYValue(atX: closestToBeam.x, forLineWithPoints: adjustedStartPosition, and: adjustedEndPosition),
-                                       let endYPosition = calculateYValue(atX: nextClosestToBeam.x, forLineWithPoints: adjustedStartPosition, and: adjustedEndPosition) {
+                                    if let nextClosestToBeam = LinesViewModel.findClosestPositionToBeam(positions: groupPositions[positionsIndex + 1], direction: direction),
+                                       let startYPosition = LinesViewModel.calculateYValue(atX: closestToBeam.x, forLineWithPoints: adjustedStartPosition, and: adjustedEndPosition),
+                                       let endYPosition = LinesViewModel.calculateYValue(atX: nextClosestToBeam.x, forLineWithPoints: adjustedStartPosition, and: adjustedEndPosition) {
                                         let beamStartPosition = CGPoint(x: closestToBeam.x + xOffset, y: startYPosition + beamYOffset)
                                         let beamEndPosition = CGPoint(x: nextClosestToBeam.x + xOffset, y: endYPosition + beamYOffset)
-                                        let midPoint = calculateMidpoint(forLineWithPoints: beamStartPosition, and: beamEndPosition)
+                                        let midPoint = LinesViewModel.calculateMidpoint(forLineWithPoints: beamStartPosition, and: beamEndPosition)
                                         
                                         if i <= 0 || positionsIndex == 0 || i + 1 <= numberOfBeamLines[positionsIndex + 1] {
                                             beamLines.append(Line(startPoint: beamStartPosition, endPoint: midPoint))
@@ -312,9 +287,9 @@ extension LinesViewModel {
                                             stemLines.append(Line(startPoint: stemStartPosition, endPoint: stemEndPosition))
                                             
                                             if startIndex == -1 {
-                                                let beamExtensionX = beamStartPosition.x - self.noteSize
+                                                let beamExtensionX = beamStartPosition.x - noteSize
                                                 
-                                                if let beamExtensionY = calculateYValue(atX: beamExtensionX, forLineWithPoints: beamStartPosition, and: beamEndPosition) {
+                                                if let beamExtensionY = LinesViewModel.calculateYValue(atX: beamExtensionX, forLineWithPoints: beamStartPosition, and: beamEndPosition) {
                                                     let beamExtensionPoint = CGPoint(x: beamExtensionX, y: beamExtensionY)
                                                     let beamExtensionTowardsStemPoint = CGPoint(x: beamExtensionX, y: beamExtensionY - 1.5 * beamYOffset)
                                                     
@@ -325,16 +300,16 @@ extension LinesViewModel {
                                         }
                                     }
                                     
-                                    beamYOffset += (direction == .Upward) ? self.beamSpacing : -self.beamSpacing
+                                    beamYOffset += (direction == .Upward) ? beamSpacing : -beamSpacing
                                 }
                             }
                             
                             if groupPositions.count == 1 && numberOfBeamLines[0] == 0 && groupTimeModification != -1 {
-                                let beamYOffset = (direction == .Upward) ? -self.beamSpacing : self.beamSpacing
+                                let beamYOffset = (direction == .Upward) ? -beamSpacing : beamSpacing
                                 
                                 let midPoint = CGPoint(x: closestToBeam.x + xOffset, y: closestToBeam.y + stemOffset + beamYOffset)
-                                let leadingBeamExtensionPoint = CGPoint(x: midPoint.x - self.noteSize, y: midPoint.y)
-                                let trailingBeamExtensionPoint = CGPoint(x: midPoint.x + self.noteSize, y: midPoint.y)
+                                let leadingBeamExtensionPoint = CGPoint(x: midPoint.x - noteSize, y: midPoint.y)
+                                let trailingBeamExtensionPoint = CGPoint(x: midPoint.x + noteSize, y: midPoint.y)
                                 let leadingBeamExtensionTowardsStemPoint = CGPoint(x: leadingBeamExtensionPoint.x, y: leadingBeamExtensionPoint.y - 1.5 * beamYOffset)
                                 let trailingBeamExtensionTowardsStemPoint = CGPoint(x: trailingBeamExtensionPoint.x, y: trailingBeamExtensionPoint.y - 1.5 * beamYOffset)
                                 
@@ -360,7 +335,7 @@ extension LinesViewModel {
         return (beamLines, stemLines, tailLines, ledgerLines, timeModifications)
     }
     
-    private func calculateYValue(atX x: CGFloat, forLineWithPoints point1: CGPoint, and point2: CGPoint) -> CGFloat? {
+    private static func calculateYValue(atX x: CGFloat, forLineWithPoints point1: CGPoint, and point2: CGPoint) -> CGFloat? {
         guard point1.x != point2.x else { return point1.y }
         
         let m = (point2.y - point1.y) / (point2.x - point1.x)
@@ -369,45 +344,45 @@ extension LinesViewModel {
         return y
     }
     
-    private func calculateMidpoint(forLineWithPoints point1: CGPoint, and point2: CGPoint) -> CGPoint {
+    private static func calculateMidpoint(forLineWithPoints point1: CGPoint, and point2: CGPoint) -> CGPoint {
         let midX = (point1.x + point2.x) / 2.0
         let midY = (point1.y + point2.y) / 2.0
         
         return CGPoint(x: midX, y: midY)
     }
     
-    private func calculateIdealStemLength() -> CGFloat {
-        return self.noteSize * 3.5
+    private static func calculateIdealStemLength(noteSize: CGFloat) -> CGFloat {
+        return noteSize * 3.5
     }
     
-    private func calculateMinimumStemLength() -> CGFloat {
-        return self.idealStemLength / 2
+    private static func calculateMinimumStemLength(idealStemLength: CGFloat) -> CGFloat {
+        return idealStemLength / 2
     }
     
-    private func calculateBeamThickness() -> CGFloat {
-        return self.barGeometry.size.height / 35
+    private static func calculateBeamThickness(barGeometry: GeometryProxy) -> CGFloat {
+        return barGeometry.size.height / 35
     }
     
-    private func calculateStemThickness() -> CGFloat {
-        return self.beamThickness * 0.5
+    private static func calculateStemThickness(beamThickness: CGFloat) -> CGFloat {
+        return beamThickness * 0.5
     }
     
-    private func calculateTailThickness() -> CGFloat {
-        return self.beamThickness * 0.75
+    private static func calculateTailThickness(beamThickness: CGFloat) -> CGFloat {
+        return beamThickness * 0.75
     }
     
-    private func calculateLedgerThickness() -> CGFloat {
-        return self.barGeometry.size.height / 100
+    private static func calculateLedgerThickness(barGeometry: GeometryProxy) -> CGFloat {
+        return barGeometry.size.height / 100
     }
     
-    private func calculateBeamSpacing() -> CGFloat {
-        return self.idealStemLength / 5
+    private static func calculateBeamSpacing(idealStemLength: CGFloat) -> CGFloat {
+        return idealStemLength / 5
     }
     
-    private func calculateDurations() -> [[Note.Duration]] {
+    private static func calculateDurations(beatBeamGroupChords: [[Chord]]) -> [[Note.Duration]] {
         var durations: [[Note.Duration]] = []
         
-        for group in self.beatBeamGroupChords {
+        for group in beatBeamGroupChords {
             var groupDurations: [Note.Duration] = []
             
             for chord in group {
@@ -422,8 +397,8 @@ extension LinesViewModel {
         return durations
     }
     
-    private func calculateNumberOfBeamLines() -> [[Int]] {
-        return self.durations.map { chordDurations in
+    private static func calculateNumberOfBeamLines(durations: [[Note.Duration]]) -> [[Int]] {
+        return durations.map { chordDurations in
             return chordDurations.map { duration in
                 switch duration {
                     case .eighth: return 1
@@ -436,7 +411,7 @@ extension LinesViewModel {
         }
     }
     
-    private func findFurthestPositionFromBeam(positions: [CGPoint], direction: Direction) -> CGPoint? {
+    private static func findFurthestPositionFromBeam(positions: [CGPoint], direction: Direction) -> CGPoint? {
         guard !positions.isEmpty else { return nil }
         
         switch direction {
@@ -447,7 +422,7 @@ extension LinesViewModel {
         }
     }
     
-    private func findClosestPositionToBeam(positions: [CGPoint], direction: Direction) -> CGPoint? {
+    private static func findClosestPositionToBeam(positions: [CGPoint], direction: Direction) -> CGPoint? {
         guard !positions.isEmpty else { return nil }
         
         switch direction {

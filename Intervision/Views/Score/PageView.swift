@@ -67,7 +67,10 @@ struct PageView: View {
                         }
                     }
                     .frame(width: width * 0.9)
+                    .frame(maxHeight: height / 5)
                 }
+                
+                Spacer()
             }
             .frame(height: height * 0.9)
         }

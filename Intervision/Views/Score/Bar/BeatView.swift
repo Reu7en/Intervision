@@ -45,7 +45,8 @@ struct BeatView: View {
                     middleStaveNote: beatViewModel.middleStaveNote,
                     barGeometry: beatViewModel.barGeometry,
                     beatGeometry: beatViewModel.beatGeometry, 
-                    noteSize: beatViewModel.noteSize
+                    noteSize: beatViewModel.noteSize,
+                    beamDirections: beatViewModel.beamDirections
                 )
             )
         }

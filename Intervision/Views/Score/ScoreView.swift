@@ -13,7 +13,7 @@ struct ScoreView: View {
     
     @StateObject var scoreViewModel: ScoreViewModel
     
-    @State private var zoomLevel: CGFloat = 0.75
+    @State private var zoomLevel: CGFloat = 3.0
     @State private var showInspector: Bool = false
     
     var body: some View {

@@ -66,7 +66,7 @@ struct LinesView: View {
 
 #Preview {
     GeometryReader { geometry in
-        LinesView(linesViewModel: LinesViewModel(beamGroups: [], positions: [], middleStaveNote: nil, barGeometry: geometry, beatGeometry: geometry, noteSize: .zero))
+        LinesView(linesViewModel: LinesViewModel(beamGroups: [], positions: [], middleStaveNote: nil, barGeometry: geometry, beatGeometry: geometry, noteSize: .zero, beamDirections: []))
     }
 }
 

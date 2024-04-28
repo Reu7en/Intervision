@@ -17,6 +17,7 @@ class BeatViewModel: ObservableObject {
     let middleStaveNote: Note?
     
     let noteSize: CGFloat
+    let beamDirections: [Direction]
     let notePositions: [[(CGPoint, Int)]]
     let restPositions: [CGPoint]
     let groupPositions: [[[CGPoint]]]
@@ -40,8 +41,9 @@ class BeatViewModel: ObservableObject {
         self.middleStaveNote = middleStaveNote
         
         self.noteSize = BeatViewModel.calculateNoteSize(beatGeometry: self.beatGeometry, beatNoteGrid: self.beatNoteGrid)
+        self.beamDirections = BeatViewModel.calculateDirections(beatBeamGroupChords: self.beatBeamGroupChords, middleStaveNote: self.middleStaveNote)
         
-        let positions = BeatViewModel.calculatePositions(beatGeometry: self.beatGeometry, beatNoteGrid: self.beatNoteGrid)
+        let positions = BeatViewModel.calculatePositions(beatGeometry: self.beatGeometry, beatNoteGrid: self.beatNoteGrid, beatBeamGroupChords: self.beatBeamGroupChords, beamDirections: self.beamDirections)
         
         self.notePositions = positions.0
         self.restPositions = positions.1
@@ -59,20 +61,54 @@ class BeatViewModel: ObservableObject {
 }
 
 extension BeatViewModel {
+    enum Direction {
+        case Upward, Downward
+    }
+}
+
+extension BeatViewModel {
     private static func calculateNoteSize(beatGeometry: GeometryProxy, beatNoteGrid: [[[Note]?]]) -> CGFloat {
         return 2 * (beatGeometry.size.height / CGFloat(beatNoteGrid[0].count - 1))
     }
     
-    private static func calculatePositions(beatGeometry: GeometryProxy, beatNoteGrid: [[[Note]?]]) -> ([[(CGPoint, Int)]], [CGPoint]) {
+    private static func calculateDirections(beatBeamGroupChords: [[Chord]], middleStaveNote: Note?) -> [Direction] {
+        var directions: [Direction] = []
+        
+        for chordGroup in beatBeamGroupChords {
+            var totalDistance = 0
+            
+            for chord in chordGroup {
+                for note in chord.notes {
+                    guard !note.isRest, let middleStaveNote = middleStaveNote else { continue }
+                    totalDistance += middleStaveNote.calculateDistance(from: middleStaveNote, to: note)
+                }
+            }
+            
+            directions.append(totalDistance < 0 ? .Upward : .Downward)
+        }
+        
+        return directions
+    }
+    
+    private static func calculatePositions(beatGeometry: GeometryProxy, beatNoteGrid: [[[Note]?]], beatBeamGroupChords: [[Chord]], beamDirections: [Direction]) -> ([[(CGPoint, Int)]], [CGPoint]) {
         var notePositions: [[(CGPoint, Int)]] = []
         var restPositions: [CGPoint] = []
+        var currentChordIndex = 0
+        var currentBeamIndex = 0
+        
+        guard !beatBeamGroupChords.isEmpty else { return (notePositions, restPositions) }
         
         for (columnIndex, column) in beatNoteGrid.enumerated() {
+            if currentChordIndex == beatBeamGroupChords[currentBeamIndex].count {
+                currentBeamIndex += 1
+                currentChordIndex = 0
+            }
+            
             var chordPositions: [(CGPoint, Int)] = []
             
             for (rowIndex, row) in column.enumerated() {
                 if let notes = row {
-                    for note in notes {
+                    for (noteIndex, note) in notes.enumerated() {
                         let isRest = note.isRest
                         let xPosition = (beatNoteGrid.count == 1) ? 0 : (beatGeometry.size.width / CGFloat(beatNoteGrid.count - 1)) * CGFloat(columnIndex)
                         let yPosition = isRest ? beatGeometry.size.height / 2 : (beatGeometry.size.height / CGFloat(column.count - 1)) * CGFloat(rowIndex)
@@ -81,22 +117,14 @@ extension BeatViewModel {
                         if isRest {
                             restPositions.append(position)
                         } else {
+                            if chordPositions.isEmpty {
+                                currentChordIndex += 1
+                            }
+                            
                             if rowIndex % 2 != 0 && (rowIndex < column.count - 1 && column[rowIndex + 1] != nil && !(column[rowIndex + 1]?.first?.isRest ?? false) || rowIndex > 0 && column[rowIndex - 1] != nil && !(column[rowIndex - 1]?.first?.isRest ?? false)) {
-                                let middle: Double = Double(column.count) / 2
-                                var sum: Double = 0
-                                var count: Double = 0
-                                
-                                for (rowIndex, row) in column.enumerated() {
-                                    if let notes = row,
-                                       let first = notes.first, !first.isRest {
-                                        sum += Double(rowIndex)
-                                        count += 1
-                                    }
-                                }
-                                
-                                chordPositions.append((position, sum / count < middle ? -1 : 1))
+                                chordPositions.append((position, beamDirections[currentBeamIndex] == .Upward ? 1 : -1))
                             } else {
-                                chordPositions.append((position, 0))
+                                chordPositions.append((position, noteIndex == 1 ? (beamDirections[currentBeamIndex] == .Upward ? 1 : -1) : 0))
                             }
                         }
                     }

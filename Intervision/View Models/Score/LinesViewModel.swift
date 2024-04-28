@@ -16,8 +16,8 @@ class LinesViewModel: ObservableObject {
     let barGeometry: GeometryProxy
     let beatGeometry: GeometryProxy
     let noteSize: CGFloat
+    let beamDirections: [BeatViewModel.Direction]
     
-    let beamDirections: [Direction]
     let idealStemLength: CGFloat
     let minimumStemLength: CGFloat
     let beamThickness: CGFloat
@@ -40,7 +40,8 @@ class LinesViewModel: ObservableObject {
         middleStaveNote: Note?,
         barGeometry: GeometryProxy,
         beatGeometry: GeometryProxy,
-        noteSize: CGFloat
+        noteSize: CGFloat,
+        beamDirections: [BeatViewModel.Direction]
     ) {
         self.beatBeamGroupChords = beamGroups
         self.positions = positions
@@ -48,8 +49,8 @@ class LinesViewModel: ObservableObject {
         self.barGeometry = barGeometry
         self.beatGeometry = beatGeometry
         self.noteSize = noteSize
+        self.beamDirections = beamDirections
         
-        self.beamDirections = LinesViewModel.calculateDirections(beatBeamGroupChords: self.beatBeamGroupChords, middleStaveNote: self.middleStaveNote)
         self.idealStemLength = LinesViewModel.calculateIdealStemLength(noteSize: self.noteSize)
         self.minimumStemLength = LinesViewModel.calculateMinimumStemLength(idealStemLength: self.idealStemLength)
         self.beamThickness = LinesViewModel.calculateBeamThickness(barGeometry: self.barGeometry)
@@ -72,26 +73,7 @@ class LinesViewModel: ObservableObject {
 
 // Functions
 extension LinesViewModel {
-    private static func calculateDirections(beatBeamGroupChords: [[Chord]], middleStaveNote: Note?) -> [Direction] {
-        var directions: [Direction] = []
-        
-        for chordGroup in beatBeamGroupChords {
-            var totalDistance = 0
-            
-            for chord in chordGroup {
-                for note in chord.notes {
-                    guard !note.isRest, let middleStaveNote = middleStaveNote else { continue }
-                    totalDistance += middleStaveNote.calculateDistance(from: middleStaveNote, to: note)
-                }
-            }
-            
-            directions.append(totalDistance < 0 ? .Upward : .Downward)
-        }
-        
-        return directions
-    }
-    
-    private static func calculateLines(beatBeamGroupChords: [[Chord]], beamDirections: [Direction], positions: [[[CGPoint]]], numberOfBeamLines: [[Int]], barGeometry: GeometryProxy, idealStemLength: CGFloat, stemThickness: CGFloat, noteSize: CGFloat, beamSpacing: CGFloat, minimumStemLength: CGFloat) -> ([Line], [Line], [Line], [Line], [(CGPoint, Int)]) {
+    private static func calculateLines(beatBeamGroupChords: [[Chord]], beamDirections: [BeatViewModel.Direction], positions: [[[CGPoint]]], numberOfBeamLines: [[Int]], barGeometry: GeometryProxy, idealStemLength: CGFloat, stemThickness: CGFloat, noteSize: CGFloat, beamSpacing: CGFloat, minimumStemLength: CGFloat) -> ([Line], [Line], [Line], [Line], [(CGPoint, Int)]) {
         var beamLines: [Line] = []
         var stemLines: [Line] = []
         var tailLines: [Line] = []
@@ -412,7 +394,7 @@ extension LinesViewModel {
         }
     }
     
-    private static func findFurthestPositionFromBeam(positions: [CGPoint], direction: Direction) -> CGPoint? {
+    private static func findFurthestPositionFromBeam(positions: [CGPoint], direction: BeatViewModel.Direction) -> CGPoint? {
         guard !positions.isEmpty else { return nil }
         
         switch direction {
@@ -423,7 +405,7 @@ extension LinesViewModel {
         }
     }
     
-    private static func findClosestPositionToBeam(positions: [CGPoint], direction: Direction) -> CGPoint? {
+    private static func findClosestPositionToBeam(positions: [CGPoint], direction: BeatViewModel.Direction) -> CGPoint? {
         guard !positions.isEmpty else { return nil }
         
         switch direction {
@@ -432,11 +414,5 @@ extension LinesViewModel {
             case .Downward:
                 return positions.max(by: { $0.y < $1.y })
         }
-    }
-}
-
-extension LinesViewModel {
-    enum Direction {
-        case Upward, Downward
     }
 }

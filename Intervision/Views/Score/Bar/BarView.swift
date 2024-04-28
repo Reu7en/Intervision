@@ -20,7 +20,6 @@ struct BarView: View {
                         .fontWeight(.bold)
                         .foregroundStyle(.black)
                         .padding(.horizontal, wholeGeometry.size.width / 50)
-                        .frame(maxWidth: wholeGeometry.size.width / 8)
                 }
                 
                 GeometryReader { geometry in

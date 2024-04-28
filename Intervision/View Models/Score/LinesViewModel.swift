@@ -118,9 +118,10 @@ extension LinesViewModel {
                 for position in chordPositions {
                     var currentLedgerPoint = CGPoint(x: position.x, y: barGeometry.size.height / 2)
                     var currentLinesAwayFromMiddle = 0
+                    let epsilon = 0.0001
                     
                     if position.y > barGeometry.size.height / 2 {
-                        while currentLedgerPoint.y <= position.y {
+                        while currentLedgerPoint.y <= position.y + epsilon {
                             if currentLinesAwayFromMiddle > 2 {
                                 let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - noteSize * 0.75, y: currentLedgerPoint.y)
                                 let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + noteSize * 0.75, y: currentLedgerPoint.y)
@@ -132,7 +133,7 @@ extension LinesViewModel {
                             currentLinesAwayFromMiddle += 1
                         }
                     } else {
-                        while currentLedgerPoint.y >= position.y {
+                        while currentLedgerPoint.y >= position.y - epsilon {
                             if currentLinesAwayFromMiddle > 2 {
                                 let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - noteSize * 0.75, y: currentLedgerPoint.y)
                                 let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + noteSize * 0.75, y: currentLedgerPoint.y)

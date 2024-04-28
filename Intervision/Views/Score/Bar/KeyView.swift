@@ -20,15 +20,17 @@ struct KeyView: View {
                let middlePitch = middleStaveNote.pitch {
                 ForEach(0..<key.alteredNotes.count, id: \.self) { noteIndex in
                     let pitch = key.alteredNotes[noteIndex].0
-                    let distance = middlePitch.distanceFromC() - pitch.distanceFromC()
-                    let yOffset = CGFloat(distance - 1) * (gapHeight / 2)
+                    let distance = 7 - pitch.distanceFromC() + (pitch.distanceFromC() < (key.sharps ? 5 : 3) ? -7 : 0)
+                    let yOffset = CGFloat(key.sharps ? distance : distance - 1 + (middlePitch.distanceFromC() > 4 ? middlePitch.distanceFromC() - 7 : middlePitch.distanceFromC())) * (gapHeight / 2)
                     
-                    Image(key.sharps ? "Sharp" : "Flat")
-                        .interpolation(.high)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: gapHeight * 2)
-                        .offset(y: yOffset)
+                    HStack {
+                        Image(key.sharps ? "Sharp" : "Flat")
+                            .interpolation(.high)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: gapHeight * 2)
+                            .offset(y: yOffset)
+                    }
                 }
             }
         }

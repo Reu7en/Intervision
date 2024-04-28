@@ -19,13 +19,13 @@ struct ScoreView: View {
     var body: some View {
         if let pages = scoreViewModel.pages {
             GeometryReader { geometry in
-                ScrollView([.horizontal]) {
+                ScrollView([.vertical, .horizontal]) {
                     LazyHStack(spacing: 0) {
                         ForEach(0..<pages.count, id: \.self) { pageIndex in
                             PageView(
                                 geometry: geometry,
                                 zoomLevel: $zoomLevel,
-                                bars: pages[pageIndex], 
+                                bars: pages[pageIndex],
                                 showScoreInformation: pageIndex == 0,
                                 scoreTitle: scoreViewModel.scoreManager.score?.title ?? "",
                                 scoreComposer: scoreViewModel.scoreManager.score?.composer ?? ""

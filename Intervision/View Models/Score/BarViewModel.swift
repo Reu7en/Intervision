@@ -27,7 +27,7 @@ class BarViewModel: ObservableObject {
     let middleStaveNote: Note?
     let splitChords: [[Chord]]
     let beamGroupChords: [[[Chord]]]
-    let noteGrid: [[[[Note]?]]]
+    let noteGrid: [[[[(Note, Note.Accidental?)]?]]]
     
     init
     (
@@ -57,7 +57,7 @@ class BarViewModel: ObservableObject {
         self.middleStaveNote = BarViewModel.calculateMiddleStaveNote(lowestGapNote: self.lowestGapNote, gaps: self.gaps)
         self.splitChords = BarViewModel.calculateSplitChords(beatValue: self.beatValue, chords: self.bar.chords)
         self.beamGroupChords = BarViewModel.calculateBeamGroupChords(beatValue: self.beatValue, splitChords: self.splitChords)
-        self.noteGrid = BarViewModel.calculateNoteGrid(gaps: self.gaps, ledgerLines: self.ledgerLines, rows: self.rows, lowestGapNote: self.lowestGapNote, splitChords: self.splitChords)
+        self.noteGrid = BarViewModel.calculateNoteGrid(gaps: self.gaps, ledgerLines: self.ledgerLines, rows: self.rows, lowestGapNote: self.lowestGapNote, splitChords: self.splitChords, bar: self.bar)
     }
 }
 
@@ -339,20 +339,21 @@ extension BarViewModel {
         return groups
     }
     
-    private static func calculateNoteGrid(gaps: Int, ledgerLines: Int, rows: Int, lowestGapNote: Note?, splitChords: [[Chord]]) -> [[[[Note]?]]] {
-        var noteGrid: [[[[Note]?]]] = []
+    private static func calculateNoteGrid(gaps: Int, ledgerLines: Int, rows: Int, lowestGapNote: Note?, splitChords: [[Chord]], bar: Bar) -> [[[[(Note, Note.Accidental?)]?]]] {
+        var noteGrid: [[[[(Note, Note.Accidental?)]?]]] = []
+        var seenTones: [(Note.Pitch?, Note.Accidental?, Note.Octave?)] = []
         let lowestGapIndex = (ledgerLines * 2) + (gaps * 2)
         
         for chordGroup in splitChords {
-            var groupGrid: [[[Note]?]] = Array(repeating: Array(repeating: nil, count: rows), count: chordGroup.count)
+            var groupGrid: [[[(Note, Note.Accidental?)]?]] = Array(repeating: Array(repeating: nil, count: rows), count: chordGroup.count)
             
             for (chordIndex, chord) in chordGroup.enumerated() {
                 for note in chord.notes {
                     if note.isRest {
                         if groupGrid[chordIndex][0] == nil {
-                            groupGrid[chordIndex][0] = [note]
+                            groupGrid[chordIndex][0] = [(note, nil)]
                         } else {
-                            groupGrid[chordIndex][0]?.append(note)
+                            groupGrid[chordIndex][0]?.append((note, nil))
                         }
                     } else {
                         guard let distance = calculateGapBetweenLowestGapNote(note, lowestGapNote: lowestGapNote) else {
@@ -365,9 +366,9 @@ extension BarViewModel {
                             )
                             
                             if groupGrid[chordIndex][0] == nil {
-                                groupGrid[chordIndex][0] = [rest]
+                                groupGrid[chordIndex][0] = [(rest, nil)]
                             } else {
-                                groupGrid[chordIndex][0]?.append(rest)
+                                groupGrid[chordIndex][0]?.append((rest, nil))
                             }
                             
                             continue
@@ -395,18 +396,22 @@ extension BarViewModel {
                             )
                             
                             if groupGrid[chordIndex][0] == nil {
-                                groupGrid[chordIndex][0] = [rest]
+                                groupGrid[chordIndex][0] = [(rest, nil)]
                             } else {
-                                groupGrid[chordIndex][0]?.append(rest)
+                                groupGrid[chordIndex][0]?.append((rest, nil))
                             }
                             
                             continue
                         }
                         
+                        let accidentalToRender: Note.Accidental? = seenTones.contains(where: { $0 == (note.pitch, note.accidental, note.octave) }) ? nil : BarViewModel.calculateAccidentalToRender(bar: bar, note: note)
+                        
+                        seenTones.append((note.pitch, note.accidental, note.octave))
+                        
                         if groupGrid[chordIndex][index] == nil {
-                            groupGrid[chordIndex][index] = [note]
+                            groupGrid[chordIndex][index] = [(note, accidentalToRender)]
                         } else {
-                            groupGrid[chordIndex][index]?.append(note)
+                            groupGrid[chordIndex][index]?.append((note, accidentalToRender))
                         }
                     }
                 }
@@ -436,11 +441,8 @@ extension BarViewModel {
         return nil
     }
     
-    // must check if accidental already rendered in bar
-    func shouldRenderAccidental(_ note: Note) -> Note.Accidental? {
-        guard let pitch = note.pitch else {
-            return nil
-        }
+    private static func calculateAccidentalToRender(bar: Bar, note: Note) -> Note.Accidental? {
+        guard let pitch = note.pitch else { return nil }
         
         if let alteredNote = bar.keySignature.alteredNotes.first(where: { $0.0 == pitch }) {
             if alteredNote.1 == note.accidental {

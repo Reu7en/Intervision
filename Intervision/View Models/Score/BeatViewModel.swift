@@ -10,7 +10,7 @@ import SwiftUI
 
 class BeatViewModel: ObservableObject {
     
-    let beatNoteGrid: [[[Note]?]]
+    let beatNoteGrid: [[[(Note, Note.Accidental?)]?]]
     let barGeometry: GeometryProxy
     let beatGeometry: GeometryProxy
     let beatBeamGroupChords: [[Chord]]
@@ -20,15 +20,17 @@ class BeatViewModel: ObservableObject {
     let beamDirections: [Direction]
     let notePositions: [[(CGPoint, Int)]]
     let restPositions: [CGPoint]
+    let accidentalPositions: [(CGPoint, Int)]
     let groupPositions: [[[CGPoint]]]
     let isHollow: [Bool]
     let noteIsDotted: [Bool]
     let restIsDotted: [Bool]
     let restDurations: [Note.Duration]
+    let accidentals: [Note.Accidental]
     
     init
     (
-        noteGrid: [[[Note]?]],
+        noteGrid: [[[(Note, Note.Accidental?)]?]],
         barGeometry: GeometryProxy,
         beatGeometry: GeometryProxy,
         beamGroupChords: [[Chord]],
@@ -47,6 +49,7 @@ class BeatViewModel: ObservableObject {
         
         self.notePositions = positions.0
         self.restPositions = positions.1
+        self.accidentalPositions = positions.2
         
         self.groupPositions = BeatViewModel.calculateGroupPositions(beatBeamGroupChords: self.beatBeamGroupChords, notePositions: self.notePositions)
         self.isHollow = BeatViewModel.calculateIsHollow(beatNoteGrid: self.beatNoteGrid)
@@ -57,6 +60,7 @@ class BeatViewModel: ObservableObject {
         self.restIsDotted = isDotted.1
         
         self.restDurations = BeatViewModel.calculateRestDurations(beatNoteGrid: self.beatNoteGrid)
+        self.accidentals = BeatViewModel.calculateAccidentals(beatNoteGrid: self.beatNoteGrid)
     }
 }
 
@@ -67,7 +71,7 @@ extension BeatViewModel {
 }
 
 extension BeatViewModel {
-    private static func calculateNoteSize(beatGeometry: GeometryProxy, beatNoteGrid: [[[Note]?]]) -> CGFloat {
+    private static func calculateNoteSize(beatGeometry: GeometryProxy, beatNoteGrid: [[[(Note, Note.Accidental?)]?]]) -> CGFloat {
         return 2 * (beatGeometry.size.height / CGFloat(beatNoteGrid[0].count - 1))
     }
     
@@ -90,13 +94,15 @@ extension BeatViewModel {
         return directions
     }
     
-    private static func calculatePositions(beatGeometry: GeometryProxy, beatNoteGrid: [[[Note]?]], beatBeamGroupChords: [[Chord]], beamDirections: [Direction]) -> ([[(CGPoint, Int)]], [CGPoint]) {
+    private static func calculatePositions(beatGeometry: GeometryProxy, beatNoteGrid: [[[(Note, Note.Accidental?)]?]], beatBeamGroupChords: [[Chord]], beamDirections: [Direction]) -> ([[(CGPoint, Int)]], [CGPoint], [(CGPoint, Int)]) {
         var notePositions: [[(CGPoint, Int)]] = []
         var restPositions: [CGPoint] = []
+        var accidentalPositions: [(CGPoint, Int)] = []
+        
         var currentChordIndex = 0
         var currentBeamIndex = 0
         
-        guard !beatBeamGroupChords.isEmpty else { return (notePositions, restPositions) }
+        guard !beatBeamGroupChords.isEmpty else { return (notePositions, restPositions, accidentalPositions) }
         
         for (columnIndex, column) in beatNoteGrid.enumerated() {
             if currentChordIndex == beatBeamGroupChords[currentBeamIndex].count {
@@ -109,7 +115,8 @@ extension BeatViewModel {
             for (rowIndex, row) in column.enumerated() {
                 if let notes = row {
                     for (noteIndex, note) in notes.enumerated() {
-                        let isRest = note.isRest
+                        let isRest = note.0.isRest
+                        let hasAccidental = note.1 != nil
                         let xPosition = (beatNoteGrid.count == 1) ? 0 : (beatGeometry.size.width / CGFloat(beatNoteGrid.count - 1)) * CGFloat(columnIndex)
                         let yPosition = isRest ? beatGeometry.size.height / 2 : (beatGeometry.size.height / CGFloat(column.count - 1)) * CGFloat(rowIndex)
                         let position = CGPoint(x: xPosition, y: yPosition)
@@ -121,10 +128,46 @@ extension BeatViewModel {
                                 currentChordIndex += 1
                             }
                             
-                            if rowIndex % 2 != 0 && (rowIndex < column.count - 1 && column[rowIndex + 1] != nil && !(column[rowIndex + 1]?.first?.isRest ?? false) || rowIndex > 0 && column[rowIndex - 1] != nil && !(column[rowIndex - 1]?.first?.isRest ?? false)) {
+                            if rowIndex % 2 != 0 && (rowIndex < column.count - 1 && column[rowIndex + 1] != nil && !(column[rowIndex + 1]?.first?.0.isRest ?? false) || rowIndex > 0 && column[rowIndex - 1] != nil && !(column[rowIndex - 1]?.first?.0.isRest ?? false)) {
                                 chordPositions.append((position, beamDirections[currentBeamIndex] == .Upward ? 1 : -1))
+                                
+                                if hasAccidental {
+                                    if (rowIndex < column.count - 1 && column[rowIndex + 1] != nil && !((column[rowIndex + 1] ?? []).allSatisfy({ $0.1 == nil })) || rowIndex > 0 && column[rowIndex - 1] != nil && !((column[rowIndex - 1] ?? []).allSatisfy({ $0.1 == nil }))) {
+                                        accidentalPositions.append((position, beamDirections[currentBeamIndex] == .Upward ? -1 : -3))
+                                    } else {
+                                        accidentalPositions.append((position, beamDirections[currentBeamIndex] == .Upward ? -1 : -2))
+                                    }
+                                }
                             } else {
-                                chordPositions.append((position, noteIndex == 1 ? (beamDirections[currentBeamIndex] == .Upward ? 1 : -1) : 0))
+                                if notes.count == 2 {
+                                    chordPositions.append((position, noteIndex == 1 ? (beamDirections[currentBeamIndex] == .Upward ? 1 : -1) : 0))
+                                    
+                                    if hasAccidental {
+                                        if (rowIndex < column.count - 1 && column[rowIndex + 1] != nil && !((column[rowIndex + 1] ?? []).allSatisfy({ $0.1 == nil })) || rowIndex > 0 && column[rowIndex - 1] != nil && !((column[rowIndex - 1] ?? []).allSatisfy({ $0.1 == nil }))) {
+                                            if noteIndex == 1 {
+                                                accidentalPositions.append((position, beamDirections[currentBeamIndex] == .Upward ? -1 : -2))
+                                            } else {
+                                                accidentalPositions.append((position, beamDirections[currentBeamIndex] == .Upward ? -2 : -3))
+                                            }
+                                        } else {
+                                            accidentalPositions.append((position, beamDirections[currentBeamIndex] == .Upward ? -1 : -2))
+                                        }
+                                    }
+                                } else {
+                                    chordPositions.append((position, 0))
+                                    
+                                    if hasAccidental {
+                                        if (rowIndex < column.count - 1 && column[rowIndex + 1] != nil && !(column[rowIndex + 1]?.first?.0.isRest ?? false) || rowIndex > 0 && column[rowIndex - 1] != nil && !(column[rowIndex - 1]?.first?.0.isRest ?? false)) {
+                                            if (rowIndex < column.count - 1 && column[rowIndex + 1] != nil && !((column[rowIndex + 1] ?? []).allSatisfy({ $0.1 == nil })) || rowIndex > 0 && column[rowIndex - 1] != nil && !((column[rowIndex - 1] ?? []).allSatisfy({ $0.1 == nil }))) {
+                                                accidentalPositions.append((position, -2))
+                                            } else {
+                                                accidentalPositions.append((position, beamDirections[currentBeamIndex] == .Upward ? -1 : -2))
+                                            }
+                                        } else {
+                                            accidentalPositions.append((position, -1))
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -136,7 +179,7 @@ extension BeatViewModel {
             }
         }
         
-        return (notePositions, restPositions)
+        return (notePositions, restPositions, accidentalPositions)
     }
     
     private static func calculateGroupPositions(beatBeamGroupChords: [[Chord]], notePositions: [[(CGPoint, Int)]]) -> [[[CGPoint]]] {
@@ -157,7 +200,7 @@ extension BeatViewModel {
         return groupPositions
     }
     
-    private static func calculateIsHollow(beatNoteGrid: [[[Note]?]]) -> [Bool] {
+    private static func calculateIsHollow(beatNoteGrid: [[[(Note, Note.Accidental?)]?]]) -> [Bool] {
         var isHollow: [Bool] = []
         
         for column in beatNoteGrid {
@@ -166,7 +209,7 @@ extension BeatViewModel {
             for row in column {
                 if let notes = row {
                     for note in notes {
-                        if !note.isRest && note.duration.rawValue >= 0.5 {
+                        if !note.0.isRest && note.0.duration.rawValue >= 0.5 {
                             chordIsHollow = true
                         }
                     }
@@ -179,7 +222,7 @@ extension BeatViewModel {
         return isHollow
     }
     
-    private static func calculateIsDotted(beatNoteGrid: [[[Note]?]]) -> ([Bool], [Bool]) {
+    private static func calculateIsDotted(beatNoteGrid: [[[(Note, Note.Accidental?)]?]]) -> ([Bool], [Bool]) {
         var noteIsDotted: [Bool] = []
         var restIsDotted: [Bool] = []
         
@@ -189,10 +232,10 @@ extension BeatViewModel {
             for row in column {
                 if let notes = row {
                     for note in notes {
-                        if note.isRest {
-                            restIsDotted.append(note.isDotted)
+                        if note.0.isRest {
+                            restIsDotted.append(note.0.isDotted)
                         } else {
-                            chordIsDotted = note.isDotted
+                            chordIsDotted = note.0.isDotted
                         }
                     }
                 }
@@ -206,15 +249,33 @@ extension BeatViewModel {
         return (noteIsDotted, restIsDotted)
     }
     
-    private static func calculateRestDurations(beatNoteGrid: [[[Note]?]]) -> [Note.Duration] {
+    private static func calculateAccidentals(beatNoteGrid: [[[(Note, Note.Accidental?)]?]]) -> [Note.Accidental] {
+        var accidentals: [Note.Accidental] = []
+        
+        for column in beatNoteGrid {
+            for row in column {
+                if let notes = row {
+                    for note in notes {
+                        if let accidental = note.1 {
+                            accidentals.append(accidental)
+                        }
+                    }
+                }
+            }
+        }
+        
+        return accidentals
+    }
+    
+    private static func calculateRestDurations(beatNoteGrid: [[[(Note, Note.Accidental?)]?]]) -> [Note.Duration] {
         var restDurations: [Note.Duration] = []
 
         for column in beatNoteGrid {
             for row in column {
                 if let notes = row {
                     for note in notes {
-                        if note.isRest {
-                            restDurations.append(note.duration)
+                        if note.0.isRest {
+                            restDurations.append(note.0.duration)
                         }
                     }
                 }

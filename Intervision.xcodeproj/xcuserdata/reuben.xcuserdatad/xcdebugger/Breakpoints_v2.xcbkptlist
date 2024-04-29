@@ -62,8 +62,8 @@
             filePath = "Intervision/View Models/Score/BeatViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "165"
-            endingLineNumber = "165"
+            startingLineNumber = "208"
+            endingLineNumber = "208"
             landmarkName = "calculateIsHollow(beatNoteGrid:)"
             landmarkType = "7">
          </BreakpointContent>

@@ -37,6 +37,17 @@ struct BeatView: View {
             .position(restPosition)
         }
         
+        ForEach(0..<beatViewModel.accidentalPositions.count, id: \.self) { positionIndex in
+            let accidentalPosition = beatViewModel.accidentalPositions[positionIndex]
+            
+            AccidentalView(
+                accidental: beatViewModel.accidentals[positionIndex]
+            )
+            .frame(height: beatViewModel.noteSize * 1.75)
+            .position(accidentalPosition.0)
+            .offset(x: beatViewModel.noteSize * CGFloat(accidentalPosition.1))
+        }
+        
         if !beatViewModel.beatBeamGroupChords.isEmpty && !beatViewModel.notePositions.isEmpty {
             LinesView(
                 linesViewModel: LinesViewModel(

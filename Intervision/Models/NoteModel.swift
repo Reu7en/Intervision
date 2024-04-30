@@ -15,7 +15,6 @@ class Note: Identifiable, Equatable {
         octave: Octave? = nil,
         octaveShift: OctaveShift? = nil,
         duration: Duration,
-        durationValue: Double,
         timeModification: TimeModification? = nil,
         changeDynamic: ChangeDynamic? = nil,
         graceNotes: [Grace]? = nil,
@@ -31,7 +30,6 @@ class Note: Identifiable, Equatable {
         self.octave = octave
         self.octaveShift = octaveShift
         self.duration = duration
-        self.durationValue = durationValue
         self.timeModification = timeModification
         self.changeDynamic = changeDynamic
         self.graceNotes = graceNotes
@@ -48,7 +46,6 @@ class Note: Identifiable, Equatable {
     var octave: Octave?
     var octaveShift: OctaveShift?
     var duration: Duration
-    var durationValue: Double
     var timeModification: TimeModification?
     var changeDynamic: ChangeDynamic?
     var graceNotes: [Grace]?

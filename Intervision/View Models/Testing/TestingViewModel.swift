@@ -163,7 +163,6 @@ extension TestingViewModel {
             pitch: clef == .Treble ? .F : .A,
             octave: clef == .Treble ? .oneLine : .great,
             duration: .quarter,
-            durationValue: -1,
             isRest: false,
             isDotted: false,
             hasAccent: false
@@ -171,7 +170,6 @@ extension TestingViewModel {
         
         let quarterRest = Note(
             duration: .quarter,
-            durationValue: -1,
             isRest: true,
             isDotted: false,
             hasAccent: false
@@ -179,7 +177,6 @@ extension TestingViewModel {
         
         let halfRest = Note(
             duration: .half,
-            durationValue: -1,
             isRest: true,
             isDotted: false,
             hasAccent: false
@@ -191,7 +188,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -201,7 +197,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -241,7 +236,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -251,7 +245,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -261,7 +254,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -307,7 +299,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -317,7 +308,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -327,7 +317,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -372,7 +361,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -382,7 +370,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -392,7 +379,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -480,7 +466,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -490,7 +475,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -500,7 +484,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -510,7 +493,6 @@ extension TestingViewModel {
                 pitch: lowestGapNote.pitch,
                 octave: lowestGapNote.octave,
                 duration: .quarter,
-                durationValue: -1,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false

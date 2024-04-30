@@ -108,7 +108,6 @@ extension BarViewModel {
     private static func calculateLowestGapNote(clef: Bar.Clef) -> Note? {
         let lowestGapNote = Note(
             duration: .bar,
-            durationValue: -1,
             isRest: false,
             isDotted: false,
             hasAccent: false
@@ -153,7 +152,6 @@ extension BarViewModel {
         
         let middleStaveNote = Note(
             duration: .bar,
-            durationValue: -1,
             isRest: false,
             isDotted: false,
             hasAccent: false
@@ -359,7 +357,6 @@ extension BarViewModel {
                         guard let distance = calculateGapBetweenLowestGapNote(note, lowestGapNote: lowestGapNote) else {
                             let rest = Note(
                                 duration: note.duration,
-                                durationValue: -1,
                                 isRest: true,
                                 isDotted: note.isDotted,
                                 hasAccent: false
@@ -389,7 +386,6 @@ extension BarViewModel {
                         if index < 0 || index > rows - 1 {
                             let rest = Note(
                                 duration: note.duration,
-                                durationValue: -1,
                                 isRest: true,
                                 isDotted: note.isDotted,
                                 hasAccent: false

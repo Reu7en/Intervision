@@ -428,7 +428,6 @@ struct MusicXMLDataService {
                 var accidental: Note.Accidental? = nil
                 var octave: Note.Octave? = nil
                 var duration: Note.Duration? = nil
-                var durationValue: Double? = nil
                 var isRest: Bool = false
                 var isDotted: Bool = false
                 var isMeasureRest: Bool = false
@@ -455,7 +454,6 @@ struct MusicXMLDataService {
                     if line.contains("<rest measure=") {
                         let barRest: Note = Note(
                             duration: Note.Duration.bar,
-                            durationValue: -1,
                             isRest: true,
                             isDotted: false,
                             hasAccent: false
@@ -515,11 +513,6 @@ struct MusicXMLDataService {
                         default:
                             break
                         }
-                    }
-                    
-                    if line.contains("<duration") {
-                        let dur = Double(extractContent(fromTag: line) ?? "-1") ?? -1
-                        durationValue = dur
                     }
                     
                     if line.contains("<type") {
@@ -729,14 +722,12 @@ struct MusicXMLDataService {
                 
                 var pNote: Note? = nil
                 
-                if let d = duration,
-                   let dV = durationValue {
+                if let d = duration {
                     pNote = Note(
                         pitch: pitch,
                         accidental: accidental,
                         octave: octave,
                         duration: d,
-                        durationValue: dV,
                         timeModification: timeModification,
                         changeDynamic: changeDynamic,
                         graceNotes: nil,

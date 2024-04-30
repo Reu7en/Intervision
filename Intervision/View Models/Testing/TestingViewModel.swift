@@ -159,9 +159,9 @@ extension TestingViewModel {
         let clef: Bar.Clef = Bool.random() ? .Treble : .Bass
         let key: Bar.KeySignature = Bar.KeySignature.allCases.randomElement() ?? .CMajor
         let bar = Bar(chords: [Chord(notes: [])], clef: clef, timeSignature: .custom(beats: 4, noteValue: 4), repeat: nil, doubleLine: false, keySignature: key)
-        let lowestGapNote = Note(
-            pitch: clef == .Treble ? .F : .A,
-            octave: clef == .Treble ? .oneLine : .great,
+        let lowestStartingNote = Note(
+            pitch: clef == .Treble ? .B : .D,
+            octave: clef == .Treble ? .small : .great,
             duration: .quarter,
             isRest: false,
             isDotted: false,
@@ -185,8 +185,8 @@ extension TestingViewModel {
         switch question.type {
         case .ScoreTwoNoteIntervalIdentification, .RollTwoNoteIntervalIdentification:
             let lowestNote = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
@@ -194,22 +194,23 @@ extension TestingViewModel {
             )
             
             let highestNote = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
             )
             
-            let semitoneIncreases = self.generateDistinctNumbers(count: 2, range: 0...12)
-            let answer = semitoneIncreases[1] - semitoneIncreases[0]
+            let lowestNoteSemitoneIncrease = Int.random(in: 0...12)
+            let highestNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 1)...(lowestNoteSemitoneIncrease + 12))
+            let answer = highestNoteSemitoneIncrease - lowestNoteSemitoneIncrease
             
-            for _ in 0..<semitoneIncreases[0] {
+            for _ in 0..<lowestNoteSemitoneIncrease {
                 lowestNote.increaseSemitone(sharps: key.sharps)
             }
             
-            for _ in 0..<semitoneIncreases[1] {
+            for _ in 0..<highestNoteSemitoneIncrease {
                 highestNote.increaseSemitone(sharps: key.sharps)
             }
             
@@ -233,8 +234,8 @@ extension TestingViewModel {
             }
         case .ScoreThreeNoteInnerIntervalsIdentification, .RollThreeNoteInnerIntervalsIdentification:
             let lowestNote = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
@@ -242,8 +243,8 @@ extension TestingViewModel {
             )
             
             let middleNote = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
@@ -251,27 +252,29 @@ extension TestingViewModel {
             )
             
             let highestNote = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
             )
             
-            let semitoneIncreases = self.generateDistinctNumbers(count: 3, range: 0...12)
-            let answer1 = semitoneIncreases[1] - semitoneIncreases[0]
-            let answer2 = semitoneIncreases[2] - semitoneIncreases[1]
+            let lowestNoteSemitoneIncrease = Int.random(in: 0...12)
+            let highestNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 2)...(lowestNoteSemitoneIncrease + 12))
+            let middleNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 1)...(highestNoteSemitoneIncrease - 1))
+            let answer1 = middleNoteSemitoneIncrease - lowestNoteSemitoneIncrease
+            let answer2 = highestNoteSemitoneIncrease - middleNoteSemitoneIncrease
             
-            for _ in 0..<semitoneIncreases[0] {
+            for _ in 0..<lowestNoteSemitoneIncrease {
                 lowestNote.increaseSemitone(sharps: key.sharps)
             }
             
-            for _ in 0..<semitoneIncreases[1] {
+            for _ in 0..<middleNoteSemitoneIncrease {
                 middleNote.increaseSemitone(sharps: key.sharps)
             }
             
-            for _ in 0..<semitoneIncreases[2] {
+            for _ in 0..<highestNoteSemitoneIncrease {
                 highestNote.increaseSemitone(sharps: key.sharps)
             }
             
@@ -296,8 +299,8 @@ extension TestingViewModel {
             }
         case .ScoreThreeNoteOuterIntervalIdentification, .RollThreeNoteOuterIntervalIdentification:
             let lowestNote = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
@@ -305,8 +308,8 @@ extension TestingViewModel {
             )
             
             let middleNote = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
@@ -314,26 +317,28 @@ extension TestingViewModel {
             )
             
             let highestNote = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
             )
             
-            let semitoneIncreases = self.generateDistinctNumbers(count: 3, range: 0...12)
-            let answer = semitoneIncreases[2] - semitoneIncreases[0]
+            let lowestNoteSemitoneIncrease = Int.random(in: 0...12)
+            let highestNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 2)...(lowestNoteSemitoneIncrease + 12))
+            let middleNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 1)...(highestNoteSemitoneIncrease - 1))
+            let answer = highestNoteSemitoneIncrease - lowestNoteSemitoneIncrease
             
-            for _ in 0..<semitoneIncreases[0] {
+            for _ in 0..<lowestNoteSemitoneIncrease {
                 lowestNote.increaseSemitone(sharps: key.sharps)
             }
             
-            for _ in 0..<semitoneIncreases[1] {
+            for _ in 0..<middleNoteSemitoneIncrease {
                 middleNote.increaseSemitone(sharps: key.sharps)
             }
             
-            for _ in 0..<semitoneIncreases[2] {
+            for _ in 0..<highestNoteSemitoneIncrease {
                 highestNote.increaseSemitone(sharps: key.sharps)
             }
             
@@ -357,62 +362,90 @@ extension TestingViewModel {
                 return nil
             }
         case .ScoreChordsAreInversions, .RollChordsAreInversions:
-            let lowestNote = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+            let lowestNote1 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
             )
             
-            let middleNote = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+            let middleNote1 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
             )
             
-            let highestNote = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+            let highestNote1 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
             )
             
-            let semitoneIncreases = self.generateDistinctNumbers(count: 3, range: 0...12)
+            let lowestNote2 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .quarter,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
             
-            for _ in 0..<semitoneIncreases[0] {
-                lowestNote.increaseSemitone(sharps: key.sharps)
+            let middleNote2 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .quarter,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let highestNote2 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .quarter,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let lowestNoteSemitoneIncrease = Int.random(in: 0...12)
+            let highestNoteSemitoneIncrease = ((lowestNoteSemitoneIncrease + 6)...(lowestNoteSemitoneIncrease + 12)).filter { $0 != lowestNoteSemitoneIncrease + 12 }.randomElement() ?? Int.random(in: (lowestNoteSemitoneIncrease + 6)...(lowestNoteSemitoneIncrease + 12))
+            let middleNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 3)...(highestNoteSemitoneIncrease - 3))
+            
+            for _ in 0..<lowestNoteSemitoneIncrease {
+                lowestNote1.increaseSemitone(sharps: key.sharps)
+                lowestNote2.increaseSemitone(sharps: key.sharps)
             }
             
-            for _ in 0..<semitoneIncreases[1] {
-                middleNote.increaseSemitone(sharps: key.sharps)
+            for _ in 0..<middleNoteSemitoneIncrease {
+                middleNote1.increaseSemitone(sharps: key.sharps)
+                middleNote2.increaseSemitone(sharps: key.sharps)
             }
             
-            for _ in 0..<semitoneIncreases[2] {
-                highestNote.increaseSemitone(sharps: key.sharps)
+            for _ in 0..<highestNoteSemitoneIncrease {
+                highestNote1.increaseSemitone(sharps: key.sharps)
+                highestNote2.increaseSemitone(sharps: key.sharps)
             }
             
-            bar.chords[0].notes.append(lowestNote)
-            bar.chords[0].notes.append(middleNote)
-            bar.chords[0].notes.append(highestNote)
+            bar.chords[0].notes.append(lowestNote1)
+            bar.chords[0].notes.append(middleNote1)
+            bar.chords[0].notes.append(highestNote1)
             bar.chords.append(Chord(notes: [quarterRest]))
             bar.chords.append(Chord(notes: []))
             
             if Bool.random() { // Apply 1st or 2nd inversion
-                for _ in 0..<12 {
-                    lowestNote.increaseSemitone(sharps: key.sharps)
-                }
+                lowestNote2.increaseOctave()
             } else {
-                for _ in 0..<12 {
-                    lowestNote.increaseSemitone(sharps: key.sharps)
-                    middleNote.increaseSemitone(sharps: key.sharps)
-                }
+                lowestNote2.increaseOctave()
+                middleNote2.increaseOctave()
             }
             
             let answer = Bool.random()
@@ -423,29 +456,29 @@ extension TestingViewModel {
                 if Bool.random() { // Adjust lowest note
                     if semitonesToAdjust > 0 {
                         for _ in 0..<semitonesToAdjust {
-                            lowestNote.increaseSemitone(sharps: key.sharps)
+                            lowestNote2.increaseSemitone(sharps: key.sharps)
                         }
                     } else {
                         for _ in 0..<abs(semitonesToAdjust) {
-                            lowestNote.decreaseSemitone(sharps: key.sharps)
+                            lowestNote2.decreaseSemitone(sharps: key.sharps)
                         }
                     }
                 } else { // Adjust middle note
                     if semitonesToAdjust > 0 {
                         for _ in 0..<semitonesToAdjust {
-                            middleNote.increaseSemitone(sharps: key.sharps)
+                            middleNote2.increaseSemitone(sharps: key.sharps)
                         }
                     } else {
                         for _ in 0..<abs(semitonesToAdjust) {
-                            middleNote.decreaseSemitone(sharps: key.sharps)
+                            middleNote2.decreaseSemitone(sharps: key.sharps)
                         }
                     }
                 }
             }
             
-            bar.chords[2].notes.append(lowestNote)
-            bar.chords[2].notes.append(middleNote)
-            bar.chords[2].notes.append(highestNote)
+            bar.chords[2].notes.append(lowestNote2)
+            bar.chords[2].notes.append(middleNote2)
+            bar.chords[2].notes.append(highestNote2)
             bar.chords.append(Chord(notes: [quarterRest]))
             
             if question.type.isScoreQuestion {
@@ -463,8 +496,8 @@ extension TestingViewModel {
             }
         case .ScoreTwoNoteIntervalsAreEqual, .RollTwoNoteIntervalsAreEqual:
             let lowestNote1 = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
@@ -472,8 +505,8 @@ extension TestingViewModel {
             )
             
             let highestNote1 = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
@@ -481,8 +514,8 @@ extension TestingViewModel {
             )
             
             let lowestNote2 = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
@@ -490,21 +523,22 @@ extension TestingViewModel {
             )
             
             let highestNote2 = Note(
-                pitch: lowestGapNote.pitch,
-                octave: lowestGapNote.octave,
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
                 duration: .quarter,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
             )
             
-            let semitoneIncreases = self.generateDistinctNumbers(count: 2, range: 0...12)
+            let lowestNoteSemitoneIncrease = Int.random(in: 0...12)
+            let highestNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 3)...(lowestNoteSemitoneIncrease + 12))
             
-            for _ in 0..<semitoneIncreases[0] {
+            for _ in 0..<lowestNoteSemitoneIncrease {
                 lowestNote1.increaseSemitone(sharps: key.sharps)
             }
             
-            for _ in 0..<semitoneIncreases[1] {
+            for _ in 0..<highestNoteSemitoneIncrease {
                 highestNote1.increaseSemitone(sharps: key.sharps)
             }
             
@@ -514,21 +548,15 @@ extension TestingViewModel {
             bar.chords.append(Chord(notes: []))
             
             let answer = Bool.random()
-            let lowestNote2SemitoneIncrease = Int.random(in: 1...11)
-            let highestNote2SemitoneIncrease = answer ? lowestNote2SemitoneIncrease + semitoneIncreases[1] : lowestNote2SemitoneIncrease + semitoneIncreases[1] + (Int.random(in: 1...2) * (Bool.random() ? 1 : -1))
+            let lowestNote2SemitoneIncrease = (0...12).filter { $0 != lowestNoteSemitoneIncrease }.randomElement() ?? Int.random(in: 0...12)
+            let highestNote2SemitoneIncrease = lowestNote2SemitoneIncrease + highestNoteSemitoneIncrease - lowestNoteSemitoneIncrease + (answer ? 0 : (Int.random(in: 1...2) * (Bool.random() ? 1 : -1)))
             
-            for _ in 0..<(semitoneIncreases[0] + lowestNote2SemitoneIncrease) {
+            for _ in 0..<lowestNote2SemitoneIncrease {
                 lowestNote2.increaseSemitone(sharps: key.sharps)
             }
             
-            if highestNote2SemitoneIncrease > 0 {
-                for _ in 0..<highestNote2SemitoneIncrease {
-                    highestNote2.increaseSemitone(sharps: key.sharps)
-                }
-            } else {
-                for _ in 0..<abs(highestNote2SemitoneIncrease) {
-                    highestNote2.decreaseSemitone(sharps: key.sharps)
-                }
+            for _ in 0..<highestNote2SemitoneIncrease {
+                highestNote2.increaseSemitone(sharps: key.sharps)
             }
             
             bar.chords[2].notes.append(lowestNote2)
@@ -549,15 +577,5 @@ extension TestingViewModel {
                 return nil
             }
         }
-    }
-    
-    private func generateDistinctNumbers(count: Int, range: ClosedRange<Int>) -> [Int] {
-        var numbers = Set<Int>()
-        
-        while numbers.count < count {
-            numbers.insert(Int.random(in: range))
-        }
-        
-        return numbers.sorted()
     }
 }

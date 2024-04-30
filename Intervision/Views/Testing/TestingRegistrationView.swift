@@ -43,7 +43,7 @@ struct TestingRegistrationView: View {
                     }
                 }
                 
-                Text("Competencies")
+                Text("Experience")
                     .font(.title)
                     .padding()
                 

@@ -41,7 +41,8 @@ struct BeatView: View {
             let accidentalPosition = beatViewModel.accidentalPositions[positionIndex]
             
             AccidentalView(
-                accidental: beatViewModel.accidentals[positionIndex]
+                accidental: beatViewModel.accidentals[positionIndex],
+                noteSize: beatViewModel.noteSize
             )
             .frame(height: beatViewModel.noteSize * 1.75)
             .position(accidentalPosition.0)

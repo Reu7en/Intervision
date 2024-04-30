@@ -21,7 +21,7 @@ class BeatViewModel: ObservableObject {
     let notePositions: [[(CGPoint, Int)]]
     let restPositions: [CGPoint]
     let accidentalPositions: [(CGPoint, Int)]
-    let groupPositions: [[[CGPoint]]]
+    let groupPositions: [[[(CGPoint, Int)]]]
     let isHollow: [Bool]
     let noteIsDotted: [Bool]
     let restIsDotted: [Bool]
@@ -129,7 +129,7 @@ extension BeatViewModel {
                             }
                             
                             if rowIndex % 2 != 0 && (rowIndex < column.count - 1 && column[rowIndex + 1] != nil && !(column[rowIndex + 1]?.first?.0.isRest ?? false) || rowIndex > 0 && column[rowIndex - 1] != nil && !(column[rowIndex - 1]?.first?.0.isRest ?? false)) {
-                                chordPositions.append((position, beamDirections[currentBeamIndex] == .Upward ? 1 : -1))
+                                chordPositions.append((position, noteIndex == 0 ? (beamDirections[currentBeamIndex] == .Upward ? 1 : -1) : 0))
                                 
                                 if hasAccidental {
                                     if (rowIndex < column.count - 1 && column[rowIndex + 1] != nil && !((column[rowIndex + 1] ?? []).allSatisfy({ $0.1 == nil })) || rowIndex > 0 && column[rowIndex - 1] != nil && !((column[rowIndex - 1] ?? []).allSatisfy({ $0.1 == nil }))) {
@@ -140,11 +140,11 @@ extension BeatViewModel {
                                 }
                             } else {
                                 if notes.count == 2 {
-                                    chordPositions.append((position, noteIndex == 1 ? beamDirections[currentBeamIndex] == .Upward ? 1 : -1 : 0))
+                                    chordPositions.append((position, noteIndex == 1 ? (beamDirections[currentBeamIndex] == .Upward ? 1 : -1) : 0))
                                     
                                     if hasAccidental {
-                                        if (rowIndex < column.count - 1 && column[rowIndex + 1] != nil && !((column[rowIndex + 1] ?? []).allSatisfy({ $0.1 == nil })) || rowIndex > 0 && column[rowIndex - 1] != nil && !((column[rowIndex - 1] ?? []).allSatisfy({ $0.1 == nil }))) {
-                                            if noteIndex == 1 {
+                                        if noteIndex == 1 {
+                                            if notes[0].1 == nil {
                                                 accidentalPositions.append((position, beamDirections[currentBeamIndex] == .Upward ? -1 : -2))
                                             } else {
                                                 accidentalPositions.append((position, beamDirections[currentBeamIndex] == .Upward ? -2 : -3))
@@ -182,16 +182,16 @@ extension BeatViewModel {
         return (notePositions, restPositions, accidentalPositions)
     }
     
-    private static func calculateGroupPositions(beatBeamGroupChords: [[Chord]], notePositions: [[(CGPoint, Int)]]) -> [[[CGPoint]]] {
+    private static func calculateGroupPositions(beatBeamGroupChords: [[Chord]], notePositions: [[(CGPoint, Int)]]) -> [[[(CGPoint, Int)]]] {
         guard !notePositions.isEmpty else { return [] }
-        var groupPositions: [[[CGPoint]]] = []
+        var groupPositions: [[[(CGPoint, Int)]]] = []
         var currentIndex = 0
         
         for group in beatBeamGroupChords {
-            var currentPositions: [[CGPoint]] = []
+            var currentPositions: [[(CGPoint, Int)]] = []
             
             for _ in 0..<group.count {
-                currentPositions.append(notePositions[currentIndex].compactMap { $0.0 })
+                currentPositions.append(notePositions[currentIndex].compactMap( { $0 } ))
                 currentIndex += 1
             }
             

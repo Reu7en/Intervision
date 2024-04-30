@@ -34,7 +34,7 @@ struct TestSession: Identifiable {
         var questions: [Question] = []
         
         for _ in 0..<(questionCount / (3 * Question.QuestionType.allCases.count)) {
-            for questionType in Question.QuestionType.allCases {
+            for questionType in Question.QuestionType.allCases.filter( { $0.isScoreQuestion } ) { // REMOVE FILTER
                 if questionType.isScoreQuestion {
                     let scoreQuestions = Array(repeating: Question(type: questionType, intervalLinesType: .None), count: 3)
                     questions.append(contentsOf: scoreQuestions)

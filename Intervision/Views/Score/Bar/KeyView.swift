@@ -24,12 +24,19 @@ struct KeyView: View {
                     let yOffset = CGFloat(distance + (middlePitch.distanceFromC() > 4 ? middlePitch.distanceFromC() - 7 : middlePitch.distanceFromC())) * (gapHeight / 2)
                     
                     HStack {
-                        Image(key.sharps ? "Sharp" : "Flat")
-                            .interpolation(.high)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: gapHeight * 2)
-                            .offset(y: yOffset + (key.sharps ? 0 : -gapHeight / 2))
+                        AccidentalView(
+                            accidental: key.sharps ? Note.Accidental.Sharp : Note.Accidental.Flat,
+                            noteSize: gapHeight
+                        )
+                        .frame(height: gapHeight * 2)
+                        .offset(y: yOffset)
+                        
+//                        Image(key.sharps ? "Sharp" : "Flat")
+//                            .interpolation(.high)
+//                            .resizable()
+//                            .scaledToFit()
+//                            .frame(height: gapHeight * 2)
+//                            .offset(y: yOffset + (key.sharps ? 0 : -gapHeight / 2))
                     }
                 }
             }

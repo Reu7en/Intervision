@@ -10,6 +10,7 @@ import SwiftUI
 struct AccidentalView: View {
     
     let accidental: Note.Accidental
+    let noteSize: CGFloat
     
     var body: some View {
         switch accidental {
@@ -23,6 +24,7 @@ struct AccidentalView: View {
                 .interpolation(.high)
                 .resizable()
                 .scaledToFit()
+                .offset(y: -noteSize / 2.5)
         case .Natural:
             Image("Natural")
                 .interpolation(.high)
@@ -39,5 +41,5 @@ struct AccidentalView: View {
 }
 
 #Preview {
-    AccidentalView(accidental: .Natural)
+    AccidentalView(accidental: .Natural, noteSize: .zero)
 }

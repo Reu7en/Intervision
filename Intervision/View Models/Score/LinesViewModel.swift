@@ -11,7 +11,7 @@ import SwiftUI
 class LinesViewModel: ObservableObject {
     
     let beatBeamGroupChords: [[Chord]]
-    let positions: [[[CGPoint]]]
+    let positions: [[[(CGPoint, Int)]]]
     let middleStaveNote: Note?
     let barGeometry: GeometryProxy
     let beatGeometry: GeometryProxy
@@ -36,7 +36,7 @@ class LinesViewModel: ObservableObject {
     init
     (
         beamGroups: [[Chord]],
-        positions: [[[CGPoint]]],
+        positions: [[[(CGPoint, Int)]]],
         middleStaveNote: Note?,
         barGeometry: GeometryProxy,
         beatGeometry: GeometryProxy,
@@ -73,7 +73,7 @@ class LinesViewModel: ObservableObject {
 
 // Functions
 extension LinesViewModel {
-    private static func calculateLines(beatBeamGroupChords: [[Chord]], beamDirections: [BeatViewModel.Direction], positions: [[[CGPoint]]], numberOfBeamLines: [[Int]], barGeometry: GeometryProxy, idealStemLength: CGFloat, stemThickness: CGFloat, noteSize: CGFloat, beamSpacing: CGFloat, minimumStemLength: CGFloat) -> ([Line], [Line], [Line], [Line], [(CGPoint, Int)]) {
+    private static func calculateLines(beatBeamGroupChords: [[Chord]], beamDirections: [BeatViewModel.Direction], positions: [[[(CGPoint, Int)]]], numberOfBeamLines: [[Int]], barGeometry: GeometryProxy, idealStemLength: CGFloat, stemThickness: CGFloat, noteSize: CGFloat, beamSpacing: CGFloat, minimumStemLength: CGFloat) -> ([Line], [Line], [Line], [Line], [(CGPoint, Int)]) {
         var beamLines: [Line] = []
         var stemLines: [Line] = []
         var tailLines: [Line] = []
@@ -98,15 +98,15 @@ extension LinesViewModel {
             
             for chordPositions in positions[groupIndex] {
                 for position in chordPositions {
-                    var currentLedgerPoint = CGPoint(x: position.x, y: barGeometry.size.height / 2)
+                    var currentLedgerPoint = CGPoint(x: position.0.x + (CGFloat(position.1) * noteSize), y: barGeometry.size.height / 2)
                     var currentLinesAwayFromMiddle = 0
                     let epsilon = 0.0001
                     
-                    if position.y > barGeometry.size.height / 2 {
-                        while currentLedgerPoint.y <= position.y + epsilon {
+                    if position.0.y > barGeometry.size.height / 2 {
+                        while currentLedgerPoint.y <= position.0.y + epsilon {
                             if currentLinesAwayFromMiddle > 2 {
-                                let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - noteSize * 0.75, y: currentLedgerPoint.y)
-                                let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + noteSize * 0.75, y: currentLedgerPoint.y)
+                                let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - (noteSize * 0.75), y: currentLedgerPoint.y)
+                                let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + (noteSize * 0.75), y: currentLedgerPoint.y)
                                 
                                 ledgerLines.append(Line(startPoint: ledgerStartPoint, endPoint: ledgerEndPoint))
                             }
@@ -115,10 +115,10 @@ extension LinesViewModel {
                             currentLinesAwayFromMiddle += 1
                         }
                     } else {
-                        while currentLedgerPoint.y >= position.y - epsilon {
+                        while currentLedgerPoint.y >= position.0.y - epsilon {
                             if currentLinesAwayFromMiddle > 2 {
-                                let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - noteSize * 0.75, y: currentLedgerPoint.y)
-                                let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + noteSize * 0.75, y: currentLedgerPoint.y)
+                                let ledgerStartPoint = CGPoint(x: currentLedgerPoint.x - (noteSize * 0.75), y: currentLedgerPoint.y)
+                                let ledgerEndPoint = CGPoint(x: currentLedgerPoint.x + (noteSize * 0.75), y: currentLedgerPoint.y)
                                 
                                 ledgerLines.append(Line(startPoint: ledgerStartPoint, endPoint: ledgerEndPoint))
                             }
@@ -394,25 +394,25 @@ extension LinesViewModel {
         }
     }
     
-    private static func findFurthestPositionFromBeam(positions: [CGPoint], direction: BeatViewModel.Direction) -> CGPoint? {
+    private static func findFurthestPositionFromBeam(positions: [(CGPoint, Int)], direction: BeatViewModel.Direction) -> CGPoint? {
         guard !positions.isEmpty else { return nil }
         
         switch direction {
             case .Upward:
-                return positions.max(by: { $0.y < $1.y })
+                return positions.max(by: { $0.0.y < $1.0.y })?.0
             case .Downward:
-                return positions.min(by: { $0.y < $1.y })
+                return positions.min(by: { $0.0.y < $1.0.y })?.0
         }
     }
     
-    private static func findClosestPositionToBeam(positions: [CGPoint], direction: BeatViewModel.Direction) -> CGPoint? {
+    private static func findClosestPositionToBeam(positions: [(CGPoint, Int)], direction: BeatViewModel.Direction) -> CGPoint? {
         guard !positions.isEmpty else { return nil }
         
         switch direction {
             case .Upward:
-                return positions.min(by: { $0.y < $1.y })
+                return positions.min(by: { $0.0.y < $1.0.y })?.0
             case .Downward:
-                return positions.max(by: { $0.y < $1.y })
+                return positions.max(by: { $0.0.y < $1.0.y })?.0
         }
     }
 }

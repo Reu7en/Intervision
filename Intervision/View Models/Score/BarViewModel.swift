@@ -339,7 +339,7 @@ extension BarViewModel {
     
     private static func calculateNoteGrid(gaps: Int, ledgerLines: Int, rows: Int, lowestGapNote: Note?, splitChords: [[Chord]], bar: Bar) -> [[[[(Note, Note.Accidental?)]?]]] {
         var noteGrid: [[[[(Note, Note.Accidental?)]?]]] = []
-        var seenTones: [(Note.Pitch?, Note.Accidental?, Note.Octave?)] = []
+        var seenTones: [String: Note.Accidental?] = [:]
         let lowestGapIndex = (ledgerLines * 2) + (gaps * 2)
         
         for chordGroup in splitChords {
@@ -400,9 +400,23 @@ extension BarViewModel {
                             continue
                         }
                         
-                        let accidentalToRender: Note.Accidental? = seenTones.contains(where: { $0 == (note.pitch, note.accidental, note.octave) }) ? nil : BarViewModel.calculateAccidentalToRender(bar: bar, note: note)
-                        
-                        seenTones.append((note.pitch, note.accidental, note.octave))
+                        let accidentalToRender: Note.Accidental? = {
+                            let noteKey = getNoteKey(note: note)
+
+                            if let lastAccidental = seenTones[noteKey] {
+                                if note.accidental == lastAccidental {
+                                    return nil
+                                } else {
+                                    seenTones[noteKey] = note.accidental ?? .Natural
+                                    
+                                    return note.accidental ?? .Natural
+                                }
+                            }
+
+                            seenTones[noteKey] = note.accidental
+
+                            return BarViewModel.calculateAccidentalToRender(bar: bar, note: note)
+                        }()
                         
                         if groupGrid[chordIndex][index] == nil {
                             groupGrid[chordIndex][index] = [(note, accidentalToRender)]
@@ -447,5 +461,11 @@ extension BarViewModel {
         }
         
         return note.accidental
+    }
+    
+    private static func getNoteKey(note: Note) -> String {
+        guard let pitch = note.pitch, let octave = note.octave else { return "" }
+        
+        return "\(pitch.rawValue)_\(octave.rawValue)"
     }
 }

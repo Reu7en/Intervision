@@ -211,11 +211,11 @@ extension TestingViewModel {
             let answer = semitoneIncreases[1] - semitoneIncreases[0]
             
             for _ in 0..<semitoneIncreases[0] {
-                lowestNote.increaseSemitone()
+                lowestNote.increaseSemitone(sharps: key.sharps)
             }
             
             for _ in 0..<semitoneIncreases[1] {
-                highestNote.increaseSemitone()
+                highestNote.increaseSemitone(sharps: key.sharps)
             }
             
             bar.chords[0].notes.append(lowestNote)
@@ -226,6 +226,7 @@ extension TestingViewModel {
             if question.type.isScoreQuestion {
                 let barViewModel = BarViewModel(
                     bar: bar,
+                    ledgerLines: 5,
                     showClef: true,
                     showKey: true,
                     showTime: true
@@ -271,15 +272,15 @@ extension TestingViewModel {
             let answer2 = semitoneIncreases[2] - semitoneIncreases[1]
             
             for _ in 0..<semitoneIncreases[0] {
-                lowestNote.increaseSemitone()
+                lowestNote.increaseSemitone(sharps: key.sharps)
             }
             
             for _ in 0..<semitoneIncreases[1] {
-                middleNote.increaseSemitone()
+                middleNote.increaseSemitone(sharps: key.sharps)
             }
             
             for _ in 0..<semitoneIncreases[2] {
-                highestNote.increaseSemitone()
+                highestNote.increaseSemitone(sharps: key.sharps)
             }
             
             bar.chords[0].notes.append(lowestNote)
@@ -291,6 +292,7 @@ extension TestingViewModel {
             if question.type.isScoreQuestion {
                 let barViewModel = BarViewModel(
                     bar: bar,
+                    ledgerLines: 5,
                     showClef: true,
                     showKey: true,
                     showTime: true
@@ -335,15 +337,15 @@ extension TestingViewModel {
             let answer = semitoneIncreases[2] - semitoneIncreases[0]
             
             for _ in 0..<semitoneIncreases[0] {
-                lowestNote.increaseSemitone()
+                lowestNote.increaseSemitone(sharps: key.sharps)
             }
             
             for _ in 0..<semitoneIncreases[1] {
-                middleNote.increaseSemitone()
+                middleNote.increaseSemitone(sharps: key.sharps)
             }
             
             for _ in 0..<semitoneIncreases[2] {
-                highestNote.increaseSemitone()
+                highestNote.increaseSemitone(sharps: key.sharps)
             }
             
             bar.chords[0].notes.append(lowestNote)
@@ -355,6 +357,7 @@ extension TestingViewModel {
             if question.type.isScoreQuestion {
                 let barViewModel = BarViewModel(
                     bar: bar,
+                    ledgerLines: 5,
                     showClef: true,
                     showKey: true,
                     showTime: true
@@ -398,15 +401,15 @@ extension TestingViewModel {
             let semitoneIncreases = self.generateDistinctNumbers(count: 3, range: 0...12)
             
             for _ in 0..<semitoneIncreases[0] {
-                lowestNote.increaseSemitone()
+                lowestNote.increaseSemitone(sharps: key.sharps)
             }
             
             for _ in 0..<semitoneIncreases[1] {
-                middleNote.increaseSemitone()
+                middleNote.increaseSemitone(sharps: key.sharps)
             }
             
             for _ in 0..<semitoneIncreases[2] {
-                highestNote.increaseSemitone()
+                highestNote.increaseSemitone(sharps: key.sharps)
             }
             
             bar.chords[0].notes.append(lowestNote)
@@ -416,10 +419,14 @@ extension TestingViewModel {
             bar.chords.append(Chord(notes: []))
             
             if Bool.random() { // Apply 1st or 2nd inversion
-                lowestNote.increaseOctave(applyOctaveShift: false)
+                for _ in 0..<12 {
+                    lowestNote.increaseSemitone(sharps: key.sharps)
+                }
             } else {
-                lowestNote.increaseOctave(applyOctaveShift: false)
-                middleNote.increaseOctave(applyOctaveShift: false)
+                for _ in 0..<12 {
+                    lowestNote.increaseSemitone(sharps: key.sharps)
+                    middleNote.increaseSemitone(sharps: key.sharps)
+                }
             }
             
             let answer = Bool.random()
@@ -430,21 +437,21 @@ extension TestingViewModel {
                 if Bool.random() { // Adjust lowest note
                     if semitonesToAdjust > 0 {
                         for _ in 0..<semitonesToAdjust {
-                            lowestNote.increaseSemitone()
+                            lowestNote.increaseSemitone(sharps: key.sharps)
                         }
                     } else {
                         for _ in 0..<abs(semitonesToAdjust) {
-                            lowestNote.decreaseSemitone()
+                            lowestNote.decreaseSemitone(sharps: key.sharps)
                         }
                     }
                 } else { // Adjust middle note
                     if semitonesToAdjust > 0 {
                         for _ in 0..<semitonesToAdjust {
-                            middleNote.increaseSemitone()
+                            middleNote.increaseSemitone(sharps: key.sharps)
                         }
                     } else {
                         for _ in 0..<abs(semitonesToAdjust) {
-                            middleNote.decreaseSemitone()
+                            middleNote.decreaseSemitone(sharps: key.sharps)
                         }
                     }
                 }
@@ -458,6 +465,7 @@ extension TestingViewModel {
             if question.type.isScoreQuestion {
                 let barViewModel = BarViewModel(
                     bar: bar,
+                    ledgerLines: 5,
                     showClef: true,
                     showKey: true,
                     showTime: true
@@ -511,11 +519,11 @@ extension TestingViewModel {
             let semitoneIncreases = self.generateDistinctNumbers(count: 2, range: 0...12)
             
             for _ in 0..<semitoneIncreases[0] {
-                lowestNote1.increaseSemitone()
+                lowestNote1.increaseSemitone(sharps: key.sharps)
             }
             
             for _ in 0..<semitoneIncreases[1] {
-                highestNote1.increaseSemitone()
+                highestNote1.increaseSemitone(sharps: key.sharps)
             }
             
             bar.chords[0].notes.append(lowestNote1)
@@ -524,20 +532,20 @@ extension TestingViewModel {
             bar.chords.append(Chord(notes: []))
             
             let answer = Bool.random()
-            let lowestNote2SemitoneIncrease = Int.random(in: 0...12)
-            let highestNote2SemitoneIncrease = answer ? lowestNote2SemitoneIncrease + semitoneIncreases[1] - semitoneIncreases[0] : lowestNote2SemitoneIncrease + semitoneIncreases[1] - semitoneIncreases[0] + (Int.random(in: 1...2) * (Bool.random() ? 1 : -1))
+            let lowestNote2SemitoneIncrease = Int.random(in: 1...11)
+            let highestNote2SemitoneIncrease = answer ? lowestNote2SemitoneIncrease + semitoneIncreases[1] : lowestNote2SemitoneIncrease + semitoneIncreases[1] + (Int.random(in: 1...2) * (Bool.random() ? 1 : -1))
             
             for _ in 0..<(semitoneIncreases[0] + lowestNote2SemitoneIncrease) {
-                lowestNote2.increaseSemitone()
+                lowestNote2.increaseSemitone(sharps: key.sharps)
             }
             
             if highestNote2SemitoneIncrease > 0 {
                 for _ in 0..<highestNote2SemitoneIncrease {
-                    highestNote2.increaseSemitone()
+                    highestNote2.increaseSemitone(sharps: key.sharps)
                 }
             } else {
                 for _ in 0..<abs(highestNote2SemitoneIncrease) {
-                    highestNote2.decreaseSemitone()
+                    highestNote2.decreaseSemitone(sharps: key.sharps)
                 }
             }
             
@@ -548,6 +556,7 @@ extension TestingViewModel {
             if question.type.isScoreQuestion {
                 let barViewModel = BarViewModel(
                     bar: bar,
+                    ledgerLines: 5,
                     showClef: true,
                     showKey: true,
                     showTime: true

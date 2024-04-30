@@ -23,6 +23,7 @@ struct ScoreThreeNoteOuterIntervalIdentificationView: View {
                     if let questionData = testingViewModel.generateQuestionData(question: question),
                        let barViewModel = questionData.0,
                        let answer = questionData.2 {
+                        
                         HStack {
                             Spacer()
                             

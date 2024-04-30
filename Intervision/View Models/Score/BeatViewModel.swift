@@ -140,7 +140,7 @@ extension BeatViewModel {
                                 }
                             } else {
                                 if notes.count == 2 {
-                                    chordPositions.append((position, noteIndex == 1 ? (beamDirections[currentBeamIndex] == .Upward ? 1 : -1) : 0))
+                                    chordPositions.append((position, noteIndex == 1 ? beamDirections[currentBeamIndex] == .Upward ? 1 : -1 : 0))
                                     
                                     if hasAccidental {
                                         if (rowIndex < column.count - 1 && column[rowIndex + 1] != nil && !((column[rowIndex + 1] ?? []).allSatisfy({ $0.1 == nil })) || rowIndex > 0 && column[rowIndex - 1] != nil && !((column[rowIndex - 1] ?? []).allSatisfy({ $0.1 == nil }))) {
@@ -183,6 +183,7 @@ extension BeatViewModel {
     }
     
     private static func calculateGroupPositions(beatBeamGroupChords: [[Chord]], notePositions: [[(CGPoint, Int)]]) -> [[[CGPoint]]] {
+        guard !notePositions.isEmpty else { return [] }
         var groupPositions: [[[CGPoint]]] = []
         var currentIndex = 0
         

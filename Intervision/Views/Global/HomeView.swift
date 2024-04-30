@@ -35,14 +35,11 @@ struct HomeView: View {
             NavigationStack {
                 ZStack {
                     VStack {
-                        Spacer()
-                        
-                        Image(systemName: "pianokeys")
+                        Image("LaunchScreenIcon")
+                            .interpolation(.high)
                             .resizable()
                             .scaledToFit()
-                            .frame(width: width / 30)
-                        
-                        Spacer()
+                            .frame(width: width / 15)
                         
                         Button {
                             
@@ -95,11 +92,9 @@ struct HomeView: View {
                             .padding()
                         }
                         .frame(width: width / 10)
-                        
-                        Spacer()
                     }
                     .padding()
-                    .frame(width: width / 5, height: height / 5)
+                    .padding(.horizontal, width / 20)
                     .background(
                         RoundedRectangle(cornerRadius: 20)
                             .fill(Material.ultraThickMaterial)
@@ -154,7 +149,7 @@ extension HomeView {
 
 extension UTType {
     static var musicXML: UTType {
-        UTType(exportedAs: "com.example.musicxml")
+        UTType(exportedAs: "com.reuben.musicxml")
     }
 }
 

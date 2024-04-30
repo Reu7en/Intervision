@@ -126,12 +126,12 @@ extension BarViewModel {
                 
                 return lowestGapNote
             case .Alto:
-                lowestGapNote.pitch = Note.Pitch.F
+                lowestGapNote.pitch = Note.Pitch.G
                 lowestGapNote.octave = Note.Octave.small
                 
                 return lowestGapNote
             case .Tenor:
-                lowestGapNote.pitch = Note.Pitch.A
+                lowestGapNote.pitch = Note.Pitch.E
                 lowestGapNote.octave = Note.Octave.small
                 
                 return lowestGapNote
@@ -442,17 +442,11 @@ extension BarViewModel {
     }
     
     private static func calculateAccidentalToRender(bar: Bar, note: Note) -> Note.Accidental? {
-        guard let pitch = note.pitch else { return nil }
+        if bar.keySignature.alteredNotes.contains(where: { $0 == (note.pitch, note.accidental) }) { return nil }
         
-        if let alteredNote = bar.keySignature.alteredNotes.first(where: { $0.0 == pitch }) {
-            if alteredNote.1 == note.accidental {
-                return nil
-            } else {
-                if note.accidental == nil {
-                    return .Natural
-                } else {
-                    return note.accidental
-                }
+        for alteredNote in bar.keySignature.alteredNotes {
+            if note.pitch == alteredNote.0 {
+                return note.accidental ?? .Natural
             }
         }
         

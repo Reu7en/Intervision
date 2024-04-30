@@ -243,122 +243,137 @@ extension Note: CustomStringConvertible {
 }
 
 extension Note {
-    func increaseSemitone() {
-        guard let currentPitch = self.pitch, let currentOctave = self.octave else { return }
-        guard currentPitch != currentPitch.nextPitch, currentPitch != currentPitch.previousPitch else { return }
+    func increaseSemitone(sharps: Bool) {
+        guard let currentPitch = self.pitch else { return }
         
-        var newAccidental: Accidental?
-        var newPitch: Pitch?
-        var newOctave: Octave?
+        var currentSemitonesFromC = currentPitch.semitonesFromC()
         
         if let currentAccidental = self.accidental {
-            switch currentAccidental {
-            case .Sharp:
-                if currentPitch == .B || currentPitch == .E {
-                    newAccidental = .Sharp
-                } else {
-                    newAccidental = nil
-                }
-                
-                newPitch = currentPitch.nextPitch
-                break
-            case .Flat:
-                newAccidental = nil
-                newPitch = currentPitch
-                break
-            case .Natural:
-                if currentPitch == .B || currentPitch == .E {
-                    newAccidental = nil
-                    newPitch = currentPitch.nextPitch
-                } else {
-                    newAccidental = .Sharp
-                    newPitch = currentPitch
-                }
-                
-                break
-            case .DoubleSharp:
-                break
-            case .DoubleFlat:
-                break
-            }
-        } else {
-            if currentPitch == .B || currentPitch == .E {
-                newAccidental = nil
-                newPitch = currentPitch.nextPitch
-            } else {
-                newAccidental = .Sharp
-                newPitch = currentPitch
-            }
+            currentSemitonesFromC += currentAccidental.rawValue
         }
         
-        if currentPitch == .B && newPitch == .C {
-            newOctave = currentOctave.next
-        } else {
-            newOctave = currentOctave
+        switch currentSemitonesFromC {
+        case -2:
+            self.pitch = .B
+            self.accidental = nil
+            self.decreaseOctave()
+        case -1:
+            self.pitch = .C
+            self.accidental = nil
+        case 0:
+            self.pitch = sharps ? .C : .D
+            self.accidental = sharps ? .Sharp : .Flat
+        case 1:
+            self.pitch = .D
+            self.accidental = nil
+        case 2:
+            self.pitch = sharps ? .D : .E
+            self.accidental = sharps ? .Sharp : .Flat
+        case 3:
+            self.pitch = .E
+            self.accidental = nil
+        case 4:
+            self.pitch = .F
+            self.accidental = nil
+        case 5:
+            self.pitch = sharps ? .F : .G
+            self.accidental = sharps ? .Sharp : .Flat
+        case 6:
+            self.pitch = .G
+            self.accidental = nil
+        case 7:
+            self.pitch = sharps ? .G : .A
+            self.accidental = sharps ? .Sharp : .Flat
+        case 8:
+            self.pitch = .A
+            self.accidental = nil
+        case 9:
+            self.pitch = sharps ? .A : .B
+            self.accidental = sharps ? .Sharp : .Flat
+        case 10:
+            self.pitch = .B
+            self.accidental = nil
+        case 11:
+            self.pitch = .C
+            self.accidental = nil
+            self.increaseOctave()
+        case 12:
+            self.pitch = sharps ? .C : .D
+            self.accidental = sharps ? .Sharp : .Flat
+            self.increaseOctave()
+        case 13:
+            self.pitch = .D
+            self.accidental = nil
+            self.increaseOctave()
+        default:
+            return
         }
-        
-        self.accidental = newAccidental
-        self.pitch = newPitch
-        self.octave = newOctave
     }
     
-    func decreaseSemitone() {
-        guard let currentPitch = self.pitch, let currentOctave = self.octave else { return }
-        guard currentPitch != currentPitch.nextPitch, currentPitch != currentPitch.previousPitch else { return }
+    func decreaseSemitone(sharps: Bool) {
+        guard let currentPitch = self.pitch else { return }
         
-        var newAccidental: Accidental?
-        var newPitch: Pitch?
-        var newOctave: Octave?
+        var currentSemitonesFromC = currentPitch.semitonesFromC()
         
         if let currentAccidental = self.accidental {
-            switch currentAccidental {
-            case .Sharp:
-                newAccidental = nil
-                newPitch = currentPitch
-                break
-            case .Flat:
-                if currentPitch == .C || currentPitch == .F {
-                    newAccidental = .Flat
-                } else {
-                    newAccidental = nil
-                }
-                
-                newPitch = currentPitch.previousPitch
-                
-                break
-            case .Natural:
-                if currentPitch == .C || currentPitch == .F {
-                    newAccidental = nil
-                    newPitch = currentPitch.previousPitch
-                } else {
-                    newAccidental = .Flat
-                    newPitch = currentPitch
-                }
-                
-                break
-            case .DoubleSharp:
-                break
-            case .DoubleFlat:
-                break
-            }
-        } else {
-            if currentPitch == .C || currentPitch == .F {
-                newAccidental = nil
-                newPitch = currentPitch.previousPitch
-            } else {
-                newAccidental = .Flat
-                newPitch = currentPitch
-            }
+            currentSemitonesFromC += currentAccidental.rawValue
         }
         
-        if currentPitch == .C && newPitch == .B {
-            newOctave = currentOctave.prev
-        } else {
-            newOctave = currentOctave
+        switch currentSemitonesFromC {
+        case -2:
+            self.pitch = .A
+            self.accidental = nil
+            self.decreaseOctave()
+        case -1:
+            self.pitch = sharps ? .A : .B
+            self.accidental = sharps ? .Sharp : .Flat
+            self.decreaseOctave()
+        case 0:
+            self.pitch = .B
+            self.accidental = nil
+            self.decreaseOctave()
+        case 1:
+            self.pitch = .C
+            self.accidental = nil
+        case 2:
+            self.pitch = sharps ? .C : .D
+            self.accidental = sharps ? .Sharp : .Flat
+        case 3:
+            self.pitch = .D
+            self.accidental = nil
+        case 4:
+            self.pitch = sharps ? .D : .E
+            self.accidental = sharps ? .Sharp : .Flat
+        case 5:
+            self.pitch = .E
+            self.accidental = nil
+        case 6:
+            self.pitch = .F
+            self.accidental = nil
+        case 7:
+            self.pitch = sharps ? .F : .G
+            self.accidental = sharps ? .Sharp : .Flat
+        case 8:
+            self.pitch = .G
+            self.accidental = nil
+        case 9:
+            self.pitch = sharps ? .G : .A
+            self.accidental = sharps ? .Sharp : .Flat
+        case 10:
+            self.pitch = .A
+            self.accidental = nil
+        case 11:
+            self.pitch = sharps ? .A : .B
+            self.accidental = sharps ? .Sharp : .Flat
+        case 12:
+            self.pitch = .B
+            self.accidental = nil
+        case 13:
+            self.pitch = .C
+            self.accidental = nil
+            self.increaseOctave()
+        default:
+            return
         }
-        
-        self.accidental = newAccidental
-        self.pitch = newPitch
-        self.octave = newOctave
     }
 }

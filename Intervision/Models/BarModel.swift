@@ -47,7 +47,7 @@ extension Bar {
         case eighth(bpm: Int)
     }
     
-    enum Clef {
+    enum Clef: CaseIterable {
         case Treble, Soprano, Alto, Tenor, Bass, Neutral
     }
     

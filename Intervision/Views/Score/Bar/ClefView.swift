@@ -28,6 +28,7 @@ struct ClefView: View {
                         .interpolation(.high)
                         .resizable()
                         .frame(height: gapHeight * 4)
+                        .offset(y: gapHeight * 2)
                 }
             case .Alto:
                 ZStack {
@@ -42,6 +43,7 @@ struct ClefView: View {
                         .interpolation(.high)
                         .resizable()
                         .frame(height: gapHeight * 4)
+                        .offset(y: -gapHeight)
                 }
             case .Bass:
                 ZStack {

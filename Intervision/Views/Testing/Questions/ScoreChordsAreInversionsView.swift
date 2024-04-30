@@ -23,6 +23,7 @@ struct ScoreChordsAreInversionsView: View {
                     if let questionData = testingViewModel.generateQuestionData(question: question),
                        let barViewModel = questionData.0,
                        let answer = questionData.3 {
+                        
                         HStack {
                             Spacer()
                             

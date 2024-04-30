@@ -21,7 +21,7 @@ struct KeyView: View {
                 ForEach(0..<key.alteredNotes.count, id: \.self) { noteIndex in
                     let pitch = key.alteredNotes[noteIndex].0
                     let distance = 7 - pitch.distanceFromC() + (pitch.distanceFromC() < (key.sharps ? 5 : 3) ? -7 : 0)
-                    let yOffset = CGFloat(key.sharps ? distance : distance - 1 + (middlePitch.distanceFromC() > 4 ? middlePitch.distanceFromC() - 7 : middlePitch.distanceFromC())) * (gapHeight / 2)
+                    let yOffset = CGFloat(distance + (middlePitch.distanceFromC() > 4 ? middlePitch.distanceFromC() - 7 : middlePitch.distanceFromC())) * (gapHeight / 2)
                     
                     HStack {
                         Image(key.sharps ? "Sharp" : "Flat")
@@ -29,7 +29,7 @@ struct KeyView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(height: gapHeight * 2)
-                            .offset(y: yOffset)
+                            .offset(y: yOffset + (key.sharps ? 0 : -gapHeight / 2))
                     }
                 }
             }

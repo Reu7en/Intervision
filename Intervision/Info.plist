@@ -12,7 +12,7 @@
 			<key>UTTypeDescription</key>
 			<string>MusicXML File</string>
 			<key>UTTypeIdentifier</key>
-			<string>com.example.musicxml</string>
+			<string>com.reuben.musicxml</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>

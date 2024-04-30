@@ -9,7 +9,7 @@ import Foundation
 
 class Segment: Identifiable, Equatable, ObservableObject {
     
-    init(rowIndex: Int, duration: Double, durationPreceeding: Double, dynamic: Bar.Dynamic?, note: Note?, id: UUID = UUID(), isSelected: Bool = false) {
+    init(rowIndex: Int, duration: Double, durationPreceeding: Double, dynamic: Bar.Dynamic?, note: Note?, id: UUID = UUID(), isSelected: Bool = false, sharps: Bool) {
         self.rowIndex = rowIndex
         self.duration = duration
         self.durationPreceeding = durationPreceeding
@@ -17,6 +17,7 @@ class Segment: Identifiable, Equatable, ObservableObject {
         self.note = note
         self.id = id
         self.isSelected = isSelected
+        self.sharps = sharps
     }
     
     @Published var rowIndex: Int
@@ -26,6 +27,7 @@ class Segment: Identifiable, Equatable, ObservableObject {
     let dynamic: Bar.Dynamic?
     let note: Note?
     var isSelected: Bool
+    let sharps: Bool
     
     // Identifiable
     var id = UUID()
@@ -36,12 +38,12 @@ class Segment: Identifiable, Equatable, ObservableObject {
     }
     
     func increaseSemitone() {
-        note?.increaseSemitone()
+        note?.increaseSemitone(sharps: sharps)
         self.rowIndex -= 1
     }
     
     func decreaseSemitone() {
-        note?.decreaseSemitone()
+        note?.decreaseSemitone(sharps: sharps)
         self.rowIndex += 1
     }
     

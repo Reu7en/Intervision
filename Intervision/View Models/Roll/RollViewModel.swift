@@ -294,7 +294,7 @@ class RollViewModel: ObservableObject {
                                 }
                                 
                                 if segment.durationPreceeding != 0 && groups.isEmpty && currentGroup.isEmpty {
-                                    groups.append([Segment(rowIndex: -1, duration: segment.durationPreceeding, durationPreceeding: 0, dynamic: nil, note: nil)])
+                                    groups.append([Segment(rowIndex: -1, duration: segment.durationPreceeding, durationPreceeding: 0, dynamic: nil, note: nil, sharps: barToUpdate.keySignature.sharps)])
                                 }
                                 
                                 if segment.durationPreceeding < currentLongestDurationPoint {
@@ -307,7 +307,7 @@ class RollViewModel: ObservableObject {
                                             let delta = segment.durationPreceeding - (lastSegment.duration + lastSegment.durationPreceeding)
                                             
                                             if delta > 0 {
-                                                groups.append([Segment(rowIndex: -1, duration: delta, durationPreceeding: lastSegment.duration + lastSegment.durationPreceeding, dynamic: nil, note: nil)]) // rest segment
+                                                groups.append([Segment(rowIndex: -1, duration: delta, durationPreceeding: lastSegment.duration + lastSegment.durationPreceeding, dynamic: nil, note: nil, sharps: barToUpdate.keySignature.sharps)]) // rest segment
                                             }
                                         }
                                     }
@@ -327,7 +327,7 @@ class RollViewModel: ObservableObject {
                                     let delta = barDuration - (lastSegment.duration + lastSegment.durationPreceeding)
                                     
                                     if delta > 0 {
-                                        groups.append([Segment(rowIndex: -1, duration: delta, durationPreceeding: lastSegment.duration + lastSegment.durationPreceeding, dynamic: nil, note: nil)]) // rest segment
+                                        groups.append([Segment(rowIndex: -1, duration: delta, durationPreceeding: lastSegment.duration + lastSegment.durationPreceeding, dynamic: nil, note: nil, sharps: barToUpdate.keySignature.sharps)]) // rest segment
                                     }
                                 }
                             }
@@ -385,7 +385,7 @@ class RollViewModel: ObservableObject {
                                                     tie = .Both
                                                 }
                                                 
-                                                currentChords[i].append((Segment(rowIndex: segment.rowIndex, duration: times[i + 1] - times[i], durationPreceeding: times[i], dynamic: segment.dynamic, note: segment.note), tie))
+                                                currentChords[i].append((Segment(rowIndex: segment.rowIndex, duration: times[i + 1] - times[i], durationPreceeding: times[i], dynamic: segment.dynamic, note: segment.note, sharps: barToUpdate.keySignature.sharps), tie))
                                             }
                                         }
                                     }
@@ -820,7 +820,8 @@ class RollViewModel: ObservableObject {
                                                 duration: duration,
                                                 durationPreceeding: durationPreceeding,
                                                 dynamic: currentDynamics[staveIndex],
-                                                note: note
+                                                note: note, 
+                                                sharps: bar.keySignature.sharps
                                             )
                                         )
                                     }

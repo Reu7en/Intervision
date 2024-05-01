@@ -16,6 +16,7 @@ struct PianoKeysView: View {
     let whiteKeysPerOctave = 7
     let blackKeysPerOctave = 5
     let totalKeysPerOctave = 12
+    let showOctaveLabel: Bool
     
     var body: some View {
         
@@ -34,7 +35,7 @@ struct PianoKeysView: View {
                                     .frame(width: width, height: whiteKeyHeight)
                                     .border(Color.black)
                                 
-                                if whiteKeyIndex == whiteKeysPerOctave - 1 {
+                                if whiteKeyIndex == whiteKeysPerOctave - 1 && showOctaveLabel {
                                     HStack(spacing: 0) {
                                         Spacer()
                                         
@@ -66,6 +67,6 @@ struct PianoKeysView: View {
 
 #Preview {
     GeometryReader { geometry in
-        PianoKeysView(geometry: geometry, octaves: 9, width: 100, rowHeight: 10)
+        PianoKeysView(geometry: geometry, octaves: 9, width: 100, rowHeight: 10, showOctaveLabel: false)
     }
 }

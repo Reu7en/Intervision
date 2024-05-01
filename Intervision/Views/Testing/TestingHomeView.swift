@@ -22,7 +22,7 @@ struct TestingHomeView: View {
                     switch testingViewModel.presentedView {
                     case .Registration:
                         TestingRegistrationView(testingViewModel: testingViewModel)
-                            .frame(width: geometry.size.width / 3, height: geometry.size.height / 2.5)
+                            .frame(width: geometry.size.width / 2.5, height: geometry.size.height / 1.5)
                             .background(
                                 RoundedRectangle(cornerRadius: 20)
                                     .fill(Material.ultraThickMaterial)
@@ -46,17 +46,14 @@ struct TestingHomeView: View {
                                     }
                             )
                             .shadow(radius: 10)
-                    case .Practice:
-                        PracticeView()
                     case .Questions:
                         QuestionsView(testingViewModel: testingViewModel)
                     case .Results:
-                        ResultsView()
+                        ResultsView(testingViewModel: testingViewModel)
                     }
                     
                     Spacer()
                 }
-                .padding()
                 
                 Spacer()
             }

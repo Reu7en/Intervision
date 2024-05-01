@@ -648,9 +648,9 @@ class RollViewModel: ObservableObject {
     }
     
     func clearSelectedSegments() {
-        for segment in selectedSegments {
+//        for segment in selectedSegments {
 //            updateBar(barToUpdate: segment.1)
-        }
+//        }
         
         updateScoreParts()
         

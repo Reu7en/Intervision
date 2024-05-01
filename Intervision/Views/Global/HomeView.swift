@@ -52,6 +52,7 @@ struct HomeView: View {
                             .padding()
                         }
                         .frame(width: width / 10)
+                        .disabled(true)
                         
                         Button {
                             let panel = NSOpenPanel()
@@ -79,6 +80,7 @@ struct HomeView: View {
                             .padding()
                         }
                         .frame(width: width / 10)
+                        .disabled(true)
                         
                         Button {
                             presentedView = .Testing
@@ -92,6 +94,8 @@ struct HomeView: View {
                             .padding()
                         }
                         .frame(width: width / 10)
+                        
+                        Text("[User Testing Build]")
                     }
                     .padding()
                     .padding(.horizontal, width / 20)

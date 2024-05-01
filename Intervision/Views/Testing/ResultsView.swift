@@ -8,11 +8,69 @@
 import SwiftUI
 
 struct ResultsView: View {
+    
+    @StateObject var testingViewModel: TestingViewModel
+    
+    @State private var showExitAlert = false
+    
     var body: some View {
-        Text("Results")
+        VStack {
+            Spacer()
+            
+            HStack {
+                Spacer()
+                
+                Button {
+                    testingViewModel.saveTestSession()
+                } label: {
+                    Text("Save Results")
+                        .font(.title)
+                        .padding()
+                }
+                .alert(isPresented: $testingViewModel.showSavingSuccessAlert) {
+                    Alert(
+                        title: Text("Saved"),
+                        message: Text("Your test data has been saved successfully! 🎉")
+                    )
+                }
+                .alert(isPresented: $testingViewModel.showSavingErrorAlert) {
+                    Alert(
+                        title: Text("Error!"),
+                        message: Text("Test data has not been saved!")
+                    )
+                }
+                
+                Spacer()
+            }
+            
+            Spacer()
+        }
+        .overlay(alignment: .topLeading) {
+            Button {
+                self.showExitAlert = true
+                
+            } label: {
+                Image(systemName: "xmark")
+                    .font(.title)
+                    .padding()
+            }
+        }
+        .alert("Are you sure you want to exit?", isPresented: $showExitAlert) {
+            Button {
+                testingViewModel.presentedView = .Registration
+            } label: {
+                Text("Yes")
+            }
+            
+            Button {
+                
+            } label: {
+                Text("No")
+            }
+        }
     }
 }
 
 #Preview {
-    ResultsView()
+    ResultsView(testingViewModel: TestingViewModel())
 }

@@ -11,6 +11,8 @@ struct QuestionsView: View {
     
     @StateObject var testingViewModel: TestingViewModel
     
+    @State private var showErrorAlert: Bool = false
+    
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -24,35 +26,25 @@ struct QuestionsView: View {
                         CountdownTimerView(testingViewModel: testingViewModel)
                             .frame(width: geometry.size.width / 3, height: geometry.size.height / 3)
                     case .Question:
-                        if let testSession = testingViewModel.testSession {
-                            switch testSession.questions[testingViewModel.currentQuestion].type {
-                            case .ScoreTwoNoteIntervalIdentification:
-                                ScoreTwoNoteIntervalIdentificationView(testingViewModel: testingViewModel)
-                            case .ScoreThreeNoteInnerIntervalsIdentification:
-                                ScoreThreeNoteInnerIntervalsIdentificationView(testingViewModel: testingViewModel)
-                            case .ScoreThreeNoteOuterIntervalIdentification:
-                                ScoreThreeNoteOuterIntervalIdentificationView(testingViewModel: testingViewModel)
-                            case .ScoreChordsAreInversions:
-                                ScoreChordsAreInversionsView(testingViewModel: testingViewModel)
-                            case .ScoreTwoNoteIntervalsAreEqual:
-                                ScoreTwoNoteIntervalsAreEqualView(testingViewModel: testingViewModel)
-                            case .RollTwoNoteIntervalIdentification:
-                                RollTwoNoteIntervalIdentificationView(testingViewModel: testingViewModel)
-                            case .RollThreeNoteInnerIntervalsIdentification:
-                                RollThreeNoteInnerIntervalsIdentificationView(testingViewModel: testingViewModel)
-                            case .RollThreeNoteOuterIntervalIdentification:
-                                RollThreeNoteOuterIntervalIdentificationView(testingViewModel: testingViewModel)
-                            case .RollChordsAreInversions:
-                                RollChordsAreInversionsView(testingViewModel: testingViewModel)
-                            case .RollTwoNoteIntervalsAreEqual:
-                                RollTwoNoteIntervalsAreEqualView(testingViewModel: testingViewModel)
-                            }
+                        if testingViewModel.testSession != nil {
+                            QuestionView(testingViewModel: testingViewModel)
+                        } else {
+                            EmptyView()
+                                .onAppear {
+                                    self.showErrorAlert = true
+                                }
+                                .alert("Fatal Error Occurred", isPresented: $showErrorAlert) {
+                                    Button {
+                                        testingViewModel.presentedView = .Registration
+                                    } label: {
+                                        Text("OK")
+                                    }
+                                }
                         }
                     }
                     
                     Spacer()
                 }
-                .padding()
                 
                 Spacer()
             }

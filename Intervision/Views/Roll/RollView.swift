@@ -104,7 +104,8 @@ struct RollView: View {
                                                 geometry: geometry,
                                                 octaves: rollViewModel.octaves,
                                                 width: pianoKeysWidth,
-                                                rowHeight: rowHeight
+                                                rowHeight: rowHeight,
+                                                showOctaveLabel: true
                                             )
                                             .id(UUID())
                                         } header: {

@@ -15,6 +15,7 @@ struct TestingRegistrationView: View {
     @State private var showTesterIdAlert = false
     @State private var showTutorialAlert = false
     @State private var showPracticeAlert = false
+    @State private var showInvalidIdAlert = false
     
     @FocusState private var testerIdFieldFocused: Bool
     
@@ -26,7 +27,7 @@ struct TestingRegistrationView: View {
                     .padding()
                 
                 HStack {
-                    TextField("Tester ID", text: $testingViewModel.id, prompt: Text("Example: 12345678-abcd-4ef0-9876-0123456789ab"))
+                    TextField("Tester ID", text: $testingViewModel.testerId, prompt: Text("Example: 12345678-abcd-4ef0-9876-0123456789ab"))
                         .focused($testerIdFieldFocused)
                     
                     Button {
@@ -53,7 +54,7 @@ struct TestingRegistrationView: View {
                     Spacer()
                     
                     Picker("", selection: $testingViewModel.performerSkillLevel) {
-                        ForEach(Tester.SkillLevel.allCases, id: \.self) { skillLevel in
+                        ForEach(Skill.SkillLevel.allCases, id: \.self) { skillLevel in
                             Text(String(describing: skillLevel))
                         }
                     }
@@ -70,7 +71,7 @@ struct TestingRegistrationView: View {
                     Spacer()
                     
                     Picker("", selection: $testingViewModel.composerSkillLevel) {
-                        ForEach(Tester.SkillLevel.allCases, id: \.self) { skillLevel in
+                        ForEach(Skill.SkillLevel.allCases, id: \.self) { skillLevel in
                             Text(String(describing: skillLevel))
                         }
                     }
@@ -87,7 +88,7 @@ struct TestingRegistrationView: View {
                     Spacer()
                     
                     Picker("", selection: $testingViewModel.theoristSkillLevel) {
-                        ForEach(Tester.SkillLevel.allCases, id: \.self) { skillLevel in
+                        ForEach(Skill.SkillLevel.allCases, id: \.self) { skillLevel in
                             Text(String(describing: skillLevel))
                         }
                     }
@@ -104,7 +105,7 @@ struct TestingRegistrationView: View {
                     Spacer()
                     
                     Picker("", selection: $testingViewModel.educatorSkillLevel) {
-                        ForEach(Tester.SkillLevel.allCases, id: \.self) { skillLevel in
+                        ForEach(Skill.SkillLevel.allCases, id: \.self) { skillLevel in
                             Text(String(describing: skillLevel))
                         }
                     }
@@ -121,7 +122,7 @@ struct TestingRegistrationView: View {
                     Spacer()
                     
                     Picker("", selection: $testingViewModel.developerSkillLevel) {
-                        ForEach(Tester.SkillLevel.allCases, id: \.self) { skillLevel in
+                        ForEach(Skill.SkillLevel.allCases, id: \.self) { skillLevel in
                             Text(String(describing: skillLevel))
                         }
                     }
@@ -161,8 +162,22 @@ struct TestingRegistrationView: View {
                 Button {
                     testerIdFieldFocused = false
                     
-                    withAnimation(.easeInOut) {
-                        showTutorialAlert = true
+                    if !testingViewModel.testerId.isEmpty {
+                        if let _ = UUID(uuidString: testingViewModel.testerId) {
+                            withAnimation(.easeInOut) {
+//                                showTutorialAlert = true
+                                showPracticeAlert = true
+                            }
+                        } else {
+                            withAnimation(.easeInOut) {
+                                showInvalidIdAlert = true
+                            }
+                        }
+                    } else {
+                        withAnimation(.easeInOut) {
+//                            showTutorialAlert = true
+                            showPracticeAlert = true
+                        }
                     }
                 } label: {
                     Text("Start Tests")
@@ -189,6 +204,8 @@ struct TestingRegistrationView: View {
                 .alert("Would you like to complete some practice questions?", isPresented: $showPracticeAlert) {
                     Button {
                         testingViewModel.practice = true
+                        
+                        testingViewModel.startTests()
                     } label: {
                         Text("Yes")
                     }
@@ -200,6 +217,11 @@ struct TestingRegistrationView: View {
                     } label: {
                         Text("No")
                     }
+                }
+                .alert(isPresented: $showInvalidIdAlert) {
+                    Alert(
+                        title: Text("Your Tester ID is invalid!")
+                    )
                 }
             }
             .padding()

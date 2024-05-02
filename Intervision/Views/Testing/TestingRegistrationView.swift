@@ -24,15 +24,15 @@ struct TestingRegistrationView: View {
     
     var body: some View {
         #if os(macOS)
-        let viewSize = CGSize(width: screenSizeViewModel.screenSize.width / 3, height: screenSizeViewModel.screenSize.height / 3)
+        let viewSize = CGSize(width: screenSizeViewModel.screenSize.width / 1.5, height: screenSizeViewModel.screenSize.height / 1.5)
         #elseif os(iOS)
         let viewSize = CGSize(width: screenSizeViewModel.screenSize.width / 1.1, height: screenSizeViewModel.screenSize.height / 1.1)
         #endif
         
         #if os(macOS)
-        let buttonHeight = screenSizeViewModel.getEquivalentValue(50)
+        let buttonHeight = screenSizeViewModel.getEquivalentValue(40)
         #elseif os(iOS)
-        let buttonHeight = screenSizeViewModel.getEquivalentValue(75)
+        let buttonHeight = screenSizeViewModel.getEquivalentValue(80)
         #endif
         
         let spacing = screenSizeViewModel.getEquivalentValue(20)
@@ -43,9 +43,9 @@ struct TestingRegistrationView: View {
         let cornerRadius = screenSizeViewModel.getEquivalentValue(8)
         
         ZStack {
-            VStack(spacing: spacing) {
+            VStack(spacing: spacing / 2) {
                 Text("Tester ID")
-                    .equivalentFont(.largeTitle)
+                    .equivalentFont(.title)
                     .equivalentPadding()
                     .fontWeight(.semibold)
                 
@@ -89,7 +89,7 @@ struct TestingRegistrationView: View {
                 }
                 
                 Text("Experience")
-                    .equivalentFont(.largeTitle)
+                    .equivalentFont(.title)
                     .equivalentPadding()
                     .fontWeight(.semibold)
                 
@@ -107,7 +107,6 @@ struct TestingRegistrationView: View {
                             .overlay {
                                 Text(skillLevel.rawValue)
                                     .equivalentFont(.title3)
-                                    .fontWeight(.semibold)
                             }
                             .onTapGesture {
                                 withAnimation(.easeInOut) {
@@ -132,7 +131,6 @@ struct TestingRegistrationView: View {
                             .overlay {
                                 Text(skillLevel.rawValue)
                                     .equivalentFont(.title3)
-                                    .fontWeight(.semibold)
                             }
                             .onTapGesture {
                                 withAnimation(.easeInOut) {
@@ -157,7 +155,6 @@ struct TestingRegistrationView: View {
                             .overlay {
                                 Text(skillLevel.rawValue)
                                     .equivalentFont(.title3)
-                                    .fontWeight(.semibold)
                             }
                             .onTapGesture {
                                 withAnimation(.easeInOut) {
@@ -182,7 +179,6 @@ struct TestingRegistrationView: View {
                             .overlay {
                                 Text(skillLevel.rawValue)
                                     .equivalentFont(.title3)
-                                    .fontWeight(.semibold)
                             }
                             .onTapGesture {
                                 withAnimation(.easeInOut) {
@@ -207,7 +203,6 @@ struct TestingRegistrationView: View {
                             .overlay {
                                 Text(skillLevel.rawValue)
                                     .equivalentFont(.title3)
-                                    .fontWeight(.semibold)
                             }
                             .onTapGesture {
                                 withAnimation(.easeInOut) {
@@ -219,7 +214,7 @@ struct TestingRegistrationView: View {
                 }
                 
                 Text("Piano Roll Background")
-                    .equivalentFont(.largeTitle)
+                    .equivalentFont(.title)
                     .equivalentPadding()
                     .fontWeight(.semibold)
                 
@@ -233,7 +228,6 @@ struct TestingRegistrationView: View {
                             .overlay {
                                 Text(viewType.rawValue)
                                     .equivalentFont(.title3)
-                                    .fontWeight(.semibold)
                             }
                             .onTapGesture {
                                 withAnimation(.easeInOut) {
@@ -271,7 +265,7 @@ struct TestingRegistrationView: View {
                     .overlay {
                         Text("Start Tests")
                             .equivalentFont(.title)
-                            .fontWeight(.semibold)
+                            .fontWeight(.bold)
                     }
                     .onTapGesture {
                         withAnimation(.easeInOut) {
@@ -338,15 +332,91 @@ struct TestingRegistrationView: View {
             }
             .equivalentPadding(padding: 50)
             .background(
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: screenSizeViewModel.getEquivalentValue(20))
                     .fill(Material.ultraThickMaterial)
                     .stroke(Color.gray.opacity(0.5), lineWidth: 1)
                     .overlay {
-                        RoundedRectangle(cornerRadius: 20)
+                        RoundedRectangle(cornerRadius: screenSizeViewModel.getEquivalentValue(20))
                             .fill(Color.gray.opacity(0.2))
                     }
-                    .shadow(radius: 10)
+                    .shadow(radius: screenSizeViewModel.getEquivalentValue(10))
             )
+            .overlay {
+                if showRollBackgroundOverlay {
+                    VStack {
+                        Text("You can change how the background of the piano roll looks to better help you identify different intervals")
+                            .equivalentPadding(.top)
+                            .equivalentFont(.title2)
+                            .fontWeight(.semibold)
+                        
+                        HStack {
+                            Spacer()
+                            
+                            BarRowsView(
+                                rows: 12,
+                                rowWidth: viewSize.width * 0.9,
+                                rowHeight: viewSize.height / 20,
+                                beats: 1,
+                                viewType: testingViewModel.rollRowsViewType,
+                                image: false
+                            )
+                            .equivalentPadding(.top)
+                            
+                            Spacer()
+                        }
+                        
+                        HStack(spacing: spacing) {
+                            ForEach(BarRowsView.ViewType.allCases, id: \.self) { viewType in
+                                RoundedRectangle(cornerRadius: cornerRadius)
+                                    .foregroundStyle(Color.clear)
+                                    .frame(height: buttonHeight)
+                                    .background(viewType == testingViewModel.rollRowsViewType ? Color.accentColor : Color.secondary)
+                                    .cornerRadius(cornerRadius)
+                                    .overlay {
+                                        Text(viewType.rawValue)
+                                            .equivalentFont(.title3)
+                                    }
+                                    .onTapGesture {
+                                        withAnimation(.easeInOut) {
+                                            testerIdFieldFocused = false
+                                            testingViewModel.rollRowsViewType = viewType
+                                        }
+                                    }
+                            }
+                        }
+                        .equivalentPadding(.top)
+                        .frame(width: viewSize.width * 0.9)
+                        
+                        Text("This can be changed at any time when answering questions")
+                            .equivalentPadding(.top)
+                            .equivalentFont(.title2)
+                            .fontWeight(.semibold)
+                        
+                        Spacer()
+                        
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .foregroundStyle(Color.accentColor)
+                            .frame(width: skillsButtonWidth, height: buttonHeight * 1.5)
+                            .background(Color.secondary)
+                            .cornerRadius(cornerRadius)
+                            .equivalentPadding()
+                            .overlay {
+                                Text("OK")
+                                    .equivalentFont(.title)
+                                    .fontWeight(.bold)
+                            }
+                            .onTapGesture {
+                                withAnimation(.easeInOut) {
+                                    showRollBackgroundOverlay = false
+                                }
+                            }
+                    }
+                    .equivalentPadding(padding: 50)
+                    .background(.ultraThickMaterial)
+                    .cornerRadius(screenSizeViewModel.getEquivalentValue(20))
+                    .cornerRadius(cornerRadius)
+                }
+            }
             .contentShape(Rectangle())
             .simultaneousGesture(
                 TapGesture().onEnded {
@@ -358,57 +428,6 @@ struct TestingRegistrationView: View {
                 testerIdFieldFocused = false
             }
             #endif
-            .overlay {
-                if showRollBackgroundOverlay {
-                    Color.black.opacity(0.4)
-                        .ignoresSafeArea()
-                        .clipShape(RoundedRectangle(cornerRadius: screenSizeViewModel.getEquivalentValue(20)))
-                    
-                    VStack {
-                        Text("You can change how the background of the piano roll looks to better help you identify different intervals")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .padding(.vertical)
-                        
-                        BarRowsView(
-                            rows: 12,
-                            rowWidth: screenSizeViewModel.screenSize.width,
-                            rowHeight: screenSizeViewModel.screenSize.height / 50,
-                            beats: 1,
-                            viewType: testingViewModel.rollRowsViewType,
-                            image: false
-                        )
-                        .padding()
-                        
-                        Picker("", selection: $testingViewModel.rollRowsViewType.animation(.easeInOut)) {
-                            ForEach(BarRowsView.ViewType.allCases, id: \.self) { viewType in
-                                Text(viewType.rawValue)
-                            }
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .padding()
-                        
-                        Text("This can be changed at any time when answering questions")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .padding(.vertical)
-                        
-                        Button {
-                            withAnimation(.easeInOut) {
-                                showRollBackgroundOverlay = false
-                            }
-                        } label: {
-                            Text("OK")
-                                .foregroundColor(Color.white)
-                                .padding()
-                                .padding(.horizontal)
-                        }
-                        .background(Color.blue)
-                        .cornerRadius(8)
-                        .padding()
-                    }
-                }
-            }
         }
         .frame(width: viewSize.width, height: viewSize.height)
         .position(x: screenSizeViewModel.screenSize.width / 2, y: screenSizeViewModel.screenSize.height / 2)

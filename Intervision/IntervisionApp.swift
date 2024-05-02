@@ -9,6 +9,9 @@ import SwiftUI
 
 @main
 struct IntervisionApp: App {
+    
+    @StateObject var screenSizeViewModel = ScreenSizeViewModel()
+    
     var body: some Scene {
         
         #if os(macOS)
@@ -17,6 +20,7 @@ struct IntervisionApp: App {
         
         WindowGroup {
             HomeView()
+                .environmentObject(screenSizeViewModel)
         }
     }
 }

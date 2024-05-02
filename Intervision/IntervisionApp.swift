@@ -11,7 +11,9 @@ import SwiftUI
 struct IntervisionApp: App {
     var body: some Scene {
         
+        #if os(macOS)
         @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+        #endif
         
         WindowGroup {
             HomeView()

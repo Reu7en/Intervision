@@ -908,6 +908,7 @@ extension TestingViewModel {
     func saveTestSession() {
         guard let testSession = testSession else { self.showSavingErrorAlert = true; return }
 
+        #if os(macOS)
         let panel = NSSavePanel()
         
         panel.allowedContentTypes = [.json]
@@ -933,5 +934,7 @@ extension TestingViewModel {
                 }
             }
         }
+        #elseif os(iOS)
+        #endif
     }
 }

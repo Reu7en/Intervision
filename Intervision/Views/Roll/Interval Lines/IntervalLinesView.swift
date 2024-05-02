@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+#if os(macOS)
+import Cocoa
+#elseif os(iOS)
+import UIKit
+#endif
+
 struct IntervalLinesView: View {
     
     @StateObject var intervalLinesViewModel: IntervalLinesViewModel
@@ -97,7 +103,11 @@ extension Color {
         var blue: CGFloat = 0
         var opacity: CGFloat = 0
         
+        #if os(macOS)
         NSColor(self).getRed(&red, green: &green, blue: &blue, alpha: &opacity)
+        #elseif os(iOS)
+        UIColor(self).getRed(&red, green: &green, blue: &blue, alpha: &opacity)
+        #endif
         
         let invertedRed = 1.0 - red
         let invertedGreen = 1.0 - green

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Cocoa
 
 struct StaveView: View {
     let rows: Int

@@ -168,11 +168,15 @@ struct RollView: View {
             if rollViewModel.partGroups.isEmpty {
                 rollViewModel.initialisePartGroups()
             }
-            
+      
+            #if os(macOS)
             rollViewModel.setupEventMonitoring()
+            #endif
         }
         .onDisappear {
+            #if os(macOS)
             rollViewModel.stopEventMonitoring()
+            #endif
             rollViewModel.clearSelectedSegments()
         }
         .onTapGesture {

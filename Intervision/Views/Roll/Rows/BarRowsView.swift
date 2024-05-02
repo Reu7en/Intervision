@@ -6,8 +6,13 @@
 //
 
 import SwiftUI
+
+#if os(macOS)
 import Cocoa
 import AppKit
+#elseif os(iOS)
+import UIKit
+#endif
 
 struct BarRowsView: View {
     
@@ -43,6 +48,7 @@ struct BarRowsView: View {
         }
     }
     
+    #if os(macOS)
     private func renderImage() -> some View {
         Image(nsImage: renderContent(viewType))
     }
@@ -84,6 +90,44 @@ struct BarRowsView: View {
         
         return image
     }
+    #elseif os(iOS)
+    private func renderImage() -> some View {
+        Image(uiImage: renderContent(viewType))
+    }
+
+    private func renderContent(_ viewType: BarRowsView.ViewType) -> UIImage {
+        let imageSize = CGSize(width: rowWidth, height: rowHeight * CGFloat(rows))
+        let renderer = UIGraphicsImageRenderer(size: imageSize)
+        let image = renderer.image { context in
+            for rowIndex in 0..<rows {
+                let rect = CGRect(x: 0, y: rowHeight - CGFloat(rowIndex) * rowHeight, width: rowWidth, height: rowHeight)
+                let fillColor = fillColor(for: rowIndex).cgColor ?? UIColor.black.withAlphaComponent(0.125).cgColor
+                context.cgContext.setFillColor(fillColor)
+                context.fill(rect)
+                
+                let borderPath = UIBezierPath(rect: rect)
+                borderPath.lineWidth = 1.0
+                UIColor.black.withAlphaComponent(0.375).setStroke()
+                borderPath.stroke()
+            }
+            
+            for beatIndex in 1..<beats {
+                let xPosition = CGFloat(beatIndex) * (rowWidth / CGFloat(beats))
+                let path = UIBezierPath()
+                path.move(to: CGPoint(x: xPosition, y: 0))
+                path.addLine(to: CGPoint(x: xPosition, y: rowHeight * CGFloat(rows)))
+                UIColor.black.withAlphaComponent(0.25).setStroke()
+                path.stroke()
+            }
+            
+            let borderPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height))
+            borderPath.lineWidth = 1.0
+            UIColor.black.withAlphaComponent(0.75).setStroke()
+            borderPath.stroke()
+        }
+        return image
+    }
+    #endif
     
     private func fillColor(for rowIndex: Int) -> Color {
         switch viewType {

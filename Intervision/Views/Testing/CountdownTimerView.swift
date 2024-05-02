@@ -42,7 +42,7 @@ struct CountdownTimerView: View {
             
             VStack {
                 Spacer()
-                    .frame(height: geometry.size.height / 2)
+                    .frame(height: geometry.size.height / 1.5)
                 
                 if let session = testingViewModel.testSession, testingViewModel.countdown != 0 {
                     let currentQuestionType = session.questions[testingViewModel.currentQuestionIndex].type

@@ -50,7 +50,9 @@ struct RollInspectorView: View {
                                 Text("\(type.rawValue.capitalized)").tag(type)
                             }
                         }
+                        #if os(macOS)
                         .pickerStyle(RadioGroupPickerStyle())
+                        #endif
                         .onChange(of: presentedView) { newValue, _ in
                             withAnimation(.easeInOut) {
                                 presentedView = newValue
@@ -117,11 +119,13 @@ struct RollInspectorView: View {
                                 TextField("Group Name", text: $editedGroupName)
                                     .font(.title2)
                                     .focused($isFocused)
+                                    #if os(macOS)
                                     .onExitCommand {
                                         isEditingGroupTitle = false
                                         editedGroupName = ""
                                         initialGroupTitle = nil
                                     }
+                                    #endif
                                     .onSubmit {
                                         isEditingGroupTitle = false
                                         
@@ -231,10 +235,12 @@ struct RollInspectorView: View {
                             TextField("New Group Name", text: $newGroupName)
                                 .font(.title2)
                                 .focused($addFieldIsFocused)
+                                #if os(macOS)
                                 .onExitCommand {
                                     showAddGroupTextField = false
                                     newGroupName = ""
                                 }
+                                #endif
                                 .onSubmit {
                                     showAddGroupTextField = false
                                     
@@ -331,7 +337,9 @@ struct RollInspectorView: View {
                                 Text("\(type.rawValue.capitalized)").tag(type)
                             }
                         }
+                        #if os(macOS)
                         .pickerStyle(RadioGroupPickerStyle())
+                        #endif
                         
                         Spacer()
                     }

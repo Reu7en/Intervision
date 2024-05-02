@@ -78,8 +78,8 @@
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "520"
-            endingLineNumber = "520"
+            startingLineNumber = "522"
+            endingLineNumber = "522"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
             <Locations>
@@ -231,8 +231,8 @@
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "273"
-            endingLineNumber = "273"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
             <Locations>
@@ -279,8 +279,8 @@
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "334"
-            endingLineNumber = "334"
+            startingLineNumber = "336"
+            endingLineNumber = "336"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
             <Locations>
@@ -327,8 +327,8 @@
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "358"
-            endingLineNumber = "358"
+            startingLineNumber = "360"
+            endingLineNumber = "360"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
             <Locations>
@@ -375,8 +375,8 @@
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "400"
-            endingLineNumber = "400"
+            startingLineNumber = "402"
+            endingLineNumber = "402"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
          </BreakpointContent>

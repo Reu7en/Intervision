@@ -88,6 +88,7 @@ class RollViewModel: ObservableObject {
         self.barWidth = width
     }
     
+    #if os(macOS)
     func setupEventMonitoring() {
         keyboardEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { [weak self] event in
             self?.handleKeyEvent(event)
@@ -173,6 +174,7 @@ class RollViewModel: ObservableObject {
             lastMouseLocation = nil
         }
     }
+    #endif
     
     func refresh() {
         objectWillChange.send()

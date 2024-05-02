@@ -15,6 +15,7 @@ struct HomeView: View {
     @StateObject var scoreViewModel: ScoreViewModel
     @StateObject var rollViewModel: RollViewModel
     @StateObject var testingViewModel: TestingViewModel
+    @StateObject var screenSizeViewModel: ScreenSizeViewModel
     
     @State var showView: Bool = false
     @State var presentedView: PresentedView = .Roll
@@ -24,6 +25,7 @@ struct HomeView: View {
         _scoreViewModel = StateObject(wrappedValue: ScoreViewModel(scoreManager: scoreManager))
         _rollViewModel = StateObject(wrappedValue: RollViewModel(scoreManager: scoreManager))
         _testingViewModel = StateObject(wrappedValue: TestingViewModel())
+        _screenSizeViewModel = StateObject(wrappedValue: ScreenSizeViewModel())
         _scoreManager = ObservedObject(wrappedValue: scoreManager)
     }
     
@@ -55,6 +57,7 @@ struct HomeView: View {
                         .disabled(true)
                         
                         Button {
+                            #if os(macOS)
                             let panel = NSOpenPanel()
                             
                             panel.allowedContentTypes = [UTType.musicXML]
@@ -71,6 +74,7 @@ struct HomeView: View {
                                     }
                                 }
                             }
+                            #endif
                         } label: {
                             HStack {
                                 Text("Open")
@@ -129,6 +133,7 @@ struct HomeView: View {
                         switch presentedView {
                         case .Testing:
                             TestingHomeView(testingViewModel: testingViewModel)
+                                .environmentObject(screenSizeViewModel)
                                 .navigationBarBackButtonHidden()
                         case .None:
                             HomeView()
@@ -136,6 +141,12 @@ struct HomeView: View {
                             HomeView()
                         }
                     }
+                }
+                .onAppear {
+                    screenSizeViewModel.screenSize = geometry.size
+                }
+                .onChange(of: geometry.size) {
+                    screenSizeViewModel.screenSize = geometry.size
                 }
             }
         }

@@ -5,8 +5,8 @@
 //  Created by Reuben on 06/02/2024.
 //
 
+#if os(macOS)
 import Cocoa
-import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -24,3 +24,4 @@ extension NSWindow {
         self.setFrame(visibleFrame, display: true, animate: true)
     }
 }
+#endif

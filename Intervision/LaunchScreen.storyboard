@@ -13,26 +13,40 @@
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UDe-W7-9SH">
-                                <rect key="frame" x="177" y="114" width="96" height="96"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="LaunchScreenIcon" id="2Ca-SU-Eq4"/>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PJC-AD-30H">
+                                <rect key="frame" x="161" y="86" width="128" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="kxp-Az-oiM"/>
+                                    <constraint firstAttribute="width" constant="128" id="oyU-V7-MKy"/>
+                                </constraints>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="LaunchScreenIcon" id="oig-rc-rVe"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gOk-Vd-pFc">
-                                <rect key="frame" x="192" y="90" width="67" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Intervision" id="PLk-jh-eqC">
-                                    <font key="font" metaFont="system"/>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="olQ-FO-t0s">
+                                <rect key="frame" x="189" y="67" width="73" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Intervision" id="r2x-a3-dWj">
+                                    <font key="font" metaFont="systemBold"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="PJC-AD-30H" firstAttribute="centerX" secondItem="tOy-S4-hL0" secondAttribute="centerX" id="1Wi-Ze-XNt"/>
+                            <constraint firstItem="PJC-AD-30H" firstAttribute="centerY" secondItem="tOy-S4-hL0" secondAttribute="centerY" id="2eh-zd-ohN"/>
+                            <constraint firstItem="olQ-FO-t0s" firstAttribute="centerY" secondItem="tOy-S4-hL0" secondAttribute="centerY" constant="100" id="7qa-xb-4Mu"/>
+                            <constraint firstItem="olQ-FO-t0s" firstAttribute="centerY" secondItem="tOy-S4-hL0" secondAttribute="centerY" constant="75" id="Scn-ui-TVF"/>
+                            <constraint firstItem="olQ-FO-t0s" firstAttribute="centerX" secondItem="tOy-S4-hL0" secondAttribute="centerX" id="TcE-4R-Ig7"/>
+                            <constraint firstItem="olQ-FO-t0s" firstAttribute="centerX" secondItem="tOy-S4-hL0" secondAttribute="centerX" id="XRM-T6-azT"/>
+                            <constraint firstItem="PJC-AD-30H" firstAttribute="centerY" secondItem="tOy-S4-hL0" secondAttribute="centerY" id="bVO-lw-0g6"/>
+                            <constraint firstItem="PJC-AD-30H" firstAttribute="centerY" secondItem="tOy-S4-hL0" secondAttribute="centerY" id="ct6-Fk-ZDR"/>
+                            <constraint firstItem="PJC-AD-30H" firstAttribute="centerX" secondItem="tOy-S4-hL0" secondAttribute="centerX" id="rHC-VC-oI6"/>
+                            <constraint firstItem="PJC-AD-30H" firstAttribute="centerX" secondItem="tOy-S4-hL0" secondAttribute="centerX" id="yjB-99-DpM"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <customObject id="9uD-mB-xHs" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="140" y="131"/>
+            <point key="canvasLocation" x="88" y="-39"/>
         </scene>
     </scenes>
     <resources>

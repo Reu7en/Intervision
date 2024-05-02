@@ -43,8 +43,13 @@ struct RollBarView: View {
                         .frame(width: width, height: rowHeight)
                         .position(x: xPosition + (width / 2), y: yPosition + (rowHeight / 2))
                         .onTapGesture {
+                            #if os(macOS)
                             guard let currentEvent = NSApp.currentEvent else { return }
                             rollViewModel.handleSegmentClicked(segment: segment, bar: rollViewModel.parts?[partIndex].bars[barIndex][staveIndex], isCommandKeyDown: currentEvent.modifierFlags.contains(.command))
+                            #elseif os(iOS)
+                            rollViewModel.handleSegmentClicked(segment: segment, bar: rollViewModel.parts?[partIndex].bars[barIndex][staveIndex], isCommandKeyDown: false)
+                            #endif
+                            
                         }
                         .gesture(
                             DragGesture()

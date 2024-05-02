@@ -41,11 +41,82 @@
 		1B231FF52B8A5FB9003AB714 /* RollViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FF42B8A5FB9003AB714 /* RollViewModel.swift */; };
 		1B231FF72B8A6C2B003AB714 /* RollBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FF62B8A6C2B003AB714 /* RollBarView.swift */; };
 		1B231FFB2B8E10B9003AB714 /* RollInspectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FFA2B8E10B8003AB714 /* RollInspectorView.swift */; };
+		1B2A23B92BE3E38E000577BF /* GlobalDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2A23B82BE3E38E000577BF /* GlobalDataService.swift */; };
+		1B2A23BE2BE3F1C8000577BF /* ScreenSizeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2A23BD2BE3F1C8000577BF /* ScreenSizeViewModel.swift */; };
+		1B2A23D82BE40886000577BF /* TestLoad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC978A2B76A3C7001C953C /* TestLoad.swift */; };
+		1B2A23D92BE40886000577BF /* EmptyRollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44AF2B92899400C0E12C /* EmptyRollView.swift */; };
+		1B2A23DA2BE40886000577BF /* RollInspectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FFA2B8E10B8003AB714 /* RollInspectorView.swift */; };
+		1B2A23DB2BE40886000577BF /* GraceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC977F2B759D8E001C953C /* GraceModel.swift */; };
+		1B2A23DC2BE40886000577BF /* BarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F782B79219F001860E5 /* BarView.swift */; };
+		1B2A23DD2BE40886000577BF /* KeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A62B85703600B57DA7 /* KeyView.swift */; };
+		1B2A23DE2BE40886000577BF /* MusicXMLDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC97832B7699EB001C953C /* MusicXMLDataService.swift */; };
+		1B2A23DF2BE40886000577BF /* TimeSignatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A82B857A8D00B57DA7 /* TimeSignatureView.swift */; };
+		1B2A23E02BE40886000577BF /* QuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DD32BE1E41000F21E39 /* QuestionView.swift */; };
+		1B2A23E12BE40886000577BF /* LineKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DD52BE2033900F21E39 /* LineKeyView.swift */; };
+		1B2A23E22BE40886000577BF /* GlobalDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2A23B82BE3E38E000577BF /* GlobalDataService.swift */; };
+		1B2A23E32BE40886000577BF /* NoteHeadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435942B7ED65B00B57DA7 /* NoteHeadView.swift */; };
+		1B2A23E42BE40886000577BF /* AnswerTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DD12BE1CD1900F21E39 /* AnswerTimerView.swift */; };
+		1B2A23E52BE40886000577BF /* ClefView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A42B856D5900B57DA7 /* ClefView.swift */; };
+		1B2A23E62BE40886000577BF /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D862BDC3E6B00F21E39 /* TutorialView.swift */; };
+		1B2A23E72BE40886000577BF /* LinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B52482BC1657400225A11 /* LinesView.swift */; };
+		1B2A23E82BE40886000577BF /* RollBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B523F2BB7877800225A11 /* RollBarViewModel.swift */; };
+		1B2A23E92BE40886000577BF /* ScoreModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEDB2B71C58E007D0BE5 /* ScoreModel.swift */; };
+		1B2A23EA2BE40886000577BF /* RollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44B12B928A1600C0E12C /* RollView.swift */; };
+		1B2A23EB2BE40886000577BF /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEE92B726CC1007D0BE5 /* ScoreView.swift */; };
+		1B2A23EC2BE40886000577BF /* StaveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B12C9E62B75472200DC87DC /* StaveModel.swift */; };
+		1B2A23ED2BE40886000577BF /* PartModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B12C9E42B753EBE00DC87DC /* PartModel.swift */; };
+		1B2A23EE2BE40886000577BF /* AccidentalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B52412BBC4CBA00225A11 /* AccidentalView.swift */; };
+		1B2A23EF2BE40886000577BF /* BeatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B524C2BC1685500225A11 /* BeatViewModel.swift */; };
+		1B2A23F02BE40886000577BF /* TestingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0FEE502BDC152800068B3F /* TestingViewModel.swift */; };
+		1B2A23F12BE40886000577BF /* TestingHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0FEE462BDC082D00068B3F /* TestingHomeView.swift */; };
+		1B2A23F22BE40886000577BF /* TesterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0FEE482BDC0A9D00068B3F /* TesterModel.swift */; };
+		1B2A23F32BE40886000577BF /* IntervalLinesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E449F2B92516500C0E12C /* IntervalLinesViewModel.swift */; };
+		1B2A23F42BE40886000577BF /* TestingRegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0FEE4E2BDC140300068B3F /* TestingRegistrationView.swift */; };
+		1B2A23F52BE40886000577BF /* NextQuestionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DBF2BDD2DC200F21E39 /* NextQuestionButton.swift */; };
+		1B2A23F62BE40886000577BF /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D8C2BDC3F7C00F21E39 /* ResultsView.swift */; };
+		1B2A23F72BE40886000577BF /* PracticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D882BDC3F6B00F21E39 /* PracticeView.swift */; };
+		1B2A23F82BE40886000577BF /* BarRowsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44AA2B9284E600C0E12C /* BarRowsView.swift */; };
+		1B2A23F92BE40886000577BF /* TestSessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0FEE4A2BDC0C5500068B3F /* TestSessionModel.swift */; };
+		1B2A23FA2BE40886000577BF /* InspectorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44A62B9260A900C0E12C /* InspectorButton.swift */; };
+		1B2A23FB2BE40886000577BF /* LinesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B524A2BC165D600225A11 /* LinesViewModel.swift */; };
+		1B2A23FC2BE40886000577BF /* NoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEE12B71C617007D0BE5 /* NoteModel.swift */; };
+		1B2A23FD2BE40886000577BF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F762B784CF3001860E5 /* HomeView.swift */; };
+		1B2A23FE2BE40886000577BF /* RestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435982B7F153100B57DA7 /* RestView.swift */; };
+		1B2A23FF2BE40886000577BF /* ChordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEDF2B71C607007D0BE5 /* ChordModel.swift */; };
+		1B2A24002BE40886000577BF /* IntervalLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E449D2B92510F00C0E12C /* IntervalLinesView.swift */; };
+		1B2A24012BE40886000577BF /* StaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435922B7EBFF900B57DA7 /* StaveView.swift */; };
+		1B2A24022BE40886000577BF /* LineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44B72B96AE8C00C0E12C /* LineModel.swift */; };
+		1B2A24032BE40886000577BF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEE52B71D917007D0BE5 /* AppDelegate.swift */; };
+		1B2A24042BE40886000577BF /* RollBarHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44B42B928A8400C0E12C /* RollBarHeader.swift */; };
+		1B2A24052BE40886000577BF /* PianoKeysHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44AC2B92892800C0E12C /* PianoKeysHeader.swift */; };
+		1B2A24062BE40886000577BF /* ScreenSizeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2A23BD2BE3F1C8000577BF /* ScreenSizeViewModel.swift */; };
+		1B2A24072BE40886000577BF /* CountdownTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D902BDD245E00F21E39 /* CountdownTimerView.swift */; };
+		1B2A24082BE40886000577BF /* ScoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBF21A22B9FFB160097D5A3 /* ScoreManager.swift */; };
+		1B2A24092BE40886000577BF /* BarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F7A2B793216001860E5 /* BarViewModel.swift */; };
+		1B2A240A2BE40886000577BF /* RollViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FF42B8A5FB9003AB714 /* RollViewModel.swift */; };
+		1B2A240B2BE40886000577BF /* BeatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B524E2BC16DE800225A11 /* BeatView.swift */; };
+		1B2A240C2BE40886000577BF /* IntervisionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEC92B71C167007D0BE5 /* IntervisionApp.swift */; };
+		1B2A240D2BE40886000577BF /* SegmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44A12B92519800C0E12C /* SegmentModel.swift */; };
+		1B2A240E2BE40886000577BF /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEEC2B7279CF007D0BE5 /* PageView.swift */; };
+		1B2A240F2BE40886000577BF /* PianoKeysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FF22B895153003AB714 /* PianoKeysView.swift */; };
+		1B2A24102BE40886000577BF /* QuestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D8A2BDC3F7500F21E39 /* QuestionsView.swift */; };
+		1B2A24112BE40886000577BF /* ScoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC978C2B76A50D001C953C /* ScoreViewModel.swift */; };
+		1B2A24122BE40886000577BF /* BarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEDD2B71C59B007D0BE5 /* BarModel.swift */; };
+		1B2A24132BE40886000577BF /* PianoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8522732BAAF2CA005E53E4 /* PianoButton.swift */; };
+		1B2A24142BE40886000577BF /* StaveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B52462BBF1FB200225A11 /* StaveViewModel.swift */; };
+		1B2A24152BE40886000577BF /* RollBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FF62B8A6C2B003AB714 /* RollBarView.swift */; };
+		1B2A24162BE40886000577BF /* QuestionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0FEE4C2BDC0D5900068B3F /* QuestionModel.swift */; };
+		1B2A24192BE40886000577BF /* Flight_of_the_Bumblebee.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B523B2BB75EF800225A11 /* Flight_of_the_Bumblebee.musicxml */; };
+		1B2A241B2BE40886000577BF /* Simpsons_MultiPart.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B52372BB75B6A00225A11 /* Simpsons_MultiPart.musicxml */; };
+		1B2A241C2BE40886000577BF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B97BED02B71C168007D0BE5 /* Preview Assets.xcassets */; };
+		1B2A241D2BE40886000577BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B97BECD2B71C168007D0BE5 /* Assets.xcassets */; };
+		1B2A241E2BE40886000577BF /* Fur_Elise.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B523D2BB75F6500225A11 /* Fur_Elise.musicxml */; };
+		1B2A241F2BE40886000577BF /* Canon_in_D.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B52392BB75BC400225A11 /* Canon_in_D.musicxml */; };
+		1B2A24202BE40886000577BF /* Advanced_Trio.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B52352BB75AFF00225A11 /* Advanced_Trio.musicxml */; };
 		1B370D872BDC3E6B00F21E39 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D862BDC3E6B00F21E39 /* TutorialView.swift */; };
 		1B370D892BDC3F6B00F21E39 /* PracticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D882BDC3F6B00F21E39 /* PracticeView.swift */; };
 		1B370D8B2BDC3F7500F21E39 /* QuestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D8A2BDC3F7500F21E39 /* QuestionsView.swift */; };
 		1B370D8D2BDC3F7C00F21E39 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D8C2BDC3F7C00F21E39 /* ResultsView.swift */; };
-		1B370D8F2BDC4C4E00F21E39 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B370D8E2BDC4C4E00F21E39 /* LaunchScreen.storyboard */; };
 		1B370D912BDD245E00F21E39 /* CountdownTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D902BDD245E00F21E39 /* CountdownTimerView.swift */; };
 		1B370DC02BDD2DC200F21E39 /* NextQuestionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DBF2BDD2DC200F21E39 /* NextQuestionButton.swift */; };
 		1B370DD22BE1CD1900F21E39 /* AnswerTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370DD12BE1CD1900F21E39 /* AnswerTimerView.swift */; };
@@ -76,6 +147,8 @@
 		1BBC978B2B76A3C7001C953C /* TestLoad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC978A2B76A3C7001C953C /* TestLoad.swift */; };
 		1BBC978D2B76A50D001C953C /* ScoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC978C2B76A50D001C953C /* ScoreViewModel.swift */; };
 		1BBF21A32B9FFB160097D5A3 /* ScoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBF21A22B9FFB160097D5A3 /* ScoreManager.swift */; };
+		1BCBA7072BE40AC600BC2D13 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BCBA7062BE40AC600BC2D13 /* LaunchScreen.storyboard */; };
+		1BCBA7082BE415D100BC2D13 /* LaunchScreeniPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BCBA7042BE40AAD00BC2D13 /* LaunchScreeniPad.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -113,11 +186,14 @@
 		1B231FF42B8A5FB9003AB714 /* RollViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollViewModel.swift; sourceTree = "<group>"; };
 		1B231FF62B8A6C2B003AB714 /* RollBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollBarView.swift; sourceTree = "<group>"; };
 		1B231FFA2B8E10B8003AB714 /* RollInspectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollInspectorView.swift; sourceTree = "<group>"; };
+		1B2A23B82BE3E38E000577BF /* GlobalDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalDataService.swift; sourceTree = "<group>"; };
+		1B2A23BD2BE3F1C8000577BF /* ScreenSizeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenSizeViewModel.swift; sourceTree = "<group>"; };
+		1B2A24242BE40886000577BF /* Intervision iPad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Intervision iPad.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B2A24252BE40886000577BF /* Intervision iPad.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Intervision iPad.plist"; path = "/Users/reuben/swift/Intervision/Intervision/Intervision iPad.plist"; sourceTree = "<absolute>"; };
 		1B370D862BDC3E6B00F21E39 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		1B370D882BDC3F6B00F21E39 /* PracticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeView.swift; sourceTree = "<group>"; };
 		1B370D8A2BDC3F7500F21E39 /* QuestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsView.swift; sourceTree = "<group>"; };
 		1B370D8C2BDC3F7C00F21E39 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
-		1B370D8E2BDC4C4E00F21E39 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1B370D902BDD245E00F21E39 /* CountdownTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownTimerView.swift; sourceTree = "<group>"; };
 		1B370DBF2BDD2DC200F21E39 /* NextQuestionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextQuestionButton.swift; sourceTree = "<group>"; };
 		1B370DD12BE1CD1900F21E39 /* AnswerTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerTimerView.swift; sourceTree = "<group>"; };
@@ -151,9 +227,18 @@
 		1BBC978A2B76A3C7001C953C /* TestLoad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestLoad.swift; sourceTree = "<group>"; };
 		1BBC978C2B76A50D001C953C /* ScoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreViewModel.swift; sourceTree = "<group>"; };
 		1BBF21A22B9FFB160097D5A3 /* ScoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreManager.swift; sourceTree = "<group>"; };
+		1BCBA7042BE40AAD00BC2D13 /* LaunchScreeniPad.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreeniPad.storyboard; sourceTree = "<group>"; };
+		1BCBA7062BE40AC600BC2D13 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1B2A24172BE40886000577BF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1B97BEC32B71C167007D0BE5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -302,6 +387,14 @@
 			path = Roll;
 			sourceTree = "<group>";
 		};
+		1B2A23BC2BE3F1BB000577BF /* Global */ = {
+			isa = PBXGroup;
+			children = (
+				1B2A23BD2BE3F1C8000577BF /* ScreenSizeViewModel.swift */,
+			);
+			path = Global;
+			sourceTree = "<group>";
+		};
 		1B9435912B7EBFEA00B57DA7 /* Bar */ = {
 			isa = PBXGroup;
 			children = (
@@ -331,6 +424,7 @@
 			isa = PBXGroup;
 			children = (
 				1B97BEC62B71C167007D0BE5 /* Intervision.app */,
+				1B2A24242BE40886000577BF /* Intervision iPad.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -339,6 +433,7 @@
 			isa = PBXGroup;
 			children = (
 				1B9435AA2B85A55500B57DA7 /* Info.plist */,
+				1B2A24252BE40886000577BF /* Intervision iPad.plist */,
 				1BBC97852B769ACA001C953C /* Test Scores */,
 				1B97BED92B71C4D1007D0BE5 /* Models */,
 				1B97BED82B71C4C9007D0BE5 /* Views */,
@@ -349,8 +444,9 @@
 				1B97BEE52B71D917007D0BE5 /* AppDelegate.swift */,
 				1B97BECD2B71C168007D0BE5 /* Assets.xcassets */,
 				1B97BED22B71C168007D0BE5 /* Intervision.entitlements */,
+				1BCBA7062BE40AC600BC2D13 /* LaunchScreen.storyboard */,
+				1BCBA7042BE40AAD00BC2D13 /* LaunchScreeniPad.storyboard */,
 				1B97BECF2B71C168007D0BE5 /* Preview Content */,
-				1B370D8E2BDC4C4E00F21E39 /* LaunchScreen.storyboard */,
 			);
 			path = Intervision;
 			sourceTree = "<group>";
@@ -397,6 +493,7 @@
 		1B97BEDA2B71C4D6007D0BE5 /* View Models */ = {
 			isa = PBXGroup;
 			children = (
+				1B2A23BC2BE3F1BB000577BF /* Global */,
 				1B0FEE442BDC07D700068B3F /* Testing */,
 				1B0B52442BBF177800225A11 /* Roll */,
 				1B0B52432BBF177100225A11 /* Score */,
@@ -408,6 +505,7 @@
 			isa = PBXGroup;
 			children = (
 				1BBC97832B7699EB001C953C /* MusicXMLDataService.swift */,
+				1B2A23B82BE3E38E000577BF /* GlobalDataService.swift */,
 			);
 			path = "Data Services";
 			sourceTree = "<group>";
@@ -445,6 +543,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1B2A23D62BE40886000577BF /* Intervision iPad */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1B2A24212BE40886000577BF /* Build configuration list for PBXNativeTarget "Intervision iPad" */;
+			buildPhases = (
+				1B2A23D72BE40886000577BF /* Sources */,
+				1B2A24172BE40886000577BF /* Frameworks */,
+				1B2A24182BE40886000577BF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Intervision iPad";
+			productName = Intervision;
+			productReference = 1B2A24242BE40886000577BF /* Intervision iPad.app */;
+			productType = "com.apple.product-type.application";
+		};
 		1B97BEC52B71C167007D0BE5 /* Intervision */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1B97BED52B71C168007D0BE5 /* Build configuration list for PBXNativeTarget "Intervision" */;
@@ -491,17 +606,33 @@
 			projectRoot = "";
 			targets = (
 				1B97BEC52B71C167007D0BE5 /* Intervision */,
+				1B2A23D62BE40886000577BF /* Intervision iPad */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1B2A24182BE40886000577BF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1B2A24192BE40886000577BF /* Flight_of_the_Bumblebee.musicxml in Resources */,
+				1B2A241B2BE40886000577BF /* Simpsons_MultiPart.musicxml in Resources */,
+				1B2A241C2BE40886000577BF /* Preview Assets.xcassets in Resources */,
+				1BCBA7082BE415D100BC2D13 /* LaunchScreeniPad.storyboard in Resources */,
+				1B2A241D2BE40886000577BF /* Assets.xcassets in Resources */,
+				1B2A241E2BE40886000577BF /* Fur_Elise.musicxml in Resources */,
+				1B2A241F2BE40886000577BF /* Canon_in_D.musicxml in Resources */,
+				1B2A24202BE40886000577BF /* Advanced_Trio.musicxml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1B97BEC42B71C167007D0BE5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BCBA7072BE40AC600BC2D13 /* LaunchScreen.storyboard in Resources */,
 				1B0B523C2BB75EF800225A11 /* Flight_of_the_Bumblebee.musicxml in Resources */,
-				1B370D8F2BDC4C4E00F21E39 /* LaunchScreen.storyboard in Resources */,
 				1B0B52382BB75B6A00225A11 /* Simpsons_MultiPart.musicxml in Resources */,
 				1B97BED12B71C168007D0BE5 /* Preview Assets.xcassets in Resources */,
 				1B97BECE2B71C168007D0BE5 /* Assets.xcassets in Resources */,
@@ -514,6 +645,76 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1B2A23D72BE40886000577BF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1B2A23D82BE40886000577BF /* TestLoad.swift in Sources */,
+				1B2A23D92BE40886000577BF /* EmptyRollView.swift in Sources */,
+				1B2A23DA2BE40886000577BF /* RollInspectorView.swift in Sources */,
+				1B2A23DB2BE40886000577BF /* GraceModel.swift in Sources */,
+				1B2A23DC2BE40886000577BF /* BarView.swift in Sources */,
+				1B2A23DD2BE40886000577BF /* KeyView.swift in Sources */,
+				1B2A23DE2BE40886000577BF /* MusicXMLDataService.swift in Sources */,
+				1B2A23DF2BE40886000577BF /* TimeSignatureView.swift in Sources */,
+				1B2A23E02BE40886000577BF /* QuestionView.swift in Sources */,
+				1B2A23E12BE40886000577BF /* LineKeyView.swift in Sources */,
+				1B2A23E22BE40886000577BF /* GlobalDataService.swift in Sources */,
+				1B2A23E32BE40886000577BF /* NoteHeadView.swift in Sources */,
+				1B2A23E42BE40886000577BF /* AnswerTimerView.swift in Sources */,
+				1B2A23E52BE40886000577BF /* ClefView.swift in Sources */,
+				1B2A23E62BE40886000577BF /* TutorialView.swift in Sources */,
+				1B2A23E72BE40886000577BF /* LinesView.swift in Sources */,
+				1B2A23E82BE40886000577BF /* RollBarViewModel.swift in Sources */,
+				1B2A23E92BE40886000577BF /* ScoreModel.swift in Sources */,
+				1B2A23EA2BE40886000577BF /* RollView.swift in Sources */,
+				1B2A23EB2BE40886000577BF /* ScoreView.swift in Sources */,
+				1B2A23EC2BE40886000577BF /* StaveModel.swift in Sources */,
+				1B2A23ED2BE40886000577BF /* PartModel.swift in Sources */,
+				1B2A23EE2BE40886000577BF /* AccidentalView.swift in Sources */,
+				1B2A23EF2BE40886000577BF /* BeatViewModel.swift in Sources */,
+				1B2A23F02BE40886000577BF /* TestingViewModel.swift in Sources */,
+				1B2A23F12BE40886000577BF /* TestingHomeView.swift in Sources */,
+				1B2A23F22BE40886000577BF /* TesterModel.swift in Sources */,
+				1B2A23F32BE40886000577BF /* IntervalLinesViewModel.swift in Sources */,
+				1B2A23F42BE40886000577BF /* TestingRegistrationView.swift in Sources */,
+				1B2A23F52BE40886000577BF /* NextQuestionButton.swift in Sources */,
+				1B2A23F62BE40886000577BF /* ResultsView.swift in Sources */,
+				1B2A23F72BE40886000577BF /* PracticeView.swift in Sources */,
+				1B2A23F82BE40886000577BF /* BarRowsView.swift in Sources */,
+				1B2A23F92BE40886000577BF /* TestSessionModel.swift in Sources */,
+				1B2A23FA2BE40886000577BF /* InspectorButton.swift in Sources */,
+				1B2A23FB2BE40886000577BF /* LinesViewModel.swift in Sources */,
+				1B2A23FC2BE40886000577BF /* NoteModel.swift in Sources */,
+				1B2A23FD2BE40886000577BF /* HomeView.swift in Sources */,
+				1B2A23FE2BE40886000577BF /* RestView.swift in Sources */,
+				1B2A23FF2BE40886000577BF /* ChordModel.swift in Sources */,
+				1B2A24002BE40886000577BF /* IntervalLinesView.swift in Sources */,
+				1B2A24012BE40886000577BF /* StaveView.swift in Sources */,
+				1B2A24022BE40886000577BF /* LineModel.swift in Sources */,
+				1B2A24032BE40886000577BF /* AppDelegate.swift in Sources */,
+				1B2A24042BE40886000577BF /* RollBarHeader.swift in Sources */,
+				1B2A24052BE40886000577BF /* PianoKeysHeader.swift in Sources */,
+				1B2A24062BE40886000577BF /* ScreenSizeViewModel.swift in Sources */,
+				1B2A24072BE40886000577BF /* CountdownTimerView.swift in Sources */,
+				1B2A24082BE40886000577BF /* ScoreManager.swift in Sources */,
+				1B2A24092BE40886000577BF /* BarViewModel.swift in Sources */,
+				1B2A240A2BE40886000577BF /* RollViewModel.swift in Sources */,
+				1B2A240B2BE40886000577BF /* BeatView.swift in Sources */,
+				1B2A240C2BE40886000577BF /* IntervisionApp.swift in Sources */,
+				1B2A240D2BE40886000577BF /* SegmentModel.swift in Sources */,
+				1B2A240E2BE40886000577BF /* PageView.swift in Sources */,
+				1B2A240F2BE40886000577BF /* PianoKeysView.swift in Sources */,
+				1B2A24102BE40886000577BF /* QuestionsView.swift in Sources */,
+				1B2A24112BE40886000577BF /* ScoreViewModel.swift in Sources */,
+				1B2A24122BE40886000577BF /* BarModel.swift in Sources */,
+				1B2A24132BE40886000577BF /* PianoButton.swift in Sources */,
+				1B2A24142BE40886000577BF /* StaveViewModel.swift in Sources */,
+				1B2A24152BE40886000577BF /* RollBarView.swift in Sources */,
+				1B2A24162BE40886000577BF /* QuestionModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1B97BEC22B71C167007D0BE5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -528,6 +729,7 @@
 				1B9435A92B857A8D00B57DA7 /* TimeSignatureView.swift in Sources */,
 				1B370DD42BE1E41000F21E39 /* QuestionView.swift in Sources */,
 				1B370DD62BE2033900F21E39 /* LineKeyView.swift in Sources */,
+				1B2A23B92BE3E38E000577BF /* GlobalDataService.swift in Sources */,
 				1B9435952B7ED65B00B57DA7 /* NoteHeadView.swift in Sources */,
 				1B370DD22BE1CD1900F21E39 /* AnswerTimerView.swift in Sources */,
 				1B9435A52B856D5900B57DA7 /* ClefView.swift in Sources */,
@@ -563,6 +765,7 @@
 				1B97BEE62B71D917007D0BE5 /* AppDelegate.swift in Sources */,
 				1B0E44B52B928A8400C0E12C /* RollBarHeader.swift in Sources */,
 				1B0E44AD2B92892800C0E12C /* PianoKeysHeader.swift in Sources */,
+				1B2A23BE2BE3F1C8000577BF /* ScreenSizeViewModel.swift in Sources */,
 				1B370D912BDD245E00F21E39 /* CountdownTimerView.swift in Sources */,
 				1BBF21A32B9FFB160097D5A3 /* ScoreManager.swift in Sources */,
 				1B561F7B2B793216001860E5 /* BarViewModel.swift in Sources */,
@@ -585,6 +788,80 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		1B2A24222BE40886000577BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Intervision/Intervision.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_ASSET_PATHS = "\"Intervision/Preview Content\"";
+				DEVELOPMENT_TEAM = WAFD9G7398;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Intervision copy-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreeniPad.storyboard;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.reuben.Intervision;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		1B2A24232BE40886000577BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Intervision/Intervision.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_ASSET_PATHS = "\"Intervision/Preview Content\"";
+				DEVELOPMENT_TEAM = WAFD9G7398;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Intervision copy-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreeniPad.storyboard;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.reuben.Intervision;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Release;
+		};
 		1B97BED32B71C168007D0BE5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -637,6 +914,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -694,6 +972,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -722,6 +1001,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -730,6 +1010,8 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reuben.Intervision;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -754,6 +1036,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -762,6 +1045,8 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reuben.Intervision;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -770,6 +1055,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1B2A24212BE40886000577BF /* Build configuration list for PBXNativeTarget "Intervision iPad" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1B2A24222BE40886000577BF /* Debug */,
+				1B2A24232BE40886000577BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1B97BEC12B71C167007D0BE5 /* Build configuration list for PBXProject "Intervision" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

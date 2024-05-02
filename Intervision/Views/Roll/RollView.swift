@@ -48,7 +48,8 @@ struct RollView: View {
                                                             rowWidth: rowWidth,
                                                             rowHeight: rowHeight,
                                                             beats: beats,
-                                                            viewType: .Piano // parameterise
+                                                            viewType: .Piano, // parameterise
+                                                            image: true
                                                         )
                                                         .id(UUID())
                                                         

@@ -10,16 +10,34 @@ import SwiftUI
 
 class IntervalLinesViewModel: ObservableObject {
     
-    @Published var harmonicLines: [Line]?
-    @Published var melodicLines: [Line]?
+    @Published var harmonicLines: [Line] = []
+    @Published var melodicLines: [Line] = []
     
     let segments: [[[[Segment]]]] // part->bar->stave->segment
     let parts: [Part]
     let groups: [(String, [Part])]
+    let harmonicIntervalLinesType: IntervalLinesType
+    let showMelodicIntervalLines: Bool
     let barIndex: Int
-    let barWidth: CGFloat
-    let rowWidth: CGFloat
-    let rowHeight: CGFloat
+    
+    var barWidth: CGFloat {
+        didSet {
+            self.calculateLines()
+        }
+    }
+    
+    var rowWidth: CGFloat {
+        didSet {
+            self.calculateLines()
+        }
+    }
+    
+    var rowHeight: CGFloat {
+        didSet {
+            self.calculateLines()
+        }
+    }
+    
     let harmonicIntervalLineColors: [Color]
     let melodicIntervalLineColors: [Color]
     let viewableMelodicLines: [Part]
@@ -45,6 +63,8 @@ class IntervalLinesViewModel: ObservableObject {
         self.segments = segments
         self.parts = parts
         self.groups = groups
+        self.harmonicIntervalLinesType = harmonicIntervalLinesType
+        self.showMelodicIntervalLines = showMelodicIntervalLines
         self.barIndex = barIndex
         self.barWidth = barWidth
         self.rowWidth = rowWidth
@@ -55,9 +75,13 @@ class IntervalLinesViewModel: ObservableObject {
         self.showInvertedIntervals = showInvertedIntervals
         self.showZigZags = showZigZags
         
+        self.calculateLines()
+    }
+    
+    private func calculateLines() {
         var harmonicSegments: [[Segment]]?
         
-        switch harmonicIntervalLinesType {
+        switch self.harmonicIntervalLinesType {
         case .none:
             break
         case .staves:

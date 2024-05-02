@@ -16,6 +16,8 @@ struct TestingRegistrationView: View {
     @State private var showTutorialAlert = false
     @State private var showPracticeAlert = false
     @State private var showInvalidIdAlert = false
+    @State private var showRollBackgroundOverlay = false
+    @State private var overlayRollRowsViewType = BarRowsView.ViewType.Piano
     
     @FocusState private var testerIdFieldFocused: Bool
     
@@ -29,6 +31,8 @@ struct TestingRegistrationView: View {
                 HStack {
                     TextField("Tester ID", text: $testingViewModel.testerId, prompt: Text("Example: 12345678-abcd-4ef0-9876-0123456789ab"))
                         .focused($testerIdFieldFocused)
+                    
+                    Spacer()
                     
                     Button {
                         testerIdFieldFocused = false
@@ -133,28 +137,36 @@ struct TestingRegistrationView: View {
                     }
                 }
                 
-                Text("Question Count - \(testingViewModel.questionCount)")
+                Text("Piano Roll Background")
                     .font(.title)
                     .padding()
                 
-                Slider(
-                    value: Binding(
-                        get: { Double(testingViewModel.questionCount) },
-                        set: { testingViewModel.questionCount = Int($0) }
-                    ),
-                    in: 30...150,
-                    step: 30
-                ) {
-                    Text("")
-                } minimumValueLabel: {
-                    Text("\(30)")
-                } maximumValueLabel: {
-                    Text("\(150)")
-                } onEditingChanged: { sliding in
-                    isSliding = sliding
+                HStack {
+                    Spacer()
+                    
+                    Picker("", selection: $testingViewModel.rollRowsViewType) {
+                        ForEach(BarRowsView.ViewType.allCases, id: \.self) { viewType in
+                            Text(viewType.rawValue)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .frame(width: geometry.size.width / 1.5)
+                    .onChange(of: testingViewModel.rollRowsViewType) {
+                        testerIdFieldFocused = false
+                    }
+                
+                    Spacer()
                 }
-                .onChange(of: testingViewModel.questionCount) {
-                    testerIdFieldFocused = false
+                .overlay(alignment: .trailing) {
+                    Button {
+                        testerIdFieldFocused = false
+                        
+                        withAnimation(.easeInOut) {
+                            showRollBackgroundOverlay = true
+                        }
+                    } label: {
+                        Image(systemName: "questionmark")
+                    }
                 }
                 
                 Spacer()
@@ -235,10 +247,74 @@ struct TestingRegistrationView: View {
             .onExitCommand {
                 testerIdFieldFocused = false
             }
+            .overlay {
+                if showRollBackgroundOverlay {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                    
+                    VStack {
+                        Text("You can change how the background of the piano roll looks to better help you identify different intervals")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .padding(.vertical)
+                        
+                        BarRowsView(
+                            rows: 12,
+                            rowWidth: geometry.size.width / 1.5,
+                            rowHeight: geometry.size.height / 50,
+                            beats: 1,
+                            viewType: testingViewModel.rollRowsViewType,
+                            image: false
+                        )
+                        .padding()
+                        
+                        Picker("", selection: $testingViewModel.rollRowsViewType.animation(.easeInOut)) {
+                            ForEach(BarRowsView.ViewType.allCases, id: \.self) { viewType in
+                                Text(viewType.rawValue)
+                            }
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .padding()
+                        
+                        Text("This can be changed at any time when answering questions")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .padding(.vertical)
+                        
+                        Button {
+                            withAnimation(.easeInOut) {
+                                showRollBackgroundOverlay = false
+                            }
+                        } label: {
+                            Text("OK")
+                                .foregroundColor(Color.white)
+                                .padding()
+                                .padding(.horizontal)
+                        }
+                        .background(Color.blue)
+                        .cornerRadius(8)
+                        .padding()
+                    }
+                    .frame(width: geometry.size.width / 1.5)
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Material.ultraThickMaterial)
+                            .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(Color.gray.opacity(0.2))
+                            }
+                            .shadow(radius: 10)
+                    )
+                }
+            }
         }
     }
 }
 
 #Preview {
     TestingRegistrationView(testingViewModel: TestingViewModel())
+        .frame(width: 1000, height: 1000)
 }

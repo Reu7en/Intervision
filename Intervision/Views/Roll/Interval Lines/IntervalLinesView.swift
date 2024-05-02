@@ -11,44 +11,42 @@ struct IntervalLinesView: View {
     
     @StateObject var intervalLinesViewModel: IntervalLinesViewModel
     
+    let lineWidth: CGFloat = 3.5
+    
     var body: some View {
-        if let harmonicLines = intervalLinesViewModel.harmonicLines {
-            ForEach(0..<harmonicLines.count, id: \.self) { lineIndex in
-                let line = harmonicLines[lineIndex]
-                
-                if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
-                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: intervalLinesViewModel.barWidth / 128)
-                        .stroke(line.color, style: StrokeStyle(lineWidth: 3, lineCap: .round))
-                        .shadow(color: Color.black.opacity(0.75), radius: 5, x: 0, y: 0)
-                } else {
-                    Path { path in
-                        path.move(to: line.startPoint)
-                        path.addLine(to: line.endPoint)
-                    }
-                    .stroke(line.color, style: StrokeStyle(lineWidth: 3, lineCap: .round))
+        ForEach(0..<intervalLinesViewModel.harmonicLines.count, id: \.self) { lineIndex in
+            let line = intervalLinesViewModel.harmonicLines[lineIndex]
+            
+            if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
+                ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: intervalLinesViewModel.barWidth / 128)
+                    .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                     .shadow(color: Color.black.opacity(0.75), radius: 5, x: 0, y: 0)
+            } else {
+                Path { path in
+                    path.move(to: line.startPoint)
+                    path.addLine(to: line.endPoint)
                 }
+                .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+                .shadow(color: Color.black.opacity(0.75), radius: 5, x: 0, y: 0)
             }
         }
         
-        if let melodicLines = intervalLinesViewModel.melodicLines {
-            ForEach(0..<melodicLines.count, id: \.self) { lineIndex in
-                let line = melodicLines[lineIndex]
-                
-                if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
-                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: intervalLinesViewModel.barWidth / 128)
-                        .stroke(line.color, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round, dash: [4]))
-                        .shadow(color: Color.black, radius: 5, x: 0, y: 0)
-                        .zIndex(.infinity)
-                } else {
-                    Path { path in
-                        path.move(to: line.startPoint)
-                        path.addLine(to: line.endPoint)
-                    }
-                    .stroke(line.color, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round, dash: [4]))
+        ForEach(0..<intervalLinesViewModel.melodicLines.count, id: \.self) { lineIndex in
+            let line = intervalLinesViewModel.melodicLines[lineIndex]
+            
+            if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
+                ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: intervalLinesViewModel.barWidth / 128)
+                    .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round, dash: [4]))
                     .shadow(color: Color.black, radius: 5, x: 0, y: 0)
                     .zIndex(.infinity)
+            } else {
+                Path { path in
+                    path.move(to: line.startPoint)
+                    path.addLine(to: line.endPoint)
                 }
+                .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round, dash: [4]))
+                .shadow(color: Color.black, radius: 5, x: 0, y: 0)
+                .zIndex(.infinity)
             }
         }
     }
@@ -70,18 +68,20 @@ extension IntervalLinesView {
             let segments = Int(segmentLength / 10)
             let angle = atan2(deltaY, deltaX)
 
-            for i in 1..<segments {
-                let x = startPoint.x + cos(angle) * CGFloat(i) * 10
-                let y = startPoint.y + sin(angle) * CGFloat(i) * 10
-                let point = CGPoint(x: x, y: y)
-
-                let perpendicularAngle = angle + .pi / 2
-                let offset = (i % 2 == 0 ? amplitude : -amplitude)
-                let offsetX = offset * cos(perpendicularAngle)
-                let offsetY = offset * sin(perpendicularAngle)
-
-                let zigzagPoint = CGPoint(x: point.x + offsetX, y: point.y + offsetY)
-                path.addLine(to: zigzagPoint)
+            if segments > 0 {
+                for i in 1..<segments {
+                    let x = startPoint.x + cos(angle) * CGFloat(i) * 10
+                    let y = startPoint.y + sin(angle) * CGFloat(i) * 10
+                    let point = CGPoint(x: x, y: y)
+                    
+                    let perpendicularAngle = angle + .pi / 2
+                    let offset = (i % 2 == 0 ? amplitude : -amplitude)
+                    let offsetX = offset * cos(perpendicularAngle)
+                    let offsetY = offset * sin(perpendicularAngle)
+                    
+                    let zigzagPoint = CGPoint(x: point.x + offsetX, y: point.y + offsetY)
+                    path.addLine(to: zigzagPoint)
+                }
             }
 
             path.addLine(to: endPoint)

@@ -14,43 +14,26 @@ struct NextQuestionButton: View {
     @State private var showPracticeAlert: Bool = false
     
     var body: some View {
-        if testingViewModel.isLastQuestion {
-            Button {
+        Button {
+            withAnimation(.easeInOut(duration: 0.5)) {
+                testingViewModel.questionVisible = false
+            }
+            
+            if testingViewModel.isLastQuestion {
                 if testingViewModel.practice {
-                    showPracticeAlert = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        testingViewModel.startTests()
+                    }
                 } else {
                     testingViewModel.goToResults()
                 }
-            } label: {
-                Image(systemName: "flag.checkered")
-                    .font(.title)
-                    .padding()
-            }
-            .alert("Would you like to complete some more practice questions?", isPresented: $showPracticeAlert) {
-                Button {
-                    testingViewModel.practice = true
-                    
-                    testingViewModel.startTests()
-                } label: {
-                    Text("Yes")
-                }
-                
-                Button {
-                    testingViewModel.practice = false
-                    
-                    testingViewModel.startTests()
-                } label: {
-                    Text("No")
-                }
-            }
-        } else {
-            Button {
+            } else {
                 testingViewModel.goToNextQuestion()
-            } label: {
-                Image(systemName: "arrow.right")
-                    .font(.title)
-                    .padding()
             }
+        } label: {
+            Image(systemName: testingViewModel.isLastQuestion && !testingViewModel.practice ? "flag.checkered" : "arrow.right")
+                .font(.title)
+                .padding()
         }
     }
 }

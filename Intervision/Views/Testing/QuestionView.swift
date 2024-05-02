@@ -13,8 +13,9 @@ struct QuestionView: View {
     
     @State private var answer1Clicked: TestingViewModel.Answer?
     @State private var answer2Clicked: TestingViewModel.Answer?
-    @State private var showEndPracticeAlert: Bool = false
-    @State private var showEndSessionAlert: Bool = false
+    @State private var showEndPracticeAlert = false
+    @State private var showEndSessionAlert = false
+    @State private var opacity = 1.0
     
     var body: some View {
         GeometryReader { geometry in
@@ -27,7 +28,7 @@ struct QuestionView: View {
                         
                         if let questionData = testingViewModel.currentQuestionData,
                            let answers = questionData.2, answers.count == (question.type.isMultipartQuestion ? 2 : 1), !(questionData.0 == nil && questionData.1 == nil) {
-                            Text("\(testingViewModel.practice ? "Practice " : "")Question \(testingViewModel.currentQuestionIndex + 1)/\(testingViewModel.practice ? 30 : testingViewModel.questionCount)")
+                            Text("\(testingViewModel.practice ? "Practice Question" : "Question \(testingViewModel.currentQuestionIndex + 1)/\(30)")")
                                 .font(.title2)
                                 .fontWeight(.bold)
                             
@@ -45,24 +46,26 @@ struct QuestionView: View {
                                             }
                                             .shadow(radius: 10)
                                     )
-                            } else if let rollViewModel = questionData.1,
-                                      let parts = rollViewModel.parts,
-                                      let segments = rollViewModel.segments {
+                            } else if let viewModels = questionData.1 {
                                 HStack {
                                     GeometryReader { rollGeometry in
                                         let rows = 36
                                         let rowHeight = rollGeometry.size.height / CGFloat(rows)
                                         let pianoKeysWidth = rollGeometry.size.width / 10
-                                        let rollWidth = rollGeometry.size.width - pianoKeysWidth
+                                        let inspectorWidth = rollGeometry.size.width / 10
+                                        let rollWidth = rollGeometry.size.width - inspectorWidth - (testingViewModel.showPiano ? pianoKeysWidth : 0)
                                         
-                                        PianoKeysView(
-                                            geometry: rollGeometry,
-                                            octaves: 3,
-                                            width: pianoKeysWidth,
-                                            rowHeight: rowHeight,
-                                            showOctaveLabel: true
-                                        )
-                                        .frame(width: pianoKeysWidth)
+                                        if testingViewModel.showPiano {
+                                            PianoKeysView(
+                                                geometry: rollGeometry,
+                                                octaves: 3,
+                                                width: pianoKeysWidth,
+                                                rowHeight: rowHeight,
+                                                showOctaveLabel: true
+                                            )
+                                            .frame(width: pianoKeysWidth)
+                                            .transition(.move(edge: .leading))
+                                        }
                                         
                                         ZStack {
                                             BarRowsView(
@@ -70,33 +73,27 @@ struct QuestionView: View {
                                                 rowWidth: rollWidth,
                                                 rowHeight: rowHeight,
                                                 beats: 4,
-                                                viewType: .Piano
+                                                viewType: testingViewModel.rollRowsViewType,
+                                                image: false
                                             )
                                             
                                             if question.intervalLinesType != .None {
                                                 IntervalLinesView(
-                                                    intervalLinesViewModel: IntervalLinesViewModel(
-                                                        segments: segments,
-                                                        parts: parts,
-                                                        groups: rollViewModel.partGroups,
-                                                        harmonicIntervalLinesType: .all,
-                                                        showMelodicIntervalLines: false,
-                                                        barIndex: 0,
-                                                        barWidth: rollWidth,
-                                                        rowWidth: rollWidth,
-                                                        rowHeight: rowHeight,
-                                                        harmonicIntervalLineColors: rollViewModel.viewableHarmonicIntervalLineColors,
-                                                        melodicIntervalLineColors: [],
-                                                        viewableMelodicLines: [],
-                                                        showInvertedIntervals: question.intervalLinesType == .InvertedLines,
-                                                        showZigZags: question.intervalLinesType == .InvertedLines
-                                                    )
+                                                    intervalLinesViewModel: viewModels.1
                                                 )
+                                                .onAppear {
+                                                    viewModels.1.barWidth = rollWidth
+                                                    viewModels.1.rowWidth = rollWidth
+                                                    viewModels.1.rowHeight = rowHeight
+                                                }
+//                                                .onChange(of: testingViewModel.showPiano) {
+//                                                    viewModels.1.barWidth = rollWidth
+//                                                }
                                             }
                                             
                                             RollBarView(
-                                                rollViewModel: rollViewModel,
-                                                segments: segments,
+                                                rollViewModel: viewModels.0,
+                                                segments: viewModels.0.segments ?? [],
                                                 barIndex: 0,
                                                 barWidth: rollWidth,
                                                 rowHeight: rowHeight,
@@ -105,11 +102,64 @@ struct QuestionView: View {
                                             )
                                         }
                                         .frame(width: rollWidth)
-                                        .offset(x: pianoKeysWidth)
+                                        .offset(x: testingViewModel.showPiano ? pianoKeysWidth : 0)
+                                        .transition(.move(edge: .leading))
+                                        .allowsHitTesting(false)
+                                        
+                                        VStack {
+                                            Spacer()
+                                            
+                                            Text("Show Piano")
+                                                .font(.headline)
+                                            
+                                            Button {
+                                                withAnimation(.easeInOut) {
+                                                    testingViewModel.showPiano.toggle()
+                                                }
+                                            } label: {
+                                                Image(systemName: "pianokeys")
+                                                    .font(.largeTitle)
+                                                    .frame(width: inspectorWidth * 0.75, height: rollGeometry.size.height / 8)
+                                            }
+                                            .frame(width: inspectorWidth * 0.75, height: rollGeometry.size.height / 8)
+                                            .cornerRadius(8)
+                                            .background {
+                                                if testingViewModel.showPiano {
+                                                    Color.blue
+                                                        .cornerRadius(8)
+                                                }
+                                            }
+                                            
+                                            Text("Background")
+                                                .font(.headline)
+                                            
+                                            ForEach(BarRowsView.ViewType.allCases, id: \.self) { viewType in
+                                                Button {
+                                                    withAnimation(.easeInOut) {
+                                                        testingViewModel.rollRowsViewType = viewType
+                                                    }
+                                                } label: {
+                                                    Text(viewType.rawValue)
+                                                        .frame(width: inspectorWidth * 0.75, height: rollGeometry.size.height / 8)
+                                                }
+                                                .frame(width: inspectorWidth * 0.75, height: rollGeometry.size.height / 8)
+                                                .cornerRadius(8)
+                                                .background {
+                                                    if testingViewModel.rollRowsViewType == viewType {
+                                                        Color.blue
+                                                            .cornerRadius(8)
+                                                    }
+                                                }
+                                            }
+                                            
+                                            Spacer()
+                                        }
+                                        .frame(width: inspectorWidth)
+                                        .offset(x: rollWidth + (testingViewModel.showPiano ? pianoKeysWidth : 0))
                                     }
                                 }
-                                .allowsHitTesting(false)
                                 .frame(width: geometry.size.width / 1.5, height: geometry.size.height / 2.375)
+                                .clipped(antialiased: true)
                                 .padding()
                                 .background(
                                     RoundedRectangle(cornerRadius: 20)
@@ -127,7 +177,7 @@ struct QuestionView: View {
                                         if question.intervalLinesType == .Lines {
                                             ForEach(0..<12) { i in
                                                 LineKeyView(
-                                                    color: rollViewModel.viewableHarmonicIntervalLineColors[i],
+                                                    color: RollViewModel.harmonicIntervalLineColors[i],
                                                     label: TestingViewModel.Answer(semitones: i + 1)?.rawValue ?? "",
                                                     showZigZags: false
                                                 )
@@ -137,21 +187,21 @@ struct QuestionView: View {
                                             ForEach(0..<11) { i in
                                                 if i < 5 {
                                                     LineKeyView(
-                                                        color: rollViewModel.viewableHarmonicIntervalLineColors[i],
+                                                        color: RollViewModel.invertedHarmonicIntervalLineColors[i],
                                                         label: "\(TestingViewModel.Answer(semitones: i + 1)?.rawValue ?? "")/\(TestingViewModel.Answer(semitones: 11 - i)?.rawValue ?? "")",
                                                         showZigZags: true
                                                     )
                                                     .frame(width: geometry.size.width / 12)
                                                 } else if i == 5 {
                                                         LineKeyView(
-                                                            color: rollViewModel.viewableHarmonicIntervalLineColors[i],
+                                                            color: RollViewModel.invertedHarmonicIntervalLineColors[i],
                                                             label: TestingViewModel.Answer(semitones: i + 1)?.rawValue ?? "",
                                                             showZigZags: false
                                                         )
                                                         .frame(width: geometry.size.width / 12)
                                                         
                                                         LineKeyView(
-                                                            color: rollViewModel.viewableHarmonicIntervalLineColors[i + 1],
+                                                            color: RollViewModel.invertedHarmonicIntervalLineColors[i + 1],
                                                             label: TestingViewModel.Answer(semitones: i + 7)?.rawValue ?? "",
                                                             showZigZags: false
                                                         )
@@ -182,6 +232,13 @@ struct QuestionView: View {
                                         testingViewModel.questionMarked = true
                                         print("Roll Error")
                                     }
+                                
+                                NextQuestionButton(testingViewModel: testingViewModel)
+                                    .frame(height: geometry.size.height / 30)
+                                    .disabled(!testingViewModel.questionMarked)
+                                    .padding()
+                                
+                                Spacer()
                             }
                             
                             Text(testingViewModel.answerTime >= testingViewModel.maximumAnswerTime ? "DNF" : "\(testingViewModel.answerTime, format: .number.rounded(increment: 0.01))")
@@ -304,6 +361,13 @@ struct QuestionView: View {
                                     testingViewModel.questionMarked = true
                                     print("View Error")
                                 }
+                            
+                            NextQuestionButton(testingViewModel: testingViewModel)
+                                .frame(height: geometry.size.height / 30)
+                                .disabled(!testingViewModel.questionMarked)
+                                .padding()
+                            
+                            Spacer()
                         }
                     }
                 }
@@ -327,7 +391,13 @@ struct QuestionView: View {
                 Button {
                     testingViewModel.practice = false
                     
-                    testingViewModel.startTests()
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        testingViewModel.questionVisible = false
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        testingViewModel.startTests()
+                    }
                 } label: {
                     Text("Yes")
                 }
@@ -351,6 +421,7 @@ struct QuestionView: View {
                     Text("No")
                 }
             }
+            .opacity(testingViewModel.questionVisible ? 1.0 : 0.0)
         }
     }
 }

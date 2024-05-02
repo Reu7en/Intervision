@@ -55,7 +55,7 @@ struct TestSession: Identifiable, Codable {
     private static func generateQuestions(questionCount: Int) -> [Question] {
         var questions: [Question] = []
         
-        for _ in 0..<(questionCount / (3 * Question.QuestionType.allCases.count)) {
+        for _ in 0..<(max(1, questionCount / (3 * Question.QuestionType.allCases.count))) {
             for questionType in Question.QuestionType.allCases {
                 if questionType.isScoreQuestion {
                     let scoreQuestions = Array(repeating: Question(type: questionType, intervalLinesType: .None), count: 3)

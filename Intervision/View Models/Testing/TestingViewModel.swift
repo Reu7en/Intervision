@@ -21,8 +21,8 @@ class TestingViewModel: ObservableObject {
     @Published var educatorSkillLevel = Skill.SkillLevel.None
     @Published var developerSkillLevel = Skill.SkillLevel.None
     
-    @Published var questionCount = 90
-    var selectedQuestionCount = 90
+    @Published var rollRowsViewType = BarRowsView.ViewType.Piano
+    @Published var showPiano = false
     
     @Published var tutorial = false {
         didSet {
@@ -40,9 +40,9 @@ class TestingViewModel: ObservableObject {
     @Published var showSavingErrorAlert = false
     @Published var showSavingSuccessAlert = false
     
-    @Published var countdown = 3
+    @Published var countdown = 5
     @Published var progress = 1.0
-    private let totalSeconds = 3
+    private let totalSeconds = 5
     private var countdownTimer: AnyCancellable?
     
     var isFirstQuestion = true
@@ -57,15 +57,21 @@ class TestingViewModel: ObservableObject {
                 self.isFirstQuestion = true
             }
             
-            self.generateQuestionData(question: self.testSession?.questions[currentQuestionIndex])
+            if self.practice {
+                self.randomlyGenerateQuestionData(question: self.testSession?.questions[currentQuestionIndex])
+            } else {
+                self.getTestQuestionData(currentQuestionIndex)
+            }
+            
             self.questionResults = []
             self.questionMarked = false
         }
     }
     
-    @Published var currentQuestionData: (BarViewModel?, RollViewModel?, [Answer]?)?
+    @Published var currentQuestionData: (BarViewModel?, (RollViewModel, IntervalLinesViewModel)?, [Answer]?)?
     @Published var questionResults: [Bool] = []
-    @Published var questionMarked: Bool = false
+    @Published var questionMarked = false
+    @Published var questionVisible = false
     
     @Published var answerTime = 0.0
     @Published var answerProgress = 1.0
@@ -159,35 +165,39 @@ extension TestingViewModel {
 
 extension TestingViewModel {
     func startTests() {
-        withAnimation(.easeInOut) {
-            self.presentedQuestionView = .CountdownTimer
-            self.presentedView = .Questions
-        }
+        var testerSkills: [Skill] = []
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            var testerSkills: [Skill] = []
-            
-            testerSkills.append(Skill(type: .Performer, level: self.performerSkillLevel))
-            testerSkills.append(Skill(type: .Composer, level: self.composerSkillLevel))
-            testerSkills.append(Skill(type: .Theorist, level: self.theoristSkillLevel))
-            testerSkills.append(Skill(type: .Educator, level: self.educatorSkillLevel))
-            testerSkills.append(Skill(type: .Developer, level: self.developerSkillLevel))
-            
-            let testerId: UUID = UUID(uuidString: self.testerId) ?? UUID()
-            
-            self.tester = Tester(skills: testerSkills, id: testerId)
-            
-            if let tester = self.tester {
-                self.testSession = TestSession(tester: tester, questionCount: self.practice ? 30 : self.questionCount)
+        testerSkills.append(Skill(type: .Performer, level: self.performerSkillLevel))
+        testerSkills.append(Skill(type: .Composer, level: self.composerSkillLevel))
+        testerSkills.append(Skill(type: .Theorist, level: self.theoristSkillLevel))
+        testerSkills.append(Skill(type: .Educator, level: self.educatorSkillLevel))
+        testerSkills.append(Skill(type: .Developer, level: self.developerSkillLevel))
+        
+        let testerId: UUID = UUID(uuidString: self.testerId) ?? UUID()
+        
+        self.tester = Tester(skills: testerSkills, id: testerId)
+        
+        if let tester = self.tester {
+            if self.practice {
+                self.testSession = TestSession(tester: tester, questionCount: 30)
+            } else {
+                self.testSession = TestSession(tester: tester, questionCount: 30)
             }
-        
-            self.currentQuestionIndex = 0
         }
+    
+        self.currentQuestionIndex = 0
+        self.goToNextQuestion()
     }
     
     func startCountdown() {
         self.countdown = self.totalSeconds
         self.progress = 1.0
+        
+        if self.isFirstQuestion {
+            self.isFirstQuestion = false
+        } else {
+            self.currentQuestionIndex += 1
+        }
         
         self.countdownTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect().sink { [weak self] _ in
             guard let self = self else { return }
@@ -200,13 +210,6 @@ extension TestingViewModel {
             } else {
                 self.countdownTimer?.cancel()
                 self.countdownTimer = nil
-                
-                if isFirstQuestion {
-                    isFirstQuestion = false
-                } else {
-                    self.currentQuestionIndex += 1
-                }
-                
                 self.goToQuestion()
             }
         }
@@ -239,14 +242,19 @@ extension TestingViewModel {
     
     func goToQuestion() {
         withAnimation(.easeInOut) {
+            self.presentedView = .Questions
             self.presentedQuestionView = .Question
+            self.questionVisible = true
             self.startAnswerTimer()
         }
     }
     
     func goToNextQuestion() {
-        withAnimation(.easeInOut) {
-            self.presentedQuestionView = .CountdownTimer
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            withAnimation(.easeInOut(duration: 0.5)) {
+                self.presentedView = .Questions
+                self.presentedQuestionView = .CountdownTimer
+            }
         }
     }
     
@@ -257,18 +265,17 @@ extension TestingViewModel {
     }
     
     private func calculateIsLastQuestion() -> Bool {
-        return self.currentQuestionIndex + 1 == self.questionCount
+        return self.currentQuestionIndex + 1 == self.testSession?.questionCount
     }
     
-    func generateQuestionData(question: Question?) {
+    func randomlyGenerateQuestionData(question: Question?) {
         guard let question = question else { self.currentQuestionData = nil; return }
         
-        let clef: Bar.Clef = Bool.random() ? .Treble : .Bass
         let key: Bar.KeySignature = Bar.KeySignature.allCases.randomElement() ?? .CMajor
-        let bar = Bar(chords: [Chord(notes: [])], clef: clef, timeSignature: .custom(beats: 4, noteValue: 4), repeat: nil, doubleLine: false, keySignature: key)
+        let bar = Bar(chords: [Chord(notes: [])], clef: .Treble, timeSignature: .custom(beats: 4, noteValue: 4), repeat: nil, doubleLine: false, keySignature: key)
         let lowestStartingNote = Note(
-            pitch: question.type.isScoreQuestion ? (clef == .Treble ? .B : .D) : .C,
-            octave: question.type.isScoreQuestion ? (clef == .Treble ? .small : .great) : .subContra,
+            pitch: question.type.isScoreQuestion ? .B : .C,
+            octave: question.type.isScoreQuestion ? .small : .subContra,
             duration: .quarter,
             isRest: false,
             isDotted: false,
@@ -321,12 +328,12 @@ extension TestingViewModel {
                 highestNote.increaseSemitone(sharps: key.sharps)
             }
             
-            bar.chords[0].notes.append(lowestNote)
-            bar.chords[0].notes.append(highestNote)
-            bar.chords.append(Chord(notes: [quarterRest]))
-            bar.chords.append(Chord(notes: [halfRest]))
-            
             if question.type.isScoreQuestion {
+                bar.chords[0].notes.append(lowestNote)
+                bar.chords[0].notes.append(highestNote)
+                bar.chords.append(Chord(notes: [quarterRest]))
+                bar.chords.append(Chord(notes: [halfRest]))
+                
                 let barViewModel = BarViewModel(
                     bar: bar,
                     ledgerLines: 5,
@@ -341,12 +348,33 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             } else {
+                bar.chords[0].notes.append(quarterRest)
+                bar.chords.append(Chord(notes: []))
+                bar.chords[1].notes.append(lowestNote)
+                bar.chords[1].notes.append(highestNote)
+                bar.chords.append(Chord(notes: [halfRest]))
+                
                 let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 3)
                 rollViewModel.parts = [Part(bars: [[bar]])]
-                rollViewModel.viewableHarmonicIntervalLineColors.shuffle()
+                
+                let intervalLinesViewModel = IntervalLinesViewModel(
+                    segments: rollViewModel.segments ?? [],
+                    parts: rollViewModel.parts ?? [], 
+                    groups: rollViewModel.partGroups,
+                    harmonicIntervalLinesType: .all,
+                    showMelodicIntervalLines: false,
+                    barIndex: 0, barWidth: .zero,
+                    rowWidth: .zero,
+                    rowHeight: .zero,
+                    harmonicIntervalLineColors: RollViewModel.harmonicIntervalLineColors,
+                    melodicIntervalLineColors: [],
+                    viewableMelodicLines: [],
+                    showInvertedIntervals: question.intervalLinesType == .InvertedLines,
+                    showZigZags: question.intervalLinesType == .InvertedLines
+                )
                 
                 if let answer = answer {
-                    self.currentQuestionData = (nil, rollViewModel, [answer])
+                    self.currentQuestionData = (nil, (rollViewModel, intervalLinesViewModel), [answer])
                 } else {
                     self.currentQuestionData = nil
                 }
@@ -397,13 +425,13 @@ extension TestingViewModel {
                 highestNote.increaseSemitone(sharps: key.sharps)
             }
             
-            bar.chords[0].notes.append(lowestNote)
-            bar.chords[0].notes.append(middleNote)
-            bar.chords[0].notes.append(highestNote)
-            bar.chords.append(Chord(notes: [quarterRest]))
-            bar.chords.append(Chord(notes: [halfRest]))
-            
             if question.type.isScoreQuestion {
+                bar.chords[0].notes.append(lowestNote)
+                bar.chords[0].notes.append(middleNote)
+                bar.chords[0].notes.append(highestNote)
+                bar.chords.append(Chord(notes: [quarterRest]))
+                bar.chords.append(Chord(notes: [halfRest]))
+                
                 let barViewModel = BarViewModel(
                     bar: bar,
                     ledgerLines: 5,
@@ -419,13 +447,35 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             } else {
+                bar.chords[0].notes.append(quarterRest)
+                bar.chords.append(Chord(notes: []))
+                bar.chords[1].notes.append(lowestNote)
+                bar.chords[1].notes.append(middleNote)
+                bar.chords[1].notes.append(highestNote)
+                bar.chords.append(Chord(notes: [halfRest]))
+                
                 let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 3)
                 rollViewModel.parts = [Part(bars: [[bar]])]
-                rollViewModel.viewableHarmonicIntervalLineColors.shuffle()
+                
+                let intervalLinesViewModel = IntervalLinesViewModel(
+                    segments: rollViewModel.segments ?? [],
+                    parts: rollViewModel.parts ?? [],
+                    groups: rollViewModel.partGroups,
+                    harmonicIntervalLinesType: .all,
+                    showMelodicIntervalLines: false,
+                    barIndex: 0, barWidth: .zero,
+                    rowWidth: .zero,
+                    rowHeight: .zero,
+                    harmonicIntervalLineColors: RollViewModel.harmonicIntervalLineColors,
+                    melodicIntervalLineColors: [],
+                    viewableMelodicLines: [],
+                    showInvertedIntervals: question.intervalLinesType == .InvertedLines,
+                    showZigZags: question.intervalLinesType == .InvertedLines
+                )
                 
                 if let answer1 = answer1,
                    let answer2 = answer2 {
-                    self.currentQuestionData = (nil, rollViewModel, [answer1, answer2])
+                    self.currentQuestionData = (nil, (rollViewModel, intervalLinesViewModel), [answer1, answer2])
                 } else {
                     self.currentQuestionData = nil
                 }
@@ -475,13 +525,13 @@ extension TestingViewModel {
                 highestNote.increaseSemitone(sharps: key.sharps)
             }
             
-            bar.chords[0].notes.append(lowestNote)
-            bar.chords[0].notes.append(middleNote)
-            bar.chords[0].notes.append(highestNote)
-            bar.chords.append(Chord(notes: [quarterRest]))
-            bar.chords.append(Chord(notes: [halfRest]))
-            
             if question.type.isScoreQuestion {
+                bar.chords[0].notes.append(lowestNote)
+                bar.chords[0].notes.append(middleNote)
+                bar.chords[0].notes.append(highestNote)
+                bar.chords.append(Chord(notes: [quarterRest]))
+                bar.chords.append(Chord(notes: [halfRest]))
+                
                 let barViewModel = BarViewModel(
                     bar: bar,
                     ledgerLines: 5,
@@ -496,12 +546,34 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             } else {
+                bar.chords[0].notes.append(quarterRest)
+                bar.chords.append(Chord(notes: []))
+                bar.chords[1].notes.append(lowestNote)
+                bar.chords[1].notes.append(middleNote)
+                bar.chords[1].notes.append(highestNote)
+                bar.chords.append(Chord(notes: [halfRest]))
+                
                 let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 3)
                 rollViewModel.parts = [Part(bars: [[bar]])]
-                rollViewModel.viewableHarmonicIntervalLineColors.shuffle()
+                
+                let intervalLinesViewModel = IntervalLinesViewModel(
+                    segments: rollViewModel.segments ?? [],
+                    parts: rollViewModel.parts ?? [],
+                    groups: rollViewModel.partGroups,
+                    harmonicIntervalLinesType: .all,
+                    showMelodicIntervalLines: false,
+                    barIndex: 0, barWidth: .zero,
+                    rowWidth: .zero,
+                    rowHeight: .zero,
+                    harmonicIntervalLineColors: RollViewModel.harmonicIntervalLineColors,
+                    melodicIntervalLineColors: [],
+                    viewableMelodicLines: [],
+                    showInvertedIntervals: question.intervalLinesType == .InvertedLines,
+                    showZigZags: question.intervalLinesType == .InvertedLines
+                )
                 
                 if let answer = answer {
-                    self.currentQuestionData = (nil, rollViewModel, [answer])
+                    self.currentQuestionData = (nil, (rollViewModel, intervalLinesViewModel), [answer])
                 } else {
                     self.currentQuestionData = nil
                 }
@@ -580,11 +652,21 @@ extension TestingViewModel {
                 highestNote2.increaseSemitone(sharps: key.sharps)
             }
             
-            bar.chords[0].notes.append(lowestNote1)
-            bar.chords[0].notes.append(middleNote1)
-            bar.chords[0].notes.append(highestNote1)
-            bar.chords.append(Chord(notes: [quarterRest]))
-            bar.chords.append(Chord(notes: []))
+            if question.type.isScoreQuestion {
+                bar.chords[0].notes.append(lowestNote1)
+                bar.chords[0].notes.append(middleNote1)
+                bar.chords[0].notes.append(highestNote1)
+                bar.chords.append(Chord(notes: [quarterRest]))
+                bar.chords.append(Chord(notes: []))
+            } else {
+                bar.chords[0].notes.append(quarterRest)
+                bar.chords.append(Chord(notes: []))
+                bar.chords[1].notes.append(lowestNote1)
+                bar.chords[1].notes.append(middleNote1)
+                bar.chords[1].notes.append(highestNote1)
+                bar.chords.append(Chord(notes: [quarterRest]))
+                bar.chords.append(Chord(notes: []))
+            }
             
             if Bool.random() { // Apply 1st or 2nd inversion
                 lowestNote2.increaseOctave()
@@ -621,12 +703,12 @@ extension TestingViewModel {
                 }
             }
             
-            bar.chords[2].notes.append(lowestNote2)
-            bar.chords[2].notes.append(middleNote2)
-            bar.chords[2].notes.append(highestNote2)
-            bar.chords.append(Chord(notes: [quarterRest]))
-            
             if question.type.isScoreQuestion {
+                bar.chords[2].notes.append(lowestNote2)
+                bar.chords[2].notes.append(middleNote2)
+                bar.chords[2].notes.append(highestNote2)
+                bar.chords.append(Chord(notes: [quarterRest]))
+                
                 let barViewModel = BarViewModel(
                     bar: bar,
                     ledgerLines: 5,
@@ -641,12 +723,31 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             } else {
+                bar.chords[3].notes.append(lowestNote2)
+                bar.chords[3].notes.append(middleNote2)
+                bar.chords[3].notes.append(highestNote2)
+                
                 let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 3)
                 rollViewModel.parts = [Part(bars: [[bar]])]
-                rollViewModel.viewableHarmonicIntervalLineColors.shuffle()
+                
+                let intervalLinesViewModel = IntervalLinesViewModel(
+                    segments: rollViewModel.segments ?? [],
+                    parts: rollViewModel.parts ?? [],
+                    groups: rollViewModel.partGroups,
+                    harmonicIntervalLinesType: .all,
+                    showMelodicIntervalLines: false,
+                    barIndex: 0, barWidth: .zero,
+                    rowWidth: .zero,
+                    rowHeight: .zero,
+                    harmonicIntervalLineColors: RollViewModel.harmonicIntervalLineColors,
+                    melodicIntervalLineColors: [],
+                    viewableMelodicLines: [],
+                    showInvertedIntervals: question.intervalLinesType == .InvertedLines,
+                    showZigZags: question.intervalLinesType == .InvertedLines
+                )
                 
                 if let answer = answer {
-                    self.currentQuestionData = (nil, rollViewModel, [answer])
+                    self.currentQuestionData = (nil, (rollViewModel, intervalLinesViewModel), [answer])
                 } else {
                     self.currentQuestionData = nil
                 }
@@ -699,10 +800,19 @@ extension TestingViewModel {
                 highestNote1.increaseSemitone(sharps: key.sharps)
             }
             
-            bar.chords[0].notes.append(lowestNote1)
-            bar.chords[0].notes.append(highestNote1)
-            bar.chords.append(Chord(notes: [quarterRest]))
-            bar.chords.append(Chord(notes: []))
+            if question.type.isScoreQuestion {
+                bar.chords[0].notes.append(lowestNote1)
+                bar.chords[0].notes.append(highestNote1)
+                bar.chords.append(Chord(notes: [quarterRest]))
+                bar.chords.append(Chord(notes: []))
+            } else {
+                bar.chords[0].notes.append(quarterRest)
+                bar.chords.append(Chord(notes: []))
+                bar.chords[1].notes.append(lowestNote1)
+                bar.chords[1].notes.append(highestNote1)
+                bar.chords.append(Chord(notes: [quarterRest]))
+                bar.chords.append(Chord(notes: []))
+            }
             
             let answer = Answer(boolValue: Bool.random())
             let lowestNote2SemitoneIncrease = (0...12).filter { $0 != lowestNoteSemitoneIncrease }.randomElement() ?? Int.random(in: 0...12)
@@ -716,11 +826,11 @@ extension TestingViewModel {
                 highestNote2.increaseSemitone(sharps: key.sharps)
             }
             
-            bar.chords[2].notes.append(lowestNote2)
-            bar.chords[2].notes.append(highestNote2)
-            bar.chords.append(Chord(notes: [quarterRest]))
-            
             if question.type.isScoreQuestion {
+                bar.chords[2].notes.append(lowestNote2)
+                bar.chords[2].notes.append(highestNote2)
+                bar.chords.append(Chord(notes: [quarterRest]))
+                
                 let barViewModel = BarViewModel(
                     bar: bar,
                     ledgerLines: 5,
@@ -735,12 +845,30 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             } else {
+                bar.chords[3].notes.append(lowestNote2)
+                bar.chords[3].notes.append(highestNote2)
+                
                 let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 3)
                 rollViewModel.parts = [Part(bars: [[bar]])]
-                rollViewModel.viewableHarmonicIntervalLineColors.shuffle()
+                
+                let intervalLinesViewModel = IntervalLinesViewModel(
+                    segments: rollViewModel.segments ?? [],
+                    parts: rollViewModel.parts ?? [],
+                    groups: rollViewModel.partGroups,
+                    harmonicIntervalLinesType: .all,
+                    showMelodicIntervalLines: false,
+                    barIndex: 0, barWidth: .zero,
+                    rowWidth: .zero,
+                    rowHeight: .zero,
+                    harmonicIntervalLineColors: RollViewModel.harmonicIntervalLineColors,
+                    melodicIntervalLineColors: [],
+                    viewableMelodicLines: [],
+                    showInvertedIntervals: question.intervalLinesType == .InvertedLines,
+                    showZigZags: question.intervalLinesType == .InvertedLines
+                )
                 
                 if let answer = answer {
-                    self.currentQuestionData = (nil, rollViewModel, [answer])
+                    self.currentQuestionData = (nil, (rollViewModel, intervalLinesViewModel), [answer])
                 } else {
                     self.currentQuestionData = nil
                 }
@@ -748,7 +876,11 @@ extension TestingViewModel {
         }
     }
     
-    func submitAnswer(questionData: (BarViewModel?, RollViewModel?, [Answer]?), answer: Answer, answerIndex: Int) {
+    func getTestQuestionData(_ currentQuestionIndex: Int) {
+        
+    }
+    
+    func submitAnswer(questionData: (BarViewModel?, (RollViewModel, IntervalLinesViewModel)?, [Answer]?), answer: Answer, answerIndex: Int) {
         guard let answers = questionData.2 else { self.questionMarked = true; return }
         
         self.questionResults.append(answer.rawValue == answers[answerIndex].rawValue)
@@ -767,7 +899,7 @@ extension TestingViewModel {
         
         if let question = self.testSession?.questions[self.currentQuestionIndex] {
             let answeredCorrectly = self.questionResults.isEmpty ? false : self.questionResults.allSatisfy( { $0 == true } )
-            let timeTaken = self.answerTime
+            let timeTaken = self.questionResults.isEmpty ? -1 : self.answerTime
             
             self.testSession?.results.append(TestResult(question: question, answeredCorrectly: answeredCorrectly, timeTaken: timeTaken))
         }

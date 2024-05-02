@@ -24,7 +24,6 @@ struct QuestionsView: View {
                     switch testingViewModel.presentedQuestionView {
                     case .CountdownTimer:
                         CountdownTimerView(testingViewModel: testingViewModel)
-                            .frame(width: geometry.size.width / 3, height: geometry.size.height / 3)
                     case .Question:
                         if testingViewModel.testSession != nil {
                             QuestionView(testingViewModel: testingViewModel)

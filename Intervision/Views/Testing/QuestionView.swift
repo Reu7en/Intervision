@@ -69,7 +69,8 @@ struct QuestionView: View {
                                                 rows: rows,
                                                 rowWidth: rollWidth,
                                                 rowHeight: rowHeight,
-                                                beats: 4
+                                                beats: 4,
+                                                viewType: .Piano
                                             )
                                             
                                             if question.intervalLinesType != .None {

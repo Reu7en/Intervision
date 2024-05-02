@@ -52,7 +52,7 @@ struct HomeView: View {
                             .padding()
                         }
                         .frame(width: width / 10)
-                        .disabled(true)
+//                        .disabled(true)
                         
                         Button {
                             let panel = NSOpenPanel()
@@ -80,7 +80,7 @@ struct HomeView: View {
                             .padding()
                         }
                         .frame(width: width / 10)
-                        .disabled(true)
+//                        .disabled(true)
                         
                         Button {
                             presentedView = .Testing

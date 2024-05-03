@@ -156,5 +156,5 @@ extension BarRowsView {
 }
 
 #Preview {
-    BarRowsView(rows: 12, rowWidth: 500, rowHeight: 50, beats: 1, viewType: .None, image: true)
+    BarRowsView(rows: 12, rowWidth: 500, rowHeight: 50, beats: 1, viewType: .None, image: false)
 }

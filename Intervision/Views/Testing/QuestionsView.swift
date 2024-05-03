@@ -9,6 +9,8 @@ import SwiftUI
 
 struct QuestionsView: View {
     
+    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    
     @StateObject var testingViewModel: TestingViewModel
     
     @State private var showErrorAlert: Bool = false
@@ -27,6 +29,8 @@ struct QuestionsView: View {
                     case .Question:
                         if testingViewModel.testSession != nil {
                             QuestionView(testingViewModel: testingViewModel)
+                                .environmentObject(screenSizeViewModel)
+                                .frame(width: screenSizeViewModel.screenSize.width, height: screenSizeViewModel.screenSize.height)
                         } else {
                             EmptyView()
                                 .onAppear {
@@ -53,4 +57,5 @@ struct QuestionsView: View {
 
 #Preview {
     QuestionsView(testingViewModel: TestingViewModel())
+        .environmentObject(ScreenSizeViewModel())
 }

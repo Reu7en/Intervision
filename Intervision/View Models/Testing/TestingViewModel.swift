@@ -35,14 +35,15 @@ class TestingViewModel: ObservableObject {
     }
     
     @Published var practice = false
+    @Published var random = false
     @Published var presentedView: PresentedView = .Registration
     @Published var presentedQuestionView: PresentedQuestionView = .CountdownTimer
     @Published var showSavingErrorAlert = false
     @Published var showSavingSuccessAlert = false
     
-    @Published var countdown = 5
+    @Published var countdown = 1
     @Published var progress = 1.0
-    private let totalSeconds = 5
+    private let totalSeconds = 1
     private var countdownTimer: AnyCancellable?
     
     var isFirstQuestion = true
@@ -57,7 +58,7 @@ class TestingViewModel: ObservableObject {
                 self.isFirstQuestion = true
             }
             
-            if self.practice {
+            if self.practice || self.random {
                 self.randomlyGenerateQuestionData(question: self.testSession?.questions[currentQuestionIndex])
             } else {
                 self.getTestQuestionData(currentQuestionIndex)

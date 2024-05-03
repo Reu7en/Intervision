@@ -103,11 +103,11 @@ struct RollView: View {
                                     LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
                                         Section {
                                             PianoKeysView(
-                                                geometry: geometry,
                                                 octaves: rollViewModel.octaves,
                                                 width: pianoKeysWidth,
                                                 rowHeight: rowHeight,
-                                                showOctaveLabel: true
+                                                showOctaveLabel: true,
+                                                fontSize: 12
                                             )
                                             .id(UUID())
                                         } header: {

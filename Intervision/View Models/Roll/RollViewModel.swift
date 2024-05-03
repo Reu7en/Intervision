@@ -923,22 +923,22 @@ extension RollViewModel {
     ]
     
     static let partSegmentColors: [Color] = [
-        Color(red: 1, green: 0, blue: 0),
-        Color(red: 0, green: 1, blue: 0),
-        Color(red: 0, green: 0, blue: 1),
-        Color(red: 1, green: 1, blue: 0),
-        Color(red: 1, green: 0, blue: 1),
-        Color(red: 0, green: 1, blue: 1),
-        Color(red: 1, green: 128/255, blue: 0),
-        Color(red: 0, green: 128/255, blue: 128/255),
-        Color(red: 128/255, green: 0, blue: 1),
-        Color(red: 1, green: 128/255, blue: 1),
-        Color(red: 1, green: 1, blue: 1),
-        Color(red: 128/255, green: 128/255, blue: 128/255)
+        Color("1S"),
+        Color("2S"),
+        Color("3S"),
+        Color("4S"),
+        Color("5S"),
+        Color("6S"),
+        Color("7S"),
+        Color("8S"),
+        Color("9S"),
+        Color("10S"),
+        Color("11S"),
+        Color("12S")
     ]
     
     static let harmonicIntervalLineColors: [Color] = partSegmentColors
     static let melodicIntervalLineColors: [Color] = partSegmentColors
-    static let invertedHarmonicIntervalLineColors: [Color] = Array(harmonicIntervalLineColors.prefix(7))
-    static let invertedMelodicIntervalLineColors: [Color] = Array(melodicIntervalLineColors.prefix(7))
+    static let invertedHarmonicIntervalLineColors: [Color] = Array(harmonicIntervalLineColors.prefix(6)) + Array(harmonicIntervalLineColors.reversed().prefix(1))
+    static let invertedMelodicIntervalLineColors: [Color] = Array(melodicIntervalLineColors.prefix(6)) + Array(melodicIntervalLineColors.reversed().prefix(1))
 }

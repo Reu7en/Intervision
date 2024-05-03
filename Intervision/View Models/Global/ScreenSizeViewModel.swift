@@ -52,7 +52,7 @@ class ScreenSizeViewModel: ObservableObject {
         #if os(macOS)
         let referenceFontSize: CGFloat = 16
         #elseif os(iOS)
-        let referenceFontSize: CGFloat = 32
+        let referenceFontSize: CGFloat = 24
         #endif
         
         let relativeWidth = self.screenSize.width / referenceScreenSize.width

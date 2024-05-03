@@ -23,6 +23,7 @@ struct TestingHomeView: View {
                     switch testingViewModel.presentedView {
                     case .Registration:
                         TestingRegistrationView(testingViewModel: testingViewModel)
+                            .environmentObject(screenSizeViewModel)
                     case .Tutorial:
                         TutorialView(testingViewModel: testingViewModel)
                             .frame(width: geometry.size.width / 3)
@@ -38,6 +39,7 @@ struct TestingHomeView: View {
                             .shadow(radius: 10)
                     case .Questions:
                         QuestionsView(testingViewModel: testingViewModel)
+                            .environmentObject(screenSizeViewModel)
                     case .Results:
                         ResultsView(testingViewModel: testingViewModel)
                     }

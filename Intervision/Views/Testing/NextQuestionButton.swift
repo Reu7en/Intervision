@@ -9,6 +9,8 @@ import SwiftUI
 
 struct NextQuestionButton: View {
     
+    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    
     @StateObject var testingViewModel: TestingViewModel
     
     @State private var showPracticeAlert: Bool = false
@@ -32,12 +34,14 @@ struct NextQuestionButton: View {
             }
         } label: {
             Image(systemName: testingViewModel.isLastQuestion && !testingViewModel.practice ? "flag.checkered" : "arrow.right")
-                .font(.title)
-                .padding()
+                .equivalentFont(.title)
+                .equivalentPadding()
         }
+        .buttonStyle(BorderedButtonStyle())
     }
 }
 
 #Preview {
     NextQuestionButton(testingViewModel: TestingViewModel())
+        .environmentObject(ScreenSizeViewModel())
 }

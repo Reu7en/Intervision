@@ -9,15 +9,18 @@ import SwiftUI
 
 struct LineKeyView: View {
     
+    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    
     let color: Color
     let label: String
     let showZigZags: Bool
     
     var body: some View {
         GeometryReader { geometry in
-            VStack {
+            VStack(spacing: 0) {
                 Text(label)
-                    .fontWeight(.bold)
+                    .equivalentFont(.title3)
+                    .fontWeight(.semibold)
                 
                 if showZigZags {
                     ZStack {
@@ -47,4 +50,5 @@ struct LineKeyView: View {
 
 #Preview {
     LineKeyView(color: .clear, label: "", showZigZags: false)
+        .environmentObject(ScreenSizeViewModel())
 }

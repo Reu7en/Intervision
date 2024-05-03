@@ -52,7 +52,7 @@ struct TestingRegistrationView: View {
                 HStack(spacing: spacing) {
                     TextEditor(text: $testingViewModel.testerId)
                         .equivalentFont(.title3)
-                        .equivalentPadding(.top, padding: 12)
+                        .equivalentPadding()
                         .fontWeight(.semibold)
                         .frame(width: textFieldWidth, height: buttonHeight)
                         .lineLimit(1)
@@ -83,7 +83,7 @@ struct TestingRegistrationView: View {
                         .alert(isPresented: $showTesterIdAlert) {
                             Alert(
                                 title: Text("Input Your Tester ID Here"),
-                                message: Text("If this is your first time completing any tests, you should leave this field blank! A unique Tester ID will be generated for you automatically.\n\nIf you have completed any tests before, you can find your Tester ID within your results data.")
+                                message: Text("If this is your first time completing the test, you should leave this field blank! A unique Tester ID will be generated for you automatically.\n\nIf you have completed the test before, you can find your Tester ID within your results data.")
                             )
                         }
                 }
@@ -275,6 +275,7 @@ struct TestingRegistrationView: View {
                                 if let _ = UUID(uuidString: testingViewModel.testerId) {
                                     withAnimation(.easeInOut) {
                                         //                                showTutorialAlert = true
+                                        testingViewModel.random = true
                                         showPracticeAlert = true
                                     }
                                 } else {

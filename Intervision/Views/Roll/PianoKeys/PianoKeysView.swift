@@ -9,7 +9,6 @@ import SwiftUI
 
 struct PianoKeysView: View {
     
-    let geometry: GeometryProxy
     let octaves: Int
     let width: CGFloat
     let rowHeight: CGFloat
@@ -17,6 +16,7 @@ struct PianoKeysView: View {
     let blackKeysPerOctave = 5
     let totalKeysPerOctave = 12
     let showOctaveLabel: Bool
+    let fontSize: CGFloat
     
     var body: some View {
         
@@ -24,7 +24,7 @@ struct PianoKeysView: View {
         let whiteKeyHeight = octaveHeight / CGFloat(whiteKeysPerOctave)
         let blackKeyHeight = octaveHeight / CGFloat(totalKeysPerOctave)
         
-        LazyVStack(spacing: 0) {
+        VStack(spacing: 0) {
             ForEach(0..<octaves, id: \.self) { octaveIndex in
                 ZStack {
                     VStack(spacing: 0) {
@@ -41,7 +41,8 @@ struct PianoKeysView: View {
                                         
                                         Text("C\(octaves - octaveIndex - 1)")
                                             .foregroundStyle(Color.gray)
-                                            .padding(.horizontal, geometry.size.width / 200)
+                                            .padding(.horizontal, width / 20)
+                                            .font(.system(size: fontSize))
                                     }
                                 }
                             }
@@ -62,11 +63,10 @@ struct PianoKeysView: View {
                 }
             }
         }
+        .frame(width: width)
     }
 }
 
 #Preview {
-    GeometryReader { geometry in
-        PianoKeysView(geometry: geometry, octaves: 9, width: 100, rowHeight: 10, showOctaveLabel: false)
-    }
+    PianoKeysView(octaves: 9, width: 100, rowHeight: 10, showOctaveLabel: true, fontSize: 12)
 }

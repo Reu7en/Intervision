@@ -46,7 +46,7 @@ struct ScoreView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .padding(.trailing)
                 .padding(.top, 5)
-                .onChange(of: presentedView) { newValue in
+                .onChange(of: presentedView) { newValue, _ in
                     withAnimation(.easeInOut) {
                         presentedView = newValue
                     }

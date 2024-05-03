@@ -79,7 +79,7 @@ extension HomeView {
         
         var body: some View {
             #if os(macOS)
-            let size = CGSize(width: geometry.size.width / 3, height: geometry.size.width / 3)
+            let size = CGSize(width: geometry.size.width / 5, height: geometry.size.width / 5)
             #elseif os(iOS)
             let size = CGSize(width: geometry.size.width / 2, height: geometry.size.width / 2)
             #endif
@@ -100,7 +100,7 @@ extension HomeView {
                     } label: {
                         HStack {
                             Text("New")
-                                .equivalentFont(.title)
+                                .equivalentFont(.title2)
                             
                             Spacer()
                             
@@ -132,7 +132,7 @@ extension HomeView {
                     } label: {
                         HStack {
                             Text("Open MusicXML")
-                                .equivalentFont(.title)
+                                .equivalentFont(.title2)
                             
                             Spacer()
                             
@@ -150,7 +150,7 @@ extension HomeView {
                     } label: {
                         HStack {
                             Text("Testing")
-                                .equivalentFont(.title)
+                                .equivalentFont(.title2)
                             
                             Spacer()
                             
@@ -163,6 +163,7 @@ extension HomeView {
                     Spacer()
                     
                     Text("[User Testing Build]")
+                        .padding()
                 }
             }
             .environmentObject(screenSizeViewModel)

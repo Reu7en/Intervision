@@ -9,6 +9,8 @@ import SwiftUI
 
 struct TutorialView: View {
     
+    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    
     @StateObject var testingViewModel: TestingViewModel
     
     @State private var currentPage = 0
@@ -84,4 +86,5 @@ struct TutorialView: View {
 
 #Preview {
     TutorialView(testingViewModel: TestingViewModel())
+        .environmentObject(ScreenSizeViewModel())
 }

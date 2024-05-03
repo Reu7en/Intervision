@@ -12,12 +12,14 @@ class Line: Identifiable, Equatable, Comparable {
     
     var startPoint: CGPoint
     var endPoint: CGPoint
+    var dotted: Bool
     let color: Color
     let inversionType: InversionType?
     
-    init(startPoint: CGPoint, endPoint: CGPoint, color: Color = .black, inversionType: InversionType? = nil, id: UUID = UUID()) {
+    init(startPoint: CGPoint, endPoint: CGPoint, dotted: Bool = false, color: Color = .black, inversionType: InversionType? = nil, id: UUID = UUID()) {
         self.startPoint = startPoint
         self.endPoint = endPoint
+        self.dotted = dotted
         self.color = color
         self.inversionType = inversionType
         self.id = id

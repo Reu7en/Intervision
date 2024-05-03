@@ -804,6 +804,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intervision copy-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Intervision;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreeniPad.storyboard;
@@ -841,6 +842,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intervision copy-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Intervision;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreeniPad.storyboard;

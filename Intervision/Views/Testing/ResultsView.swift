@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ResultsView: View {
     
+    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    
     @StateObject var testingViewModel: TestingViewModel
     
     @State private var showExitAlert = false
@@ -73,4 +75,5 @@ struct ResultsView: View {
 
 #Preview {
     ResultsView(testingViewModel: TestingViewModel())
+        .environmentObject(ScreenSizeViewModel())
 }

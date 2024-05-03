@@ -36,6 +36,7 @@ struct NextQuestionButton: View {
             Image(systemName: testingViewModel.isLastQuestion && !testingViewModel.practice ? "flag.checkered" : "arrow.right")
                 .equivalentFont(.title)
                 .equivalentPadding()
+                .equivalentPadding(.horizontal, padding: 50)
         }
         .buttonStyle(BorderedButtonStyle())
     }

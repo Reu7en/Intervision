@@ -110,7 +110,7 @@ struct EquivalentFontModifier: ViewModifier {
 }
 
 extension View {
-    func equivalentPadding(_ edges: Edge.Set = [.all], padding: CGFloat = 10) -> some View {
+    func equivalentPadding(_ edges: Edge.Set = [.all], padding: CGFloat = 8) -> some View {
         self.modifier(EquivalentPaddingModifier(edges: edges, padding: padding))
     }
     

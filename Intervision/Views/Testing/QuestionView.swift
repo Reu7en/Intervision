@@ -29,8 +29,8 @@ struct QuestionView: View {
         let cornerRadius = screenSizeViewModel.getEquivalentValue(8)
         let backgroundCornerRadius = screenSizeViewModel.getEquivalentValue(20)
         let backgroundShadow = screenSizeViewModel.getEquivalentValue(10)
-        let barHeight = viewSize.height / 2
-        let timerHeight = viewSize.height / 20
+        let barHeight = viewSize.height / 2.25
+        let timerHeight = viewSize.height / 25
         
         ZStack {
             VStack(spacing: spacing) {
@@ -60,7 +60,7 @@ struct QuestionView: View {
                         } else if let viewModels = questionData.1 {
                             ZStack {
                                 HStack(spacing: 0) {
-                                    let rows = 36
+                                    let rows = 24
                                     let rowHeight = barHeight / CGFloat(rows)
                                     let pianoKeysWidth = viewSize.width / 10
                                     let inspectorWidth = viewSize.width / 8
@@ -109,6 +109,13 @@ struct QuestionView: View {
                                                     withAnimation(.linear(duration: 0.25)) {
                                                         intervalLinesOpacity = 1.0
                                                     }
+                                                }
+                                            }
+                                            .onChange(of: viewSize) {
+                                                withAnimation(.easeInOut) {
+                                                    viewModels.1.barWidth = rollWidth
+                                                    viewModels.1.rowWidth = rollWidth
+                                                    viewModels.1.rowHeight = rowHeight
                                                 }
                                             }
                                             .opacity(intervalLinesOpacity)
@@ -407,6 +414,7 @@ struct QuestionView: View {
                 }
             }
             .frame(width: viewSize.width)
+            #if os(iOS)
             .overlay(alignment: .topLeading) {
                 Button {
                     if testingViewModel.practice {
@@ -420,17 +428,32 @@ struct QuestionView: View {
                         .equivalentPadding()
                 }
             }
+            #endif
         }
         .frame(width: screenSizeViewModel.screenSize.width, height: screenSizeViewModel.screenSize.height)
+        #if os(macOS)
+        .overlay(alignment: .topLeading) {
+            Button {
+                if testingViewModel.practice {
+                    self.showEndPracticeAlert = true
+                } else {
+                    self.showEndSessionAlert = true
+                }
+            } label: {
+                Image(systemName: "xmark")
+                    .equivalentFont(.title2)
+                    .equivalentPadding()
+            }
+        }
+        #endif
         .alert("Would you like to stop practicing and start the tests?", isPresented: $showEndPracticeAlert) {
             Button {
-                testingViewModel.practice = false
-                
                 withAnimation(.easeInOut(duration: 0.5)) {
                     testingViewModel.questionVisible = false
                 }
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    testingViewModel.practice = false
                     testingViewModel.startTests()
                 }
             } label: {

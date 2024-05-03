@@ -53,11 +53,6 @@ struct RollInspectorView: View {
                         #if os(macOS)
                         .pickerStyle(RadioGroupPickerStyle())
                         #endif
-                        .onChange(of: presentedView) { newValue, _ in
-                            withAnimation(.easeInOut) {
-                                presentedView = newValue
-                            }
-                        }
                         
                         Spacer()
                     }

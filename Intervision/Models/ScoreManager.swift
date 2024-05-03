@@ -10,8 +10,8 @@ import Foundation
 class ScoreManager: ObservableObject {
     @Published var score: Score?
     
-    func updateScore(newScore: Score?) {
-        DispatchQueue.main.async {
+    func updateScore(newScore: Score?) async {
+        Task {
             self.score = newScore
         }
     }

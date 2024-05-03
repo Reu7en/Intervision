@@ -18,7 +18,7 @@ struct HomeView: View {
     @StateObject var rollViewModel: RollViewModel
     @StateObject var testingViewModel: TestingViewModel
     
-    @State var presentedView: PresentedView = .Roll
+    @State var presentedView: PresentedView = .None
     
     init() {
         let scoreManager = ScoreManager()
@@ -30,39 +30,36 @@ struct HomeView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            if scoreManager.score != nil {
-                switch presentedView {
-                case .Score:
-                    ScoreView(presentedView: $presentedView, scoreViewModel: scoreViewModel)
-                        .navigationBarBackButtonHidden()
-                case .Roll:
-                    RollView(presentedView: $presentedView, rollViewModel: rollViewModel)
-                        .navigationBarBackButtonHidden()
-                default:
-                    HomePanel(scoreManager: scoreManager, presentedView: $presentedView, geometry: geometry)
-                        .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-                        .environmentObject(screenSizeViewModel)
-                }
-            } else {
-                switch presentedView {
-                case .Testing:
-                    TestingHomeView(testingViewModel: testingViewModel)
-                        .environmentObject(screenSizeViewModel)
-                        .navigationBarBackButtonHidden()
-                default:
-                    HomePanel(scoreManager: scoreManager, presentedView: $presentedView, geometry: geometry)
-                        .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-                }
+            switch presentedView {
+            case .Score:
+                ScoreView(presentedView: $presentedView, scoreViewModel: scoreViewModel)
+                    .navigationBarBackButtonHidden()
+                    .onAppear {
+                        scoreViewModel.scoreManager = scoreManager
+                    }
+            case .Roll:
+                RollView(presentedView: $presentedView, rollViewModel: rollViewModel)
+                    .navigationBarBackButtonHidden()
+//                    .onAppear {
+//                        rollViewModel.scoreManager = scoreManager
+//                    }
+            case .Testing:
+                TestingHomeView(testingViewModel: testingViewModel)
+                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                    .environmentObject(screenSizeViewModel)
+                    .navigationBarBackButtonHidden()
+            default:
+                HomePanel(scoreManager: scoreManager, presentedView: $presentedView, geometry: geometry)
+                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                    .onAppear {
+                        screenSizeViewModel.screenSize = geometry.size
+                    }
+                    .onChange(of: geometry.size) {
+                        screenSizeViewModel.screenSize = geometry.size
+                    }
             }
-            
-            Color.clear
-                .onAppear {
-                    screenSizeViewModel.screenSize = geometry.size
-                }
-                .onChange(of: geometry.size) {
-                    screenSizeViewModel.screenSize = geometry.size
-                }
         }
+        .padding(0)
     }
 }
 
@@ -121,10 +118,11 @@ extension HomeView {
                         
                         if panel.runModal() == .OK {
                             if let fileURL = panel.urls.first {
-                                MusicXMLDataService.readXML(fileURL.standardizedFileURL.path) { score in
-                                    DispatchQueue.main.async {
-                                        scoreManager.updateScore(newScore: score)
-                                    }
+                                Task {
+                                    let score = await MusicXMLDataService.readXML(fileURL.standardizedFileURL.path)
+                                
+                                    await scoreManager.updateScore(newScore: score)
+                                    presentedView = .Roll
                                 }
                             }
                         }
@@ -141,7 +139,7 @@ extension HomeView {
                         .equivalentPadding()
                     }
                     .frame(width: size.width / 1.5)
-                    .disabled(true)
+//                    .disabled(true)
                     
                     Button {
                         withAnimation(.easeInOut) {

@@ -367,11 +367,12 @@ extension TestingViewModel {
                     barIndex: 0, barWidth: .zero,
                     rowWidth: .zero,
                     rowHeight: .zero,
-                    harmonicIntervalLineColors: RollViewModel.harmonicIntervalLineColors,
+                    harmonicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedHarmonicIntervalLineColors : RollViewModel.harmonicIntervalLineColors,
                     melodicIntervalLineColors: [],
                     viewableMelodicLines: [],
                     showInvertedIntervals: question.intervalLinesType == .InvertedLines,
-                    showZigZags: question.intervalLinesType == .InvertedLines
+                    showZigZags: question.intervalLinesType == .InvertedLines, 
+                    testing: true
                 )
                 
                 if let answer = answer {
@@ -467,11 +468,12 @@ extension TestingViewModel {
                     barIndex: 0, barWidth: .zero,
                     rowWidth: .zero,
                     rowHeight: .zero,
-                    harmonicIntervalLineColors: RollViewModel.harmonicIntervalLineColors,
+                    harmonicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedHarmonicIntervalLineColors : RollViewModel.harmonicIntervalLineColors,
                     melodicIntervalLineColors: [],
                     viewableMelodicLines: [],
                     showInvertedIntervals: question.intervalLinesType == .InvertedLines,
-                    showZigZags: question.intervalLinesType == .InvertedLines
+                    showZigZags: question.intervalLinesType == .InvertedLines,
+                    testing: true
                 )
                 
                 if let answer1 = answer1,
@@ -566,11 +568,12 @@ extension TestingViewModel {
                     barIndex: 0, barWidth: .zero,
                     rowWidth: .zero,
                     rowHeight: .zero,
-                    harmonicIntervalLineColors: RollViewModel.harmonicIntervalLineColors,
+                    harmonicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedHarmonicIntervalLineColors : RollViewModel.harmonicIntervalLineColors,
                     melodicIntervalLineColors: [],
                     viewableMelodicLines: [],
                     showInvertedIntervals: question.intervalLinesType == .InvertedLines,
-                    showZigZags: question.intervalLinesType == .InvertedLines
+                    showZigZags: question.intervalLinesType == .InvertedLines,
+                    testing: true
                 )
                 
                 if let answer = answer {
@@ -740,11 +743,12 @@ extension TestingViewModel {
                     barIndex: 0, barWidth: .zero,
                     rowWidth: .zero,
                     rowHeight: .zero,
-                    harmonicIntervalLineColors: RollViewModel.harmonicIntervalLineColors,
+                    harmonicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedHarmonicIntervalLineColors : RollViewModel.harmonicIntervalLineColors,
                     melodicIntervalLineColors: [],
                     viewableMelodicLines: [],
                     showInvertedIntervals: question.intervalLinesType == .InvertedLines,
-                    showZigZags: question.intervalLinesType == .InvertedLines
+                    showZigZags: question.intervalLinesType == .InvertedLines,
+                    testing: true
                 )
                 
                 if let answer = answer {
@@ -817,7 +821,7 @@ extension TestingViewModel {
             
             let answer = Answer(boolValue: Bool.random())
             let lowestNote2SemitoneIncrease = (0...12).filter { $0 != lowestNoteSemitoneIncrease }.randomElement() ?? Int.random(in: 0...12)
-            let highestNote2SemitoneIncrease = lowestNote2SemitoneIncrease + highestNoteSemitoneIncrease - lowestNoteSemitoneIncrease + (answer == .True ? 0 : (Int.random(in: 1...2) * (Bool.random() ? 1 : -1)))
+            let highestNote2SemitoneIncrease = lowestNote2SemitoneIncrease + highestNoteSemitoneIncrease - lowestNoteSemitoneIncrease
             
             for _ in 0..<lowestNote2SemitoneIncrease {
                 lowestNote2.increaseSemitone(sharps: key.sharps)
@@ -825,6 +829,20 @@ extension TestingViewModel {
             
             for _ in 0..<highestNote2SemitoneIncrease {
                 highestNote2.increaseSemitone(sharps: key.sharps)
+            }
+            
+            if answer == .False {
+                let semitonesToAdjust = Int.random(in: 1...2) * (Bool.random() ? 1 : -1)
+                
+                if semitonesToAdjust > 0 {
+                    for _ in 0..<semitonesToAdjust {
+                        highestNote2.increaseSemitone(sharps: key.sharps)
+                    }
+                } else {
+                    for _ in 0..<abs(semitonesToAdjust) {
+                        highestNote2.decreaseSemitone(sharps: key.sharps)
+                    }
+                }
             }
             
             if question.type.isScoreQuestion {
@@ -861,11 +879,12 @@ extension TestingViewModel {
                     barIndex: 0, barWidth: .zero,
                     rowWidth: .zero,
                     rowHeight: .zero,
-                    harmonicIntervalLineColors: RollViewModel.harmonicIntervalLineColors,
+                    harmonicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedHarmonicIntervalLineColors : RollViewModel.harmonicIntervalLineColors,
                     melodicIntervalLineColors: [],
                     viewableMelodicLines: [],
                     showInvertedIntervals: question.intervalLinesType == .InvertedLines,
-                    showZigZags: question.intervalLinesType == .InvertedLines
+                    showZigZags: question.intervalLinesType == .InvertedLines,
+                    testing: true
                 )
                 
                 if let answer = answer {
@@ -878,7 +897,19 @@ extension TestingViewModel {
     }
     
     func getTestQuestionData(_ currentQuestionIndex: Int) {
-        
+        /*
+         case ScoreTwoNoteIntervalIdentification
+         case ScoreThreeNoteInnerIntervalsIdentification
+         case ScoreThreeNoteOuterIntervalIdentification
+         case ScoreChordsAreInversions
+         case ScoreTwoNoteIntervalsAreEqual
+
+         case RollTwoNoteIntervalIdentification
+         case RollThreeNoteInnerIntervalsIdentification
+         case RollThreeNoteOuterIntervalIdentification
+         case RollChordsAreInversions
+         case RollTwoNoteIntervalsAreEqual
+         */
     }
     
     func submitAnswer(questionData: (BarViewModel?, (RollViewModel, IntervalLinesViewModel)?, [Answer]?), answer: Answer, answerIndex: Int) {
@@ -938,4 +969,1527 @@ extension TestingViewModel {
         #elseif os(iOS)
         #endif
     }
+    
+    static let quarterRest = Note(
+        duration: .quarter,
+        isRest: true,
+        isDotted: false,
+        hasAccent: false
+    )
+    
+    static let halfRest = Note(
+        duration: .half,
+        isRest: true,
+        isDotted: false,
+        hasAccent: false
+    )
+    
+    static let questions: [(Bar, [Answer])] = [
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: nil,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .C,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .BMajor
+        ), []), // S2II 1
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .G,
+                        accidental: .Sharp,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .AMajor
+        ), []), // S2II 2
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .B,
+                        accidental: .Flat,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .BFlatMajor
+        ), []), // S2II 3
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: .Sharp,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .F,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .AMajor
+        ), []), // S3II 1
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .E,
+                        accidental: nil,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .G,
+                        accidental: nil,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .C,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .GMajor
+        ), []), // S3II 2
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .B,
+                        accidental: .Flat,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .AFlatMajor
+        ), []), // S3II 3
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: .Flat,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .B,
+                        accidental: .Flat,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .FMajor
+        ), []), // S3OI 1
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .G,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .G,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .EMajor
+        ), []), // S3OI 2
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .E,
+                        accidental: .Flat,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .FMajor
+        ), []), // S3OI 3
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .D,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .D,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .G,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .AMajor
+        ), []), // SCAI 1
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .E,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .G,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .D,
+                        accidental: .Sharp,
+                        octave: .twoLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .EMajor
+        ), []), // SCAI 2
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .E,
+                        accidental: nil,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .B,
+                        accidental: .Flat,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .B,
+                        accidental: .Flat,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .E,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .BFlatMajor
+        ), []), // SCAI 3
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: .Flat,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .D,
+                        accidental: .Flat,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .B,
+                        accidental: nil,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .G,
+                        accidental: .Flat,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CFlatMajor
+        ), []), // S2SI 1
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .B,
+                        accidental: nil,
+                        octave: .great,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: nil,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .EMajor
+        ), []), // S2SI 2
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: .Flat,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .F,
+                        accidental: .Flat,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .B,
+                        accidental: nil,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .E,
+                        accidental: .Flat,
+                        octave: .small,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .GFlatMajor
+        ), []), // S3SI 3
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .B,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .F,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), []), // R2II NL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .E,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), []), // R2II WL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), []), // R2II IL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .A,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .E,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), []), // R3II NL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .C,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .E,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), []), // R3II WL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .A,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), []), // R3II IL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .B,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .F,
+                        accidental: .Sharp,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .A,
+                        accidental: .Sharp,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), []), // R3OI NL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .E,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .B,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), []), // R3OI WL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .G,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .A,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), []), // R3OI IL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), []), // RCAI NL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .D,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .B,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .D,
+                        accidental: .Sharp,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), []), // RCAI WL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .F,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .B,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .B,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), []), // RCAI IL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .A,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: .Sharp,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), []), // R2SI NL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .D,
+                        accidental: .Sharp,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .G,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), []), // R2SI WL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .B,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .G,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), [])  // R3SI IL
+    ]
 }

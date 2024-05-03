@@ -24,7 +24,7 @@ struct TestingRegistrationView: View {
     
     var body: some View {
         #if os(macOS)
-        let viewSize = CGSize(width: screenSizeViewModel.screenSize.width / 1.5, height: screenSizeViewModel.screenSize.height / 1.5)
+        let viewSize = CGSize(width: screenSizeViewModel.screenSize.width / 2, height: screenSizeViewModel.screenSize.height / 2)
         #elseif os(iOS)
         let viewSize = CGSize(width: screenSizeViewModel.screenSize.width / 1.1, height: screenSizeViewModel.screenSize.height / 1.1)
         #endif
@@ -77,7 +77,7 @@ struct TestingRegistrationView: View {
                         }
                         .onTapGesture {
                             withAnimation(.easeInOut) {
-                                showTesterIdAlert = true
+                                showTesterIdAlert.toggle()
                             }
                         }
                         .alert(isPresented: $showTesterIdAlert) {
@@ -249,87 +249,83 @@ struct TestingRegistrationView: View {
                         .onTapGesture {
                             withAnimation(.easeInOut) {
                                 testerIdFieldFocused = false
-                                showRollBackgroundOverlay = true
+                                showRollBackgroundOverlay.toggle()
                             }
                         }
                 }
                 
                 Spacer()
                 
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .foregroundStyle(Color.clear)
-                    .frame(width: skillsButtonWidth, height: buttonHeight * 1.5)
-                    .background(Color.secondary)
-                    .cornerRadius(cornerRadius)
-                    .equivalentPadding()
-                    .overlay {
-                        Text("Start Tests")
-                            .equivalentFont(.title)
-                            .fontWeight(.bold)
-                    }
-                    .onTapGesture {
-                        withAnimation(.easeInOut) {
-                            testerIdFieldFocused = false
-                            
-                            if !testingViewModel.testerId.isEmpty {
-                                if let _ = UUID(uuidString: testingViewModel.testerId) {
-                                    withAnimation(.easeInOut) {
-                                        //                                showTutorialAlert = true
-                                        testingViewModel.random = true
-                                        showPracticeAlert = true
-                                    }
-                                } else {
-                                    withAnimation(.easeInOut) {
-                                        showInvalidIdAlert = true
-                                    }
+                Button {
+                    withAnimation(.easeInOut) {
+                        testerIdFieldFocused = false
+                        
+                        if !testingViewModel.testerId.isEmpty {
+                            if let _ = UUID(uuidString: testingViewModel.testerId) {
+                                withAnimation(.easeInOut) {
+                                    //                                showTutorialAlert = true
+                                    testingViewModel.random = true
+                                    showPracticeAlert = true
                                 }
                             } else {
                                 withAnimation(.easeInOut) {
-                                    //                            showTutorialAlert = true
-                                    showPracticeAlert = true
+                                    showInvalidIdAlert = true
                                 }
                             }
-                        }
-                    }
-                    .alert("Would you like to view the tutorial first?", isPresented: $showTutorialAlert) {
-                        Button {
-                            testingViewModel.tutorial = true
-                        } label: {
-                            Text("Yes")
-                        }
-                        
-                        Button {
-                            testingViewModel.tutorial = false
-                            
+                        } else {
                             withAnimation(.easeInOut) {
+                                //                            showTutorialAlert = true
                                 showPracticeAlert = true
                             }
-                        } label: {
-                            Text("No")
                         }
                     }
-                    .alert("Would you like to complete some practice questions?", isPresented: $showPracticeAlert) {
-                        Button {
-                            testingViewModel.practice = true
-                            
-                            testingViewModel.startTests()
-                        } label: {
-                            Text("Yes")
-                        }
+                } label: {
+                    Text("Start Tests")
+                        .equivalentFont(.title)
+                        .frame(width: skillsButtonWidth, height: buttonHeight * 1.5)
+                        .background(Color.secondary)
+                        .cornerRadius(cornerRadius)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .alert("Would you like to view the tutorial first?", isPresented: $showTutorialAlert) {
+                    Button {
+                        testingViewModel.tutorial = true
+                    } label: {
+                        Text("Yes")
+                    }
+                    
+                    Button {
+                        testingViewModel.tutorial = false
                         
-                        Button {
-                            testingViewModel.practice = false
-                            
-                            testingViewModel.startTests()
-                        } label: {
-                            Text("No")
+                        withAnimation(.easeInOut) {
+                            showPracticeAlert = true
                         }
+                    } label: {
+                        Text("No")
                     }
-                    .alert(isPresented: $showInvalidIdAlert) {
-                        Alert(
-                            title: Text("Your Tester ID is invalid!")
-                        )
+                }
+                .alert("Would you like to complete some practice questions?", isPresented: $showPracticeAlert) {
+                    Button {
+                        testingViewModel.practice = true
+                        
+                        testingViewModel.startTests()
+                    } label: {
+                        Text("Yes")
                     }
+                    
+                    Button {
+                        testingViewModel.practice = false
+                        
+                        testingViewModel.startTests()
+                    } label: {
+                        Text("No")
+                    }
+                }
+                .alert(isPresented: $showInvalidIdAlert) {
+                    Alert(
+                        title: Text("Your Tester ID is invalid!")
+                    )
+                }
             }
             .equivalentPadding(padding: 50)
             .background(

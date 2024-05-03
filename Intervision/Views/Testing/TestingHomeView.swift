@@ -37,11 +37,13 @@ struct TestingHomeView: View {
                                     }
                             )
                             .shadow(radius: 10)
+                            .environmentObject(screenSizeViewModel)
                     case .Questions:
                         QuestionsView(testingViewModel: testingViewModel)
                             .environmentObject(screenSizeViewModel)
                     case .Results:
                         ResultsView(testingViewModel: testingViewModel)
+                            .environmentObject(screenSizeViewModel)
                     }
                     
                     Spacer()

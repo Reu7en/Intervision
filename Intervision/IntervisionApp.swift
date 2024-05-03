@@ -19,8 +19,12 @@ struct IntervisionApp: App {
         #endif
         
         WindowGroup {
-            HomeView()
-                .environmentObject(screenSizeViewModel)
+            GeometryReader { geometry in
+                HomeView()
+                    .environmentObject(screenSizeViewModel)
+                    .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+            }
         }
     }
 }

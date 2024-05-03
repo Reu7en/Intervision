@@ -825,45 +825,40 @@ struct MusicXMLDataService {
         return String(tagString[range])
     }
     
-    static func readXML(_ filePath: String, completion: @escaping (Score?) -> Void) {
-        DispatchQueue.global().async {
-            guard let content = readFile(filePath) else {
-                DispatchQueue.main.async {
-                    completion(nil)
+    static func readXML(_ filePath: String) async -> Score? {
+        let score = Score(title: "", composer: "", parts: [])
+        
+        DispatchQueue.main.async {
+            Task {
+                guard let content = readFile(filePath) else {
+                    return
                 }
                 
-                return
-            }
-            
-            let lines = getLines(content)
-            
-            guard isPartwise(lines) else {
-                DispatchQueue.main.async {
-                    completion(nil)
+                let lines = getLines(content)
+                
+                guard isPartwise(lines) else {
+                    return
                 }
                 
-                return
-            }
-            
-            let title: String? = getTitle(lines)
-            let composer: String? = getComposer(lines)
-            var partData: [Part]? = getParts(lines)
-            let partContents = extractContentsBetweenTags(lines, startTag: "<part id=", endTag: "</part")
-            
-            if !(partContents.isEmpty) {
-                for i in 0..<(partData?.count ?? 0) {
-                    let bars: [[Bar]] = getBars(partContents[i])
-                    partData?[i].bars = bars
+                let title: String? = getTitle(lines)
+                let composer: String? = getComposer(lines)
+                var partData: [Part]? = getParts(lines)
+                let partContents = extractContentsBetweenTags(lines, startTag: "<part id=", endTag: "</part")
+                
+                if !(partContents.isEmpty) {
+                    for i in 0..<(partData?.count ?? 0) {
+                        let bars: [[Bar]] = getBars(partContents[i])
+                        partData?[i].bars = bars
+                    }
                 }
-            }
-            
-            let score = Score(title: title, composer: composer, parts: partData)
-            score.parts = purgePercussion(parts: score.parts)
-            
-            DispatchQueue.main.async {
-                completion(score)
+                
+                score.title = title
+                score.composer = composer
+                score.parts = purgePercussion(parts: score.parts)
             }
         }
+        
+        return score
     }
 
     static func purgePercussion(parts: [Part]?) -> [Part]? {

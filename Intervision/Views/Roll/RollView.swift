@@ -68,7 +68,8 @@ struct RollView: View {
                                                                 melodicIntervalLineColors: rollViewModel.viewableMelodicIntervalLineColors,
                                                                 viewableMelodicLines: rollViewModel.viewableMelodicLines,
                                                                 showInvertedIntervals: rollViewModel.showInvertedIntervals,
-                                                                showZigZags: rollViewModel.showZigZags
+                                                                showZigZags: rollViewModel.showZigZags,
+                                                                testing: false
                                                             )
                                                         )
                                                         .id(UUID())
@@ -161,6 +162,21 @@ struct RollView: View {
                 }
         }
         .onAppear {
+            if rollViewModel.parts == nil {
+                rollViewModel.addAllParts()
+            }
+            
+            if rollViewModel.partGroups.isEmpty {
+                rollViewModel.initialisePartGroups()
+            }
+      
+            #if os(macOS)
+            rollViewModel.setupEventMonitoring()
+            #endif
+            
+            print(rollViewModel.scoreManager.score == nil)
+        }
+        .onChange(of: rollViewModel.scoreManager.score) {
             if rollViewModel.parts == nil {
                 rollViewModel.addAllParts()
             }

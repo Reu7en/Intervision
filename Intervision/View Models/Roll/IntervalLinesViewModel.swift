@@ -19,6 +19,7 @@ class IntervalLinesViewModel: ObservableObject {
     let harmonicIntervalLinesType: IntervalLinesType
     let showMelodicIntervalLines: Bool
     let barIndex: Int
+    let testing: Bool
     
     var barWidth: CGFloat {
         didSet {
@@ -58,7 +59,8 @@ class IntervalLinesViewModel: ObservableObject {
         melodicIntervalLineColors: [Color],
         viewableMelodicLines: [Part],
         showInvertedIntervals: Bool,
-        showZigZags: Bool
+        showZigZags: Bool,
+        testing: Bool
     ) {
         self.segments = segments
         self.parts = parts
@@ -74,6 +76,7 @@ class IntervalLinesViewModel: ObservableObject {
         self.viewableMelodicLines = viewableMelodicLines
         self.showInvertedIntervals = showInvertedIntervals
         self.showZigZags = showZigZags
+        self.testing = testing
         
         self.calculateLines()
     }
@@ -287,6 +290,24 @@ class IntervalLinesViewModel: ObservableObject {
             }
             
             groupLines.sort()
+            
+            if self.testing, groupLines.count > 0 {
+                for i in 0..<groupLines.count - 1 {
+                    if groupLines[i + 1].startPoint.x != groupLines[i].startPoint.x {
+                        lines.append(Line(startPoint: groupLines[i].startPoint, endPoint: groupLines[i].endPoint, dotted: true, color: groupLines[i].color, inversionType: groupLines[i].inversionType))
+                    }
+                }
+                
+                lines.append(Line(startPoint: groupLines[groupLines.count - 1].startPoint, endPoint: groupLines[groupLines.count - 1].endPoint, dotted: true, color: groupLines[groupLines.count - 1].color, inversionType: groupLines[groupLines.count - 1].inversionType))
+                
+                for line in lines {
+                    let offset = self.barWidth / 4
+                    
+                    line.startPoint.x += offset
+                    line.endPoint.x += offset
+                }
+            }
+            
             removeOverlappingLines(&groupLines)
             
             lines.append(contentsOf: groupLines)

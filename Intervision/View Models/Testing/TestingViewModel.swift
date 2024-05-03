@@ -60,6 +60,7 @@ class TestingViewModel: ObservableObject {
             
             if self.practice || self.random {
                 self.randomlyGenerateQuestionData(question: self.testSession?.questions[currentQuestionIndex])
+                self.testSession?.random = self.random
             } else {
                 self.getTestQuestionData(currentQuestionIndex)
             }
@@ -894,22 +895,10 @@ extension TestingViewModel {
                 }
             }
         }
-    }
+    } // check max doesnt exceed B1/1-C2
     
     func getTestQuestionData(_ currentQuestionIndex: Int) {
-        /*
-         case ScoreTwoNoteIntervalIdentification
-         case ScoreThreeNoteInnerIntervalsIdentification
-         case ScoreThreeNoteOuterIntervalIdentification
-         case ScoreChordsAreInversions
-         case ScoreTwoNoteIntervalsAreEqual
-
-         case RollTwoNoteIntervalIdentification
-         case RollThreeNoteInnerIntervalsIdentification
-         case RollThreeNoteOuterIntervalIdentification
-         case RollChordsAreInversions
-         case RollTwoNoteIntervalsAreEqual
-         */
+        
     }
     
     func submitAnswer(questionData: (BarViewModel?, (RollViewModel, IntervalLinesViewModel)?, [Answer]?), answer: Answer, answerIndex: Int) {
@@ -1019,7 +1008,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .BMajor
-        ), []), // S2II 1
+        ), [.Tritone]), // S2II 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1054,7 +1043,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .AMajor
-        ), []), // S2II 2
+        ), [.Minor3rd]), // S2II 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1089,7 +1078,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .BFlatMajor
-        ), []), // S2II 3
+        ), [.Perfect5th]), // S2II 3
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1132,8 +1121,8 @@ extension TestingViewModel {
             timeSignature: .custom(beats: 4, noteValue: 4),
             repeat: nil,
             doubleLine: false,
-            keySignature: .AMajor
-        ), []), // S3II 1
+            keySignature: .DMajor
+        ), [.Minor3rd, .Major6th]), // S3II 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1177,7 +1166,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .GMajor
-        ), []), // S3II 2
+        ), [.Minor3rd, .Tritone]), // S3II 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1221,7 +1210,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .AFlatMajor
-        ), []), // S3II 3
+        ), [.Perfect5th, .Minor2nd]), // S3II 3
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1265,7 +1254,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .FMajor
-        ), []), // S3OI 1
+        ), [.Major3rd]), // S3OI 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1309,7 +1298,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .EMajor
-        ), []), // S3OI 2
+        ), [.Perfect4th]), // S3OI 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1353,7 +1342,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .FMajor
-        ), []), // S3OI 3
+        ), [.Major7th]), // S3OI 3
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1426,7 +1415,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .AMajor
-        ), []), // SCAI 1
+        ), [.False]), // SCAI 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1499,7 +1488,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .EMajor
-        ), []), // SCAI 2
+        ), [.False]), // SCAI 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1572,7 +1561,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .BFlatMajor
-        ), []), // SCAI 3
+        ), [.True]), // SCAI 3
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1627,7 +1616,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CFlatMajor
-        ), []), // S2SI 1
+        ), [.True]), // S2SI 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1642,7 +1631,7 @@ extension TestingViewModel {
                     ),
                     Note(
                         pitch: .A,
-                        accidental: nil,
+                        accidental: .Sharp,
                         octave: .small,
                         duration: .quarter,
                         isRest: false,
@@ -1682,7 +1671,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .EMajor
-        ), []), // S2SI 2
+        ), [.False]), // S2SI 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1737,7 +1726,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .GFlatMajor
-        ), []), // S3SI 3
+        ), [.True]), // S3SI 3
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1772,7 +1761,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), []), // R2II NL
+        ), [.Perfect5th]), // R2II NL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1807,7 +1796,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), []), // R2II WL
+        ), [.Minor7th]), // R2II WL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1842,7 +1831,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), []), // R2II IL
+        ), [.Perfect5th]), // R2II IL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1886,7 +1875,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), []), // R3II NL
+        ), [.Major2nd, .Tritone]), // R3II NL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1902,7 +1891,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .C,
                         accidental: .Sharp,
-                        octave: .subContra,
+                        octave: .contra,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1930,7 +1919,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), []), // R3II WL
+        ), [.Major3rd, .Minor3rd]), // R3II WL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1974,7 +1963,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), []), // R3II IL
+        ), [.Major3rd, .Perfect5th]), // R3II IL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1998,7 +1987,7 @@ extension TestingViewModel {
                     ),
                     Note(
                         pitch: .A,
-                        accidental: .Sharp,
+                        accidental: nil,
                         octave: .contra,
                         duration: .quarter,
                         isRest: false,
@@ -2018,7 +2007,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), []), // R3OI NL
+        ), [.Minor7th]), // R3OI NL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2062,7 +2051,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), []), // R3OI WL
+        ), [.Major7th]), // R3OI WL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2106,7 +2095,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), []), // R3OI IL
+        ), [.Perfect5th]), // R3OI IL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2179,7 +2168,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), []), // RCAI NL
+        ), [.False]), // RCAI NL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2252,7 +2241,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), []), // RCAI WL
+        ), [.False]), // RCAI WL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2325,7 +2314,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), []), // RCAI IL
+        ), [.True]), // RCAI IL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2380,7 +2369,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), []), // R2SI NL
+        ), [.True]), // R2SI NL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2435,7 +2424,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), []), // R2SI WL
+        ), [.False]), // R2SI WL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2490,6 +2479,6 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [])  // R3SI IL
+        ), [.True]) // R3SI IL
     ]
 }

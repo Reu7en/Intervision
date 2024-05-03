@@ -14,6 +14,7 @@ struct TestSession: Identifiable, Codable {
     let dateTimeStarted: Date
     
     var results: [TestResult]
+    var random = false
     
     // Identifiable
     let id: UUID
@@ -33,14 +34,15 @@ struct TestSession: Identifiable, Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
-        try container.encode(tester.id.uuidString, forKey: .___tester_id)
-        try container.encode(id.uuidString, forKey: .__test_id)
-        try container.encode(tester.skills, forKey: ._skills)
+        try container.encode(tester.id.uuidString, forKey: .____tester_id)
+        try container.encode(id.uuidString, forKey: .___test_id)
+        try container.encode(tester.skills, forKey: .__skills)
+        try container.encode(random, forKey: ._random_test_questions)
         try container.encode(results, forKey: .results)
     }
 
     enum CodingKeys: String, CodingKey {
-        case ___tester_id, __test_id, _skills, results
+        case ____tester_id, ___test_id, __skills, _random_test_questions, results
     }
     
     init(from decoder: Decoder) throws {

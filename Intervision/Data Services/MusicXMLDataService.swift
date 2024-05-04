@@ -25,7 +25,7 @@ struct MusicXMLDataService {
         return trimmedLines
     }
     
-    static func isPartwise(_ lines: [String]) -> Bool {
+    static func isPartwise(_ lines: inout [String]) -> Bool {
         for line in lines {
             if line.contains("<score-partwise") {
                 return true
@@ -37,7 +37,7 @@ struct MusicXMLDataService {
         return false
     }
     
-    static func getTitle(_ lines: [String]) -> String? {
+    static func getTitle(_ lines: inout [String]) -> String? {
         for line in lines {
             if line.contains("<work-title") {
                 return extractContent(fromTag: line)
@@ -47,7 +47,7 @@ struct MusicXMLDataService {
         return nil
     }
     
-    static func getComposer(_ lines: [String]) -> String? {
+    static func getComposer(_ lines: inout [String]) -> String? {
         for line in lines {
             if line.contains("<creator type=\"composer\"") {
                 return extractContent(fromTag: line)
@@ -57,7 +57,7 @@ struct MusicXMLDataService {
         return nil
     }
     
-    static func getParts(_ lines: [String]) -> [Part]? {
+    static func getParts(_ lines: inout [String]) -> [Part]? {
         var parts: [Part] = [Part]()
         var partIds: [String] = [String]()
         var partNames: [String] = [String]()
@@ -85,10 +85,10 @@ struct MusicXMLDataService {
         return parts
     }
     
-    static func getBars(_ partContents: [String]) -> [[Bar]] {
+    static func getBars(_ partContents: inout [String]) -> [[Bar]] {
         var bars: [[Bar]] = []
         
-        let barData: [[String]] = extractContentsBetweenTags(partContents, startTag: "<measure number=", endTag: "</measure")
+        let barData: [[String]] = extractContentsBetweenTags(&partContents, startTag: "<measure number=", endTag: "</measure")
         
         var currentTempo: Bar.Tempo? = nil
         var currentClefs: [Bar.Clef] = []
@@ -97,7 +97,8 @@ struct MusicXMLDataService {
         var clefData: [[String]] = []
         var currentStaves: Int = 1
         
-        for bar in barData {
+        for barIndex in 0..<barData.count {
+            var bar = barData[barIndex]
             if barData.count > 0 {
                 for line in barData[0] {
                     if line.contains("<staves") {
@@ -112,7 +113,7 @@ struct MusicXMLDataService {
             
             for line in bar {
                 if line.contains("<metronome") {
-                    let metronome = extractContentsBetweenTags(bar, startTag: "<metronome", endTag: "</metronome")
+                    let metronome = extractContentsBetweenTags(&bar, startTag: "<metronome", endTag: "</metronome")
                     var time: String? = nil
                     var bpm: Int = -1
                     
@@ -146,7 +147,7 @@ struct MusicXMLDataService {
                 }
                 
                 if (line.contains("<key")) {
-                    let key = extractContentsBetweenTags(bar, startTag: "<key", endTag: "</key")
+                    let key = extractContentsBetweenTags(&bar, startTag: "<key", endTag: "</key")
                     var fifths: Int? = nil
                     
                     if key.count > 0 {
@@ -214,8 +215,9 @@ struct MusicXMLDataService {
             }
         }
         
-        for bar in barData {
-            let notes = extractContentsBetweenTags(bar, startTag: "<note", endTag: "</note")
+        for barIndex in 0..<barData.count {
+            var bar = barData[barIndex]
+            let notes = extractContentsBetweenTags(&bar, startTag: "<note", endTag: "</note")
             var currentBars: [Bar] = []
             var currentStave: Int = 1
             var currentRepeat: Bar.Repeat? = nil
@@ -227,7 +229,7 @@ struct MusicXMLDataService {
             
             for line in bar {
                 if line.contains("<clef") {
-                    clefData = extractContentsBetweenTags(bar, startTag: "<clef", endTag: "</clef")
+                    clefData = extractContentsBetweenTags(&bar, startTag: "<clef", endTag: "</clef")
                     let measureNumber = Int(extractFirstAttributeValue(fromTag: line) ?? "-1") ?? -1
                     
                     for clef in clefData {
@@ -297,7 +299,7 @@ struct MusicXMLDataService {
             
             for line in bar {
                 if line.contains("<time") {
-                    let time = extractContentsBetweenTags(bar, startTag: "<time", endTag: "</time")
+                    let time = extractContentsBetweenTags(&bar, startTag: "<time", endTag: "</time")
                     var beats: Int = -1
                     var noteValue: Int = -1
                     
@@ -353,7 +355,7 @@ struct MusicXMLDataService {
             for line in bar {
                 if line.contains("<dynamics") {
                     var currentDynamic: Bar.Dynamic?
-                    let dynamic = extractContentsBetweenTags(bar, startTag: "<dynamics", endTag: "</direction>")
+                    let dynamic = extractContentsBetweenTags(&bar, startTag: "<dynamics", endTag: "</direction>")
                     var stave = 1
                     
                     if dynamic.count > 0 {
@@ -423,7 +425,8 @@ struct MusicXMLDataService {
                 chords.append(Chord(notes: []))
             }
             
-            for (noteIndex, note) in notes.enumerated() {
+            for noteIndex in 0..<notes.count {
+                var note = notes[noteIndex]
                 var pitch: Note.Pitch? = nil
                 var accidental: Note.Accidental? = nil
                 var octave: Note.Octave? = nil
@@ -549,7 +552,7 @@ struct MusicXMLDataService {
                     }
                     
                     if line.contains("<time-modification") {
-                        let timeMod = extractContentsBetweenTags(note, startTag: "<time-modification", endTag: "</time-modification")
+                        let timeMod = extractContentsBetweenTags(&note, startTag: "<time-modification", endTag: "</time-modification")
                         var actual: Int = -1
                         var normal: Int = -1
                         var normalType: Note.Duration? = duration
@@ -775,7 +778,7 @@ struct MusicXMLDataService {
         return bars
     }
     
-    static func extractContentsBetweenTags(_ lines: [String], startTag: String, endTag: String) -> [[String]] {
+    static func extractContentsBetweenTags(_ lines: inout [String], startTag: String, endTag: String) -> [[String]] {
         var extractedContents: [[String]] = []
         var currentContents: [String] = []
         var isInsideTag: Bool = false
@@ -834,20 +837,20 @@ struct MusicXMLDataService {
                     return
                 }
                 
-                let lines = getLines(content)
+                var lines = getLines(content)
                 
-                guard isPartwise(lines) else {
+                guard isPartwise(&lines) else {
                     return
                 }
                 
-                let title: String? = getTitle(lines)
-                let composer: String? = getComposer(lines)
-                var partData: [Part]? = getParts(lines)
-                let partContents = extractContentsBetweenTags(lines, startTag: "<part id=", endTag: "</part")
+                let title: String? = getTitle(&lines)
+                let composer: String? = getComposer(&lines)
+                var partData: [Part]? = getParts(&lines)
+                var partContents = extractContentsBetweenTags(&lines, startTag: "<part id=", endTag: "</part")
                 
                 if !(partContents.isEmpty) {
                     for i in 0..<(partData?.count ?? 0) {
-                        let bars: [[Bar]] = getBars(partContents[i])
+                        let bars: [[Bar]] = getBars(&partContents[i])
                         partData?[i].bars = bars
                     }
                 }

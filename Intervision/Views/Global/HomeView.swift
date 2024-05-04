@@ -22,6 +22,7 @@ struct HomeView: View {
     
     init() {
         let scoreManager = ScoreManager()
+        
         _scoreViewModel = StateObject(wrappedValue: ScoreViewModel(scoreManager: scoreManager))
         _rollViewModel = StateObject(wrappedValue: RollViewModel(scoreManager: scoreManager))
         _testingViewModel = StateObject(wrappedValue: TestingViewModel())
@@ -32,20 +33,12 @@ struct HomeView: View {
         switch presentedView {
         case .Score:
             ScoreView(presentedView: $presentedView, scoreViewModel: scoreViewModel)
-                .navigationBarBackButtonHidden()
-                .onAppear {
-                    scoreViewModel.scoreManager = scoreManager
-                }
         case .Roll:
             RollView(presentedView: $presentedView, rollViewModel: rollViewModel)
-                .navigationBarBackButtonHidden()
-            //                    .onAppear {
-            //                        rollViewModel.scoreManager = scoreManager
-            //                    }
-        case .Testing:
-            TestingHomeView(presentedHomeView: $presentedView, testingViewModel: testingViewModel)
                 .environmentObject(screenSizeViewModel)
-            //                .navigationBarBackButtonHidden()
+        case .Testing:
+            TestingHomeView(testingViewModel: testingViewModel, presentedHomeView: $presentedView)
+                .environmentObject(screenSizeViewModel)
         default:
             HomePanel(scoreManager: scoreManager, presentedView: $presentedView, size: screenSizeViewModel.screenSize)
         }
@@ -107,9 +100,7 @@ extension HomeView {
                         if panel.runModal() == .OK {
                             if let fileURL = panel.urls.first {
                                 Task {
-                                    let score = await MusicXMLDataService.readXML(fileURL.standardizedFileURL.path)
-                                
-                                    await scoreManager.updateScore(newScore: score)
+                                    scoreManager.score = await MusicXMLDataService.readXML(fileURL.standardizedFileURL.path)
                                     presentedView = .Roll
                                 }
                             }

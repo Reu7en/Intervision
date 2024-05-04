@@ -35,14 +35,14 @@ struct TestSession: Identifiable, Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encode(tester.id.uuidString, forKey: .____tester_id)
-        try container.encode(id.uuidString, forKey: .___test_id)
+        try container.encode(id.uuidString, forKey: .___test_session_id)
         try container.encode(tester.skills, forKey: .__skills)
         try container.encode(random, forKey: ._random_test_questions)
         try container.encode(results, forKey: .results)
     }
 
     enum CodingKeys: String, CodingKey {
-        case ____tester_id, ___test_id, __skills, _random_test_questions, results
+        case ____tester_id, ___test_session_id, __skills, _random_test_questions, results
     }
     
     init(from decoder: Decoder) throws {
@@ -57,18 +57,16 @@ struct TestSession: Identifiable, Codable {
     private static func generateRandomQuestions(questionCount: Int) -> [Question] {
         var questions: [Question] = []
         
-        for _ in 0..<(max(1, questionCount / (3 * Question.QuestionType.allCases.count))) {
-            for questionType in Question.QuestionType.allCases {
-                if questionType.isScoreQuestion {
-                    let scoreQuestions = Array(repeating: Question(type: questionType, intervalLinesType: .None), count: 3)
+        for questionType in Question.QuestionType.allCases {
+            if questionType.isScoreQuestion {
+                let scoreQuestions = Array(repeating: Question(type: questionType, intervalLinesType: .None), count: 2)
+                
+                questions.append(contentsOf: scoreQuestions)
+            } else {
+                for linesType in Question.IntervalLinesType.allCases.filter( { $0 != .None } ) {
+                    let rollQuestion = Question(type: questionType, intervalLinesType: linesType)
                     
-                    questions.append(contentsOf: scoreQuestions)
-                } else {
-                    for linesType in Question.IntervalLinesType.allCases {
-                        let rollQuestion = Question(type: questionType, intervalLinesType: linesType)
-                        
-                        questions.append(rollQuestion)
-                    }
+                    questions.append(rollQuestion)
                 }
             }
         }

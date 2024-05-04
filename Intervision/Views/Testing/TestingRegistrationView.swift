@@ -13,6 +13,8 @@ struct TestingRegistrationView: View {
     
     @StateObject var testingViewModel: TestingViewModel
     
+    @Binding var presentedHomeView: HomeView.PresentedView
+    
     @State private var isSliding = false
     @State private var showTesterIdAlert = false
     @State private var showTutorialAlert = false
@@ -30,13 +32,12 @@ struct TestingRegistrationView: View {
         let questionMarkButtonWidth = viewSize.width / 10
         let textFieldWidth = viewSize.width - questionMarkButtonWidth - spacing
         let skillsButtonWidth = (viewSize.width / 4) - (spacing * 3 / 4)
-        let rollRowsViewTypeButtonWidth = (viewSize.width / 5) - (spacing) - (questionMarkButtonWidth / 5)
         let cornerRadius = screenSizeViewModel.getEquivalentValue(8)
         
         ZStack {
             VStack(spacing: spacing) {
                 Text("Tester ID")
-                    .equivalentFont(.title)
+                    .equivalentFont(.title2)
                     .equivalentPadding()
                     .fontWeight(.semibold)
                 
@@ -61,7 +62,7 @@ struct TestingRegistrationView: View {
                         }
                     } label: {
                         Image(systemName: "questionmark")
-                            .equivalentFont(.title2)
+                            .equivalentFont(.title3)
                             .fontWeight(.semibold)
                             .frame(width: questionMarkButtonWidth, height: buttonHeight)
                             .background(Color.accentColor)
@@ -77,12 +78,12 @@ struct TestingRegistrationView: View {
                 }
                 
                 Text("Experience")
-                    .equivalentFont(.title)
+                    .equivalentFont(.title2)
                     .equivalentPadding()
                     .fontWeight(.semibold)
                 
-                Text("Perfomer")
-                    .equivalentFont(.title3)
+                Text("Performance")
+                    .equivalentFont()
                     .fontWeight(.semibold)
                 
                 HStack(spacing: spacing) {
@@ -94,7 +95,7 @@ struct TestingRegistrationView: View {
                             }
                         } label: {
                             Text(skillLevel.rawValue)
-                                .equivalentFont(.title2)
+                                .equivalentFont(.title3)
                                 .fontWeight(.semibold)
                                 .frame(width: skillsButtonWidth, height: buttonHeight)
                                 .background(skillLevel == testingViewModel.performerSkillLevel ? Color.accentColor : Color.secondary)
@@ -104,8 +105,8 @@ struct TestingRegistrationView: View {
                     }
                 }
                 
-                Text("Composer")
-                    .equivalentFont(.title3)
+                Text("Composition")
+                    .equivalentFont()
                     .fontWeight(.semibold)
                 
                 HStack(spacing: spacing) {
@@ -117,7 +118,7 @@ struct TestingRegistrationView: View {
                             }
                         } label: {
                             Text(skillLevel.rawValue)
-                                .equivalentFont(.title2)
+                                .equivalentFont(.title3)
                                 .fontWeight(.semibold)
                                 .frame(width: skillsButtonWidth, height: buttonHeight)
                                 .background(skillLevel == testingViewModel.composerSkillLevel ? Color.accentColor : Color.secondary)
@@ -127,8 +128,8 @@ struct TestingRegistrationView: View {
                     }
                 }
             
-                Text("Theorist")
-                    .equivalentFont(.title3)
+                Text("Theory")
+                    .equivalentFont()
                     .fontWeight(.semibold)
                 
                 HStack(spacing: spacing) {
@@ -140,7 +141,7 @@ struct TestingRegistrationView: View {
                             }
                         } label: {
                             Text(skillLevel.rawValue)
-                                .equivalentFont(.title2)
+                                .equivalentFont(.title3)
                                 .fontWeight(.semibold)
                                 .frame(width: skillsButtonWidth, height: buttonHeight)
                                 .background(skillLevel == testingViewModel.theoristSkillLevel ? Color.accentColor : Color.secondary)
@@ -150,8 +151,8 @@ struct TestingRegistrationView: View {
                     }
                 }
                 
-                Text("Music Educator")
-                    .equivalentFont(.title3)
+                Text("Music Education")
+                    .equivalentFont()
                     .fontWeight(.semibold)
                 
                 HStack(spacing: spacing) {
@@ -163,7 +164,7 @@ struct TestingRegistrationView: View {
                             }
                         } label: {
                             Text(skillLevel.rawValue)
-                                .equivalentFont(.title2)
+                                .equivalentFont(.title3)
                                 .fontWeight(.semibold)
                                 .frame(width: skillsButtonWidth, height: buttonHeight)
                                 .background(skillLevel == testingViewModel.educatorSkillLevel ? Color.accentColor : Color.secondary)
@@ -173,8 +174,8 @@ struct TestingRegistrationView: View {
                     }
                 }
                 
-                Text("Software Developer")
-                    .equivalentFont(.title3)
+                Text("Software Development")
+                    .equivalentFont()
                     .fontWeight(.semibold)
                 
                 HStack(spacing: spacing) {
@@ -186,7 +187,7 @@ struct TestingRegistrationView: View {
                             }
                         } label: {
                             Text(skillLevel.rawValue)
-                                .equivalentFont(.title2)
+                                .equivalentFont(.title3)
                                 .fontWeight(.semibold)
                                 .frame(width: skillsButtonWidth, height: buttonHeight)
                                 .background(skillLevel == testingViewModel.developerSkillLevel ? Color.accentColor : Color.secondary)
@@ -194,6 +195,49 @@ struct TestingRegistrationView: View {
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
+                }
+                
+                Text("Forms")
+                    .equivalentFont(.title2)
+                    .equivalentPadding()
+                    .fontWeight(.semibold)
+                
+                HStack(spacing: spacing) {
+                    Button {
+                        DispatchQueue.main.async {
+                            testingViewModel.savePDF(named: "Participant_Information_Sheet")
+                            
+                            withAnimation(.easeInOut) {
+                                testingViewModel.participantInformationSheetSaved = true
+                            }
+                        }
+                    } label: {
+                        Text("Participant Information")
+                            .equivalentFont(.title3)
+                            .fontWeight(.semibold)
+                            .frame(width: skillsButtonWidth, height: buttonHeight)
+                            .background(testingViewModel.participantInformationSheetSaved ? Color.green : Color.red)
+                            .cornerRadius(cornerRadius)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    Button {
+                        DispatchQueue.main.async {
+                                testingViewModel.savePDF(named: "Consent_Form")
+                            
+                            withAnimation(.easeInOut) {
+                                testingViewModel.consentFormSaved = true
+                            }
+                        }
+                    } label: {
+                        Text("Consent Form")
+                            .equivalentFont(.title3)
+                            .fontWeight(.semibold)
+                            .frame(width: skillsButtonWidth, height: buttonHeight)
+                            .background(testingViewModel.consentFormSaved ? Color.green : Color.red)
+                            .cornerRadius(cornerRadius)
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
                 
                 Spacer()
@@ -216,14 +260,15 @@ struct TestingRegistrationView: View {
                         }
                     }
                 } label: {
-                    Text("Start Tests")
-                        .equivalentFont(.title)
+                    Text("Start Test")
+                        .equivalentFont(.title2)
                         .fontWeight(.semibold)
                         .frame(width: skillsButtonWidth, height: buttonHeight * 1.5)
-                        .background(Color.secondary)
+                        .background(Color.accentColor)
                         .cornerRadius(cornerRadius)
                 }
                 .buttonStyle(PlainButtonStyle())
+                .disabled(!(testingViewModel.participantInformationSheetSaved && testingViewModel.consentFormSaved))
                 .alert("Would you like to view the tutorial first?", isPresented: $showTutorialAlert) {
                     Button {
                         testingViewModel.tutorial = true
@@ -357,7 +402,7 @@ struct TestingRegistrationView: View {
                             }
                         } label: {
                             Text("OK")
-                                .equivalentFont(.title)
+                                .equivalentFont(.title2)
                                 .frame(width: skillsButtonWidth, height: buttonHeight * 1.5)
                                 .background(Color.accentColor)
                                 .cornerRadius(cornerRadius)
@@ -368,6 +413,17 @@ struct TestingRegistrationView: View {
                     .background(.ultraThickMaterial)
                     .cornerRadius(screenSizeViewModel.getEquivalentValue(20))
                     .cornerRadius(cornerRadius)
+                }
+            }
+            .overlay(alignment: .topLeading) {
+                Button {
+                    withAnimation(.easeInOut) {
+                        presentedHomeView = .None
+                    }
+                } label: {
+                    Image(systemName: "xmark")
+                        .equivalentFont()
+                        .equivalentPadding()
                 }
             }
             #if os(macOS)
@@ -388,21 +444,23 @@ struct TestingRegistrationView: View {
                 }
                 .shadow(radius: screenSizeViewModel.getEquivalentValue(10))
         )
-        .contentShape(Rectangle())
-        .simultaneousGesture(
-            TapGesture().onEnded {
-                testerIdFieldFocused = false
-            }
-        )
+        .onTapGesture {
+            testerIdFieldFocused = false
+        }
         .environmentObject(screenSizeViewModel)
         #if os(macOS)
-        .scaleEffect(0.5)
+        .scaleEffect(0.75)
+        #endif
+        #if os(iOS)
+        .sheet(item: $testingViewModel.pdfURL) { identifiableURL in
+            ActivityView(activityItems: [identifiableURL.url])
+        }
         #endif
     }
 }
 
 #Preview {
-    TestingRegistrationView(testingViewModel: TestingViewModel())
+    TestingRegistrationView(testingViewModel: TestingViewModel(), presentedHomeView: Binding.constant(.None))
         .environmentObject(ScreenSizeViewModel())
         .frame(width: 1000, height: 1000)
 }

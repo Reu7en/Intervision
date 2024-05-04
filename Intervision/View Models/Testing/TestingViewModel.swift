@@ -40,7 +40,11 @@ class TestingViewModel: ObservableObject {
     @Published var presentedQuestionView: PresentedQuestionView = .CountdownTimer
     @Published var showSavingErrorAlert = false
     @Published var showSavingSuccessAlert = false
+    @Published var showSavingEmailAlert = false
+    @Published var participantInformationSheetSaved = false
+    @Published var consentFormSaved = false
     @Published var resultsURL: IdentifiableURL?
+    @Published var pdfURL: IdentifiableURL?
     
     @Published var countdown = 5
     @Published var progress = 1.0
@@ -305,14 +309,14 @@ extension TestingViewModel {
         panel.nameFieldStringValue = "\(testSession.id).json"
 
         panel.begin { response in
-            if response == .OK, let fileURL = panel.url {
+            if response == .OK, let temporaryURL = panel.url {
                 do {
                     let encoder = JSONEncoder()
                     
                     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
                     
                     let jsonData = try encoder.encode(testSession)
-                    try jsonData.write(to: fileURL)
+                    try jsonData.write(to: temporaryURL)
                     
                     DispatchQueue.main.async {
                         self.showSavingSuccessAlert = true
@@ -341,6 +345,68 @@ extension TestingViewModel {
             }
         }
         #endif
+    }
+    
+    func savePDF(named filename: String) {
+        guard let pdfURL = Bundle.main.url(forResource: filename, withExtension: "pdf") else { self.showSavingErrorAlert = true; return }
+        
+        #if os(macOS)
+        let panel = NSSavePanel()
+        
+        panel.allowedContentTypes = [.pdf]
+        panel.nameFieldStringValue = "\(filename).pdf"
+
+        panel.begin { response in
+            if response == .OK, let temporaryURL = panel.url {
+                do {
+                    let pdfData = try Data(contentsOf: pdfURL)
+                    try pdfData.write(to: temporaryURL)
+                    
+                    DispatchQueue.main.async {
+                        self.showSavingSuccessAlert = true
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        self.showSavingErrorAlert = true
+                    }
+                }
+            }
+        }
+        #elseif os(iOS)
+        do {
+            let pdfData = try Data(contentsOf: pdfURL)
+            let temporaryURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(filename).pdf")
+            try pdfData.write(to: temporaryURL)
+            
+            DispatchQueue.main.async {
+                self.pdfURL = IdentifiableURL(url: temporaryURL)
+            }
+        } catch {
+            DispatchQueue.main.async {
+                self.showSavingErrorAlert = true
+            }
+        }
+        #endif
+    }
+    
+    func getScoreQuestionsCorrect() {
+        
+    }
+    
+    func getRollQuestionsCorrect() {
+        
+    }
+     
+    func getPercentageAccuracy() {
+        
+    }
+    
+    func getAverageScoreTime() {
+        
+    }
+    
+    func getAverageRollTime() {
+        
     }
     
     private func calculateIsLastQuestion() -> Bool {
@@ -509,6 +575,8 @@ extension TestingViewModel {
                     rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[29].0]])]
                     answer = TestingViewModel.testQuestions[29].1
                 }
+            default:
+                break
             }
             
             if let rollViewModel = rollViewModel,
@@ -1149,6 +1217,8 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             }
+        default:
+            break
         }
     }
     

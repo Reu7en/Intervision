@@ -38,6 +38,18 @@ extension Question {
         case RollChordsAreInversions
         case RollTwoNoteIntervalsAreEqual
         
+        case ScoreMelodicIntervalIdentification
+        case ScoreSmallestMelodicIntervalIdentification
+        case ScoreLargestMelodicIntervalIdentification
+        case ScoreMelodicIntervalInversionIdentification
+        case ScoreMelodicMovementIdentification
+        
+        case RollMelodicIntervalIdentification
+        case RollSmallestMelodicIntervalIdentification
+        case RollLargestMelodicIntervalIdentification
+        case RollMelodicIntervalInversionIdentification
+        case RollMelodicMovementIdentification
+        
         var isScoreQuestion: Bool {
             switch self {
             case .ScoreTwoNoteIntervalIdentification,
@@ -75,15 +87,25 @@ extension Question {
         var description: [String] {
             switch self {
             case .ScoreTwoNoteIntervalIdentification, .RollTwoNoteIntervalIdentification:
-                return ["Identify the interval formed by these two notes", "", ""]
+                return ["Identify the harmonic interval formed by these two notes", "", ""]
             case .ScoreThreeNoteInnerIntervalsIdentification, .RollThreeNoteInnerIntervalsIdentification:
-                return ["Identify the intervals between the following", "1. The lowest note and the middle note", "2. The middle note and the highest note"]
+                return ["Identify the harmonic intervals between the following", "1. The lowest note and the middle note", "2. The middle note and the highest note"]
             case .ScoreThreeNoteOuterIntervalIdentification, .RollThreeNoteOuterIntervalIdentification:
-                return ["Identify the interval between the lowest note and the highest note", "", ""]
+                return ["Identify the harmonic interval between the lowest note and the highest note", "", ""]
             case .ScoreChordsAreInversions, .RollChordsAreInversions:
                 return ["Are these two chords inversions of each other?", "", ""]
             case .ScoreTwoNoteIntervalsAreEqual, .RollTwoNoteIntervalsAreEqual:
-                return ["Do these two chords contain the same interval?", "", ""]
+                return ["Do these two chords contain the same harmonic interval?", "", ""]
+            case .ScoreMelodicIntervalIdentification, .RollMelodicIntervalIdentification:
+                return ["Identify the melodic interval formed by these two notes", "", ""]
+            case .ScoreSmallestMelodicIntervalIdentification, .RollSmallestMelodicIntervalIdentification:
+                return ["Identify the smallest melodic interval in this phrase", "", ""]
+            case .ScoreLargestMelodicIntervalIdentification, .RollLargestMelodicIntervalIdentification:
+                return ["Identify the largest melodic interval in this phrase", "", ""]
+            case .ScoreMelodicIntervalInversionIdentification, .RollMelodicIntervalInversionIdentification:
+                return ["Identify the inversion of the melodic interval formed by these two notes", "", ""]
+            case .ScoreMelodicMovementIdentification, .RollMelodicMovementIdentification:
+                return ["Identify the overall movement in this phrase", "", ""]
             }
         }
     }

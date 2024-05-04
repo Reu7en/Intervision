@@ -9,6 +9,8 @@ import SwiftUI
 
 struct RollView: View {
     
+    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    
     @Binding var presentedView: HomeView.PresentedView
     
     @StateObject var rollViewModel: RollViewModel
@@ -73,6 +75,7 @@ struct RollView: View {
                                                             )
                                                         )
                                                         .id(UUID())
+                                                        .environmentObject(screenSizeViewModel)
                                                         
                                                         RollBarView(
                                                             rollViewModel: rollViewModel,
@@ -193,6 +196,7 @@ struct RollView: View {
             #if os(macOS)
             rollViewModel.stopEventMonitoring()
             #endif
+            
             rollViewModel.clearSelectedSegments()
         }
         .onTapGesture {
@@ -203,4 +207,5 @@ struct RollView: View {
 
 #Preview {
     RollView(presentedView: Binding.constant(.Roll), rollViewModel: RollViewModel(scoreManager: ScoreManager()))
+        .environmentObject(ScreenSizeViewModel())
 }

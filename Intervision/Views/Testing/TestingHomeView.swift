@@ -11,27 +11,15 @@ struct TestingHomeView: View {
     
     @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
     
-    @Binding var presentedHomeView: HomeView.PresentedView
-    
     @StateObject var testingViewModel: TestingViewModel
+    
+    @Binding var presentedHomeView: HomeView.PresentedView
     
     var body: some View {
         switch testingViewModel.presentedView {
         case .Registration:
-            TestingRegistrationView(testingViewModel: testingViewModel)
+            TestingRegistrationView(testingViewModel: testingViewModel, presentedHomeView: $presentedHomeView)
                 .environmentObject(screenSizeViewModel)
-                .overlay(alignment: .topLeading) {
-                    Button {
-                        withAnimation(.easeInOut) {
-                            presentedHomeView = .None
-                        }
-                    } label: {
-                        Image(systemName: "xmark")
-                            .equivalentFont()
-                            .equivalentPadding()
-                    }
-                    .equivalentPadding(.all, padding: 50)
-                }
         case .Tutorial:
             TutorialView(testingViewModel: testingViewModel)
                 .frame(width: screenSizeViewModel.screenSize.width / 3)
@@ -47,9 +35,12 @@ struct TestingHomeView: View {
                 .shadow(radius: 10)
                 .environmentObject(screenSizeViewModel)
         case .Questions:
-            QuestionsView(testingViewModel: testingViewModel)
+            ResultsView(testingViewModel: testingViewModel)
                 .environmentObject(screenSizeViewModel)
                 .navigationBarBackButtonHidden()
+//            QuestionsView(testingViewModel: testingViewModel)
+//                .environmentObject(screenSizeViewModel)
+//                .navigationBarBackButtonHidden()
         case .Results:
             ResultsView(testingViewModel: testingViewModel)
                 .environmentObject(screenSizeViewModel)
@@ -59,6 +50,6 @@ struct TestingHomeView: View {
 }
 
 #Preview {
-    TestingHomeView(presentedHomeView: Binding.constant(.None), testingViewModel: TestingViewModel())
+    TestingHomeView(testingViewModel: TestingViewModel(), presentedHomeView: Binding.constant(.None))
         .environmentObject(ScreenSizeViewModel())
 }

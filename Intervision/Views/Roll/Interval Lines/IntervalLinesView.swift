@@ -15,11 +15,13 @@ import UIKit
 
 struct IntervalLinesView: View {
     
+    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    
     @StateObject var intervalLinesViewModel: IntervalLinesViewModel
     
-    let lineWidth: CGFloat = 5
-    
     var body: some View {
+        let lineWidth: CGFloat = screenSizeViewModel.getEquivalentValue(5)
+        
         ForEach(0..<intervalLinesViewModel.harmonicLines.count, id: \.self) { lineIndex in
             let line = intervalLinesViewModel.harmonicLines[lineIndex]
             
@@ -134,4 +136,5 @@ extension Color {
 
 #Preview {
     IntervalLinesView(intervalLinesViewModel: IntervalLinesViewModel(segments: [], parts: [], groups: [], harmonicIntervalLinesType: .none, showMelodicIntervalLines: false, barIndex: 0, barWidth: 0, rowWidth: 0, rowHeight: 0, harmonicIntervalLineColors: [], melodicIntervalLineColors: [], viewableMelodicLines: [], showInvertedIntervals: false, showZigZags: false, testing: false))
+        .environmentObject(ScreenSizeViewModel())
 }

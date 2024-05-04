@@ -7,12 +7,15 @@
 
 #if os(macOS)
 import Cocoa
+import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Find the main window and maximise it
         if let window = NSApplication.shared.windows.first {
-            window.maximiseToVisibleFrame()
+            withAnimation(.easeInOut) {
+                window.maximiseToVisibleFrame()
+            }
         }
     }
 }

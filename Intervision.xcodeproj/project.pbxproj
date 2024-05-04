@@ -149,6 +149,12 @@
 		1BBF21A32B9FFB160097D5A3 /* ScoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBF21A22B9FFB160097D5A3 /* ScoreManager.swift */; };
 		1BCBA7072BE40AC600BC2D13 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BCBA7062BE40AC600BC2D13 /* LaunchScreen.storyboard */; };
 		1BCBA7082BE415D100BC2D13 /* LaunchScreeniPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BCBA7042BE40AAD00BC2D13 /* LaunchScreeniPad.storyboard */; };
+		1BEF425C2BE69E6F00C4D70C /* Participant_Information_Sheet.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 1BEF425A2BE69E6F00C4D70C /* Participant_Information_Sheet.pdf */; };
+		1BEF425D2BE69E6F00C4D70C /* Participant_Information_Sheet.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 1BEF425A2BE69E6F00C4D70C /* Participant_Information_Sheet.pdf */; };
+		1BEF425E2BE69E6F00C4D70C /* Consent_Form.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 1BEF425B2BE69E6F00C4D70C /* Consent_Form.pdf */; };
+		1BEF425F2BE69E6F00C4D70C /* Consent_Form.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 1BEF425B2BE69E6F00C4D70C /* Consent_Form.pdf */; };
+		1BEF42622BE6AA8F00C4D70C /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEF42612BE6AA8F00C4D70C /* ActivityView.swift */; };
+		1BEF42632BE6AA8F00C4D70C /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEF42612BE6AA8F00C4D70C /* ActivityView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -229,6 +235,9 @@
 		1BBF21A22B9FFB160097D5A3 /* ScoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreManager.swift; sourceTree = "<group>"; };
 		1BCBA7042BE40AAD00BC2D13 /* LaunchScreeniPad.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreeniPad.storyboard; sourceTree = "<group>"; };
 		1BCBA7062BE40AC600BC2D13 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1BEF425A2BE69E6F00C4D70C /* Participant_Information_Sheet.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Participant_Information_Sheet.pdf; sourceTree = "<group>"; };
+		1BEF425B2BE69E6F00C4D70C /* Consent_Form.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Consent_Form.pdf; sourceTree = "<group>"; };
+		1BEF42612BE6AA8F00C4D70C /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -369,6 +378,7 @@
 				1B370DD12BE1CD1900F21E39 /* AnswerTimerView.swift */,
 				1B370DD32BE1E41000F21E39 /* QuestionView.swift */,
 				1B370DD52BE2033900F21E39 /* LineKeyView.swift */,
+				1BEF42612BE6AA8F00C4D70C /* ActivityView.swift */,
 			);
 			path = Testing;
 			sourceTree = "<group>";
@@ -432,6 +442,7 @@
 		1B97BEC82B71C167007D0BE5 /* Intervision */ = {
 			isa = PBXGroup;
 			children = (
+				1BEF42602BE69E9000C4D70C /* Testing Forms */,
 				1B9435AA2B85A55500B57DA7 /* Info.plist */,
 				1B2A24252BE40886000577BF /* Intervision iPad.plist */,
 				1BBC97852B769ACA001C953C /* Test Scores */,
@@ -540,6 +551,15 @@
 			path = "Test Scores";
 			sourceTree = "<group>";
 		};
+		1BEF42602BE69E9000C4D70C /* Testing Forms */ = {
+			isa = PBXGroup;
+			children = (
+				1BEF425B2BE69E6F00C4D70C /* Consent_Form.pdf */,
+				1BEF425A2BE69E6F00C4D70C /* Participant_Information_Sheet.pdf */,
+			);
+			path = "Testing Forms";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -621,7 +641,9 @@
 				1B2A241C2BE40886000577BF /* Preview Assets.xcassets in Resources */,
 				1BCBA7082BE415D100BC2D13 /* LaunchScreeniPad.storyboard in Resources */,
 				1B2A241D2BE40886000577BF /* Assets.xcassets in Resources */,
+				1BEF425F2BE69E6F00C4D70C /* Consent_Form.pdf in Resources */,
 				1B2A241E2BE40886000577BF /* Fur_Elise.musicxml in Resources */,
+				1BEF425D2BE69E6F00C4D70C /* Participant_Information_Sheet.pdf in Resources */,
 				1B2A241F2BE40886000577BF /* Canon_in_D.musicxml in Resources */,
 				1B2A24202BE40886000577BF /* Advanced_Trio.musicxml in Resources */,
 			);
@@ -636,7 +658,9 @@
 				1B0B52382BB75B6A00225A11 /* Simpsons_MultiPart.musicxml in Resources */,
 				1B97BED12B71C168007D0BE5 /* Preview Assets.xcassets in Resources */,
 				1B97BECE2B71C168007D0BE5 /* Assets.xcassets in Resources */,
+				1BEF425E2BE69E6F00C4D70C /* Consent_Form.pdf in Resources */,
 				1B0B523E2BB75F6500225A11 /* Fur_Elise.musicxml in Resources */,
+				1BEF425C2BE69E6F00C4D70C /* Participant_Information_Sheet.pdf in Resources */,
 				1B0B523A2BB75BC400225A11 /* Canon_in_D.musicxml in Resources */,
 				1B0B52362BB75B0000225A11 /* Advanced_Trio.musicxml in Resources */,
 			);
@@ -670,6 +694,7 @@
 				1B2A23EA2BE40886000577BF /* RollView.swift in Sources */,
 				1B2A23EB2BE40886000577BF /* ScoreView.swift in Sources */,
 				1B2A23EC2BE40886000577BF /* StaveModel.swift in Sources */,
+				1BEF42632BE6AA8F00C4D70C /* ActivityView.swift in Sources */,
 				1B2A23ED2BE40886000577BF /* PartModel.swift in Sources */,
 				1B2A23EE2BE40886000577BF /* AccidentalView.swift in Sources */,
 				1B2A23EF2BE40886000577BF /* BeatViewModel.swift in Sources */,
@@ -740,6 +765,7 @@
 				1B0E44B22B928A1600C0E12C /* RollView.swift in Sources */,
 				1B97BEEA2B726CC1007D0BE5 /* ScoreView.swift in Sources */,
 				1B12C9E72B75472200DC87DC /* StaveModel.swift in Sources */,
+				1BEF42622BE6AA8F00C4D70C /* ActivityView.swift in Sources */,
 				1B12C9E52B753EBE00DC87DC /* PartModel.swift in Sources */,
 				1B0B52422BBC4CBA00225A11 /* AccidentalView.swift in Sources */,
 				1B0B524D2BC1685500225A11 /* BeatViewModel.swift in Sources */,

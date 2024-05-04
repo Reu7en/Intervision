@@ -41,6 +41,7 @@ struct QuestionView: View {
                         Text("\(testingViewModel.practice ? "Practice Question" : "Question \(testingViewModel.currentQuestionIndex + 1)/\(30)")")
                             .equivalentFont(.title3)
                             .fontWeight(.semibold)
+                            .equivalentPadding(.bottom)
                         
                         if let barViewModel = questionData.0 {
                             BarView(barViewModel: barViewModel)

@@ -25,20 +25,20 @@ struct IntervalLinesView: View {
             
             if line.dotted {
                 if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
-                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: 5)
-                        .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, dash: [3, 3]))
+                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: lineWidth * 2)
+                        .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, dash: [0, lineWidth * 2]))
                         .shadow(color: Color.black.opacity(0.75), radius: 5, x: 0, y: 0)
                 } else {
                     Path { path in
                         path.move(to: line.startPoint)
                         path.addLine(to: line.endPoint)
                     }
-                    .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, dash: [3, 3]))
+                    .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round, dash: [0, lineWidth * 2]))
                     .shadow(color: Color.black.opacity(0.75), radius: 5, x: 0, y: 0)
                 }
             } else {
                 if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
-                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: 5)
+                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: lineWidth * 2)
                         .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                         .shadow(color: Color.black.opacity(0.75), radius: 5, x: 0, y: 0)
                 } else {
@@ -56,7 +56,7 @@ struct IntervalLinesView: View {
             let line = intervalLinesViewModel.melodicLines[lineIndex]
             
             if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
-                ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: 5)
+                ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: lineWidth * 2)
                     .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round, dash: [4]))
                     .shadow(color: Color.black, radius: 5, x: 0, y: 0)
                     .zIndex(.infinity)

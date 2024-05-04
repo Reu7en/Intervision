@@ -143,7 +143,7 @@ extension BeatViewModel {
                                     chordPositions.append((position, noteIndex == 1 ? (beamDirections[currentBeamIndex] == .Upward ? 1 : -1) : 0))
                                     
                                     if hasAccidental {
-                                        if noteIndex == 1 {
+                                        if noteIndex == 0 {
                                             if notes[0].1 == nil {
                                                 accidentalPositions.append((position, beamDirections[currentBeamIndex] == .Upward ? -1 : -2))
                                             } else {

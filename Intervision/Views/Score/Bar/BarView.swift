@@ -40,7 +40,7 @@ struct BarView: View {
                                     clef: barViewModel.bar.clef,
                                     gapHeight: gapHeight
                                 )
-                                .padding(.horizontal, geometry.size.width / 50)
+                                .padding(.horizontal, geometry.size.width / 100)
                             }
                             
                             if barViewModel.showKey {
@@ -50,7 +50,7 @@ struct BarView: View {
                                     gaps: barViewModel.gaps,
                                     middleStaveNote: barViewModel.middleStaveNote
                                 )
-                                .padding(.horizontal, geometry.size.width / 50)
+                                .padding(.horizontal, geometry.size.width / 100)
                             }
                             
                             if barViewModel.showTime {
@@ -59,7 +59,7 @@ struct BarView: View {
                                     gapHeight: gapHeight,
                                     gaps: barViewModel.gaps
                                 )
-                                .padding(.horizontal, geometry.size.width / 50)
+                                .padding(.horizontal, geometry.size.width / 100)
                             }
                             
                             Spacer()

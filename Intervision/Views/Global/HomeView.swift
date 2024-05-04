@@ -29,37 +29,26 @@ struct HomeView: View {
     }
     
     var body: some View {
-        GeometryReader { geometry in
-            switch presentedView {
-            case .Score:
-                ScoreView(presentedView: $presentedView, scoreViewModel: scoreViewModel)
-                    .navigationBarBackButtonHidden()
-                    .onAppear {
-                        scoreViewModel.scoreManager = scoreManager
-                    }
-            case .Roll:
-                RollView(presentedView: $presentedView, rollViewModel: rollViewModel)
-                    .navigationBarBackButtonHidden()
-//                    .onAppear {
-//                        rollViewModel.scoreManager = scoreManager
-//                    }
-            case .Testing:
-                TestingHomeView(testingViewModel: testingViewModel)
-                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-                    .environmentObject(screenSizeViewModel)
-                    .navigationBarBackButtonHidden()
-            default:
-                HomePanel(scoreManager: scoreManager, presentedView: $presentedView, geometry: geometry)
-                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-                    .onAppear {
-                        screenSizeViewModel.screenSize = geometry.size
-                    }
-                    .onChange(of: geometry.size) {
-                        screenSizeViewModel.screenSize = geometry.size
-                    }
-            }
+        switch presentedView {
+        case .Score:
+            ScoreView(presentedView: $presentedView, scoreViewModel: scoreViewModel)
+                .navigationBarBackButtonHidden()
+                .onAppear {
+                    scoreViewModel.scoreManager = scoreManager
+                }
+        case .Roll:
+            RollView(presentedView: $presentedView, rollViewModel: rollViewModel)
+                .navigationBarBackButtonHidden()
+            //                    .onAppear {
+            //                        rollViewModel.scoreManager = scoreManager
+            //                    }
+        case .Testing:
+            TestingHomeView(presentedHomeView: $presentedView, testingViewModel: testingViewModel)
+                .environmentObject(screenSizeViewModel)
+            //                .navigationBarBackButtonHidden()
+        default:
+            HomePanel(scoreManager: scoreManager, presentedView: $presentedView, size: screenSizeViewModel.screenSize)
         }
-        .padding(0)
     }
 }
 
@@ -72,14 +61,10 @@ extension HomeView {
         
         @Binding var presentedView: HomeView.PresentedView
         
-        let geometry: GeometryProxy
+        let size: CGSize
         
         var body: some View {
-            #if os(macOS)
-            let size = CGSize(width: geometry.size.width / 5, height: geometry.size.width / 5)
-            #elseif os(iOS)
-            let size = CGSize(width: geometry.size.width / 2, height: geometry.size.width / 2)
-            #endif
+            let size = CGSize(width: size.width / 2, height: size.width / 2)
             
             ZStack {
                 VStack {
@@ -102,11 +87,14 @@ extension HomeView {
                             Spacer()
                             
                             Image(systemName: "pencil")
+                                .equivalentFont(.title3)
                         }
-                        .equivalentPadding()
+                        .equivalentPadding(.all, padding: 50)
                     }
-                    .frame(width: size.width / 1.5)
                     .disabled(true)
+                    .buttonStyle(BorderedButtonStyle())
+                    .frame(width: size.width / 1.5)
+                    .equivalentPadding()
                     
                     Button {
                     #if os(macOS)
@@ -135,11 +123,14 @@ extension HomeView {
                             Spacer()
                             
                             Image(systemName: "folder")
+                                .equivalentFont(.title3)
                         }
-                        .equivalentPadding()
+                        .equivalentPadding(.all, padding: 50)
                     }
+                    .disabled(true)
+                    .buttonStyle(BorderedButtonStyle())
                     .frame(width: size.width / 1.5)
-//                    .disabled(true)
+                    .equivalentPadding()
                     
                     Button {
                         withAnimation(.easeInOut) {
@@ -153,20 +144,25 @@ extension HomeView {
                             Spacer()
                             
                             Image(systemName: "graduationcap")
+                                .equivalentFont(.title3)
                         }
-                        .equivalentPadding()
+                        .equivalentPadding(.all, padding: 50)
                     }
+                    .buttonStyle(BorderedButtonStyle())
                     .frame(width: size.width / 1.5)
+                    .equivalentPadding()
                     
                     Spacer()
                     
                     Text("[User Testing Build]")
-                        .padding()
+                        .equivalentFont(.title3)
+                        .equivalentPadding()
+                        .fontWeight(.semibold)
                 }
             }
             .environmentObject(screenSizeViewModel)
             .frame(width: size.width, height: size.height)
-            .equivalentPadding()
+            .equivalentPadding(.all, padding: 50)
             .background(
                 RoundedRectangle(cornerRadius: 20)
                     .fill(Material.ultraThickMaterial)
@@ -177,6 +173,9 @@ extension HomeView {
                     }
                     .shadow(radius: 10)
             )
+            #if os(macOS)
+            .scaleEffect(0.5)
+            #endif
         }
     }
 }

@@ -41,6 +41,11 @@ struct ResultsView: View {
                         message: Text("Test data has not been saved!")
                     )
                 }
+                #if os(iOS)
+                .sheet(item: $testingViewModel.resultsURL) { identifiableURL in
+                    ActivityView(activityItems: [identifiableURL.url], applicationActivities: nil)
+                }
+                #endif
                 
                 Spacer()
             }
@@ -77,3 +82,16 @@ struct ResultsView: View {
     ResultsView(testingViewModel: TestingViewModel())
         .environmentObject(ScreenSizeViewModel())
 }
+
+#if os(iOS)
+struct ActivityView: UIViewControllerRepresentable {
+    var activityItems: [Any]
+    var applicationActivities: [UIActivity]?
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+}
+#endif

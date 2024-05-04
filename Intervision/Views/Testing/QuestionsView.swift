@@ -16,40 +16,26 @@ struct QuestionsView: View {
     @State private var showErrorAlert: Bool = false
     
     var body: some View {
-        GeometryReader { geometry in
-            VStack {
-                Spacer()
-                
-                HStack {
-                    Spacer()
-                    
-                    switch testingViewModel.presentedQuestionView {
-                    case .CountdownTimer:
-                        CountdownTimerView(testingViewModel: testingViewModel)
-                    case .Question:
-                        if testingViewModel.testSession != nil {
-                            QuestionView(testingViewModel: testingViewModel)
-                                .environmentObject(screenSizeViewModel)
-                                .frame(width: screenSizeViewModel.screenSize.width, height: screenSizeViewModel.screenSize.height)
-                        } else {
-                            EmptyView()
-                                .onAppear {
-                                    self.showErrorAlert = true
-                                }
-                                .alert("Fatal Error Occurred", isPresented: $showErrorAlert) {
-                                    Button {
-                                        testingViewModel.presentedView = .Registration
-                                    } label: {
-                                        Text("OK")
-                                    }
-                                }
+        switch testingViewModel.presentedQuestionView {
+        case .CountdownTimer:
+            CountdownTimerView(testingViewModel: testingViewModel)
+                .environmentObject(screenSizeViewModel)
+        case .Question:
+            if testingViewModel.testSession != nil {
+                QuestionView(testingViewModel: testingViewModel)
+                    .environmentObject(screenSizeViewModel)
+            } else {
+                EmptyView()
+                    .onAppear {
+                        self.showErrorAlert = true
+                    }
+                    .alert("Fatal Error Occurred", isPresented: $showErrorAlert) {
+                        Button {
+                            testingViewModel.presentedView = .Registration
+                        } label: {
+                            Text("OK")
                         }
                     }
-                    
-                    Spacer()
-                }
-                
-                Spacer()
             }
         }
     }

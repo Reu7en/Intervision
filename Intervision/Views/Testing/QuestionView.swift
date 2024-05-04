@@ -23,14 +23,13 @@ struct QuestionView: View {
     @State private var intervalLinesOpacity = 1.0
     
     var body: some View {
-        let viewSize = CGSize(width: screenSizeViewModel.screenSize.width / 1.125, height: screenSizeViewModel.screenSize.height)
-        
-        let spacing = screenSizeViewModel.getEquivalentValue(12)
+        let viewSize = CGSize(width: screenSizeViewModel.screenSize.width / 1.05, height: screenSizeViewModel.screenSize.height / 1.05)
+        let spacing = screenSizeViewModel.getEquivalentValue(8)
         let cornerRadius = screenSizeViewModel.getEquivalentValue(8)
         let backgroundCornerRadius = screenSizeViewModel.getEquivalentValue(20)
         let backgroundShadow = screenSizeViewModel.getEquivalentValue(10)
         let barHeight = viewSize.height / 2.25
-        let timerHeight = viewSize.height / 25
+        let timerHeight = viewSize.height / 30
         
         ZStack {
             VStack(spacing: spacing) {
@@ -40,12 +39,12 @@ struct QuestionView: View {
                     if let questionData = testingViewModel.currentQuestionData,
                        let answers = questionData.2, answers.count == (question.type.isMultipartQuestion ? 2 : 1), !(questionData.0 == nil && questionData.1 == nil) {
                         Text("\(testingViewModel.practice ? "Practice Question" : "Question \(testingViewModel.currentQuestionIndex + 1)/\(30)")")
-                            .equivalentFont(.title2)
+                            .equivalentFont(.title3)
                             .fontWeight(.semibold)
                         
                         if let barViewModel = questionData.0 {
                             BarView(barViewModel: barViewModel)
-                                .frame(width: viewSize.width, height: barHeight / 1.5)
+                                .frame(width: viewSize.width, height: barHeight / 1.25)
                                 .equivalentPadding(.all, padding: 30)
                                 .background(
                                     RoundedRectangle(cornerRadius: backgroundCornerRadius)
@@ -66,30 +65,52 @@ struct QuestionView: View {
                                     let inspectorWidth = viewSize.width / 8
                                     let rollWidth = viewSize.width - inspectorWidth - (testingViewModel.showPiano ? pianoKeysWidth : 0)
                                     
-                                    if testingViewModel.showPiano {
-                                        PianoKeysView(
-                                            octaves: 3,
-                                            width: pianoKeysWidth,
-                                            rowHeight: rowHeight,
-                                            showOctaveLabel: true,
-                                            fontSize: screenSizeViewModel.getEquivalentValue(16)
-                                        )
-                                        .frame(width: pianoKeysWidth, height: barHeight)
-                                        .transition(.move(edge: .leading))
-                                        .border(Color.black)
-                                    }
-                                    
                                     ZStack {
-                                        BarRowsView(
-                                            rows: rows,
-                                            rowWidth: rollWidth,
-                                            rowHeight: rowHeight,
-                                            beats: 4,
-                                            viewType: testingViewModel.rollRowsViewType,
-                                            image: false
-                                        )
-                                        .transition(.move(edge: .leading))
-                                        .background(colorScheme == .light ? Color.black.opacity(0.5) : Color.clear)
+                                        HStack(spacing: 0) {
+                                            if testingViewModel.showPiano {
+                                                PianoKeysView(
+                                                    octaves: 2,
+                                                    width: pianoKeysWidth,
+                                                    rowHeight: rowHeight,
+                                                    showOctaveLabel: true,
+                                                    fontSize: screenSizeViewModel.getEquivalentValue(16)
+                                                )
+                                                .frame(width: pianoKeysWidth, height: barHeight)
+                                                .transition(.move(edge: .leading))
+                                                .border(Color.black)
+                                            }
+                                            
+                                            ZStack {
+                                                BarRowsView(
+                                                    rows: rows,
+                                                    rowWidth: rollWidth,
+                                                    rowHeight: rowHeight,
+                                                    beats: 4,
+                                                    viewType: testingViewModel.rollRowsViewType,
+                                                    image: false
+                                                )
+                                                .transition(.move(edge: .leading))
+                                                .background(colorScheme == .light ? Color.black.opacity(0.5) : Color.clear)
+                                                
+                                                RollBarView(
+                                                    rollViewModel: viewModels.0,
+                                                    segments: viewModels.0.segments ?? [],
+                                                    barIndex: 0,
+                                                    barWidth: rollWidth,
+                                                    rowHeight: rowHeight,
+                                                    colors: [Color.white],
+                                                    showDynamics: false
+                                                )
+                                                .transition(.move(edge: .leading))
+                                                .allowsHitTesting(false)
+                                            }
+                                        }
+                                        .clipShape(RoundedRectangle(cornerRadius: backgroundCornerRadius))
+                                        .overlay {
+                                            RoundedRectangle(cornerRadius: backgroundCornerRadius)
+                                                .stroke(Color.black, lineWidth: screenSizeViewModel.getEquivalentValue(1))
+                                                .background(Color.clear)
+                                        }
                                         
                                         if question.intervalLinesType != .None {
                                             IntervalLinesView(
@@ -119,26 +140,16 @@ struct QuestionView: View {
                                                 }
                                             }
                                             .opacity(intervalLinesOpacity)
+                                            .offset(x: testingViewModel.showPiano ? pianoKeysWidth : 0)
                                         }
-                                        
-                                        RollBarView(
-                                            rollViewModel: viewModels.0,
-                                            segments: viewModels.0.segments ?? [],
-                                            barIndex: 0,
-                                            barWidth: rollWidth,
-                                            rowHeight: rowHeight,
-                                            colors: [Color.white],
-                                            showDynamics: false
-                                        )
-                                        .transition(.move(edge: .leading))
                                     }
-                                    .allowsHitTesting(false)
                                     
                                     VStack(spacing: spacing) {
                                         Spacer()
                                         
                                         Text("Show Piano")
-                                            .equivalentFont(.title2)
+                                            .equivalentFont(.title3)
+                                            .fontWeight(.semibold)
                                         
                                         Button {
                                             withAnimation(.linear(duration: 0.25)) {
@@ -152,7 +163,7 @@ struct QuestionView: View {
                                             }
                                         } label: {
                                             Image(systemName: "pianokeys")
-                                                .equivalentFont(.largeTitle)
+                                                .equivalentFont(.title)
                                                 .frame(width: inspectorWidth * 0.75, height: barHeight / 9)
                                                 .background(testingViewModel.showPiano ? Color.accentColor : Color.secondary)
                                                 .cornerRadius(cornerRadius)
@@ -160,7 +171,8 @@ struct QuestionView: View {
                                         .buttonStyle(PlainButtonStyle())
                                         
                                         Text("Background")
-                                            .equivalentFont(.title2)
+                                            .equivalentFont(.title3)
+                                            .fontWeight(.semibold)
                                         
                                         ForEach(BarRowsView.ViewType.allCases, id: \.self) { viewType in
                                             Button {
@@ -169,7 +181,8 @@ struct QuestionView: View {
                                                 }
                                             } label: {
                                                 Text(viewType.rawValue)
-                                                    .equivalentFont(.title3)
+                                                    .equivalentFont()
+                                                    .fontWeight(.semibold)
                                                     .frame(width: inspectorWidth * 0.75, height: barHeight / 9)
                                                     .background(testingViewModel.rollRowsViewType == viewType ? Color.accentColor : Color.secondary)
                                                     .cornerRadius(cornerRadius)
@@ -299,15 +312,14 @@ struct QuestionView: View {
                         
                         VStack(spacing: spacing) {
                             Text(question.type.description[0])
-                                .equivalentFont(.title2)
+                                .equivalentFont(.title3)
                                 .fontWeight(.semibold)
                             
-                            if question.type.isMultipartQuestion {
-                                Text(question.type.description[1])
-                                    .equivalentFont(.title3)
-                            }
+                            Text(question.type.description[1])
+                                .equivalentFont()
+                                .fontWeight(.semibold)
                             
-                            HStack(spacing: spacing / 1.2) {
+                            HStack(spacing: spacing) {
                                 ForEach(TestingViewModel.Answer.allCases.filter( { $0.isBoolQuestion == question.type.isBoolQuestion } ), id: \.self) { answer in
                                     Button {
                                         withAnimation(.easeInOut) {
@@ -319,9 +331,9 @@ struct QuestionView: View {
                                         }
                                     } label: {
                                         Text("\(answer.rawValue)")
-                                            .equivalentFont(.title2)
+                                            .equivalentFont()
                                             .fontWeight(.semibold)
-                                            .frame(width: question.type.isBoolQuestion ? viewSize.width / 5 : (viewSize.width / 12) - (spacing / 1.2) * (11 / 12), height: timerHeight / 1.25)
+                                            .frame(width: question.type.isBoolQuestion ? viewSize.width / 5 : (viewSize.width / 12) - (spacing) * (11 / 12), height: timerHeight * 1.5)
                                             .background {
                                                 if self.answer1Clicked != nil {
                                                     if answer == answers[0] {
@@ -344,9 +356,10 @@ struct QuestionView: View {
                             
                             if question.type.isMultipartQuestion {
                                 Text(question.type.description[2])
-                                    .equivalentFont(.title3)
+                                    .equivalentFont()
+                                    .fontWeight(.semibold)
                                 
-                                HStack(spacing: spacing / 1.2) {
+                                HStack(spacing: spacing) {
                                     ForEach(TestingViewModel.Answer.allCases.filter( { $0.isBoolQuestion == question.type.isBoolQuestion } ), id: \.self) { answer in
                                         Button {
                                             withAnimation(.easeInOut) {
@@ -358,9 +371,9 @@ struct QuestionView: View {
                                             }
                                         } label: {
                                             Text("\(answer.rawValue)")
-                                                .equivalentFont(.title2)
+                                                .equivalentFont()
                                                 .fontWeight(.semibold)
-                                                .frame(width: question.type.isBoolQuestion ? viewSize.width / 5 : (viewSize.width / 12) - (spacing / 1.2) * (11 / 12), height: timerHeight / 1.25)
+                                                .frame(width: question.type.isBoolQuestion ? viewSize.width / 5 : (viewSize.width / 12) - (spacing) * (11 / 12), height: timerHeight * 1.5)
                                                 .background {
                                                     if self.answer2Clicked != nil {
                                                         if answer == answers[1] {
@@ -392,7 +405,6 @@ struct QuestionView: View {
                                 }
                                 .shadow(radius: backgroundShadow)
                         )
-                        .equivalentPadding(.bottom, padding: 50)
                     } else {
                         Spacer()
                         
@@ -413,40 +425,26 @@ struct QuestionView: View {
                     }
                 }
             }
-            .frame(width: viewSize.width)
-            #if os(iOS)
             .overlay(alignment: .topLeading) {
-                Button {
-                    if testingViewModel.practice {
-                        self.showEndPracticeAlert = true
-                    } else {
-                        self.showEndSessionAlert = true
+                if testingViewModel.practice || testingViewModel.isLastQuestion {
+                    Button {
+                        if testingViewModel.practice {
+                            self.showEndPracticeAlert = true
+                        } else {
+                            self.showEndSessionAlert = true
+                        }
+                    } label: {
+                        Image(systemName: "xmark")
+                            .equivalentFont()
+                            .equivalentPadding()
                     }
-                } label: {
-                    Image(systemName: "xmark")
-                        .equivalentFont(.title2)
-                        .equivalentPadding()
                 }
             }
-            #endif
+//            .border(.green)
         }
-        .frame(width: screenSizeViewModel.screenSize.width, height: screenSizeViewModel.screenSize.height)
-        #if os(macOS)
-        .overlay(alignment: .topLeading) {
-            Button {
-                if testingViewModel.practice {
-                    self.showEndPracticeAlert = true
-                } else {
-                    self.showEndSessionAlert = true
-                }
-            } label: {
-                Image(systemName: "xmark")
-                    .equivalentFont(.title2)
-                    .equivalentPadding()
-            }
-        }
-        #endif
-        .alert("Would you like to stop practicing and start the tests?", isPresented: $showEndPracticeAlert) {
+        .frame(width: viewSize.width, height: viewSize.height)
+//        .border(.red)
+        .alert("Would you like to stop practicing and start the test?", isPresented: $showEndPracticeAlert) {
             Button {
                 withAnimation(.easeInOut(duration: 0.5)) {
                     testingViewModel.questionVisible = false

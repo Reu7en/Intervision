@@ -25,7 +25,7 @@ struct TestSession: Identifiable, Codable {
     ) {
         self.tester = tester
         self.questionCount = questionCount
-        self.questions = TestSession.generateQuestions(questionCount: questionCount)
+        self.questions = TestSession.generateRandomQuestions(questionCount: questionCount)
         self.results = []
         self.dateTimeStarted = Date()
         self.id = UUID()
@@ -54,7 +54,7 @@ struct TestSession: Identifiable, Codable {
         self.id = UUID()
     }
     
-    private static func generateQuestions(questionCount: Int) -> [Question] {
+    private static func generateRandomQuestions(questionCount: Int) -> [Question] {
         var questions: [Question] = []
         
         for _ in 0..<(max(1, questionCount / (3 * Question.QuestionType.allCases.count))) {

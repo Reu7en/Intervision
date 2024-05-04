@@ -34,7 +34,7 @@ struct NextQuestionButton: View {
             }
         } label: {
             Image(systemName: testingViewModel.isLastQuestion && !testingViewModel.practice ? "flag.checkered" : "arrow.right")
-                .equivalentFont(.title)
+                .equivalentFont(.largeTitle)
                 .equivalentPadding()
                 .equivalentPadding(.horizontal, padding: 50)
         }

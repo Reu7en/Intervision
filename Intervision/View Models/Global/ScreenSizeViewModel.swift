@@ -18,13 +18,8 @@ class ScreenSizeViewModel: ObservableObject {
         let relativeWidth = self.screenSize.width / referenceScreenSize.width
         let relativeHeight = self.screenSize.height / referenceScreenSize.height
         
-        #if os(macOS)
-        let horizontalPadding = max(1, padding * relativeWidth)
-        let verticalPadding = max(1, padding * relativeHeight)
-        #elseif os(iOS)
-        let horizontalPadding = max(1, (padding / 2) * relativeWidth)
-        let verticalPadding = max(1, (padding / 2) * relativeHeight)
-        #endif
+        let horizontalPadding = max(1, abs(padding * relativeWidth))
+        let verticalPadding = max(1, abs(padding * relativeHeight))
         
         switch edges {
         case .all:
@@ -48,12 +43,7 @@ class ScreenSizeViewModel: ObservableObject {
     
     func equivalentFont(font: Font) -> CGFloat {
         let referenceScreenSize = CGSize(width: 2560, height: 1440)
-        
-        #if os(macOS)
-        let referenceFontSize: CGFloat = 16
-        #elseif os(iOS)
-        let referenceFontSize: CGFloat = 24
-        #endif
+        let referenceFontSize: CGFloat = 32
         
         let relativeWidth = self.screenSize.width / referenceScreenSize.width
         let relativeHeight = self.screenSize.height / referenceScreenSize.height
@@ -62,15 +52,19 @@ class ScreenSizeViewModel: ObservableObject {
         
         switch font {
         case .largeTitle:
-            return referenceFontSize * 2.5 * scaleFactor
-        case .title:
             return referenceFontSize * 2.0 * scaleFactor
-        case .title2:
+        case .title:
             return referenceFontSize * 1.5 * scaleFactor
-        case .title3:
+        case .title2:
             return referenceFontSize * 1.25 * scaleFactor
+        case .title3:
+            return referenceFontSize * 1.125 * scaleFactor
         case .body:
             return referenceFontSize * scaleFactor
+        case .caption:
+            return referenceFontSize * 0.875 * scaleFactor
+        case .caption2:
+            return referenceFontSize * 0.75 * scaleFactor
         default:
             return referenceFontSize * scaleFactor
         }

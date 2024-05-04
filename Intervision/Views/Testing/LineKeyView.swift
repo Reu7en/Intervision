@@ -19,7 +19,7 @@ struct LineKeyView: View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
                 Text(label)
-                    .equivalentFont(.title3)
+                    .equivalentFont()
                     .fontWeight(.semibold)
                 
                 if showZigZags {

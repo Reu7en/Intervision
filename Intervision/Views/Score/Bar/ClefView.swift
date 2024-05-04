@@ -20,13 +20,15 @@ struct ClefView: View {
                     Image("ClefTreble")
                         .interpolation(.high)
                         .resizable()
-                        .frame(height: gapHeight * 7)
+                        .scaledToFit()
+                        .frame(height: gapHeight * 8)
                 }
             case .Soprano:
                 ZStack {
                     Image("ClefSATB")
                         .interpolation(.high)
                         .resizable()
+                        .scaledToFit()
                         .frame(height: gapHeight * 4)
                         .offset(y: gapHeight * 2)
                 }
@@ -35,6 +37,7 @@ struct ClefView: View {
                     Image("ClefSATB")
                         .interpolation(.high)
                         .resizable()
+                        .scaledToFit()
                         .frame(height: gapHeight * 4)
                 }
             case .Tenor:
@@ -42,6 +45,7 @@ struct ClefView: View {
                     Image("ClefSATB")
                         .interpolation(.high)
                         .resizable()
+                        .scaledToFit()
                         .frame(height: gapHeight * 4)
                         .offset(y: -gapHeight)
                 }
@@ -50,6 +54,7 @@ struct ClefView: View {
                     Image("ClefBass")
                         .interpolation(.high)
                         .resizable()
+                        .scaledToFit()
                         .frame(height: gapHeight * 3.5)
                         .offset(y: -gapHeight / 4)
                 }
@@ -63,10 +68,9 @@ struct ClefView: View {
                 }
             }
         }
-        .frame(maxWidth: gapHeight * 2.5)
     }
 }
 
 #Preview {
-    ClefView(clef: .Treble, gapHeight: .zero)
+    ClefView(clef: .Treble, gapHeight: 50)
 }

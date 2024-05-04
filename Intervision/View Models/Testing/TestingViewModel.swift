@@ -40,10 +40,11 @@ class TestingViewModel: ObservableObject {
     @Published var presentedQuestionView: PresentedQuestionView = .CountdownTimer
     @Published var showSavingErrorAlert = false
     @Published var showSavingSuccessAlert = false
+    @Published var resultsURL: IdentifiableURL?
     
-    @Published var countdown = 1
+    @Published var countdown = 5
     @Published var progress = 1.0
-    private let totalSeconds = 1
+    private let totalSeconds = 5
     private var countdownTimer: AnyCancellable?
     
     var isFirstQuestion = true
@@ -62,7 +63,7 @@ class TestingViewModel: ObservableObject {
                 self.randomlyGenerateQuestionData(question: self.testSession?.questions[currentQuestionIndex])
                 self.testSession?.random = self.random
             } else {
-                self.getTestQuestionData(currentQuestionIndex)
+                self.setTestQuestionData(currentQuestionIndex)
             }
             
             self.questionResults = []
@@ -70,6 +71,7 @@ class TestingViewModel: ObservableObject {
         }
     }
     
+    @Published var testQuestionData: [(BarViewModel?, (RollViewModel, IntervalLinesViewModel)?, [Answer]?)?] = []
     @Published var currentQuestionData: (BarViewModel?, (RollViewModel, IntervalLinesViewModel)?, [Answer]?)?
     @Published var questionResults: [Bool] = []
     @Published var questionMarked = false
@@ -79,6 +81,11 @@ class TestingViewModel: ObservableObject {
     @Published var answerProgress = 1.0
     let maximumAnswerTime = 60.0
     private var answerTimer: AnyCancellable?
+}
+
+struct IdentifiableURL: Identifiable {
+    let id: UUID = UUID()
+    let url: URL
 }
 
 extension TestingViewModel {
@@ -95,17 +102,17 @@ extension TestingViewModel {
     }
     
     enum Answer: String, CaseIterable {
-        case Minor2nd = "Min. 2nd"
-        case Major2nd = "Maj. 2nd"
-        case Minor3rd = "Min. 3rd"
-        case Major3rd = "Maj. 3rd"
+        case Minor2nd = "Minor 2nd"
+        case Major2nd = "Major 2nd"
+        case Minor3rd = "Minor 3rd"
+        case Major3rd = "Major 3rd"
         case Perfect4th = "Perf. 4th"
         case Tritone = "Tritone"
         case Perfect5th = "Perf. 5th"
-        case Minor6th = "Min. 6th"
-        case Major6th = "Maj. 6th"
-        case Minor7th = "Min. 7th"
-        case Major7th = "Maj. 7th"
+        case Minor6th = "Minor 6th"
+        case Major6th = "Major 6th"
+        case Minor7th = "Minor 7th"
+        case Major7th = "Major 7th"
         case Octave = "Octave"
         
         case True = "True"
@@ -180,13 +187,10 @@ extension TestingViewModel {
         self.tester = Tester(skills: testerSkills, id: testerId)
         
         if let tester = self.tester {
-            if self.practice {
-                self.testSession = TestSession(tester: tester, questionCount: 30)
-            } else {
-                self.testSession = TestSession(tester: tester, questionCount: 30)
-            }
+            self.testSession = TestSession(tester: tester, questionCount: 30)
         }
-    
+
+        self.generateTestQuestionData()
         self.currentQuestionIndex = 0
         self.goToNextQuestion()
     }
@@ -266,34 +270,285 @@ extension TestingViewModel {
         }
     }
     
+    func submitAnswer(questionData: (BarViewModel?, (RollViewModel, IntervalLinesViewModel)?, [Answer]?), answer: Answer, answerIndex: Int) {
+        guard let answers = questionData.2 else { self.questionMarked = true; return }
+        
+        self.questionResults.append(answer.rawValue == answers[answerIndex].rawValue)
+        
+        if self.questionResults.count == answers.count {
+            self.markQuestion()
+        }
+    }
+    
+    func markQuestion() {
+        self.stopAnswerTimer()
+        
+        withAnimation(.easeInOut) {
+            self.questionMarked = true
+        }
+        
+        if let question = self.testSession?.questions[self.currentQuestionIndex] {
+            let answeredCorrectly = self.questionResults.isEmpty ? false : self.questionResults.allSatisfy( { $0 == true } )
+            let timeTaken = self.questionResults.isEmpty ? -1 : self.answerTime
+            
+            self.testSession?.results.append(TestResult(question: question, answeredCorrectly: answeredCorrectly, timeTaken: timeTaken))
+        }
+    }
+    
+    func saveTestSession() {
+        guard let testSession = testSession else { self.showSavingErrorAlert = true; return }
+
+        #if os(macOS)
+        let panel = NSSavePanel()
+        
+        panel.allowedContentTypes = [.json]
+        panel.nameFieldStringValue = "\(testSession.id).json"
+
+        panel.begin { response in
+            if response == .OK, let fileURL = panel.url {
+                do {
+                    let encoder = JSONEncoder()
+                    
+                    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+                    
+                    let jsonData = try encoder.encode(testSession)
+                    try jsonData.write(to: fileURL)
+                    
+                    DispatchQueue.main.async {
+                        self.showSavingSuccessAlert = true
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        self.showSavingErrorAlert = true
+                    }
+                }
+            }
+        }
+        #elseif os(iOS)
+        do {
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+            let jsonData = try encoder.encode(testSession)
+            let temporaryURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(testSession.id).json")
+            try jsonData.write(to: temporaryURL)
+            
+            DispatchQueue.main.async {
+                self.resultsURL = IdentifiableURL(url: temporaryURL)
+            }
+        } catch {
+            DispatchQueue.main.async {
+                self.showSavingErrorAlert = true
+            }
+        }
+        #endif
+    }
+    
     private func calculateIsLastQuestion() -> Bool {
         return self.currentQuestionIndex + 1 == self.testSession?.questionCount
     }
     
-    func randomlyGenerateQuestionData(question: Question?) {
+    private func setTestQuestionData(_ currentQuestionIndex: Int) {
+        guard currentQuestionIndex < self.testQuestionData.count else { return }
+        
+        self.currentQuestionData = self.testQuestionData[currentQuestionIndex]
+    }
+    
+    private func generateTestQuestionData() {
+        guard let testQuestions = self.testSession?.questions else { return }
+        
+        var testQuestionData: [(BarViewModel?, (RollViewModel, IntervalLinesViewModel)?, [Answer]?)?] = []
+        
+        var scoreTwoNoteIntervalIdentificationIndicesLeft: [Int] = [0, 1, 2]
+        var scoreThreeNoteInnerIntervalsIdentificationIndicesLeft: [Int] = [3, 4, 5]
+        var scoreThreeNoteOuterIntervalIdentificationIndicesLeft: [Int] = [6, 7, 8]
+        var scoreChordsAreInversionsIndicesLeft: [Int] = [9, 10, 11]
+        var scoreTwoNoteIntervalsAreEqualIndicesLeft: [Int] = [12, 13, 14]
+        
+        for question in testQuestions {
+            var rollViewModel: RollViewModel?
+            var answer: [Answer]?
+            
+            switch question.type {
+            case .ScoreTwoNoteIntervalIdentification:
+                guard !scoreTwoNoteIntervalIdentificationIndicesLeft.isEmpty, let index = scoreTwoNoteIntervalIdentificationIndicesLeft.randomElement() else { testQuestionData.append(nil); break }
+                
+                let barViewModel = BarViewModel(
+                    bar: TestingViewModel.testQuestions[index].0,
+                    ledgerLines: 5,
+                    showClef: true,
+                    showKey: true,
+                    showTime: true
+                )
+                
+                testQuestionData.append((barViewModel, nil, TestingViewModel.testQuestions[index].1))
+                scoreTwoNoteIntervalIdentificationIndicesLeft.removeAll(where: { $0 == index } )
+            case .ScoreThreeNoteInnerIntervalsIdentification:
+                guard !scoreThreeNoteInnerIntervalsIdentificationIndicesLeft.isEmpty, let index = scoreThreeNoteInnerIntervalsIdentificationIndicesLeft.randomElement() else { testQuestionData.append(nil); break }
+                
+                let barViewModel = BarViewModel(
+                    bar: TestingViewModel.testQuestions[index].0,
+                    ledgerLines: 5,
+                    showClef: true,
+                    showKey: true,
+                    showTime: true
+                )
+                
+                testQuestionData.append((barViewModel, nil, TestingViewModel.testQuestions[index].1))
+                scoreThreeNoteInnerIntervalsIdentificationIndicesLeft.removeAll(where: { $0 == index } )
+            case .ScoreThreeNoteOuterIntervalIdentification:
+                guard !scoreThreeNoteOuterIntervalIdentificationIndicesLeft.isEmpty, let index = scoreThreeNoteOuterIntervalIdentificationIndicesLeft.randomElement() else { testQuestionData.append(nil); break }
+                
+                let barViewModel = BarViewModel(
+                    bar: TestingViewModel.testQuestions[index].0,
+                    ledgerLines: 5,
+                    showClef: true,
+                    showKey: true,
+                    showTime: true
+                )
+                
+                testQuestionData.append((barViewModel, nil, TestingViewModel.testQuestions[index].1))
+                scoreThreeNoteOuterIntervalIdentificationIndicesLeft.removeAll(where: { $0 == index } )
+            case .ScoreChordsAreInversions:
+                guard !scoreChordsAreInversionsIndicesLeft.isEmpty, let index = scoreChordsAreInversionsIndicesLeft.randomElement() else { testQuestionData.append(nil); break }
+                
+                let barViewModel = BarViewModel(
+                    bar: TestingViewModel.testQuestions[index].0,
+                    ledgerLines: 5,
+                    showClef: true,
+                    showKey: true,
+                    showTime: true
+                )
+                
+                testQuestionData.append((barViewModel, nil, TestingViewModel.testQuestions[index].1))
+                scoreChordsAreInversionsIndicesLeft.removeAll(where: { $0 == index } )
+            case .ScoreTwoNoteIntervalsAreEqual:
+                guard !scoreTwoNoteIntervalsAreEqualIndicesLeft.isEmpty, let index = scoreTwoNoteIntervalsAreEqualIndicesLeft.randomElement() else { testQuestionData.append(nil); break }
+                
+                let barViewModel = BarViewModel(
+                    bar: TestingViewModel.testQuestions[index].0,
+                    ledgerLines: 5,
+                    showClef: true,
+                    showKey: true,
+                    showTime: true
+                )
+                
+                testQuestionData.append((barViewModel, nil, TestingViewModel.testQuestions[index].1))
+                scoreTwoNoteIntervalsAreEqualIndicesLeft.removeAll(where: { $0 == index } )
+            case .RollTwoNoteIntervalIdentification:
+                switch question.intervalLinesType {
+                case .None:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[15].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[15].0]])]
+                    answer = TestingViewModel.testQuestions[15].1
+                case .Lines:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[16].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[16].0]])]
+                    answer = TestingViewModel.testQuestions[16].1
+                case .InvertedLines:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[17].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[17].0]])]
+                    answer = TestingViewModel.testQuestions[17].1
+                }
+            case .RollThreeNoteInnerIntervalsIdentification:
+                switch question.intervalLinesType {
+                case .None:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[18].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[18].0]])]
+                    answer = TestingViewModel.testQuestions[18].1
+                case .Lines:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[19].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[19].0]])]
+                    answer = TestingViewModel.testQuestions[19].1
+                case .InvertedLines:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[20].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[20].0]])]
+                    answer = TestingViewModel.testQuestions[20].1
+                }
+            case .RollThreeNoteOuterIntervalIdentification:
+                switch question.intervalLinesType {
+                case .None:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[21].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[21].0]])]
+                    answer = TestingViewModel.testQuestions[21].1
+                case .Lines:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[22].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[22].0]])]
+                    answer = TestingViewModel.testQuestions[22].1
+                case .InvertedLines:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[23].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[23].0]])]
+                    answer = TestingViewModel.testQuestions[23].1
+                }
+            case .RollChordsAreInversions:
+                switch question.intervalLinesType {
+                case .None:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[24].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[24].0]])]
+                    answer = TestingViewModel.testQuestions[24].1
+                case .Lines:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[25].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[25].0]])]
+                    answer = TestingViewModel.testQuestions[25].1
+                case .InvertedLines:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[26].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[26].0]])]
+                    answer = TestingViewModel.testQuestions[26].1
+                }
+            case .RollTwoNoteIntervalsAreEqual:
+                switch question.intervalLinesType {
+                case .None:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[27].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[27].0]])]
+                    answer = TestingViewModel.testQuestions[27].1
+                case .Lines:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[28].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[28].0]])]
+                    answer = TestingViewModel.testQuestions[28].1
+                case .InvertedLines:
+                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[29].0]])], octaves: 2)
+                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[29].0]])]
+                    answer = TestingViewModel.testQuestions[29].1
+                }
+            }
+            
+            if let rollViewModel = rollViewModel,
+               let answer = answer {
+                let intervalLinesViewModel = IntervalLinesViewModel(
+                    segments: rollViewModel.segments ?? [],
+                    parts: rollViewModel.parts ?? [],
+                    groups: rollViewModel.partGroups,
+                    harmonicIntervalLinesType: .all,
+                    showMelodicIntervalLines: false,
+                    barIndex: 0, barWidth: .zero,
+                    rowWidth: .zero,
+                    rowHeight: .zero,
+                    harmonicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedHarmonicIntervalLineColors : RollViewModel.harmonicIntervalLineColors,
+                    melodicIntervalLineColors: [],
+                    viewableMelodicLines: [],
+                    showInvertedIntervals: question.intervalLinesType == .InvertedLines,
+                    showZigZags: question.intervalLinesType == .InvertedLines,
+                    testing: true
+                )
+                
+                testQuestionData.append((nil, (rollViewModel, intervalLinesViewModel), answer))
+            }
+        }
+        
+        guard testQuestionData.count == testQuestions.count else { return }
+        
+        self.testQuestionData = testQuestionData
+    }
+    
+    private func randomlyGenerateQuestionData(question: Question?) {
         guard let question = question else { self.currentQuestionData = nil; return }
         
         let key: Bar.KeySignature = Bar.KeySignature.allCases.randomElement() ?? .CMajor
         let bar = Bar(chords: [Chord(notes: [])], clef: .Treble, timeSignature: .custom(beats: 4, noteValue: 4), repeat: nil, doubleLine: false, keySignature: key)
         let lowestStartingNote = Note(
-            pitch: question.type.isScoreQuestion ? .B : .C,
-            octave: question.type.isScoreQuestion ? .small : .subContra,
+            pitch: .C,
+            octave: question.type.isScoreQuestion ? .oneLine : .subContra,
             duration: .quarter,
             isRest: false,
-            isDotted: false,
-            hasAccent: false
-        )
-        
-        let quarterRest = Note(
-            duration: .quarter,
-            isRest: true,
-            isDotted: false,
-            hasAccent: false
-        )
-        
-        let halfRest = Note(
-            duration: .half,
-            isRest: true,
             isDotted: false,
             hasAccent: false
         )
@@ -318,7 +573,7 @@ extension TestingViewModel {
                 hasAccent: false
             )
             
-            let lowestNoteSemitoneIncrease = Int.random(in: 0...12)
+            let lowestNoteSemitoneIncrease = Int.random(in: 0...11)
             let highestNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 1)...(lowestNoteSemitoneIncrease + 12))
             let answer = Answer(semitones: highestNoteSemitoneIncrease - lowestNoteSemitoneIncrease)
             
@@ -333,8 +588,8 @@ extension TestingViewModel {
             if question.type.isScoreQuestion {
                 bar.chords[0].notes.append(lowestNote)
                 bar.chords[0].notes.append(highestNote)
-                bar.chords.append(Chord(notes: [quarterRest]))
-                bar.chords.append(Chord(notes: [halfRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
                 
                 let barViewModel = BarViewModel(
                     bar: bar,
@@ -350,13 +605,13 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             } else {
-                bar.chords[0].notes.append(quarterRest)
+                bar.chords[0].notes.append(TestingViewModel.quarterRest)
                 bar.chords.append(Chord(notes: []))
                 bar.chords[1].notes.append(lowestNote)
                 bar.chords[1].notes.append(highestNote)
-                bar.chords.append(Chord(notes: [halfRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
                 
-                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 3)
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 2)
                 rollViewModel.parts = [Part(bars: [[bar]])]
                 
                 let intervalLinesViewModel = IntervalLinesViewModel(
@@ -410,7 +665,7 @@ extension TestingViewModel {
                 hasAccent: false
             )
             
-            let lowestNoteSemitoneIncrease = Int.random(in: 0...12)
+            let lowestNoteSemitoneIncrease = Int.random(in: 0...11)
             let highestNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 4)...(lowestNoteSemitoneIncrease + 12))
             let middleNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 1)...(highestNoteSemitoneIncrease - 1))
             let answer1 = Answer(semitones: middleNoteSemitoneIncrease - lowestNoteSemitoneIncrease)
@@ -432,8 +687,8 @@ extension TestingViewModel {
                 bar.chords[0].notes.append(lowestNote)
                 bar.chords[0].notes.append(middleNote)
                 bar.chords[0].notes.append(highestNote)
-                bar.chords.append(Chord(notes: [quarterRest]))
-                bar.chords.append(Chord(notes: [halfRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
                 
                 let barViewModel = BarViewModel(
                     bar: bar,
@@ -450,14 +705,14 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             } else {
-                bar.chords[0].notes.append(quarterRest)
+                bar.chords[0].notes.append(TestingViewModel.quarterRest)
                 bar.chords.append(Chord(notes: []))
                 bar.chords[1].notes.append(lowestNote)
                 bar.chords[1].notes.append(middleNote)
                 bar.chords[1].notes.append(highestNote)
-                bar.chords.append(Chord(notes: [halfRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
                 
-                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 3)
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 2)
                 rollViewModel.parts = [Part(bars: [[bar]])]
                 
                 let intervalLinesViewModel = IntervalLinesViewModel(
@@ -512,7 +767,7 @@ extension TestingViewModel {
                 hasAccent: false
             )
             
-            let lowestNoteSemitoneIncrease = Int.random(in: 0...12)
+            let lowestNoteSemitoneIncrease = Int.random(in: 0...11)
             let highestNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 4)...(lowestNoteSemitoneIncrease + 12))
             let middleNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 1)...(highestNoteSemitoneIncrease - 1))
             let answer = Answer(semitones: highestNoteSemitoneIncrease - lowestNoteSemitoneIncrease)
@@ -533,8 +788,8 @@ extension TestingViewModel {
                 bar.chords[0].notes.append(lowestNote)
                 bar.chords[0].notes.append(middleNote)
                 bar.chords[0].notes.append(highestNote)
-                bar.chords.append(Chord(notes: [quarterRest]))
-                bar.chords.append(Chord(notes: [halfRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
                 
                 let barViewModel = BarViewModel(
                     bar: bar,
@@ -550,14 +805,14 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             } else {
-                bar.chords[0].notes.append(quarterRest)
+                bar.chords[0].notes.append(TestingViewModel.quarterRest)
                 bar.chords.append(Chord(notes: []))
                 bar.chords[1].notes.append(lowestNote)
                 bar.chords[1].notes.append(middleNote)
                 bar.chords[1].notes.append(highestNote)
-                bar.chords.append(Chord(notes: [halfRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
                 
-                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 3)
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 2)
                 rollViewModel.parts = [Part(bars: [[bar]])]
                 
                 let intervalLinesViewModel = IntervalLinesViewModel(
@@ -638,9 +893,9 @@ extension TestingViewModel {
                 hasAccent: false
             )
             
-            let lowestNoteSemitoneIncrease = Int.random(in: 0...12)
-            let highestNoteSemitoneIncrease = ((lowestNoteSemitoneIncrease + 6)...(lowestNoteSemitoneIncrease + 12)).filter { $0 != lowestNoteSemitoneIncrease + 12 }.randomElement() ?? Int.random(in: (lowestNoteSemitoneIncrease + 6)...(lowestNoteSemitoneIncrease + 12))
-            let middleNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 3)...(highestNoteSemitoneIncrease - 3))
+            let lowestNoteSemitoneIncrease = Int.random(in: 0...4)
+            let highestNoteSemitoneIncrease = ((lowestNoteSemitoneIncrease + 4)...(lowestNoteSemitoneIncrease + 7)).filter { $0 != lowestNoteSemitoneIncrease + 12 }.randomElement() ?? Int.random(in: (lowestNoteSemitoneIncrease + 4)...(lowestNoteSemitoneIncrease + 7))
+            let middleNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 2)...(highestNoteSemitoneIncrease - 2))
             
             for _ in 0..<lowestNoteSemitoneIncrease {
                 lowestNote1.increaseSemitone(sharps: key.sharps)
@@ -661,15 +916,15 @@ extension TestingViewModel {
                 bar.chords[0].notes.append(lowestNote1)
                 bar.chords[0].notes.append(middleNote1)
                 bar.chords[0].notes.append(highestNote1)
-                bar.chords.append(Chord(notes: [quarterRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
                 bar.chords.append(Chord(notes: []))
             } else {
-                bar.chords[0].notes.append(quarterRest)
+                bar.chords[0].notes.append(TestingViewModel.quarterRest)
                 bar.chords.append(Chord(notes: []))
                 bar.chords[1].notes.append(lowestNote1)
                 bar.chords[1].notes.append(middleNote1)
                 bar.chords[1].notes.append(highestNote1)
-                bar.chords.append(Chord(notes: [quarterRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
                 bar.chords.append(Chord(notes: []))
             }
             
@@ -712,7 +967,7 @@ extension TestingViewModel {
                 bar.chords[2].notes.append(lowestNote2)
                 bar.chords[2].notes.append(middleNote2)
                 bar.chords[2].notes.append(highestNote2)
-                bar.chords.append(Chord(notes: [quarterRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
                 
                 let barViewModel = BarViewModel(
                     bar: bar,
@@ -732,7 +987,7 @@ extension TestingViewModel {
                 bar.chords[3].notes.append(middleNote2)
                 bar.chords[3].notes.append(highestNote2)
                 
-                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 3)
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 2)
                 rollViewModel.parts = [Part(bars: [[bar]])]
                 
                 let intervalLinesViewModel = IntervalLinesViewModel(
@@ -795,7 +1050,7 @@ extension TestingViewModel {
                 hasAccent: false
             )
             
-            let lowestNoteSemitoneIncrease = Int.random(in: 0...12)
+            let lowestNoteSemitoneIncrease = Int.random(in: 2...11)
             let highestNoteSemitoneIncrease = Int.random(in: (lowestNoteSemitoneIncrease + 3)...(lowestNoteSemitoneIncrease + 12))
             
             for _ in 0..<lowestNoteSemitoneIncrease {
@@ -809,19 +1064,19 @@ extension TestingViewModel {
             if question.type.isScoreQuestion {
                 bar.chords[0].notes.append(lowestNote1)
                 bar.chords[0].notes.append(highestNote1)
-                bar.chords.append(Chord(notes: [quarterRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
                 bar.chords.append(Chord(notes: []))
             } else {
-                bar.chords[0].notes.append(quarterRest)
+                bar.chords[0].notes.append(TestingViewModel.quarterRest)
                 bar.chords.append(Chord(notes: []))
                 bar.chords[1].notes.append(lowestNote1)
                 bar.chords[1].notes.append(highestNote1)
-                bar.chords.append(Chord(notes: [quarterRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
                 bar.chords.append(Chord(notes: []))
             }
             
             let answer = Answer(boolValue: Bool.random())
-            let lowestNote2SemitoneIncrease = (0...12).filter { $0 != lowestNoteSemitoneIncrease }.randomElement() ?? Int.random(in: 0...12)
+            let lowestNote2SemitoneIncrease = (2...11).filter { $0 != lowestNoteSemitoneIncrease }.randomElement() ?? Int.random(in: 0...11)
             let highestNote2SemitoneIncrease = lowestNote2SemitoneIncrease + highestNoteSemitoneIncrease - lowestNoteSemitoneIncrease
             
             for _ in 0..<lowestNote2SemitoneIncrease {
@@ -849,7 +1104,7 @@ extension TestingViewModel {
             if question.type.isScoreQuestion {
                 bar.chords[2].notes.append(lowestNote2)
                 bar.chords[2].notes.append(highestNote2)
-                bar.chords.append(Chord(notes: [quarterRest]))
+                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
                 
                 let barViewModel = BarViewModel(
                     bar: bar,
@@ -868,7 +1123,7 @@ extension TestingViewModel {
                 bar.chords[3].notes.append(lowestNote2)
                 bar.chords[3].notes.append(highestNote2)
                 
-                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 3)
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 2)
                 rollViewModel.parts = [Part(bars: [[bar]])]
                 
                 let intervalLinesViewModel = IntervalLinesViewModel(
@@ -895,68 +1150,6 @@ extension TestingViewModel {
                 }
             }
         }
-    } // check max doesnt exceed B1/1-C2
-    
-    func getTestQuestionData(_ currentQuestionIndex: Int) {
-        
-    }
-    
-    func submitAnswer(questionData: (BarViewModel?, (RollViewModel, IntervalLinesViewModel)?, [Answer]?), answer: Answer, answerIndex: Int) {
-        guard let answers = questionData.2 else { self.questionMarked = true; return }
-        
-        self.questionResults.append(answer.rawValue == answers[answerIndex].rawValue)
-        
-        if self.questionResults.count == answers.count {
-            self.markQuestion()
-        }
-    }
-    
-    func markQuestion() {
-        self.stopAnswerTimer()
-        
-        withAnimation(.easeInOut) {
-            self.questionMarked = true
-        }
-        
-        if let question = self.testSession?.questions[self.currentQuestionIndex] {
-            let answeredCorrectly = self.questionResults.isEmpty ? false : self.questionResults.allSatisfy( { $0 == true } )
-            let timeTaken = self.questionResults.isEmpty ? -1 : self.answerTime
-            
-            self.testSession?.results.append(TestResult(question: question, answeredCorrectly: answeredCorrectly, timeTaken: timeTaken))
-        }
-    }
-    
-    func saveTestSession() {
-        guard let testSession = testSession else { self.showSavingErrorAlert = true; return }
-
-        #if os(macOS)
-        let panel = NSSavePanel()
-        
-        panel.allowedContentTypes = [.json]
-        panel.nameFieldStringValue = "\(testSession.id).json"
-
-        panel.begin { response in
-            if response == .OK, let fileURL = panel.url {
-                do {
-                    let encoder = JSONEncoder()
-                    
-                    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-                    
-                    let jsonData = try encoder.encode(testSession)
-                    try jsonData.write(to: fileURL)
-                    
-                    DispatchQueue.main.async {
-                        self.showSavingSuccessAlert = true
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        self.showSavingErrorAlert = true
-                    }
-                }
-            }
-        }
-        #elseif os(iOS)
-        #endif
     }
     
     static let quarterRest = Note(
@@ -973,14 +1166,14 @@ extension TestingViewModel {
         hasAccent: false
     )
     
-    static let questions: [(Bar, [Answer])] = [
+    static let testQuestions: [(Bar, [Answer])] = [
         (Bar(
             chords: [
                 Chord(notes: [
                     Note(
                         pitch: .G,
                         accidental: nil,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -989,7 +1182,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .C,
                         accidental: .Sharp,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1015,7 +1208,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .F,
                         accidental: nil,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1024,7 +1217,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .G,
                         accidental: .Sharp,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1048,18 +1241,18 @@ extension TestingViewModel {
             chords: [
                 Chord(notes: [
                     Note(
-                        pitch: .B,
-                        accidental: .Flat,
-                        octave: .oneLine,
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
                     ),
                     Note(
-                        pitch: .F,
-                        accidental: nil,
-                        octave: .oneLine,
+                        pitch: .B,
+                        accidental: .Flat,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1078,14 +1271,14 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .BFlatMajor
-        ), [.Perfect5th]), // S2II 3
+        ), [.Minor6th]), // S2II 3
         (Bar(
             chords: [
                 Chord(notes: [
                     Note(
                         pitch: .F,
                         accidental: .Sharp,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1103,7 +1296,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .F,
                         accidental: .Sharp,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1129,7 +1322,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .E,
                         accidental: nil,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1138,7 +1331,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .G,
                         accidental: nil,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1147,7 +1340,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .C,
                         accidental: .Sharp,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1173,7 +1366,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .D,
                         accidental: nil,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1182,7 +1375,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .A,
                         accidental: nil,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1191,7 +1384,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .B,
                         accidental: .Flat,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1261,7 +1454,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .D,
                         accidental: .Sharp,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1270,7 +1463,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .G,
                         accidental: nil,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1279,7 +1472,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .G,
                         accidental: .Sharp,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1305,7 +1498,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .E,
                         accidental: .Flat,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1314,7 +1507,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .F,
                         accidental: nil,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1323,7 +1516,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .D,
                         accidental: nil,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1349,7 +1542,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .A,
                         accidental: nil,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1358,7 +1551,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .C,
                         accidental: nil,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1367,7 +1560,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .D,
                         accidental: .Sharp,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1381,7 +1574,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .C,
                         accidental: nil,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1390,7 +1583,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .D,
                         accidental: .Sharp,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1399,7 +1592,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .G,
                         accidental: .Sharp,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1422,7 +1615,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .C,
                         accidental: nil,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1431,7 +1624,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .E,
                         accidental: nil,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1440,7 +1633,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .G,
                         accidental: .Sharp,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1454,7 +1647,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .G,
                         accidental: .Sharp,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1463,7 +1656,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .C,
                         accidental: nil,
-                        octave: .oneLine,
+                        octave: .threeLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1472,7 +1665,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .D,
                         accidental: .Sharp,
-                        octave: .twoLine,
+                        octave: .threeLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1495,7 +1688,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .C,
                         accidental: nil,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1504,7 +1697,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .E,
                         accidental: nil,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1513,7 +1706,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .B,
                         accidental: .Flat,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1527,7 +1720,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .B,
                         accidental: .Flat,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1536,7 +1729,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .C,
                         accidental: nil,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1545,7 +1738,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .E,
                         accidental: nil,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1568,7 +1761,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .G,
                         accidental: .Flat,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1577,7 +1770,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .D,
                         accidental: .Flat,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1591,7 +1784,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .B,
                         accidental: nil,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1600,7 +1793,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .G,
                         accidental: .Flat,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1623,7 +1816,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .B,
                         accidental: nil,
-                        octave: .great,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1632,7 +1825,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .A,
                         accidental: .Sharp,
-                        octave: .small,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1646,7 +1839,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .G,
                         accidental: nil,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1655,7 +1848,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .F,
                         accidental: nil,
-                        octave: .oneLine,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1678,7 +1871,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .D,
                         accidental: .Flat,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1686,8 +1879,8 @@ extension TestingViewModel {
                     ),
                     Note(
                         pitch: .F,
-                        accidental: .Flat,
-                        octave: .small,
+                        accidental: nil,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1701,7 +1894,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .B,
                         accidental: nil,
-                        octave: .small,
+                        octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1710,7 +1903,7 @@ extension TestingViewModel {
                     Note(
                         pitch: .E,
                         accidental: .Flat,
-                        octave: .small,
+                        octave: .twoLine,
                         duration: .quarter,
                         isRest: false,
                         isDotted: false,
@@ -1730,6 +1923,9 @@ extension TestingViewModel {
         (Bar(
             chords: [
                 Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
                     Note(
                         pitch: .B,
                         accidental: nil,
@@ -1750,9 +1946,6 @@ extension TestingViewModel {
                     )
                 ]),
                 Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
                     halfRest
                 ])
             ],
@@ -1761,9 +1954,12 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Perfect5th]), // R2II NL
+        ), [.Perfect4th]), // R2II NL
         (Bar(
             chords: [
+                Chord(notes: [
+                    quarterRest
+                ]),
                 Chord(notes: [
                     Note(
                         pitch: .F,
@@ -1783,9 +1979,6 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
                 ]),
                 Chord(notes: [
                     halfRest
@@ -1800,6 +1993,9 @@ extension TestingViewModel {
         (Bar(
             chords: [
                 Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
                     Note(
                         pitch: .F,
                         accidental: nil,
@@ -1818,9 +2014,6 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
                 ]),
                 Chord(notes: [
                     halfRest
@@ -1835,6 +2028,9 @@ extension TestingViewModel {
         (Bar(
             chords: [
                 Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
                     Note(
                         pitch: .G,
                         accidental: .Sharp,
@@ -1862,9 +2058,6 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
                 ]),
                 Chord(notes: [
                     halfRest
@@ -1879,6 +2072,9 @@ extension TestingViewModel {
         (Bar(
             chords: [
                 Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
                     Note(
                         pitch: .A,
                         accidental: nil,
@@ -1906,9 +2102,6 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
                 ]),
                 Chord(notes: [
                     halfRest
@@ -1923,6 +2116,9 @@ extension TestingViewModel {
         (Bar(
             chords: [
                 Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
                     Note(
                         pitch: .F,
                         accidental: nil,
@@ -1952,9 +2148,6 @@ extension TestingViewModel {
                     )
                 ]),
                 Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
                     halfRest
                 ])
             ],
@@ -1963,9 +2156,12 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Major3rd, .Perfect5th]), // R3II IL
+        ), [.Perfect4th, .Perfect5th]), // R3II IL
         (Bar(
             chords: [
+                Chord(notes: [
+                    quarterRest
+                ]),
                 Chord(notes: [
                     Note(
                         pitch: .B,
@@ -1986,7 +2182,7 @@ extension TestingViewModel {
                         hasAccent: false
                     ),
                     Note(
-                        pitch: .A,
+                        pitch: .B,
                         accidental: nil,
                         octave: .contra,
                         duration: .quarter,
@@ -1994,9 +2190,6 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
                 ]),
                 Chord(notes: [
                     halfRest
@@ -2007,9 +2200,12 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Minor7th]), // R3OI NL
+        ), [.Octave]), // R3OI NL
         (Bar(
             chords: [
+                Chord(notes: [
+                    quarterRest
+                ]),
                 Chord(notes: [
                     Note(
                         pitch: .C,
@@ -2040,9 +2236,6 @@ extension TestingViewModel {
                     )
                 ]),
                 Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
                     halfRest
                 ])
             ],
@@ -2054,6 +2247,9 @@ extension TestingViewModel {
         ), [.Major7th]), // R3OI WL
         (Bar(
             chords: [
+                Chord(notes: [
+                    quarterRest
+                ]),
                 Chord(notes: [
                     Note(
                         pitch: .D,
@@ -2082,9 +2278,6 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
                 ]),
                 Chord(notes: [
                     halfRest
@@ -2099,6 +2292,9 @@ extension TestingViewModel {
         (Bar(
             chords: [
                 Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
                     Note(
                         pitch: .D,
                         accidental: nil,
@@ -2158,10 +2354,7 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
+                ])
             ],
             clef: .Treble,
             timeSignature: .custom(beats: 4, noteValue: 4),
@@ -2172,6 +2365,9 @@ extension TestingViewModel {
         (Bar(
             chords: [
                 Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
                     Note(
                         pitch: .C,
                         accidental: nil,
@@ -2231,10 +2427,7 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
+                ])
             ],
             clef: .Treble,
             timeSignature: .custom(beats: 4, noteValue: 4),
@@ -2245,6 +2438,9 @@ extension TestingViewModel {
         (Bar(
             chords: [
                 Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
                     Note(
                         pitch: .D,
                         accidental: nil,
@@ -2304,10 +2500,7 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
+                ])
             ],
             clef: .Treble,
             timeSignature: .custom(beats: 4, noteValue: 4),
@@ -2318,6 +2511,9 @@ extension TestingViewModel {
         (Bar(
             chords: [
                 Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
                     Note(
                         pitch: .F,
                         accidental: .Sharp,
@@ -2359,10 +2555,7 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
+                ])
             ],
             clef: .Treble,
             timeSignature: .custom(beats: 4, noteValue: 4),
@@ -2372,6 +2565,9 @@ extension TestingViewModel {
         ), [.True]), // R2SI NL
         (Bar(
             chords: [
+                Chord(notes: [
+                    quarterRest
+                ]),
                 Chord(notes: [
                     Note(
                         pitch: .A,
@@ -2414,10 +2610,7 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
+                ])
             ],
             clef: .Treble,
             timeSignature: .custom(beats: 4, noteValue: 4),
@@ -2427,6 +2620,9 @@ extension TestingViewModel {
         ), [.False]), // R2SI WL
         (Bar(
             chords: [
+                Chord(notes: [
+                    quarterRest
+                ]),
                 Chord(notes: [
                     Note(
                         pitch: .C,
@@ -2469,10 +2665,7 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
+                ])
             ],
             clef: .Treble,
             timeSignature: .custom(beats: 4, noteValue: 4),

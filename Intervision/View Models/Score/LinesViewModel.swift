@@ -98,7 +98,7 @@ extension LinesViewModel {
             
             for chordPositions in positions[groupIndex] {
                 for position in chordPositions {
-                    var currentLedgerPoint = CGPoint(x: position.0.x + (CGFloat(position.1) * noteSize), y: barGeometry.size.height / 2)
+                    var currentLedgerPoint = CGPoint(x: position.0.x + (Double(position.1) * noteSize), y: barGeometry.size.height / 2)
                     var currentLinesAwayFromMiddle = 0
                     let epsilon = 0.0001
                     

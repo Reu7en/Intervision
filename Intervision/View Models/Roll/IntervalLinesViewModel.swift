@@ -555,7 +555,7 @@ class IntervalLinesViewModel: ObservableObject {
         let distance = abs(segment1.rowIndex - segment2.rowIndex)
         let index = (distance - 1) % 12
         
-        if index > 5 {
+        if index > 5 && index != 11 {
             return .Inverted
         } else {
             return .None

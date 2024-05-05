@@ -27,7 +27,7 @@ struct IntervalLinesView: View {
             
             if line.dotted {
                 if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
-                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: lineWidth)
+                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: lineWidth * 2)
                         .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, dash: [0, lineWidth * 2]))
                         .shadow(color: Color.black.opacity(0.75), radius: lineWidth, x: 0, y: 0)
                 } else {
@@ -40,7 +40,7 @@ struct IntervalLinesView: View {
                 }
             } else {
                 if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
-                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: lineWidth)
+                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: lineWidth * 2)
                         .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                         .shadow(color: Color.black.opacity(0.75), radius: lineWidth, x: 0, y: 0)
                 } else {

@@ -86,7 +86,6 @@
 		1B2A24002BE40886000577BF /* IntervalLinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E449D2B92510F00C0E12C /* IntervalLinesView.swift */; };
 		1B2A24012BE40886000577BF /* StaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435922B7EBFF900B57DA7 /* StaveView.swift */; };
 		1B2A24022BE40886000577BF /* LineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44B72B96AE8C00C0E12C /* LineModel.swift */; };
-		1B2A24032BE40886000577BF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEE52B71D917007D0BE5 /* AppDelegate.swift */; };
 		1B2A24042BE40886000577BF /* RollBarHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44B42B928A8400C0E12C /* RollBarHeader.swift */; };
 		1B2A24052BE40886000577BF /* PianoKeysHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44AC2B92892800C0E12C /* PianoKeysHeader.swift */; };
 		1B2A24062BE40886000577BF /* ScreenSizeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2A23BD2BE3F1C8000577BF /* ScreenSizeViewModel.swift */; };
@@ -139,7 +138,6 @@
 		1B97BEDE2B71C59B007D0BE5 /* BarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEDD2B71C59B007D0BE5 /* BarModel.swift */; };
 		1B97BEE02B71C607007D0BE5 /* ChordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEDF2B71C607007D0BE5 /* ChordModel.swift */; };
 		1B97BEE22B71C617007D0BE5 /* NoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEE12B71C617007D0BE5 /* NoteModel.swift */; };
-		1B97BEE62B71D917007D0BE5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEE52B71D917007D0BE5 /* AppDelegate.swift */; };
 		1B97BEEA2B726CC1007D0BE5 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEE92B726CC1007D0BE5 /* ScoreView.swift */; };
 		1B97BEED2B7279CF007D0BE5 /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEEC2B7279CF007D0BE5 /* PageView.swift */; };
 		1BBC97802B759D8E001C953C /* GraceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC977F2B759D8E001C953C /* GraceModel.swift */; };
@@ -155,6 +153,8 @@
 		1BEF425F2BE69E6F00C4D70C /* Consent_Form.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 1BEF425B2BE69E6F00C4D70C /* Consent_Form.pdf */; };
 		1BEF42622BE6AA8F00C4D70C /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEF42612BE6AA8F00C4D70C /* ActivityView.swift */; };
 		1BEF42632BE6AA8F00C4D70C /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEF42612BE6AA8F00C4D70C /* ActivityView.swift */; };
+		1BEF42652BE6C32A00C4D70C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEF42642BE6C32A00C4D70C /* AppDelegate.swift */; };
+		1BEF42662BE6C32A00C4D70C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEF42642BE6C32A00C4D70C /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -225,7 +225,6 @@
 		1B97BEDD2B71C59B007D0BE5 /* BarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarModel.swift; sourceTree = "<group>"; };
 		1B97BEDF2B71C607007D0BE5 /* ChordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChordModel.swift; sourceTree = "<group>"; };
 		1B97BEE12B71C617007D0BE5 /* NoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModel.swift; sourceTree = "<group>"; };
-		1B97BEE52B71D917007D0BE5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1B97BEE92B726CC1007D0BE5 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		1B97BEEC2B7279CF007D0BE5 /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
 		1BBC977F2B759D8E001C953C /* GraceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraceModel.swift; sourceTree = "<group>"; };
@@ -238,6 +237,7 @@
 		1BEF425A2BE69E6F00C4D70C /* Participant_Information_Sheet.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Participant_Information_Sheet.pdf; sourceTree = "<group>"; };
 		1BEF425B2BE69E6F00C4D70C /* Consent_Form.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Consent_Form.pdf; sourceTree = "<group>"; };
 		1BEF42612BE6AA8F00C4D70C /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
+		1BEF42642BE6C32A00C4D70C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -452,7 +452,7 @@
 				1B97BEE32B71C8EA007D0BE5 /* Data Services */,
 				1B97BEE42B71C909007D0BE5 /* Styles */,
 				1B97BEC92B71C167007D0BE5 /* IntervisionApp.swift */,
-				1B97BEE52B71D917007D0BE5 /* AppDelegate.swift */,
+				1BEF42642BE6C32A00C4D70C /* AppDelegate.swift */,
 				1B97BECD2B71C168007D0BE5 /* Assets.xcassets */,
 				1B97BED22B71C168007D0BE5 /* Intervision.entitlements */,
 				1BCBA7062BE40AC600BC2D13 /* LaunchScreen.storyboard */,
@@ -713,11 +713,11 @@
 				1B2A23FC2BE40886000577BF /* NoteModel.swift in Sources */,
 				1B2A23FD2BE40886000577BF /* HomeView.swift in Sources */,
 				1B2A23FE2BE40886000577BF /* RestView.swift in Sources */,
+				1BEF42662BE6C32A00C4D70C /* AppDelegate.swift in Sources */,
 				1B2A23FF2BE40886000577BF /* ChordModel.swift in Sources */,
 				1B2A24002BE40886000577BF /* IntervalLinesView.swift in Sources */,
 				1B2A24012BE40886000577BF /* StaveView.swift in Sources */,
 				1B2A24022BE40886000577BF /* LineModel.swift in Sources */,
-				1B2A24032BE40886000577BF /* AppDelegate.swift in Sources */,
 				1B2A24042BE40886000577BF /* RollBarHeader.swift in Sources */,
 				1B2A24052BE40886000577BF /* PianoKeysHeader.swift in Sources */,
 				1B2A24062BE40886000577BF /* ScreenSizeViewModel.swift in Sources */,
@@ -784,11 +784,11 @@
 				1B97BEE22B71C617007D0BE5 /* NoteModel.swift in Sources */,
 				1B561F772B784CF3001860E5 /* HomeView.swift in Sources */,
 				1B9435992B7F153100B57DA7 /* RestView.swift in Sources */,
+				1BEF42652BE6C32A00C4D70C /* AppDelegate.swift in Sources */,
 				1B97BEE02B71C607007D0BE5 /* ChordModel.swift in Sources */,
 				1B0E449E2B92510F00C0E12C /* IntervalLinesView.swift in Sources */,
 				1B9435932B7EBFF900B57DA7 /* StaveView.swift in Sources */,
 				1B0E44B82B96AE8C00C0E12C /* LineModel.swift in Sources */,
-				1B97BEE62B71D917007D0BE5 /* AppDelegate.swift in Sources */,
 				1B0E44B52B928A8400C0E12C /* RollBarHeader.swift in Sources */,
 				1B0E44AD2B92892800C0E12C /* PianoKeysHeader.swift in Sources */,
 				1B2A23BE2BE3F1C8000577BF /* ScreenSizeViewModel.swift in Sources */,
@@ -846,6 +846,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -884,6 +885,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -1026,6 +1028,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Intervision/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Intervision;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
@@ -1061,6 +1064,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Intervision/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Intervision;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;

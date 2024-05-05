@@ -50,7 +50,7 @@ struct CountdownTimerView: View {
             if let session = testingViewModel.testSession, testingViewModel.countdown != 0 {
                 let currentQuestionType = session.questions[testingViewModel.currentQuestionIndex].type
                 
-                Text("\(testingViewModel.practice ? "Practice Question" : "Question \(testingViewModel.currentQuestionIndex + 1)/\(30)")")
+                Text("\(testingViewModel.practice ? "Practice Question" : "Question \(testingViewModel.currentQuestionIndex + 1)/\(40)")")
                     .equivalentFont(.title2)
                     .fontWeight(.semibold)
                 

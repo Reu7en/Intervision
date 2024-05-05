@@ -38,7 +38,7 @@ struct QuestionView: View {
                     
                     if let questionData = testingViewModel.currentQuestionData,
                        let answers = questionData.2, answers.count == (question.type.isMultipartQuestion ? 2 : 1), !(questionData.0 == nil && questionData.1 == nil) {
-                        Text("\(testingViewModel.practice ? "Practice Question" : "Question \(testingViewModel.currentQuestionIndex + 1)/\(30)")")
+                        Text("\(testingViewModel.practice ? "Practice Question" : "Question \(testingViewModel.currentQuestionIndex + 1)/\(40)")")
                             .equivalentFont(.title3)
                             .fontWeight(.semibold)
                             .equivalentPadding(.bottom)
@@ -427,7 +427,7 @@ struct QuestionView: View {
                 }
             }
             .overlay(alignment: .topLeading) {
-                if testingViewModel.practice || testingViewModel.isLastQuestion {
+//                if testingViewModel.practice || testingViewModel.isLastQuestion {
                     Button {
                         if testingViewModel.practice {
                             self.showEndPracticeAlert = true
@@ -439,7 +439,7 @@ struct QuestionView: View {
                             .equivalentFont()
                             .equivalentPadding()
                     }
-                }
+//                }
             }
 //            .border(.green)
         }

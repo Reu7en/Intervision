@@ -35,12 +35,9 @@ struct TestingHomeView: View {
                 .shadow(radius: 10)
                 .environmentObject(screenSizeViewModel)
         case .Questions:
-            ResultsView(testingViewModel: testingViewModel)
+            QuestionsView(testingViewModel: testingViewModel)
                 .environmentObject(screenSizeViewModel)
                 .navigationBarBackButtonHidden()
-//            QuestionsView(testingViewModel: testingViewModel)
-//                .environmentObject(screenSizeViewModel)
-//                .navigationBarBackButtonHidden()
         case .Results:
             ResultsView(testingViewModel: testingViewModel)
                 .environmentObject(screenSizeViewModel)

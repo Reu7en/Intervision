@@ -41,8 +41,8 @@ class TestingViewModel: ObservableObject {
     @Published var showSavingErrorAlert = false
     @Published var showSavingSuccessAlert = false
     @Published var showSavingEmailAlert = false
-    @Published var participantInformationSheetSaved = false
-    @Published var consentFormSaved = false
+    @Published var participantInformationSheetSaved = true // CHANGE
+    @Published var consentFormSaved = true // CHANGE
     @Published var resultsURL: IdentifiableURL?
     @Published var pdfURL: IdentifiableURL?
     
@@ -300,7 +300,7 @@ extension TestingViewModel {
     }
     
     func saveTestSession() {
-        guard let testSession = testSession else { self.showSavingErrorAlert = true; return }
+        guard let testSession = self.testSession else { self.showSavingErrorAlert = true; return }
 
         #if os(macOS)
         let panel = NSSavePanel()
@@ -361,10 +361,6 @@ extension TestingViewModel {
                 do {
                     let pdfData = try Data(contentsOf: pdfURL)
                     try pdfData.write(to: temporaryURL)
-                    
-                    DispatchQueue.main.async {
-                        self.showSavingSuccessAlert = true
-                    }
                 } catch {
                     DispatchQueue.main.async {
                         self.showSavingErrorAlert = true
@@ -389,24 +385,70 @@ extension TestingViewModel {
         #endif
     }
     
-    func getScoreQuestionsCorrect() {
+    func getTotalQuestionsCorrect() -> Int? {
+        guard let testSession = self.testSession, !testSession.results.isEmpty else { return nil }
         
+        return testSession.results.filter( { $0.answeredCorrectly } ).count
     }
     
-    func getRollQuestionsCorrect() {
+    func getScoreQuestionsCorrect() -> Int? {
+        guard let testSession = self.testSession, !testSession.results.isEmpty else { return nil }
         
+        return testSession.results.filter( { $0.answeredCorrectly && $0.question.type.isScoreQuestion } ).count
+    }
+    
+    func getRollQuestionsCorrect() -> Int? {
+        guard let testSession = self.testSession, !testSession.results.isEmpty else { return nil }
+        
+        return testSession.results.filter( { $0.answeredCorrectly && !$0.question.type.isScoreQuestion } ).count
     }
      
-    func getPercentageAccuracy() {
+    func getTotalPercentageAccuracy() -> Double? {
+        guard let testSession = self.testSession, !testSession.results.isEmpty else { return nil }
         
+        return 100 * Double(testSession.results.filter( { $0.answeredCorrectly } ).count) / Double(testSession.results.count)
     }
     
-    func getAverageScoreTime() {
+    func getScorePercentageAccuracy() -> Double? {
+        guard let testSession = self.testSession, !testSession.results.filter( { $0.question.type.isScoreQuestion } ).isEmpty else { return nil }
         
+        return 100 * Double(testSession.results.filter( { $0.answeredCorrectly && $0.question.type.isScoreQuestion } ).count) / Double(testSession.results.count)
     }
     
-    func getAverageRollTime() {
+    func getRollPercentageAccuracy() -> Double? {
+        guard let testSession = self.testSession, !testSession.results.filter( { !$0.question.type.isScoreQuestion } ).isEmpty else { return nil }
         
+        return 100 * Double(testSession.results.filter( { $0.answeredCorrectly && !$0.question.type.isScoreQuestion } ).count) / Double(testSession.results.count)
+    }
+    
+    func getAverageAnswerTime() -> Double? {
+        guard let testSession = self.testSession, !testSession.results.isEmpty else { return nil }
+        
+        let result = testSession.results.filter( { $0.answeredCorrectly } ).compactMap( { $0.timeTaken } ).reduce(0, +) / Double(testSession.results.count)
+        
+        return result > 0 ? result : nil
+    }
+    
+    func getAverageScoreAnswerTime() -> Double? {
+        guard let testSession = self.testSession, !testSession.results.isEmpty else { return nil }
+        
+        let result = testSession.results.filter( { $0.answeredCorrectly && $0.question.type.isScoreQuestion } ).compactMap( { $0.timeTaken } ).reduce(0, +) / max(1, Double(testSession.results.filter( { $0.answeredCorrectly && $0.question.type.isScoreQuestion } ).count))
+        
+        return result > 0 ? result : nil
+    }
+    
+    func getAverageRollAnswerTime() -> Double? {
+        guard let testSession = self.testSession, !testSession.results.isEmpty else { return nil }
+        
+        let result = testSession.results.filter( { $0.answeredCorrectly && !$0.question.type.isScoreQuestion } ).compactMap( { $0.timeTaken } ).reduce(0, +) / max(1, Double(testSession.results.filter( { $0.answeredCorrectly && !$0.question.type.isScoreQuestion } ).count))
+        
+        return result > 0 ? result : nil
+    }
+    
+    func calculatePercentageIncrease(from value1: Double, to value2: Double) -> Double? {
+        guard value1 > 0, value1 < value2 else { return nil }
+        
+        return 100 * (value2 - value1) / value1
     }
     
     private func calculateIsLastQuestion() -> Bool {
@@ -602,7 +644,7 @@ extension TestingViewModel {
             }
         }
         
-        guard testQuestionData.count == testQuestions.count else { return }
+//        guard testQuestionData.count == testQuestions.count else { return }
         
         self.testQuestionData = testQuestionData
     }

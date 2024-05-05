@@ -36,9 +36,7 @@ struct IntervisionApp: App {
                     }
                     .onChange(of: geometry.size) {
                         if !isKeyboardVisible {
-                            withAnimation(.easeInOut) {
-                                screenSizeViewModel.screenSize = geometry.size
-                            }
+                            screenSizeViewModel.screenSize = geometry.size
                         }
                     }
                     .ignoresSafeArea(.keyboard, edges: .all)

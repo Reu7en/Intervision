@@ -31,7 +31,7 @@ struct ResultsView: View {
                 if let testSession = testingViewModel.testSession,
                    let totalQuestionsCorrect = testingViewModel.getTotalQuestionsCorrect() {
                     Text("Thank you for completing the test!")
-                        .equivalentFont(.title)
+                        .equivalentFont(.largeTitle)
                         .fontWeight(.semibold)
                     
                     Spacer()
@@ -125,7 +125,7 @@ struct ResultsView: View {
                                 Spacer()
                             
                                 HStack(spacing: 0) {
-                                    Text("\(averageAnswerTime, format: .number.rounded(increment: 0.01)) ")
+                                    Text("\(averageAnswerTime, format: .number.rounded(increment: 0.01))s ")
                                     .foregroundStyle(getColor(score: 100 * ((60 - averageAnswerTime) / 60)))                                        
                                         .equivalentFont(.title2)
                                         .fontWeight(.semibold)
@@ -146,7 +146,7 @@ struct ResultsView: View {
                                 Spacer()
                             
                                 HStack(spacing: 0) {
-                                    Text("\(averageScoreAnswerTime, format: .number.rounded(increment: 0.01)) ")
+                                    Text("\(averageScoreAnswerTime, format: .number.rounded(increment: 0.01))s ")
                                         .foregroundStyle(getColor(score: 100 * ((60 - averageScoreAnswerTime) / 60)))
                                         .equivalentFont(.title2)
                                         .fontWeight(.semibold)
@@ -167,7 +167,7 @@ struct ResultsView: View {
                                 Spacer()
                             
                                 HStack(spacing: 0) {
-                                    Text("\(averageRollAnswerTime, format: .number.rounded(increment: 0.01)) ")
+                                    Text("\(averageRollAnswerTime, format: .number.rounded(increment: 0.01))s ")
                                         .foregroundStyle(getColor(score: 100 * ((60 - averageRollAnswerTime) / 60)))
                                         .equivalentFont(.title2)
                                         .fontWeight(.semibold)
@@ -183,18 +183,20 @@ struct ResultsView: View {
                            let averageRollAnswerTime = testingViewModel.getAverageRollAnswerTime() {
                             if let rollIncrease = testingViewModel.calculatePercentageIncrease(from: averageScoreAnswerTime, to: averageRollAnswerTime) {
                                 HStack(spacing: 0) {
-                                    Text("You answered piano roll questions correctly ")
+                                    Text("You answered score questions correctly ")
                                         .equivalentFont(.title2)
                                         .fontWeight(.semibold)
                                     
-                                    Text("\(rollIncrease)% ")
+                                    Text("\(rollIncrease, format: .number.rounded(increment: 0.01))% ")
                                         .foregroundStyle(getColor(score: rollIncrease * 4))
                                         .equivalentFont(.title2)
                                         .fontWeight(.semibold)
                                     
-                                    Text("more often that score questions ")
+                                    Text("quicker than piano roll questions")
                                         .equivalentFont(.title2)
                                         .fontWeight(.semibold)
+                                    
+                                    Spacer()
                                     
                                     Text("\(getEmoji(score: rollIncrease == 25 ? 101 : rollIncrease * 4))")
                                         .equivalentFont(.title2)
@@ -202,18 +204,20 @@ struct ResultsView: View {
                                 }
                             } else if let scoreIncrease = testingViewModel.calculatePercentageIncrease(from: averageRollAnswerTime, to: averageScoreAnswerTime) {
                                 HStack(spacing: 0) {
-                                    Text("You answered score questions correctly ")
+                                    Text("You answered piano roll questions correctly ")
                                         .equivalentFont(.title2)
                                         .fontWeight(.semibold)
                                     
-                                    Text("\(scoreIncrease)% ")
+                                    Text("\(scoreIncrease, format: .number.rounded(increment: 0.01))% ")
                                         .foregroundStyle(getColor(score: scoreIncrease * 4))
                                         .equivalentFont(.title2)
                                         .fontWeight(.semibold)
                                     
-                                    Text("more often that piano roll questions ")
+                                    Text("quicker than score questions")
                                         .equivalentFont(.title2)
                                         .fontWeight(.semibold)
+                                    
+                                    Spacer()
                                     
                                     Text("\(getEmoji(score: scoreIncrease == 25 ? 101 : scoreIncrease * 4))")
                                         .equivalentFont(.title2)
@@ -222,7 +226,7 @@ struct ResultsView: View {
                             }
                         }
                     }
-                    .frame(width: viewSize.width / 2)
+                    .frame(width: viewSize.width / 1.25)
                     .equivalentPadding(50)
                     .background(
                         RoundedRectangle(cornerRadius: screenSizeViewModel.getEquivalentValue(20))
@@ -305,7 +309,7 @@ struct ResultsView: View {
                         .equivalentPadding()
                 }
             }
-            .alert("Are you sure you want to exit?", isPresented: $showExitAlert) {
+            .alert("Are you sure you want to exit? Make sure you have saved your test results first!", isPresented: $showExitAlert) {
                 Button {
                     withAnimation(.easeInOut) {
                         testingViewModel.presentedView = .Registration

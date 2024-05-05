@@ -41,14 +41,14 @@ class TestingViewModel: ObservableObject {
     @Published var showSavingErrorAlert = false
     @Published var showSavingSuccessAlert = false
     @Published var showSavingEmailAlert = false
-    @Published var participantInformationSheetSaved = true // CHANGE
-    @Published var consentFormSaved = true // CHANGE
+    @Published var participantInformationSheetSaved = false
+    @Published var consentFormSaved = false
     @Published var resultsURL: IdentifiableURL?
     @Published var pdfURL: IdentifiableURL?
     
-    @Published var countdown = 1
+    @Published var countdown = 5
     @Published var progress = 1.0
-    private let totalSeconds = 1
+    private let totalSeconds = 5
     private var countdownTimer: AnyCancellable?
     
     var isFirstQuestion = true
@@ -191,7 +191,7 @@ extension TestingViewModel {
         self.tester = Tester(skills: testerSkills, id: testerId)
         
         if let tester = self.tester {
-            self.testSession = TestSession(tester: tester, questionCount: 30)
+            self.testSession = TestSession(tester: tester, questionCount: 40)
         }
 
         self.generateTestQuestionData()
@@ -293,7 +293,7 @@ extension TestingViewModel {
         
         if let question = self.testSession?.questions[self.currentQuestionIndex] {
             let answeredCorrectly = self.questionResults.isEmpty ? false : self.questionResults.allSatisfy( { $0 == true } )
-            let timeTaken = self.questionResults.isEmpty ? -1 : self.answerTime
+            let timeTaken = self.questionResults.isEmpty ? -1 : (self.answerTime * 1000).rounded() / 1000
             
             self.testSession?.results.append(TestResult(question: question, answeredCorrectly: answeredCorrectly, timeTaken: timeTaken))
         }
@@ -412,19 +412,19 @@ extension TestingViewModel {
     func getScorePercentageAccuracy() -> Double? {
         guard let testSession = self.testSession, !testSession.results.filter( { $0.question.type.isScoreQuestion } ).isEmpty else { return nil }
         
-        return 100 * Double(testSession.results.filter( { $0.answeredCorrectly && $0.question.type.isScoreQuestion } ).count) / Double(testSession.results.count)
+        return 100 * Double(testSession.results.filter( { $0.answeredCorrectly && $0.question.type.isScoreQuestion } ).count) / Double(testSession.results.filter( { $0.question.type.isScoreQuestion } ).count)
     }
     
     func getRollPercentageAccuracy() -> Double? {
         guard let testSession = self.testSession, !testSession.results.filter( { !$0.question.type.isScoreQuestion } ).isEmpty else { return nil }
         
-        return 100 * Double(testSession.results.filter( { $0.answeredCorrectly && !$0.question.type.isScoreQuestion } ).count) / Double(testSession.results.count)
+        return 100 * Double(testSession.results.filter( { $0.answeredCorrectly && !$0.question.type.isScoreQuestion } ).count) / Double(testSession.results.filter( { !$0.question.type.isScoreQuestion } ).count)
     }
     
     func getAverageAnswerTime() -> Double? {
         guard let testSession = self.testSession, !testSession.results.isEmpty else { return nil }
         
-        let result = testSession.results.filter( { $0.answeredCorrectly } ).compactMap( { $0.timeTaken } ).reduce(0, +) / Double(testSession.results.count)
+        let result = testSession.results.filter( { $0.answeredCorrectly } ).compactMap( { $0.timeTaken } ).reduce(0, +) / max(1, Double(testSession.results.filter( { $0.answeredCorrectly } ).count))
         
         return result > 0 ? result : nil
     }
@@ -462,176 +462,56 @@ extension TestingViewModel {
     }
     
     private func generateTestQuestionData() {
-        guard let testQuestions = self.testSession?.questions else { return }
-        
+        var testQuestions: [Question] = []
         var testQuestionData: [(BarViewModel?, (RollViewModel, IntervalLinesViewModel)?, [Answer]?)?] = []
         
-        var scoreTwoNoteIntervalIdentificationIndicesLeft: [Int] = [0, 1, 2]
-        var scoreThreeNoteInnerIntervalsIdentificationIndicesLeft: [Int] = [3, 4, 5]
-        var scoreThreeNoteOuterIntervalIdentificationIndicesLeft: [Int] = [6, 7, 8]
-        var scoreChordsAreInversionsIndicesLeft: [Int] = [9, 10, 11]
-        var scoreTwoNoteIntervalsAreEqualIndicesLeft: [Int] = [12, 13, 14]
-        
-        for question in testQuestions {
-            var rollViewModel: RollViewModel?
-            var answer: [Answer]?
-            
-            switch question.type {
-            case .ScoreTwoNoteIntervalIdentification:
-                guard !scoreTwoNoteIntervalIdentificationIndicesLeft.isEmpty, let index = scoreTwoNoteIntervalIdentificationIndicesLeft.randomElement() else { testQuestionData.append(nil); break }
-                
+        for (questionIndex, questionAnswerData) in TestingViewModel.testQuestionAnswerData.enumerated() {
+            if (0...9).contains(questionIndex) || (20...29).contains(questionIndex) {
                 let barViewModel = BarViewModel(
-                    bar: TestingViewModel.testQuestions[index].0,
+                    bar: questionAnswerData.0,
                     ledgerLines: 5,
                     showClef: true,
                     showKey: true,
                     showTime: true
                 )
                 
-                testQuestionData.append((barViewModel, nil, TestingViewModel.testQuestions[index].1))
-                scoreTwoNoteIntervalIdentificationIndicesLeft.removeAll(where: { $0 == index } )
-            case .ScoreThreeNoteInnerIntervalsIdentification:
-                guard !scoreThreeNoteInnerIntervalsIdentificationIndicesLeft.isEmpty, let index = scoreThreeNoteInnerIntervalsIdentificationIndicesLeft.randomElement() else { testQuestionData.append(nil); break }
-                
-                let barViewModel = BarViewModel(
-                    bar: TestingViewModel.testQuestions[index].0,
-                    ledgerLines: 5,
-                    showClef: true,
-                    showKey: true,
-                    showTime: true
-                )
-                
-                testQuestionData.append((barViewModel, nil, TestingViewModel.testQuestions[index].1))
-                scoreThreeNoteInnerIntervalsIdentificationIndicesLeft.removeAll(where: { $0 == index } )
-            case .ScoreThreeNoteOuterIntervalIdentification:
-                guard !scoreThreeNoteOuterIntervalIdentificationIndicesLeft.isEmpty, let index = scoreThreeNoteOuterIntervalIdentificationIndicesLeft.randomElement() else { testQuestionData.append(nil); break }
-                
-                let barViewModel = BarViewModel(
-                    bar: TestingViewModel.testQuestions[index].0,
-                    ledgerLines: 5,
-                    showClef: true,
-                    showKey: true,
-                    showTime: true
-                )
-                
-                testQuestionData.append((barViewModel, nil, TestingViewModel.testQuestions[index].1))
-                scoreThreeNoteOuterIntervalIdentificationIndicesLeft.removeAll(where: { $0 == index } )
-            case .ScoreChordsAreInversions:
-                guard !scoreChordsAreInversionsIndicesLeft.isEmpty, let index = scoreChordsAreInversionsIndicesLeft.randomElement() else { testQuestionData.append(nil); break }
-                
-                let barViewModel = BarViewModel(
-                    bar: TestingViewModel.testQuestions[index].0,
-                    ledgerLines: 5,
-                    showClef: true,
-                    showKey: true,
-                    showTime: true
-                )
-                
-                testQuestionData.append((barViewModel, nil, TestingViewModel.testQuestions[index].1))
-                scoreChordsAreInversionsIndicesLeft.removeAll(where: { $0 == index } )
-            case .ScoreTwoNoteIntervalsAreEqual:
-                guard !scoreTwoNoteIntervalsAreEqualIndicesLeft.isEmpty, let index = scoreTwoNoteIntervalsAreEqualIndicesLeft.randomElement() else { testQuestionData.append(nil); break }
-                
-                let barViewModel = BarViewModel(
-                    bar: TestingViewModel.testQuestions[index].0,
-                    ledgerLines: 5,
-                    showClef: true,
-                    showKey: true,
-                    showTime: true
-                )
-                
-                testQuestionData.append((barViewModel, nil, TestingViewModel.testQuestions[index].1))
-                scoreTwoNoteIntervalsAreEqualIndicesLeft.removeAll(where: { $0 == index } )
-            case .RollTwoNoteIntervalIdentification:
-                switch question.intervalLinesType {
-                case .None:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[15].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[15].1
-                case .Lines:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[16].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[16].1
-                case .InvertedLines:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[17].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[17].1
-                }
-            case .RollThreeNoteInnerIntervalsIdentification:
-                switch question.intervalLinesType {
-                case .None:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[18].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[18].1
-                case .Lines:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[19].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[19].1
-                case .InvertedLines:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[20].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[20].1
-                }
-            case .RollThreeNoteOuterIntervalIdentification:
-                switch question.intervalLinesType {
-                case .None:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[21].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[21].1
-                case .Lines:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[22].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[22].1
-                case .InvertedLines:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[23].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[23].1
-                }
-            case .RollChordsAreInversions:
-                switch question.intervalLinesType {
-                case .None:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[24].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[24].1
-                case .Lines:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[25].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[25].1
-                case .InvertedLines:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[26].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[26].1
-                }
-            case .RollTwoNoteIntervalsAreEqual:
-                switch question.intervalLinesType {
-                case .None:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[27].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[27].1
-                case .Lines:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[28].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[28].1
-                case .InvertedLines:
-                    rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[29].0]])], octaves: 2)
-                    answer = TestingViewModel.testQuestions[29].1
-                }
-            default:
-                break
-            }
-            
-            if let rollViewModel = rollViewModel,
-               let answer = answer {
+                testQuestions.append(questionAnswerData.2)
+                testQuestionData.append((barViewModel, nil, TestingViewModel.testQuestionAnswerData[questionIndex].1))
+            } else {
+                let part = Part(bars: [[questionAnswerData.0]])
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [part], octaves: 2)
+                let answer = questionAnswerData.1
                 let intervalLinesViewModel = IntervalLinesViewModel(
                     segments: rollViewModel.segments ?? [],
                     parts: rollViewModel.parts ?? [],
                     groups: rollViewModel.partGroups,
                     harmonicIntervalLinesType: .all,
-                    showMelodicIntervalLines: false,
-                    barIndex: 0, barWidth: .zero,
+                    showMelodicIntervalLines: true,
+                    barIndex: 0,
+                    barWidth: .zero,
                     rowWidth: .zero,
                     rowHeight: .zero,
-                    harmonicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedHarmonicIntervalLineColors : RollViewModel.harmonicIntervalLineColors,
-                    melodicIntervalLineColors: [],
-                    viewableMelodicLines: [],
-                    showInvertedIntervals: question.intervalLinesType == .InvertedLines,
-                    showZigZags: question.intervalLinesType == .InvertedLines,
+                    harmonicIntervalLineColors: questionAnswerData.2.intervalLinesType == .InvertedLines ? RollViewModel.invertedHarmonicIntervalLineColors : RollViewModel.harmonicIntervalLineColors,
+                    melodicIntervalLineColors: questionAnswerData.2.intervalLinesType == .InvertedLines ? RollViewModel.invertedMelodicIntervalLineColors : RollViewModel.melodicIntervalLineColors,
+                    viewableMelodicLines: [part],
+                    showInvertedIntervals: questionAnswerData.2.intervalLinesType == .InvertedLines,
+                    showZigZags: questionAnswerData.2.intervalLinesType == .InvertedLines,
                     testing: true
                 )
                 
+                testQuestions.append(questionAnswerData.2)
                 testQuestionData.append((nil, (rollViewModel, intervalLinesViewModel), answer))
             }
         }
         
         guard testQuestionData.count == testQuestions.count else { return }
         
-        self.testQuestionData = testQuestionData
+        let shuffledIndices = Array(testQuestions.indices).shuffled()
+        let shuffledTestQuestions = shuffledIndices.map( { testQuestions[$0] } )
+        let shuffledTestQuestionData = shuffledIndices.map( { testQuestionData[$0] } )
+        
+        self.testSession?.questions = shuffledTestQuestions
+        self.testQuestionData = shuffledTestQuestionData
     }
     
     private func randomlyGenerateQuestionData(question: Question?) {
@@ -1700,28 +1580,7 @@ extension TestingViewModel {
         }
     }
     
-    static let eighthRest = Note(
-        duration: .eighth,
-        isRest: true,
-        isDotted: false,
-        hasAccent: false
-    )
-    
-    static let quarterRest = Note(
-        duration: .quarter,
-        isRest: true,
-        isDotted: false,
-        hasAccent: false
-    )
-    
-    static let halfRest = Note(
-        duration: .half,
-        isRest: true,
-        isDotted: false,
-        hasAccent: false
-    )
-    
-    static let testQuestions: [(Bar, [Answer])] = [
+    static let testQuestionAnswerData: [(Bar, [Answer], Question)] = [
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1753,7 +1612,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .BMajor
-        ), [.Tritone]), // S2II 1
+        ), [.Tritone], Question(type: .ScoreTwoNoteIntervalIdentification, intervalLinesType: .None)), // S2II 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1785,7 +1644,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .BFlatMajor
-        ), [.Minor6th]), // S2II 2
+        ), [.Minor6th], Question(type: .ScoreTwoNoteIntervalIdentification, intervalLinesType: .None)), // S2II 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1826,7 +1685,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .DMajor
-        ), [.Minor3rd, .Major6th]), // S3II 1
+        ), [.Minor3rd, .Major6th], Question(type: .ScoreThreeNoteInnerIntervalsIdentification, intervalLinesType: .None)), // S3II 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1867,7 +1726,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .GMajor
-        ), [.Minor3rd, .Tritone]), // S3II 2
+        ), [.Minor3rd, .Tritone], Question(type: .ScoreThreeNoteInnerIntervalsIdentification, intervalLinesType: .None)), // S3II 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1908,7 +1767,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .EMajor
-        ), [.Perfect4th]), // S3OI 1
+        ), [.Perfect4th], Question(type: .ScoreThreeNoteOuterIntervalIdentification, intervalLinesType: .None)), // S3OI 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1949,7 +1808,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .FMajor
-        ), [.Major7th]), // S3OI 2
+        ), [.Major7th], Question(type: .ScoreThreeNoteOuterIntervalIdentification, intervalLinesType: .None)), // S3OI 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2022,7 +1881,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .AMajor
-        ), [.False]), // SCAI 1
+        ), [.False], Question(type: .ScoreChordsAreInversions, intervalLinesType: .None)), // SCAI 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2095,7 +1954,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .BFlatMajor
-        ), [.True]), // SCAI 2
+        ), [.True], Question(type: .ScoreChordsAreInversions, intervalLinesType: .None)), // SCAI 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2150,7 +2009,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CFlatMajor
-        ), [.True]), // S2SI 1
+        ), [.True], Question(type: .ScoreTwoNoteIntervalsAreEqual, intervalLinesType: .None)), // S2SI 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2205,7 +2064,8 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .EMajor
-        ), [.False]), // S2SI 2
+        ), [.False], Question(type: .ScoreTwoNoteIntervalsAreEqual, intervalLinesType: .None)), // S2SI 2
+        
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2237,7 +2097,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Minor7th]), // R2II L
+        ), [.Minor7th], Question(type: .RollTwoNoteIntervalIdentification, intervalLinesType: .Lines)), // R2II L
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2269,7 +2129,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Perfect5th]), // R2II IL
+        ), [.Perfect5th], Question(type: .RollTwoNoteIntervalIdentification, intervalLinesType: .InvertedLines)), // R2II IL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2310,7 +2170,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Major3rd, .Minor3rd]), // R3II L
+        ), [.Major3rd, .Minor3rd], Question(type: .RollThreeNoteInnerIntervalsIdentification, intervalLinesType: .Lines)), // R3II L
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2351,7 +2211,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Perfect4th, .Perfect5th]), // R3II IL
+        ), [.Perfect4th, .Perfect5th], Question(type: .RollThreeNoteInnerIntervalsIdentification, intervalLinesType: .InvertedLines)), // R3II IL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2392,7 +2252,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Major7th]), // R3OI L
+        ), [.Major7th], Question(type: .RollThreeNoteOuterIntervalIdentification, intervalLinesType: .Lines)), // R3OI L
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2433,7 +2293,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Perfect5th]), // R3OI IL
+        ), [.Perfect5th], Question(type: .RollThreeNoteOuterIntervalIdentification, intervalLinesType: .InvertedLines)), // R3OI IL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2506,7 +2366,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.False]), // RCAI L
+        ), [.False], Question(type: .RollChordsAreInversions, intervalLinesType: .Lines)), // RCAI L
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2579,7 +2439,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.True]), // RCAI IL
+        ), [.True], Question(type: .RollChordsAreInversions, intervalLinesType: .InvertedLines)), // RCAI IL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2634,7 +2494,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.False]), // R2SI L
+        ), [.False], Question(type: .RollTwoNoteIntervalsAreEqual, intervalLinesType: .Lines)), // R2SI L
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2689,7 +2549,8 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.True]), // R3SI IL
+        ), [.True], Question(type: .RollTwoNoteIntervalsAreEqual, intervalLinesType: .InvertedLines)), // R3SI IL
+        
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2697,23 +2558,28 @@ extension TestingViewModel {
                         pitch: .G,
                         accidental: .Flat,
                         octave: .oneLine,
-                        duration: .half,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .C,
-                        accidental: nil,
-                        octave: .oneLine,
-                        duration: .half,
+                        duration: .quarter,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
                     )
                 ]),
                 Chord(notes: [
-                    halfRest
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
                 ])
             ],
             clef: .Treble,
@@ -2721,7 +2587,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .BFlatMajor
-        ), [.Tritone]), // MS2II 1
+        ), [.Tritone], Question(type: .ScoreMelodicIntervalIdentification, intervalLinesType: .None)), // MS2II 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2729,23 +2595,28 @@ extension TestingViewModel {
                         pitch: .F,
                         accidental: .Sharp,
                         octave: .twoLine,
-                        duration: .half,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .C,
-                        accidental: .Sharp,
-                        octave: .oneLine,
-                        duration: .half,
+                        duration: .quarter,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
                     )
                 ]),
                 Chord(notes: [
-                    halfRest
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
                 ])
             ],
             clef: .Treble,
@@ -2753,7 +2624,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .GMajor
-        ), [.Perfect5th]), // MS2II 2
+        ), [.Perfect5th], Question(type: .ScoreMelodicIntervalIdentification, intervalLinesType: .None)), // MS2II 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2818,7 +2689,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .GFlatMajor
-        ), [.Minor2nd]), // MS2SII 1
+        ), [.Minor2nd], Question(type: .ScoreSmallestMelodicIntervalIdentification, intervalLinesType: .None)), // MS2SII 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2883,7 +2754,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .FMajor
-        ), [.Perfect5th]), // MS2SII 2
+        ), [.Perfect5th], Question(type: .ScoreSmallestMelodicIntervalIdentification, intervalLinesType: .None)), // MS2SII 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -2948,7 +2819,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .DMajor
-        ), [.Major7th]), // MS2LII 1
+        ), [.Major7th], Question(type: .ScoreLargestMelodicIntervalIdentification, intervalLinesType: .None)), // MS2LII 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3013,7 +2884,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .EMajor
-        ), [.Minor6th]), // MS2LII 2
+        ), [.Minor6th], Question(type: .ScoreLargestMelodicIntervalIdentification, intervalLinesType: .None)), // MS2LII 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3050,7 +2921,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .EFlatMajor
-        ), [.Tritone]), // MS2III 1
+        ), [.Tritone], Question(type: .ScoreMelodicIntervalInversionIdentification, intervalLinesType: .None)), // MS2III 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3087,7 +2958,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .DMajor
-        ), [.Perfect5th]), // MS2III 2
+        ), [.Perfect5th], Question(type: .ScoreMelodicIntervalInversionIdentification, intervalLinesType: .None)), // MS2III 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3152,7 +3023,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .AFlatMajor
-        ), [.Major7th]), // MS2OM 1
+        ), [.Major7th], Question(type: .ScoreMelodicMovementIdentification, intervalLinesType: .None)), // MS2OM 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3217,7 +3088,8 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .GMajor
-        ), [.Major2nd]), // MS2OM 2
+        ), [.Major2nd], Question(type: .ScoreMelodicMovementIdentification, intervalLinesType: .None)), // MS2OM 2
+        
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3225,23 +3097,28 @@ extension TestingViewModel {
                         pitch: .C,
                         accidental: nil,
                         octave: .subContra,
-                        duration: .half,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .F,
-                        accidental: .Sharp,
-                        octave: .contra,
-                        duration: .half,
+                        duration: .quarter,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
                     )
                 ]),
                 Chord(notes: [
-                    halfRest
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: .Sharp,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
                 ])
             ],
             clef: .Treble,
@@ -3249,7 +3126,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Tritone]), // MR2II L
+        ), [.Tritone], Question(type: .RollMelodicIntervalIdentification, intervalLinesType: .Lines)), // MR2II L
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3257,23 +3134,28 @@ extension TestingViewModel {
                         pitch: .D,
                         accidental: nil,
                         octave: .subContra,
-                        duration: .half,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .A,
-                        accidental: nil,
-                        octave: .subContra,
-                        duration: .half,
+                        duration: .quarter,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
                     )
                 ]),
                 Chord(notes: [
-                    halfRest
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
                 ])
             ],
             clef: .Treble,
@@ -3281,7 +3163,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Perfect5th]), // MR2II IL
+        ), [.Perfect5th], Question(type: .RollMelodicIntervalIdentification, intervalLinesType: .InvertedLines)), // MR2II IL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3346,7 +3228,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Minor3rd]), // MR2SII L
+        ), [.Minor3rd], Question(type: .RollSmallestMelodicIntervalIdentification, intervalLinesType: .Lines)), // MR2SII L
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3411,7 +3293,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Minor2nd]), // MR2SII IL
+        ), [.Minor2nd], Question(type: .RollSmallestMelodicIntervalIdentification, intervalLinesType: .InvertedLines)), // MR2SII IL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3476,7 +3358,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Minor7th]), // MR2LII L
+        ), [.Minor7th], Question(type: .RollLargestMelodicIntervalIdentification, intervalLinesType: .Lines)), // MR2LII L
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3541,7 +3423,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Major7th]), // MR2LII IL
+        ), [.Major7th], Question(type: .RollLargestMelodicIntervalIdentification, intervalLinesType: .InvertedLines)), // MR2LII IL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3578,7 +3460,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Minor7th]), // MR2III L
+        ), [.Minor7th], Question(type: .RollMelodicIntervalInversionIdentification, intervalLinesType: .Lines)), // MR2III L
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3615,7 +3497,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Major3rd]), // MR2III IL
+        ), [.Major3rd], Question(type: .RollMelodicIntervalInversionIdentification, intervalLinesType: .InvertedLines)), // MR2III IL
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3680,7 +3562,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Perfect4th]), // MR2OM L
+        ), [.Perfect4th], Question(type: .RollMelodicMovementIdentification, intervalLinesType: .Lines)), // MR2OM L
         (Bar(
             chords: [
                 Chord(notes: [
@@ -3745,6 +3627,27 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Minor7th]), // MR2OM IL
+        ), [.Minor7th], Question(type: .RollMelodicMovementIdentification, intervalLinesType: .InvertedLines)), // MR2OM IL
     ]
+    
+    static let eighthRest = Note(
+        duration: .eighth,
+        isRest: true,
+        isDotted: false,
+        hasAccent: false
+    )
+    
+    static let quarterRest = Note(
+        duration: .quarter,
+        isRest: true,
+        isDotted: false,
+        hasAccent: false
+    )
+    
+    static let halfRest = Note(
+        duration: .half,
+        isRest: true,
+        isDotted: false,
+        hasAccent: false
+    )
 }

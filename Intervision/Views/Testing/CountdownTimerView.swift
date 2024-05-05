@@ -51,12 +51,12 @@ struct CountdownTimerView: View {
                 let currentQuestionType = session.questions[testingViewModel.currentQuestionIndex].type
                 
                 Text("\(testingViewModel.practice ? "Practice Question" : "Question \(testingViewModel.currentQuestionIndex + 1)/\(40)")")
-                    .equivalentFont(.title2)
+                    .equivalentFont(.title)
                     .fontWeight(.semibold)
                 
                 ForEach(currentQuestionType.description.filter( { $0 != "" } ), id: \.self) { description in
                     Text(description)
-                        .equivalentFont(.title3)
+                        .equivalentFont(.title2)
                         .fontWeight(.semibold)
                 }
             }

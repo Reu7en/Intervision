@@ -20,6 +20,7 @@ struct TestingRegistrationView: View {
     @State private var showTutorialAlert = false
     @State private var showPracticeAlert = false
     @State private var showInvalidIdAlert = false
+    @State private var showSaveFormsAlert = false
     @State private var showRollBackgroundOverlay = false
     @State private var overlayRollRowsViewType = BarRowsView.ViewType.Piano
     
@@ -269,15 +270,13 @@ struct TestingRegistrationView: View {
                         
                         if !testingViewModel.testerId.isEmpty {
                             if let _ = UUID(uuidString: testingViewModel.testerId) {
-                                //                                showTutorialAlert = true
                                 testingViewModel.random = true
                                 showPracticeAlert = true
                             } else {
                                 showInvalidIdAlert = true
                             }
                         } else {
-                            //                            showTutorialAlert = true
-                            showPracticeAlert = true
+                            showTutorialAlert = true
                         }
                     }
                 } label: {
@@ -290,6 +289,11 @@ struct TestingRegistrationView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 .disabled(!(testingViewModel.participantInformationSheetSaved && testingViewModel.consentFormSaved))
+                .onTapGesture {
+                    if !(testingViewModel.participantInformationSheetSaved && testingViewModel.consentFormSaved) {
+                        showSaveFormsAlert = true
+                    }
+                }
                 .alert("Would you like to view the tutorial first?", isPresented: $showTutorialAlert) {
                     Button {
                         testingViewModel.tutorial = true
@@ -327,6 +331,11 @@ struct TestingRegistrationView: View {
                 .alert(isPresented: $showInvalidIdAlert) {
                     Alert(
                         title: Text("Your Tester ID is invalid!")
+                    )
+                }
+                .alert(isPresented: $showSaveFormsAlert) {
+                    Alert(
+                        title: Text("You need to save a copy of the participant information sheet and consent form before you can begin the test!")
                     )
                 }
             }

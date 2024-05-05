@@ -548,7 +548,7 @@ class IntervalLinesViewModel: ObservableObject {
             }
         }
         
-        return melodicIntervalLineColors.indices.contains(index) ? melodicIntervalLineColors[index] : Color.clear
+        return index < 0 ? melodicIntervalLineColors.last ?? Color.clear : melodicIntervalLineColors.indices.contains(index) ? melodicIntervalLineColors[index] : Color.clear
     }
     
     func calculateInversionType(segment1: Segment, segment2: Segment) -> Line.InversionType {

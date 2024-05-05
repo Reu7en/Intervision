@@ -10,9 +10,9 @@ import Foundation
 struct TestSession: Identifiable, Codable {
     let tester: Tester
     let questionCount: Int
-    let questions: [Question]
     let dateTimeStarted: Date
     
+    var questions: [Question]
     var results: [TestResult]
     var random = false
     
@@ -34,15 +34,16 @@ struct TestSession: Identifiable, Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
-        try container.encode(tester.id.uuidString, forKey: .____tester_id)
-        try container.encode(id.uuidString, forKey: .___test_session_id)
-        try container.encode(tester.skills, forKey: .__skills)
-        try container.encode(random, forKey: ._random_test_questions)
+        try container.encode(tester.id.uuidString, forKey: ._____tester_id)
+        try container.encode(id.uuidString, forKey: .____test_session_id)
+        try container.encode(tester.skills, forKey: .___skills)
+        try container.encode(random, forKey: .__random_test_questions)
+        try container.encode(dateTimeStarted, forKey: ._time_started)
         try container.encode(results, forKey: .results)
     }
 
     enum CodingKeys: String, CodingKey {
-        case ____tester_id, ___test_session_id, __skills, _random_test_questions, results
+        case _____tester_id, ____test_session_id, ___skills, __random_test_questions, _time_started, results
     }
     
     init(from decoder: Decoder) throws {

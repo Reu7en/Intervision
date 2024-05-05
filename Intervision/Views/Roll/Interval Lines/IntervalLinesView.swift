@@ -20,7 +20,7 @@ struct IntervalLinesView: View {
     @StateObject var intervalLinesViewModel: IntervalLinesViewModel
     
     var body: some View {
-        let lineWidth: CGFloat = screenSizeViewModel.getEquivalentValue(5)
+        let lineWidth: CGFloat = screenSizeViewModel.getEquivalentValue(8)
         
         ForEach(0..<intervalLinesViewModel.harmonicLines.count, id: \.self) { lineIndex in
             let line = intervalLinesViewModel.harmonicLines[lineIndex]

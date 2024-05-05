@@ -426,7 +426,7 @@ struct QuestionView: View {
                 }
             }
             .overlay(alignment: .topLeading) {
-//                if testingViewModel.practice || testingViewModel.isLastQuestion {
+                if testingViewModel.practice || testingViewModel.isLastQuestion {
                     Button {
                         if testingViewModel.practice {
                             self.showEndPracticeAlert = true
@@ -438,12 +438,10 @@ struct QuestionView: View {
                             .equivalentFont()
                             .equivalentPadding()
                     }
-//                }
+                }
             }
-//            .border(.green)
         }
         .frame(width: viewSize.width, height: viewSize.height)
-//        .border(.red)
         .alert("Would you like to stop practicing and start the test?", isPresented: $showEndPracticeAlert) {
             Button {
                 withAnimation(.easeInOut(duration: 0.5)) {

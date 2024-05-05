@@ -426,18 +426,16 @@ struct QuestionView: View {
                 }
             }
             .overlay(alignment: .topLeading) {
-                if testingViewModel.practice || testingViewModel.isLastQuestion {
-                    Button {
-                        if testingViewModel.practice {
-                            self.showEndPracticeAlert = true
-                        } else {
-                            self.showEndSessionAlert = true
-                        }
-                    } label: {
-                        Image(systemName: "xmark")
-                            .equivalentFont()
-                            .equivalentPadding()
+                Button {
+                    if testingViewModel.practice {
+                        self.showEndPracticeAlert = true
+                    } else {
+                        self.showEndSessionAlert = true
                     }
+                } label: {
+                    Image(systemName: "xmark")
+                        .equivalentFont()
+                        .equivalentPadding()
                 }
             }
         }

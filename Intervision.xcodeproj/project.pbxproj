@@ -195,7 +195,7 @@
 		1B2A23B82BE3E38E000577BF /* GlobalDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalDataService.swift; sourceTree = "<group>"; };
 		1B2A23BD2BE3F1C8000577BF /* ScreenSizeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenSizeViewModel.swift; sourceTree = "<group>"; };
 		1B2A24242BE40886000577BF /* Intervision iPad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Intervision iPad.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1B2A24252BE40886000577BF /* Intervision iPad.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Intervision iPad.plist"; path = "/Users/reuben/swift/Intervision/Intervision/Intervision iPad.plist"; sourceTree = "<absolute>"; };
+		1B2A24252BE40886000577BF /* IntervisioniPad.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = IntervisioniPad.plist; path = /Users/reuben/swift/Intervision/Intervision/IntervisioniPad.plist; sourceTree = "<absolute>"; };
 		1B370D862BDC3E6B00F21E39 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		1B370D882BDC3F6B00F21E39 /* PracticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeView.swift; sourceTree = "<group>"; };
 		1B370D8A2BDC3F7500F21E39 /* QuestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsView.swift; sourceTree = "<group>"; };
@@ -444,7 +444,7 @@
 			children = (
 				1BEF42602BE69E9000C4D70C /* Testing Forms */,
 				1B9435AA2B85A55500B57DA7 /* Info.plist */,
-				1B2A24252BE40886000577BF /* Intervision iPad.plist */,
+				1B2A24252BE40886000577BF /* IntervisioniPad.plist */,
 				1BBC97852B769ACA001C953C /* Test Scores */,
 				1B97BED92B71C4D1007D0BE5 /* Models */,
 				1B97BED82B71C4C9007D0BE5 /* Views */,
@@ -829,7 +829,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Intervision copy-Info.plist";
+				INFOPLIST_FILE = IntervisioniPad.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Intervision;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -868,7 +868,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Intervision copy-Info.plist";
+				INFOPLIST_FILE = IntervisioniPad.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Intervision;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";

@@ -339,112 +339,112 @@ struct TestingRegistrationView: View {
                     )
                 }
             }
-            .overlay {
-                if showRollBackgroundOverlay {
-                    VStack(spacing: spacing / 2) {
-                        Text("You can change how the background of the piano roll looks to better help you identify different intervals")
-                            .equivalentFont(.title)
-                            .equivalentPadding(.bottom)
-                            .fontWeight(.semibold)
-                            .lineLimit(2)
-                        
-                        HStack(spacing: 0) {
-                            let pianoKeysWidth = testingViewModel.showPiano ? viewSize.width / 6 : 0
-                            let barRowsWidth = viewSize.width * 0.9 - pianoKeysWidth
-                            
-                            Spacer()
-                            
-                            PianoKeysView(
-                                octaves: 1,
-                                width: pianoKeysWidth, 
-                                rowHeight: viewSize.height / 25,
-                                showOctaveLabel: false,
-                                fontSize: 0
-                            )
-                            .border(Color.black)
-                            .transition(.move(edge: .leading))
-                            
-                            BarRowsView(
-                                rows: 12,
-                                rowWidth: barRowsWidth,
-                                rowHeight: viewSize.height / 25,
-                                beats: 1,
-                                viewType: testingViewModel.rollRowsViewType,
-                                image: false
-                            )
-                            .transition(.move(edge: .leading))
-                            
-                            Spacer()
-                        }
-                        .equivalentPadding(.bottom)
-                        
-                        HStack(spacing: spacing) {
-                            ForEach(BarRowsView.ViewType.allCases, id: \.self) { viewType in
-                                RoundedRectangle(cornerRadius: cornerRadius)
-                                    .foregroundStyle(Color.clear)
-                                    .frame(height: buttonHeight)
-                                    .background(viewType == testingViewModel.rollRowsViewType ? Color.accentColor : Color.secondary)
-                                    .cornerRadius(cornerRadius)
-                                    .overlay {
-                                        Text(viewType.rawValue)
-                                            .equivalentFont(.title3)
-                                    }
-                                    .onTapGesture {
-                                        withAnimation(.easeInOut) {
-                                            testerIdFieldFocused = false
-                                            testingViewModel.rollRowsViewType = viewType
-                                        }
-                                    }
-                            }
-                        }
-                        .frame(width: viewSize.width * 0.9)
-                        
-                        Text("You can also show or hide the piano keys")
-                            .equivalentPadding(.top)
-                            .equivalentFont(.title)
-                            .fontWeight(.semibold)
-                        
-                        Button {
-                            withAnimation(.easeInOut) {
-                                testingViewModel.showPiano.toggle()
-                            }
-                        } label: {
-                            Image(systemName: "pianokeys.inverse")
-                                .equivalentFont(.largeTitle)
-                                .frame(width: buttonHeight * 2, height: buttonHeight)
-                                .background(testingViewModel.showPiano ? Color.accentColor : Color.secondary)
-                                .cornerRadius(cornerRadius)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        
-                        Spacer()
-                        
-                        Text("These can both be changed at any time during the test")
-                            .equivalentPadding(.top)
-                            .equivalentFont(.title)
-                            .fontWeight(.semibold)
-                        
-                        Spacer()
-                        
-                        Button {
-                            withAnimation(.easeInOut) {
-                                showRollBackgroundOverlay = false
-                            }
-                        } label: {
-                            Text("OK")
-                                .equivalentFont(.title2)
-                                .frame(width: skillsButtonWidth, height: buttonHeight * 1.5)
-                                .background(Color.accentColor)
-                                .cornerRadius(cornerRadius)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
-                    .equivalentPadding(50)
-                    .background(.ultraThickMaterial)
-                    .cornerRadius(screenSizeViewModel.getEquivalentValue(20))
-                    .cornerRadius(cornerRadius)
-                }
-            }
+//            .overlay {
+//                if showRollBackgroundOverlay {
+//                    VStack(spacing: spacing / 2) {
+//                        Text("You can change how the background of the piano roll looks to better help you identify different intervals")
+//                            .equivalentFont(.title)
+//                            .equivalentPadding(.bottom)
+//                            .fontWeight(.semibold)
+//                            .lineLimit(2)
+//                        
+//                        HStack(spacing: 0) {
+//                            let pianoKeysWidth = testingViewModel.showPiano ? viewSize.width / 6 : 0
+//                            let barRowsWidth = viewSize.width * 0.9 - pianoKeysWidth
+//                            
+//                            Spacer()
+//                            
+//                            PianoKeysView(
+//                                octaves: 1,
+//                                width: pianoKeysWidth, 
+//                                rowHeight: viewSize.height / 25,
+//                                showOctaveLabel: false,
+//                                fontSize: 0
+//                            )
+//                            .border(Color.black)
+//                            .transition(.move(edge: .leading))
+//                            
+//                            BarRowsView(
+//                                rows: 12,
+//                                rowWidth: barRowsWidth,
+//                                rowHeight: viewSize.height / 25,
+//                                beats: 1,
+//                                viewType: testingViewModel.rollRowsViewType,
+//                                image: false
+//                            )
+//                            .transition(.move(edge: .leading))
+//                            
+//                            Spacer()
+//                        }
+//                        .equivalentPadding(.bottom)
+//                        
+//                        HStack(spacing: spacing) {
+//                            ForEach(BarRowsView.ViewType.allCases, id: \.self) { viewType in
+//                                RoundedRectangle(cornerRadius: cornerRadius)
+//                                    .foregroundStyle(Color.clear)
+//                                    .frame(height: buttonHeight)
+//                                    .background(viewType == testingViewModel.rollRowsViewType ? Color.accentColor : Color.secondary)
+//                                    .cornerRadius(cornerRadius)
+//                                    .overlay {
+//                                        Text(viewType.rawValue)
+//                                            .equivalentFont(.title3)
+//                                    }
+//                                    .onTapGesture {
+//                                        withAnimation(.easeInOut) {
+//                                            testerIdFieldFocused = false
+//                                            testingViewModel.rollRowsViewType = viewType
+//                                        }
+//                                    }
+//                            }
+//                        }
+//                        .frame(width: viewSize.width * 0.9)
+//                        
+//                        Text("You can also show or hide the piano keys")
+//                            .equivalentPadding(.top)
+//                            .equivalentFont(.title)
+//                            .fontWeight(.semibold)
+//                        
+//                        Button {
+//                            withAnimation(.easeInOut) {
+//                                testingViewModel.showPiano.toggle()
+//                            }
+//                        } label: {
+//                            Image(systemName: "pianokeys.inverse")
+//                                .equivalentFont(.largeTitle)
+//                                .frame(width: buttonHeight * 2, height: buttonHeight)
+//                                .background(testingViewModel.showPiano ? Color.accentColor : Color.secondary)
+//                                .cornerRadius(cornerRadius)
+//                        }
+//                        .buttonStyle(PlainButtonStyle())
+//                        
+//                        Spacer()
+//                        
+//                        Text("These can both be changed at any time during the test")
+//                            .equivalentPadding(.top)
+//                            .equivalentFont(.title)
+//                            .fontWeight(.semibold)
+//                        
+//                        Spacer()
+//                        
+//                        Button {
+//                            withAnimation(.easeInOut) {
+//                                showRollBackgroundOverlay = false
+//                            }
+//                        } label: {
+//                            Text("OK")
+//                                .equivalentFont(.title2)
+//                                .frame(width: skillsButtonWidth, height: buttonHeight * 1.5)
+//                                .background(Color.accentColor)
+//                                .cornerRadius(cornerRadius)
+//                        }
+//                        .buttonStyle(PlainButtonStyle())
+//                    }
+//                    .equivalentPadding(50)
+//                    .background(.ultraThickMaterial)
+//                    .cornerRadius(screenSizeViewModel.getEquivalentValue(20))
+//                    .cornerRadius(cornerRadius)
+//                }
+//            }
             .overlay(alignment: .topLeading) {
                 Button {
                     withAnimation(.easeInOut) {

@@ -29,27 +29,27 @@ struct IntervalLinesView: View {
                 if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
                     ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: lineWidth * 2)
                         .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, dash: [0, lineWidth * 2]))
-                        .shadow(color: Color.black.opacity(0.75), radius: 5, x: 0, y: 0)
+                        .shadow(color: Color.black.opacity(0.75), radius: lineWidth, x: 0, y: 0)
                 } else {
                     Path { path in
                         path.move(to: line.startPoint)
                         path.addLine(to: line.endPoint)
                     }
                     .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round, dash: [0, lineWidth * 2]))
-                    .shadow(color: Color.black.opacity(0.75), radius: 5, x: 0, y: 0)
+                    .shadow(color: Color.black.opacity(0.75), radius: lineWidth, x: 0, y: 0)
                 }
             } else {
                 if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
                     ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: lineWidth * 2)
                         .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
-                        .shadow(color: Color.black.opacity(0.75), radius: 5, x: 0, y: 0)
+                        .shadow(color: Color.black.opacity(0.75), radius: lineWidth, x: 0, y: 0)
                 } else {
                     Path { path in
                         path.move(to: line.startPoint)
                         path.addLine(to: line.endPoint)
                     }
                     .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
-                    .shadow(color: Color.black.opacity(0.75), radius: 5, x: 0, y: 0)
+                    .shadow(color: Color.black.opacity(0.75), radius: lineWidth, x: 0, y: 0)
                 }
             }
         }
@@ -57,19 +57,32 @@ struct IntervalLinesView: View {
         ForEach(0..<intervalLinesViewModel.melodicLines.count, id: \.self) { lineIndex in
             let line = intervalLinesViewModel.melodicLines[lineIndex]
             
-            if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
-                ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: lineWidth * 2)
-                    .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round, dash: [4]))
-                    .shadow(color: Color.black, radius: 5, x: 0, y: 0)
-                    .zIndex(.infinity)
-            } else {
-                Path { path in
-                    path.move(to: line.startPoint)
-                    path.addLine(to: line.endPoint)
+            if line.dotted {
+                if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
+                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: lineWidth * 2)
+                        .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, dash: [0, lineWidth * 2]))
+                        .shadow(color: Color.black.opacity(0.75), radius: lineWidth, x: 0, y: 0)
+                } else {
+                    Path { path in
+                        path.move(to: line.startPoint)
+                        path.addLine(to: line.endPoint)
+                    }
+                    .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round, dash: [0, lineWidth * 2]))
+                    .shadow(color: Color.black.opacity(0.75), radius: lineWidth, x: 0, y: 0)
                 }
-                .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round, dash: [4]))
-                .shadow(color: Color.black, radius: 5, x: 0, y: 0)
-                .zIndex(.infinity)
+            } else {
+                if line.inversionType == .Inverted && intervalLinesViewModel.showInvertedIntervals && intervalLinesViewModel.showZigZags {
+                    ZigzagLine(startPoint: line.startPoint, endPoint: line.endPoint, amplitude: lineWidth * 2)
+                        .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+                        .shadow(color: Color.black.opacity(0.75), radius: lineWidth, x: 0, y: 0)
+                } else {
+                    Path { path in
+                        path.move(to: line.startPoint)
+                        path.addLine(to: line.endPoint)
+                    }
+                    .stroke(line.color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
+                    .shadow(color: Color.black.opacity(0.75), radius: lineWidth, x: 0, y: 0)
+                }
             }
         }
     }

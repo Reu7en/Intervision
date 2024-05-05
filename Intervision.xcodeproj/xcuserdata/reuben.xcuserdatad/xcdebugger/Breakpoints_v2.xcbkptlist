@@ -46,8 +46,8 @@
             filePath = "Intervision/View Models/Score/BeatViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "209"
-            endingLineNumber = "209"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
             landmarkName = "calculateIsHollow(beatNoteGrid:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "522"
-            endingLineNumber = "522"
+            startingLineNumber = "524"
+            endingLineNumber = "524"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
             <Locations>
@@ -215,8 +215,8 @@
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "275"
-            endingLineNumber = "275"
+            startingLineNumber = "277"
+            endingLineNumber = "277"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
             <Locations>
@@ -263,8 +263,8 @@
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "336"
-            endingLineNumber = "336"
+            startingLineNumber = "338"
+            endingLineNumber = "338"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
             <Locations>
@@ -311,8 +311,8 @@
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "360"
-            endingLineNumber = "360"
+            startingLineNumber = "362"
+            endingLineNumber = "362"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
             <Locations>
@@ -359,8 +359,8 @@
             filePath = "Intervision/View Models/Roll/RollViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "402"
-            endingLineNumber = "402"
+            startingLineNumber = "404"
+            endingLineNumber = "404"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -375,8 +375,8 @@
             filePath = "Intervision/View Models/Testing/TestingViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "810"
-            endingLineNumber = "810"
+            startingLineNumber = "788"
+            endingLineNumber = "788"
             landmarkName = "randomlyGenerateQuestionData(question:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -391,8 +391,8 @@
             filePath = "Intervision/View Models/Testing/TestingViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "911"
-            endingLineNumber = "911"
+            startingLineNumber = "882"
+            endingLineNumber = "882"
             landmarkName = "randomlyGenerateQuestionData(question:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -407,8 +407,8 @@
             filePath = "Intervision/View Models/Testing/TestingViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1089"
-            endingLineNumber = "1089"
+            startingLineNumber = "1044"
+            endingLineNumber = "1044"
             landmarkName = "randomlyGenerateQuestionData(question:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -423,8 +423,8 @@
             filePath = "Intervision/View Models/Testing/TestingViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1226"
-            endingLineNumber = "1226"
+            startingLineNumber = "1169"
+            endingLineNumber = "1169"
             landmarkName = "randomlyGenerateQuestionData(question:)"
             landmarkType = "7">
             <Locations>
@@ -519,8 +519,8 @@
             filePath = "Intervision/Views/Roll/RollView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -555,6 +555,70 @@
                   offsetFromSymbolStart = "852">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3A08FF90-E5F5-44EB-AB8D-358A866EC720"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Intervision/View Models/Score/BeatViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "init(noteGrid:barGeometry:beatGeometry:beamGroupChords:middleStaveNote:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3A08FF90-E5F5-44EB-AB8D-358A866EC720 - 57184cdb7f12158e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.BeatViewModel.init(noteGrid: Swift.Array&lt;Swift.Array&lt;Swift.Optional&lt;Swift.Array&lt;(Intervision.Note, Swift.Optional&lt;Intervision.Note.Accidental&gt;)&gt;&gt;&gt;&gt;, barGeometry: SwiftUI.GeometryProxy, beatGeometry: SwiftUI.GeometryProxy, beamGroupChords: Swift.Array&lt;Swift.Array&lt;Intervision.Chord&gt;&gt;, middleStaveNote: Swift.Optional&lt;Intervision.Note&gt;) -&gt; Intervision.BeatViewModel"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Score/BeatViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "64"
+                  endingLineNumber = "64"
+                  offsetFromSymbolStart = "1764">
+               </Location>
+               <Location
+                  uuid = "3A08FF90-E5F5-44EB-AB8D-358A866EC720 - 57184cdb7f1215d1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Intervision.BeatViewModel.init(noteGrid: Swift.Array&lt;Swift.Array&lt;Swift.Optional&lt;Swift.Array&lt;(Intervision.Note, Swift.Optional&lt;Intervision.Note.Accidental&gt;)&gt;&gt;&gt;&gt;, barGeometry: SwiftUI.GeometryProxy, beatGeometry: SwiftUI.GeometryProxy, beamGroupChords: Swift.Array&lt;Swift.Array&lt;Intervision.Chord&gt;&gt;, middleStaveNote: Swift.Optional&lt;Intervision.Note&gt;) -&gt; Intervision.BeatViewModel"
+                  moduleName = "Intervision"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Score/BeatViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "65"
+                  endingLineNumber = "65"
+                  offsetFromSymbolStart = "1764">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "22115FCC-844F-482E-98D9-D3F5221AC1FB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Intervision/View Models/Score/BarViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "432"
+            endingLineNumber = "432"
+            landmarkName = "calculateNoteGrid(gaps:ledgerLines:rows:lowestGapNote:splitChords:bar:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

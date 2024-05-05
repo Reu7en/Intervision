@@ -8,6 +8,12 @@
 import Foundation
 import SwiftUI
 
-class GlobalDataService {
+public class GlobalDataService {
+    
+}
 
+extension Int {
+    func trueModulo(_ modulus: Int) -> Int {
+        return (self % modulus + modulus) % modulus
+    }
 }

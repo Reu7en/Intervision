@@ -29,17 +29,19 @@ struct LinesView: View {
                 path.move(to: line.startPoint)
                 path.addLine(to: line.endPoint)
             }
-            .stroke(line.color, lineWidth: linesViewModel.stemThickness)
+            .stroke(line.color, style: StrokeStyle(lineWidth: linesViewModel.stemThickness, lineCap: .round))
         }
         
         ForEach(0..<linesViewModel.tailLines.count, id: \.self) { lineIndex in
             let line = linesViewModel.tailLines[lineIndex]
             
-            Path { path in
-                path.move(to: line.startPoint)
-                path.addLine(to: line.endPoint)
+            ZStack {
+                Path { path in
+                    path.move(to: line.startPoint)
+                    path.addLine(to: line.endPoint)
+                }
+                .stroke(line.color, style: StrokeStyle(lineWidth: linesViewModel.stemThickness, lineCap: .round))
             }
-            .stroke(line.color, lineWidth: linesViewModel.tailThickness)
         }
         
         ForEach(0..<linesViewModel.ledgerLines.count, id: \.self) { lineIndex in

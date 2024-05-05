@@ -30,9 +30,7 @@ struct IntervisionApp: App {
                         addKeyboardObservers()
                         #endif
                         
-                        withAnimation(.easeInOut) {
-                            screenSizeViewModel.screenSize = geometry.size
-                        }
+                        screenSizeViewModel.screenSize = geometry.size
                     }
                     .onChange(of: geometry.size) {
                         if !isKeyboardVisible {

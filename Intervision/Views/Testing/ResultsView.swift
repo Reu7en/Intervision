@@ -126,7 +126,8 @@ struct ResultsView: View {
                             
                                 HStack(spacing: 0) {
                                     Text("\(averageAnswerTime, format: .number.rounded(increment: 0.01)) ")
-                                    .foregroundStyle(getColor(score: 100 * ((60 - averageAnswerTime) / 60)))                                        .equivalentFont(.title2)
+                                    .foregroundStyle(getColor(score: 100 * ((60 - averageAnswerTime) / 60)))                                        
+                                        .equivalentFont(.title2)
                                         .fontWeight(.semibold)
                                     
                                     Text("\(getEmoji(score: 100 * ((60 - averageAnswerTime) / 60)))")
@@ -222,7 +223,7 @@ struct ResultsView: View {
                         }
                     }
                     .frame(width: viewSize.width / 2)
-                    .equivalentPadding(padding: 50)
+                    .equivalentPadding(50)
                     .background(
                         RoundedRectangle(cornerRadius: screenSizeViewModel.getEquivalentValue(20))
                             .fill(Material.ultraThickMaterial)
@@ -321,7 +322,7 @@ struct ResultsView: View {
             }
         }
         .frame(width: viewSize.width, height: viewSize.height)
-        .equivalentPadding(padding: 50)
+        .equivalentPadding(50)
         .background(
             RoundedRectangle(cornerRadius: screenSizeViewModel.getEquivalentValue(20))
                 .fill(Material.ultraThickMaterial)

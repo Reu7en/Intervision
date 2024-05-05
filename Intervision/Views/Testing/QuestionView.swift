@@ -46,7 +46,7 @@ struct QuestionView: View {
                         if let barViewModel = questionData.0 {
                             BarView(barViewModel: barViewModel)
                                 .frame(width: viewSize.width, height: barHeight / 1.25)
-                                .equivalentPadding(.all, padding: 30)
+                                .equivalentPadding(.all, 30)
                                 .background(
                                     RoundedRectangle(cornerRadius: backgroundCornerRadius)
                                         .fill(Material.ultraThin)
@@ -197,8 +197,7 @@ struct QuestionView: View {
                                 }
                             }
                             .frame(height: barHeight)
-                            .clipped(antialiased: true)
-                            .equivalentPadding(.all, padding: 30)
+                            .equivalentPadding(.all, 30)
                             .background(
                                 RoundedRectangle(cornerRadius: backgroundCornerRadius)
                                     .fill(Material.ultraThin)
@@ -249,7 +248,7 @@ struct QuestionView: View {
                                     }
                                 }
                                 .frame(width: viewSize.width, height: timerHeight)
-                                .equivalentPadding(.all, padding: 30)
+                                .equivalentPadding(.all, 30)
                                 .background(
                                     RoundedRectangle(cornerRadius: backgroundCornerRadius)
                                         .fill(Material.ultraThin)
@@ -289,13 +288,13 @@ struct QuestionView: View {
                         if testingViewModel.questionMarked {
                             NextQuestionButton(testingViewModel: testingViewModel)
                                 .frame(height: timerHeight)
-                                .equivalentPadding(.all, padding: 30)
+                                .equivalentPadding(.all, 30)
                                 .disabled(!testingViewModel.questionMarked)
                                 .environmentObject(screenSizeViewModel)
                         } else {
                             AnswerTimerView(testingViewModel: testingViewModel)
                                 .frame(width: viewSize.width, height: timerHeight)
-                                .equivalentPadding(.all, padding: 30)
+                                .equivalentPadding(.all, 30)
                                 .background(
                                     RoundedRectangle(cornerRadius: backgroundCornerRadius)
                                         .fill(Material.ultraThin)
@@ -395,7 +394,7 @@ struct QuestionView: View {
                                 }
                             }
                         }
-                        .equivalentPadding(.all, padding: 30)
+                        .equivalentPadding(.all, 30)
                         .background(
                             RoundedRectangle(cornerRadius: backgroundCornerRadius)
                                 .fill(Material.ultraThick)

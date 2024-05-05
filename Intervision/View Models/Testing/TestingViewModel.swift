@@ -46,9 +46,9 @@ class TestingViewModel: ObservableObject {
     @Published var resultsURL: IdentifiableURL?
     @Published var pdfURL: IdentifiableURL?
     
-    @Published var countdown = 5
+    @Published var countdown = 1
     @Published var progress = 1.0
-    private let totalSeconds = 5
+    private let totalSeconds = 1
     private var countdownTimer: AnyCancellable?
     
     var isFirstQuestion = true
@@ -139,7 +139,7 @@ extension TestingViewModel {
             }
 
             if let semitones = semitones {
-                switch semitones {
+                switch semitones.trueModulo(12) {
                     case 1:
                         self = .Minor2nd
                     case 2:
@@ -162,7 +162,7 @@ extension TestingViewModel {
                         self = .Minor7th
                     case 11:
                         self = .Major7th
-                    case 12:
+                    case 12, 0:
                         self = .Octave
                     default:
                         return nil
@@ -546,75 +546,60 @@ extension TestingViewModel {
                 switch question.intervalLinesType {
                 case .None:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[15].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[15].0]])]
                     answer = TestingViewModel.testQuestions[15].1
                 case .Lines:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[16].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[16].0]])]
                     answer = TestingViewModel.testQuestions[16].1
                 case .InvertedLines:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[17].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[17].0]])]
                     answer = TestingViewModel.testQuestions[17].1
                 }
             case .RollThreeNoteInnerIntervalsIdentification:
                 switch question.intervalLinesType {
                 case .None:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[18].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[18].0]])]
                     answer = TestingViewModel.testQuestions[18].1
                 case .Lines:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[19].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[19].0]])]
                     answer = TestingViewModel.testQuestions[19].1
                 case .InvertedLines:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[20].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[20].0]])]
                     answer = TestingViewModel.testQuestions[20].1
                 }
             case .RollThreeNoteOuterIntervalIdentification:
                 switch question.intervalLinesType {
                 case .None:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[21].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[21].0]])]
                     answer = TestingViewModel.testQuestions[21].1
                 case .Lines:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[22].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[22].0]])]
                     answer = TestingViewModel.testQuestions[22].1
                 case .InvertedLines:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[23].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[23].0]])]
                     answer = TestingViewModel.testQuestions[23].1
                 }
             case .RollChordsAreInversions:
                 switch question.intervalLinesType {
                 case .None:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[24].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[24].0]])]
                     answer = TestingViewModel.testQuestions[24].1
                 case .Lines:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[25].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[25].0]])]
                     answer = TestingViewModel.testQuestions[25].1
                 case .InvertedLines:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[26].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[26].0]])]
                     answer = TestingViewModel.testQuestions[26].1
                 }
             case .RollTwoNoteIntervalsAreEqual:
                 switch question.intervalLinesType {
                 case .None:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[27].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[27].0]])]
                     answer = TestingViewModel.testQuestions[27].1
                 case .Lines:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[28].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[28].0]])]
                     answer = TestingViewModel.testQuestions[28].1
                 case .InvertedLines:
                     rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[TestingViewModel.testQuestions[29].0]])], octaves: 2)
-                    rollViewModel?.parts = [Part(bars: [[TestingViewModel.testQuestions[29].0]])]
                     answer = TestingViewModel.testQuestions[29].1
                 }
             default:
@@ -644,7 +629,7 @@ extension TestingViewModel {
             }
         }
         
-//        guard testQuestionData.count == testQuestions.count else { return }
+        guard testQuestionData.count == testQuestions.count else { return }
         
         self.testQuestionData = testQuestionData
     }
@@ -668,7 +653,7 @@ extension TestingViewModel {
             let lowestNote = Note(
                 pitch: lowestStartingNote.pitch,
                 octave: lowestStartingNote.octave,
-                duration: .quarter,
+                duration: .half,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -677,7 +662,7 @@ extension TestingViewModel {
             let highestNote = Note(
                 pitch: lowestStartingNote.pitch,
                 octave: lowestStartingNote.octave,
-                duration: .quarter,
+                duration: .half,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -695,12 +680,11 @@ extension TestingViewModel {
                 highestNote.increaseSemitone(sharps: key.sharps)
             }
             
+            bar.chords[0].notes.append(lowestNote)
+            bar.chords[0].notes.append(highestNote)
+            bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
+            
             if question.type.isScoreQuestion {
-                bar.chords[0].notes.append(lowestNote)
-                bar.chords[0].notes.append(highestNote)
-                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
-                bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
-                
                 let barViewModel = BarViewModel(
                     bar: bar,
                     ledgerLines: 5,
@@ -715,14 +699,8 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             } else {
-                bar.chords[0].notes.append(TestingViewModel.quarterRest)
-                bar.chords.append(Chord(notes: []))
-                bar.chords[1].notes.append(lowestNote)
-                bar.chords[1].notes.append(highestNote)
-                bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
-                
-                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 2)
-                rollViewModel.parts = [Part(bars: [[bar]])]
+                let part = Part(bars: [[bar]])
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [part], octaves: 2)
                 
                 let intervalLinesViewModel = IntervalLinesViewModel(
                     segments: rollViewModel.segments ?? [],
@@ -730,7 +708,8 @@ extension TestingViewModel {
                     groups: rollViewModel.partGroups,
                     harmonicIntervalLinesType: .all,
                     showMelodicIntervalLines: false,
-                    barIndex: 0, barWidth: .zero,
+                    barIndex: 0, 
+                    barWidth: .zero,
                     rowWidth: .zero,
                     rowHeight: .zero,
                     harmonicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedHarmonicIntervalLineColors : RollViewModel.harmonicIntervalLineColors,
@@ -751,7 +730,7 @@ extension TestingViewModel {
             let lowestNote = Note(
                 pitch: lowestStartingNote.pitch,
                 octave: lowestStartingNote.octave,
-                duration: .quarter,
+                duration: .half,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -760,7 +739,7 @@ extension TestingViewModel {
             let middleNote = Note(
                 pitch: lowestStartingNote.pitch,
                 octave: lowestStartingNote.octave,
-                duration: .quarter,
+                duration: .half,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -769,7 +748,7 @@ extension TestingViewModel {
             let highestNote = Note(
                 pitch: lowestStartingNote.pitch,
                 octave: lowestStartingNote.octave,
-                duration: .quarter,
+                duration: .half,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -793,13 +772,12 @@ extension TestingViewModel {
                 highestNote.increaseSemitone(sharps: key.sharps)
             }
             
+            bar.chords[0].notes.append(lowestNote)
+            bar.chords[0].notes.append(middleNote)
+            bar.chords[0].notes.append(highestNote)
+            bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
+            
             if question.type.isScoreQuestion {
-                bar.chords[0].notes.append(lowestNote)
-                bar.chords[0].notes.append(middleNote)
-                bar.chords[0].notes.append(highestNote)
-                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
-                bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
-                
                 let barViewModel = BarViewModel(
                     bar: bar,
                     ledgerLines: 5,
@@ -815,15 +793,8 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             } else {
-                bar.chords[0].notes.append(TestingViewModel.quarterRest)
-                bar.chords.append(Chord(notes: []))
-                bar.chords[1].notes.append(lowestNote)
-                bar.chords[1].notes.append(middleNote)
-                bar.chords[1].notes.append(highestNote)
-                bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
-                
-                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 2)
-                rollViewModel.parts = [Part(bars: [[bar]])]
+                let part = Part(bars: [[bar]])
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [part], octaves: 2)
                 
                 let intervalLinesViewModel = IntervalLinesViewModel(
                     segments: rollViewModel.segments ?? [],
@@ -831,7 +802,8 @@ extension TestingViewModel {
                     groups: rollViewModel.partGroups,
                     harmonicIntervalLinesType: .all,
                     showMelodicIntervalLines: false,
-                    barIndex: 0, barWidth: .zero,
+                    barIndex: 0, 
+                    barWidth: .zero,
                     rowWidth: .zero,
                     rowHeight: .zero,
                     harmonicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedHarmonicIntervalLineColors : RollViewModel.harmonicIntervalLineColors,
@@ -853,7 +825,7 @@ extension TestingViewModel {
             let lowestNote = Note(
                 pitch: lowestStartingNote.pitch,
                 octave: lowestStartingNote.octave,
-                duration: .quarter,
+                duration: .half,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -862,7 +834,7 @@ extension TestingViewModel {
             let middleNote = Note(
                 pitch: lowestStartingNote.pitch,
                 octave: lowestStartingNote.octave,
-                duration: .quarter,
+                duration: .half,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -871,7 +843,7 @@ extension TestingViewModel {
             let highestNote = Note(
                 pitch: lowestStartingNote.pitch,
                 octave: lowestStartingNote.octave,
-                duration: .quarter,
+                duration: .half,
                 isRest: false,
                 isDotted: false,
                 hasAccent: false
@@ -894,13 +866,12 @@ extension TestingViewModel {
                 highestNote.increaseSemitone(sharps: key.sharps)
             }
             
+            bar.chords[0].notes.append(lowestNote)
+            bar.chords[0].notes.append(middleNote)
+            bar.chords[0].notes.append(highestNote)
+            bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
+            
             if question.type.isScoreQuestion {
-                bar.chords[0].notes.append(lowestNote)
-                bar.chords[0].notes.append(middleNote)
-                bar.chords[0].notes.append(highestNote)
-                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
-                bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
-                
                 let barViewModel = BarViewModel(
                     bar: bar,
                     ledgerLines: 5,
@@ -915,15 +886,8 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             } else {
-                bar.chords[0].notes.append(TestingViewModel.quarterRest)
-                bar.chords.append(Chord(notes: []))
-                bar.chords[1].notes.append(lowestNote)
-                bar.chords[1].notes.append(middleNote)
-                bar.chords[1].notes.append(highestNote)
-                bar.chords.append(Chord(notes: [TestingViewModel.halfRest]))
-                
-                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 2)
-                rollViewModel.parts = [Part(bars: [[bar]])]
+                let part = Part(bars: [[bar]])
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [part], octaves: 2)
                 
                 let intervalLinesViewModel = IntervalLinesViewModel(
                     segments: rollViewModel.segments ?? [],
@@ -931,7 +895,8 @@ extension TestingViewModel {
                     groups: rollViewModel.partGroups,
                     harmonicIntervalLinesType: .all,
                     showMelodicIntervalLines: false,
-                    barIndex: 0, barWidth: .zero,
+                    barIndex: 0, 
+                    barWidth: .zero,
                     rowWidth: .zero,
                     rowHeight: .zero,
                     harmonicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedHarmonicIntervalLineColors : RollViewModel.harmonicIntervalLineColors,
@@ -1022,21 +987,11 @@ extension TestingViewModel {
                 highestNote2.increaseSemitone(sharps: key.sharps)
             }
             
-            if question.type.isScoreQuestion {
-                bar.chords[0].notes.append(lowestNote1)
-                bar.chords[0].notes.append(middleNote1)
-                bar.chords[0].notes.append(highestNote1)
-                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
-                bar.chords.append(Chord(notes: []))
-            } else {
-                bar.chords[0].notes.append(TestingViewModel.quarterRest)
-                bar.chords.append(Chord(notes: []))
-                bar.chords[1].notes.append(lowestNote1)
-                bar.chords[1].notes.append(middleNote1)
-                bar.chords[1].notes.append(highestNote1)
-                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
-                bar.chords.append(Chord(notes: []))
-            }
+            bar.chords[0].notes.append(lowestNote1)
+            bar.chords[0].notes.append(middleNote1)
+            bar.chords[0].notes.append(highestNote1)
+            bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
+            bar.chords.append(Chord(notes: []))
             
             if Bool.random() { // Apply 1st or 2nd inversion
                 lowestNote2.increaseOctave()
@@ -1073,12 +1028,12 @@ extension TestingViewModel {
                 }
             }
             
+            bar.chords[2].notes.append(lowestNote2)
+            bar.chords[2].notes.append(middleNote2)
+            bar.chords[2].notes.append(highestNote2)
+            bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
+            
             if question.type.isScoreQuestion {
-                bar.chords[2].notes.append(lowestNote2)
-                bar.chords[2].notes.append(middleNote2)
-                bar.chords[2].notes.append(highestNote2)
-                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
-                
                 let barViewModel = BarViewModel(
                     bar: bar,
                     ledgerLines: 5,
@@ -1093,12 +1048,8 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             } else {
-                bar.chords[3].notes.append(lowestNote2)
-                bar.chords[3].notes.append(middleNote2)
-                bar.chords[3].notes.append(highestNote2)
-                
-                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 2)
-                rollViewModel.parts = [Part(bars: [[bar]])]
+                let part = Part(bars: [[bar]])
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [part], octaves: 2)
                 
                 let intervalLinesViewModel = IntervalLinesViewModel(
                     segments: rollViewModel.segments ?? [],
@@ -1106,7 +1057,8 @@ extension TestingViewModel {
                     groups: rollViewModel.partGroups,
                     harmonicIntervalLinesType: .all,
                     showMelodicIntervalLines: false,
-                    barIndex: 0, barWidth: .zero,
+                    barIndex: 0, 
+                    barWidth: .zero,
                     rowWidth: .zero,
                     rowHeight: .zero,
                     harmonicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedHarmonicIntervalLineColors : RollViewModel.harmonicIntervalLineColors,
@@ -1171,19 +1123,10 @@ extension TestingViewModel {
                 highestNote1.increaseSemitone(sharps: key.sharps)
             }
             
-            if question.type.isScoreQuestion {
-                bar.chords[0].notes.append(lowestNote1)
-                bar.chords[0].notes.append(highestNote1)
-                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
-                bar.chords.append(Chord(notes: []))
-            } else {
-                bar.chords[0].notes.append(TestingViewModel.quarterRest)
-                bar.chords.append(Chord(notes: []))
-                bar.chords[1].notes.append(lowestNote1)
-                bar.chords[1].notes.append(highestNote1)
-                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
-                bar.chords.append(Chord(notes: []))
-            }
+            bar.chords[0].notes.append(lowestNote1)
+            bar.chords[0].notes.append(highestNote1)
+            bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
+            bar.chords.append(Chord(notes: []))
             
             let answer = Answer(boolValue: Bool.random())
             let lowestNote2SemitoneIncrease = (2...11).filter { $0 != lowestNoteSemitoneIncrease }.randomElement() ?? Int.random(in: 0...11)
@@ -1211,11 +1154,11 @@ extension TestingViewModel {
                 }
             }
             
+            bar.chords[2].notes.append(lowestNote2)
+            bar.chords[2].notes.append(highestNote2)
+            bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
+            
             if question.type.isScoreQuestion {
-                bar.chords[2].notes.append(lowestNote2)
-                bar.chords[2].notes.append(highestNote2)
-                bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
-                
                 let barViewModel = BarViewModel(
                     bar: bar,
                     ledgerLines: 5,
@@ -1230,11 +1173,8 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             } else {
-                bar.chords[3].notes.append(lowestNote2)
-                bar.chords[3].notes.append(highestNote2)
-                
-                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [Part(bars: [[bar]])], octaves: 2)
-                rollViewModel.parts = [Part(bars: [[bar]])]
+                let part = Part(bars: [[bar]])
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [part], octaves: 2)
                 
                 let intervalLinesViewModel = IntervalLinesViewModel(
                     segments: rollViewModel.segments ?? [],
@@ -1242,7 +1182,8 @@ extension TestingViewModel {
                     groups: rollViewModel.partGroups,
                     harmonicIntervalLinesType: .all,
                     showMelodicIntervalLines: false,
-                    barIndex: 0, barWidth: .zero,
+                    barIndex: 0, 
+                    barWidth: .zero,
                     rowWidth: .zero,
                     rowHeight: .zero,
                     harmonicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedHarmonicIntervalLineColors : RollViewModel.harmonicIntervalLineColors,
@@ -1259,10 +1200,512 @@ extension TestingViewModel {
                     self.currentQuestionData = nil
                 }
             }
-        default:
-            break
+        case .ScoreMelodicIntervalIdentification, .RollMelodicIntervalIdentification:
+            let note1 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .quarter,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note2 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .quarter,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note1SemitoneIncrease = Int.random(in: 0...18)
+            let note2SemitoneIncrease = (0...18).filter( { $0 != note1SemitoneIncrease } ).randomElement() ?? Int.random(in: 0...18)
+            let answer = Answer(semitones: (note2SemitoneIncrease - note1SemitoneIncrease).trueModulo(12))
+            
+            for _ in 0..<abs(note1SemitoneIncrease) {
+                note1SemitoneIncrease > 0 ? note1.increaseSemitone(sharps: key.sharps) : note1.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            for _ in 0..<abs(note2SemitoneIncrease) {
+                note2SemitoneIncrease > 0 ? note2.increaseSemitone(sharps: key.sharps) : note2.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            bar.chords[0].notes.append(note1)
+            bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
+            bar.chords.append(Chord(notes: []))
+            bar.chords[2].notes.append(note2)
+            bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
+            
+            if question.type.isScoreQuestion {
+                let barViewModel = BarViewModel(
+                    bar: bar,
+                    ledgerLines: 5,
+                    showClef: true,
+                    showKey: true,
+                    showTime: true
+                )
+                
+                if let answer = answer {
+                    self.currentQuestionData = (barViewModel, nil, [answer])
+                } else {
+                    self.currentQuestionData = nil
+                }
+            } else {
+                let part = Part(bars: [[bar]])
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [part], octaves: 2)
+                
+                let intervalLinesViewModel = IntervalLinesViewModel(
+                    segments: rollViewModel.segments ?? [],
+                    parts: rollViewModel.parts ?? [],
+                    groups: rollViewModel.partGroups,
+                    harmonicIntervalLinesType: .none,
+                    showMelodicIntervalLines: true,
+                    barIndex: 0,
+                    barWidth: .zero,
+                    rowWidth: .zero,
+                    rowHeight: .zero,
+                    harmonicIntervalLineColors: [],
+                    melodicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedMelodicIntervalLineColors : RollViewModel.melodicIntervalLineColors,
+                    viewableMelodicLines: [part],
+                    showInvertedIntervals: question.intervalLinesType == .InvertedLines,
+                    showZigZags: question.intervalLinesType == .InvertedLines,
+                    testing: false
+                )
+                
+                if let answer = answer {
+                    self.currentQuestionData = (nil, (rollViewModel, intervalLinesViewModel), [answer])
+                } else {
+                    self.currentQuestionData = nil
+                }
+            }
+        case .ScoreSmallestMelodicIntervalIdentification, .RollSmallestMelodicIntervalIdentification:
+            let note1 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .eighth,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note2 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .eighth,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note3 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .eighth,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note4 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .eighth,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note1SemitoneIncrease = Int.random(in: 0...18)
+            let note2SemitoneIncrease = (0...18).filter( { $0 != note1SemitoneIncrease && ($0 - note1SemitoneIncrease).trueModulo(12) != 0 } ).randomElement() ?? Int.random(in: 0...18)
+            let note3SemitoneIncrease = (0...18).filter( { $0 != note2SemitoneIncrease && ($0 - note2SemitoneIncrease).trueModulo(12) != 0} ).randomElement() ?? Int.random(in: 0...18)
+            let note4SemitoneIncrease = (0...18).filter( { $0 != note3SemitoneIncrease && ($0 - note3SemitoneIncrease).trueModulo(12) != 0} ).randomElement() ?? Int.random(in: 0...18)
+            let answer = Answer(semitones: [(note2SemitoneIncrease - note1SemitoneIncrease).trueModulo(12), (note3SemitoneIncrease - note2SemitoneIncrease).trueModulo(12), (note4SemitoneIncrease - note3SemitoneIncrease).trueModulo(12)].min(by: { $0 < $1 } ))
+            
+            for _ in 0..<abs(note1SemitoneIncrease) {
+                note1SemitoneIncrease > 0 ? note1.increaseSemitone(sharps: key.sharps) : note1.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            for _ in 0..<abs(note2SemitoneIncrease) {
+                note2SemitoneIncrease > 0 ? note2.increaseSemitone(sharps: key.sharps) : note2.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            for _ in 0..<abs(note3SemitoneIncrease) {
+                note3SemitoneIncrease > 0 ? note3.increaseSemitone(sharps: key.sharps) : note3.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            for _ in 0..<abs(note4SemitoneIncrease) {
+                note4SemitoneIncrease > 0 ? note4.increaseSemitone(sharps: key.sharps) : note4.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            bar.chords[0].notes.append(note1)
+            bar.chords.append(Chord(notes: [TestingViewModel.eighthRest]))
+            bar.chords.append(Chord(notes: []))
+            bar.chords[2].notes.append(note2)
+            bar.chords.append(Chord(notes: [TestingViewModel.eighthRest]))
+            bar.chords.append(Chord(notes: []))
+            bar.chords[4].notes.append(note3)
+            bar.chords.append(Chord(notes: [TestingViewModel.eighthRest]))
+            bar.chords.append(Chord(notes: []))
+            bar.chords[6].notes.append(note4)
+            bar.chords.append(Chord(notes: [TestingViewModel.eighthRest]))
+            
+            if question.type.isScoreQuestion {
+                let barViewModel = BarViewModel(
+                    bar: bar,
+                    ledgerLines: 5,
+                    showClef: true,
+                    showKey: true,
+                    showTime: true
+                )
+                
+                if let answer = answer {
+                    self.currentQuestionData = (barViewModel, nil, [answer])
+                } else {
+                    self.currentQuestionData = nil
+                }
+            } else {
+                let part = Part(bars: [[bar]])
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [part], octaves: 2)
+                
+                let intervalLinesViewModel = IntervalLinesViewModel(
+                    segments: rollViewModel.segments ?? [],
+                    parts: rollViewModel.parts ?? [],
+                    groups: rollViewModel.partGroups,
+                    harmonicIntervalLinesType: .none,
+                    showMelodicIntervalLines: true,
+                    barIndex: 0,
+                    barWidth: .zero,
+                    rowWidth: .zero,
+                    rowHeight: .zero,
+                    harmonicIntervalLineColors: [],
+                    melodicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedMelodicIntervalLineColors : RollViewModel.melodicIntervalLineColors,
+                    viewableMelodicLines: [part],
+                    showInvertedIntervals: question.intervalLinesType == .InvertedLines,
+                    showZigZags: question.intervalLinesType == .InvertedLines,
+                    testing: false
+                )
+                
+                if let answer = answer {
+                    self.currentQuestionData = (nil, (rollViewModel, intervalLinesViewModel), [answer])
+                } else {
+                    self.currentQuestionData = nil
+                }
+            }
+        case .ScoreLargestMelodicIntervalIdentification, .RollLargestMelodicIntervalIdentification:
+            let note1 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .eighth,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note2 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .eighth,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note3 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .eighth,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note4 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .eighth,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note1SemitoneIncrease = Int.random(in: 0...18)
+            let note2SemitoneIncrease = (0...18).filter( { $0 != note1SemitoneIncrease && ($0 - note1SemitoneIncrease).trueModulo(12) != 0} ).randomElement() ?? Int.random(in: 0...18)
+            let note3SemitoneIncrease = (0...18).filter( { $0 != note2SemitoneIncrease && ($0 - note2SemitoneIncrease).trueModulo(12) != 0} ).randomElement() ?? Int.random(in: 0...18)
+            let note4SemitoneIncrease = (0...18).filter( { $0 != note3SemitoneIncrease && ($0 - note3SemitoneIncrease).trueModulo(12) != 0} ).randomElement() ?? Int.random(in: 0...18)
+            let answer = Answer(semitones: [(note2SemitoneIncrease - note1SemitoneIncrease).trueModulo(12), (note3SemitoneIncrease - note2SemitoneIncrease).trueModulo(12), (note4SemitoneIncrease - note3SemitoneIncrease).trueModulo(12)].max(by: { $0 < $1 } ))
+            
+            for _ in 0..<abs(note1SemitoneIncrease) {
+                note1SemitoneIncrease > 0 ? note1.increaseSemitone(sharps: key.sharps) : note1.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            for _ in 0..<abs(note2SemitoneIncrease) {
+                note2SemitoneIncrease > 0 ? note2.increaseSemitone(sharps: key.sharps) : note2.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            for _ in 0..<abs(note3SemitoneIncrease) {
+                note3SemitoneIncrease > 0 ? note3.increaseSemitone(sharps: key.sharps) : note3.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            for _ in 0..<abs(note4SemitoneIncrease) {
+                note4SemitoneIncrease > 0 ? note4.increaseSemitone(sharps: key.sharps) : note4.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            bar.chords[0].notes.append(note1)
+            bar.chords.append(Chord(notes: [TestingViewModel.eighthRest]))
+            bar.chords.append(Chord(notes: []))
+            bar.chords[2].notes.append(note2)
+            bar.chords.append(Chord(notes: [TestingViewModel.eighthRest]))
+            bar.chords.append(Chord(notes: []))
+            bar.chords[4].notes.append(note3)
+            bar.chords.append(Chord(notes: [TestingViewModel.eighthRest]))
+            bar.chords.append(Chord(notes: []))
+            bar.chords[6].notes.append(note4)
+            bar.chords.append(Chord(notes: [TestingViewModel.eighthRest]))
+            
+            if question.type.isScoreQuestion {
+                let barViewModel = BarViewModel(
+                    bar: bar,
+                    ledgerLines: 5,
+                    showClef: true,
+                    showKey: true,
+                    showTime: true
+                )
+                
+                if let answer = answer {
+                    self.currentQuestionData = (barViewModel, nil, [answer])
+                } else {
+                    self.currentQuestionData = nil
+                }
+            } else {
+                let part = Part(bars: [[bar]])
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [part], octaves: 2)
+                
+                let intervalLinesViewModel = IntervalLinesViewModel(
+                    segments: rollViewModel.segments ?? [],
+                    parts: rollViewModel.parts ?? [],
+                    groups: rollViewModel.partGroups,
+                    harmonicIntervalLinesType: .none,
+                    showMelodicIntervalLines: true,
+                    barIndex: 0,
+                    barWidth: .zero,
+                    rowWidth: .zero,
+                    rowHeight: .zero,
+                    harmonicIntervalLineColors: [],
+                    melodicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedMelodicIntervalLineColors : RollViewModel.melodicIntervalLineColors,
+                    viewableMelodicLines: [part],
+                    showInvertedIntervals: question.intervalLinesType == .InvertedLines,
+                    showZigZags: question.intervalLinesType == .InvertedLines,
+                    testing: false
+                )
+                
+                if let answer = answer {
+                    self.currentQuestionData = (nil, (rollViewModel, intervalLinesViewModel), [answer])
+                } else {
+                    self.currentQuestionData = nil
+                }
+            }
+        case .ScoreMelodicIntervalInversionIdentification, .RollMelodicIntervalInversionIdentification:
+            let note1 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .quarter,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note2 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .quarter,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note1SemitoneIncrease = Int.random(in: 0...18)
+            let note2SemitoneIncrease = (0...18).filter( { $0 != note1SemitoneIncrease } ).randomElement() ?? Int.random(in: 0...18)
+            let answer = Answer(semitones: 12 - (note2SemitoneIncrease - note1SemitoneIncrease).trueModulo(12))
+            
+            for _ in 0..<abs(note1SemitoneIncrease) {
+                note1SemitoneIncrease > 0 ? note1.increaseSemitone(sharps: key.sharps) : note1.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            for _ in 0..<abs(note2SemitoneIncrease) {
+                note2SemitoneIncrease > 0 ? note2.increaseSemitone(sharps: key.sharps) : note2.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            bar.chords[0].notes.append(note1)
+            bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
+            bar.chords.append(Chord(notes: []))
+            bar.chords[2].notes.append(note2)
+            bar.chords.append(Chord(notes: [TestingViewModel.quarterRest]))
+            
+            if question.type.isScoreQuestion {
+                let barViewModel = BarViewModel(
+                    bar: bar,
+                    ledgerLines: 5,
+                    showClef: true,
+                    showKey: true,
+                    showTime: true
+                )
+                
+                if let answer = answer {
+                    self.currentQuestionData = (barViewModel, nil, [answer])
+                } else {
+                    self.currentQuestionData = nil
+                }
+            } else {
+                let part = Part(bars: [[bar]])
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [part], octaves: 2)
+                
+                let intervalLinesViewModel = IntervalLinesViewModel(
+                    segments: rollViewModel.segments ?? [],
+                    parts: rollViewModel.parts ?? [],
+                    groups: rollViewModel.partGroups,
+                    harmonicIntervalLinesType: .none,
+                    showMelodicIntervalLines: true,
+                    barIndex: 0,
+                    barWidth: .zero,
+                    rowWidth: .zero,
+                    rowHeight: .zero,
+                    harmonicIntervalLineColors: [],
+                    melodicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedMelodicIntervalLineColors : RollViewModel.melodicIntervalLineColors,
+                    viewableMelodicLines: [part],
+                    showInvertedIntervals: question.intervalLinesType == .InvertedLines,
+                    showZigZags: question.intervalLinesType == .InvertedLines,
+                    testing: false
+                )
+                
+                if let answer = answer {
+                    self.currentQuestionData = (nil, (rollViewModel, intervalLinesViewModel), [answer])
+                } else {
+                    self.currentQuestionData = nil
+                }
+            }
+        case .ScoreMelodicMovementIdentification, .RollMelodicMovementIdentification:
+            let note1 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .eighth,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note2 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .eighth,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note3 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .eighth,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note4 = Note(
+                pitch: lowestStartingNote.pitch,
+                octave: lowestStartingNote.octave,
+                duration: .eighth,
+                isRest: false,
+                isDotted: false,
+                hasAccent: false
+            )
+            
+            let note1SemitoneIncrease = Int.random(in: 0...18)
+            let note2SemitoneIncrease = (0...18).filter( { $0 != note1SemitoneIncrease } ).randomElement() ?? Int.random(in: 0...18)
+            let note3SemitoneIncrease = (0...18).filter( { $0 != note2SemitoneIncrease } ).randomElement() ?? Int.random(in: 0...18)
+            let note4SemitoneIncrease = (0...18).filter( { $0 != note3SemitoneIncrease && ($0 - note1SemitoneIncrease).trueModulo(12) != 0} ).randomElement() ?? Int.random(in: 0...18)
+            let answer = Answer(semitones: (note4SemitoneIncrease - note1SemitoneIncrease).trueModulo(12))
+            
+            for _ in 0..<abs(note1SemitoneIncrease) {
+                note1SemitoneIncrease > 0 ? note1.increaseSemitone(sharps: key.sharps) : note1.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            for _ in 0..<abs(note2SemitoneIncrease) {
+                note2SemitoneIncrease > 0 ? note2.increaseSemitone(sharps: key.sharps) : note2.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            for _ in 0..<abs(note3SemitoneIncrease) {
+                note3SemitoneIncrease > 0 ? note3.increaseSemitone(sharps: key.sharps) : note3.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            for _ in 0..<abs(note4SemitoneIncrease) {
+                note4SemitoneIncrease > 0 ? note4.increaseSemitone(sharps: key.sharps) : note4.decreaseSemitone(sharps: key.sharps)
+            }
+            
+            bar.chords[0].notes.append(note1)
+            bar.chords.append(Chord(notes: [TestingViewModel.eighthRest]))
+            bar.chords.append(Chord(notes: []))
+            bar.chords[2].notes.append(note2)
+            bar.chords.append(Chord(notes: [TestingViewModel.eighthRest]))
+            bar.chords.append(Chord(notes: []))
+            bar.chords[4].notes.append(note3)
+            bar.chords.append(Chord(notes: [TestingViewModel.eighthRest]))
+            bar.chords.append(Chord(notes: []))
+            bar.chords[6].notes.append(note4)
+            bar.chords.append(Chord(notes: [TestingViewModel.eighthRest]))
+            
+            if question.type.isScoreQuestion {
+                let barViewModel = BarViewModel(
+                    bar: bar,
+                    ledgerLines: 5,
+                    showClef: true,
+                    showKey: true,
+                    showTime: true
+                )
+                
+                if let answer = answer {
+                    self.currentQuestionData = (barViewModel, nil, [answer])
+                } else {
+                    self.currentQuestionData = nil
+                }
+            } else {
+                let part = Part(bars: [[bar]])
+                let rollViewModel = RollViewModel(scoreManager: ScoreManager(), parts: [part], octaves: 2)
+                
+                let intervalLinesViewModel = IntervalLinesViewModel(
+                    segments: rollViewModel.segments ?? [],
+                    parts: rollViewModel.parts ?? [],
+                    groups: rollViewModel.partGroups,
+                    harmonicIntervalLinesType: .none,
+                    showMelodicIntervalLines: true,
+                    barIndex: 0,
+                    barWidth: .zero,
+                    rowWidth: .zero,
+                    rowHeight: .zero,
+                    harmonicIntervalLineColors: [],
+                    melodicIntervalLineColors: question.intervalLinesType == .InvertedLines ? RollViewModel.invertedMelodicIntervalLineColors : RollViewModel.melodicIntervalLineColors,
+                    viewableMelodicLines: [part],
+                    showInvertedIntervals: question.intervalLinesType == .InvertedLines,
+                    showZigZags: question.intervalLinesType == .InvertedLines,
+                    testing: false
+                )
+                
+                if let answer = answer {
+                    self.currentQuestionData = (nil, (rollViewModel, intervalLinesViewModel), [answer])
+                } else {
+                    self.currentQuestionData = nil
+                }
+            }
         }
     }
+    
+    static let eighthRest = Note(
+        duration: .eighth,
+        isRest: true,
+        isDotted: false,
+        hasAccent: false
+    )
     
     static let quarterRest = Note(
         duration: .quarter,
@@ -1286,7 +1729,7 @@ extension TestingViewModel {
                         pitch: .G,
                         accidental: nil,
                         octave: .oneLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -1295,14 +1738,11 @@ extension TestingViewModel {
                         pitch: .C,
                         accidental: .Sharp,
                         octave: .twoLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
                 ]),
                 Chord(notes: [
                     halfRest
@@ -1318,45 +1758,10 @@ extension TestingViewModel {
             chords: [
                 Chord(notes: [
                     Note(
-                        pitch: .F,
-                        accidental: nil,
-                        octave: .oneLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .G,
-                        accidental: .Sharp,
-                        octave: .oneLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
-                    halfRest
-                ])
-            ],
-            clef: .Treble,
-            timeSignature: .custom(beats: 4, noteValue: 4),
-            repeat: nil,
-            doubleLine: false,
-            keySignature: .AMajor
-        ), [.Minor3rd]), // S2II 2
-        (Bar(
-            chords: [
-                Chord(notes: [
-                    Note(
                         pitch: .D,
                         accidental: nil,
                         octave: .twoLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -1365,14 +1770,11 @@ extension TestingViewModel {
                         pitch: .B,
                         accidental: .Flat,
                         octave: .twoLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
                 ]),
                 Chord(notes: [
                     halfRest
@@ -1383,7 +1785,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .BFlatMajor
-        ), [.Minor6th]), // S2II 3
+        ), [.Minor6th]), // S2II 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1391,7 +1793,7 @@ extension TestingViewModel {
                         pitch: .F,
                         accidental: .Sharp,
                         octave: .oneLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -1400,7 +1802,7 @@ extension TestingViewModel {
                         pitch: .A,
                         accidental: nil,
                         octave: .oneLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -1409,14 +1811,11 @@ extension TestingViewModel {
                         pitch: .F,
                         accidental: .Sharp,
                         octave: .twoLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
                 ]),
                 Chord(notes: [
                     halfRest
@@ -1435,7 +1834,7 @@ extension TestingViewModel {
                         pitch: .E,
                         accidental: nil,
                         octave: .oneLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -1444,7 +1843,7 @@ extension TestingViewModel {
                         pitch: .G,
                         accidental: nil,
                         octave: .oneLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -1453,14 +1852,11 @@ extension TestingViewModel {
                         pitch: .C,
                         accidental: .Sharp,
                         octave: .twoLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
                 ]),
                 Chord(notes: [
                     halfRest
@@ -1477,97 +1873,9 @@ extension TestingViewModel {
                 Chord(notes: [
                     Note(
                         pitch: .D,
-                        accidental: nil,
-                        octave: .twoLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .A,
-                        accidental: nil,
-                        octave: .twoLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .B,
-                        accidental: .Flat,
-                        octave: .twoLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
-                    halfRest
-                ])
-            ],
-            clef: .Treble,
-            timeSignature: .custom(beats: 4, noteValue: 4),
-            repeat: nil,
-            doubleLine: false,
-            keySignature: .AFlatMajor
-        ), [.Perfect5th, .Minor2nd]), // S3II 3
-        (Bar(
-            chords: [
-                Chord(notes: [
-                    Note(
-                        pitch: .G,
-                        accidental: .Flat,
-                        octave: .oneLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .A,
-                        accidental: nil,
-                        octave: .oneLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .B,
-                        accidental: .Flat,
-                        octave: .oneLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
-                    halfRest
-                ])
-            ],
-            clef: .Treble,
-            timeSignature: .custom(beats: 4, noteValue: 4),
-            repeat: nil,
-            doubleLine: false,
-            keySignature: .FMajor
-        ), [.Major3rd]), // S3OI 1
-        (Bar(
-            chords: [
-                Chord(notes: [
-                    Note(
-                        pitch: .D,
                         accidental: .Sharp,
                         octave: .twoLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -1576,7 +1884,7 @@ extension TestingViewModel {
                         pitch: .G,
                         accidental: nil,
                         octave: .twoLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -1585,14 +1893,11 @@ extension TestingViewModel {
                         pitch: .G,
                         accidental: .Sharp,
                         octave: .twoLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
                 ]),
                 Chord(notes: [
                     halfRest
@@ -1603,7 +1908,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .EMajor
-        ), [.Perfect4th]), // S3OI 2
+        ), [.Perfect4th]), // S3OI 1
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1611,7 +1916,7 @@ extension TestingViewModel {
                         pitch: .E,
                         accidental: .Flat,
                         octave: .oneLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -1620,7 +1925,7 @@ extension TestingViewModel {
                         pitch: .F,
                         accidental: nil,
                         octave: .oneLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -1629,14 +1934,11 @@ extension TestingViewModel {
                         pitch: .D,
                         accidental: nil,
                         octave: .twoLine,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
                     )
-                ]),
-                Chord(notes: [
-                    quarterRest
                 ]),
                 Chord(notes: [
                     halfRest
@@ -1647,7 +1949,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .FMajor
-        ), [.Major7th]), // S3OI 3
+        ), [.Major7th]), // S3OI 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1727,79 +2029,6 @@ extension TestingViewModel {
                     Note(
                         pitch: .C,
                         accidental: nil,
-                        octave: .twoLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .E,
-                        accidental: nil,
-                        octave: .twoLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .G,
-                        accidental: .Sharp,
-                        octave: .twoLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
-                    Note(
-                        pitch: .G,
-                        accidental: .Sharp,
-                        octave: .twoLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .C,
-                        accidental: nil,
-                        octave: .threeLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .D,
-                        accidental: .Sharp,
-                        octave: .threeLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
-            ],
-            clef: .Treble,
-            timeSignature: .custom(beats: 4, noteValue: 4),
-            repeat: nil,
-            doubleLine: false,
-            keySignature: .EMajor
-        ), [.False]), // SCAI 2
-        (Bar(
-            chords: [
-                Chord(notes: [
-                    Note(
-                        pitch: .C,
-                        accidental: nil,
                         octave: .oneLine,
                         duration: .quarter,
                         isRest: false,
@@ -1866,7 +2095,7 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .BFlatMajor
-        ), [.True]), // SCAI 3
+        ), [.True]), // SCAI 2
         (Bar(
             chords: [
                 Chord(notes: [
@@ -1981,103 +2210,10 @@ extension TestingViewModel {
             chords: [
                 Chord(notes: [
                     Note(
-                        pitch: .D,
-                        accidental: .Flat,
-                        octave: .oneLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .F,
-                        accidental: nil,
-                        octave: .oneLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
-                    Note(
-                        pitch: .B,
-                        accidental: nil,
-                        octave: .oneLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .E,
-                        accidental: .Flat,
-                        octave: .twoLine,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
-            ],
-            clef: .Treble,
-            timeSignature: .custom(beats: 4, noteValue: 4),
-            repeat: nil,
-            doubleLine: false,
-            keySignature: .GFlatMajor
-        ), [.True]), // S3SI 3
-        (Bar(
-            chords: [
-                Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
-                    Note(
-                        pitch: .B,
-                        accidental: nil,
-                        octave: .subContra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
                         pitch: .F,
                         accidental: .Sharp,
                         octave: .subContra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    halfRest
-                ])
-            ],
-            clef: .Treble,
-            timeSignature: .custom(beats: 4, noteValue: 4),
-            repeat: nil,
-            doubleLine: false,
-            keySignature: .CMajor
-        ), [.Perfect4th]), // R2II NL
-        (Bar(
-            chords: [
-                Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
-                    Note(
-                        pitch: .F,
-                        accidental: .Sharp,
-                        octave: .subContra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2086,7 +2222,7 @@ extension TestingViewModel {
                         pitch: .E,
                         accidental: nil,
                         octave: .contra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2101,18 +2237,15 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Minor7th]), // R2II WL
+        ), [.Minor7th]), // R2II L
         (Bar(
             chords: [
-                Chord(notes: [
-                    quarterRest
-                ]),
                 Chord(notes: [
                     Note(
                         pitch: .F,
                         accidental: nil,
                         octave: .subContra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2121,7 +2254,7 @@ extension TestingViewModel {
                         pitch: .C,
                         accidental: nil,
                         octave: .contra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2140,58 +2273,11 @@ extension TestingViewModel {
         (Bar(
             chords: [
                 Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
-                    Note(
-                        pitch: .G,
-                        accidental: .Sharp,
-                        octave: .subContra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .A,
-                        accidental: .Sharp,
-                        octave: .subContra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .E,
-                        accidental: nil,
-                        octave: .contra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    halfRest
-                ])
-            ],
-            clef: .Treble,
-            timeSignature: .custom(beats: 4, noteValue: 4),
-            repeat: nil,
-            doubleLine: false,
-            keySignature: .CMajor
-        ), [.Major2nd, .Tritone]), // R3II NL
-        (Bar(
-            chords: [
-                Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
                     Note(
                         pitch: .A,
                         accidental: nil,
                         octave: .subContra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2200,7 +2286,7 @@ extension TestingViewModel {
                         pitch: .C,
                         accidental: .Sharp,
                         octave: .contra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2209,7 +2295,7 @@ extension TestingViewModel {
                         pitch: .E,
                         accidental: nil,
                         octave: .contra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2224,18 +2310,15 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Major3rd, .Minor3rd]), // R3II WL
+        ), [.Major3rd, .Minor3rd]), // R3II L
         (Bar(
             chords: [
-                Chord(notes: [
-                    quarterRest
-                ]),
                 Chord(notes: [
                     Note(
                         pitch: .F,
                         accidental: nil,
                         octave: .subContra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2244,7 +2327,7 @@ extension TestingViewModel {
                         pitch: .A,
                         accidental: .Sharp,
                         octave: .subContra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2253,7 +2336,7 @@ extension TestingViewModel {
                         pitch: .F,
                         accidental: nil,
                         octave: .contra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2272,58 +2355,11 @@ extension TestingViewModel {
         (Bar(
             chords: [
                 Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
-                    Note(
-                        pitch: .B,
-                        accidental: nil,
-                        octave: .subContra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .F,
-                        accidental: .Sharp,
-                        octave: .contra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .B,
-                        accidental: nil,
-                        octave: .contra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    halfRest
-                ])
-            ],
-            clef: .Treble,
-            timeSignature: .custom(beats: 4, noteValue: 4),
-            repeat: nil,
-            doubleLine: false,
-            keySignature: .CMajor
-        ), [.Octave]), // R3OI NL
-        (Bar(
-            chords: [
-                Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
                     Note(
                         pitch: .C,
                         accidental: nil,
                         octave: .contra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2332,7 +2368,7 @@ extension TestingViewModel {
                         pitch: .E,
                         accidental: nil,
                         octave: .contra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2341,7 +2377,7 @@ extension TestingViewModel {
                         pitch: .B,
                         accidental: nil,
                         octave: .contra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2356,18 +2392,15 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.Major7th]), // R3OI WL
+        ), [.Major7th]), // R3OI L
         (Bar(
             chords: [
-                Chord(notes: [
-                    quarterRest
-                ]),
                 Chord(notes: [
                     Note(
                         pitch: .D,
                         accidental: .Sharp,
                         octave: .subContra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2376,7 +2409,7 @@ extension TestingViewModel {
                         pitch: .G,
                         accidental: .Sharp,
                         octave: .subContra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2385,7 +2418,7 @@ extension TestingViewModel {
                         pitch: .A,
                         accidental: .Sharp,
                         octave: .subContra,
-                        duration: .quarter,
+                        duration: .half,
                         isRest: false,
                         isDotted: false,
                         hasAccent: false
@@ -2404,82 +2437,6 @@ extension TestingViewModel {
         (Bar(
             chords: [
                 Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
-                    Note(
-                        pitch: .D,
-                        accidental: nil,
-                        octave: .subContra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .F,
-                        accidental: nil,
-                        octave: .subContra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .A,
-                        accidental: nil,
-                        octave: .subContra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
-                    Note(
-                        pitch: .F,
-                        accidental: nil,
-                        octave: .subContra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .A,
-                        accidental: nil,
-                        octave: .subContra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .C,
-                        accidental: nil,
-                        octave: .contra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ])
-            ],
-            clef: .Treble,
-            timeSignature: .custom(beats: 4, noteValue: 4),
-            repeat: nil,
-            doubleLine: false,
-            keySignature: .CMajor
-        ), [.False]), // RCAI NL
-        (Bar(
-            chords: [
-                Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
                     Note(
                         pitch: .C,
                         accidental: nil,
@@ -2539,6 +2496,9 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
+                ]),
+                Chord(notes: [
+                    quarterRest
                 ])
             ],
             clef: .Treble,
@@ -2546,12 +2506,9 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.False]), // RCAI WL
+        ), [.False]), // RCAI L
         (Bar(
             chords: [
-                Chord(notes: [
-                    quarterRest
-                ]),
                 Chord(notes: [
                     Note(
                         pitch: .D,
@@ -2612,6 +2569,9 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
+                ]),
+                Chord(notes: [
+                    quarterRest
                 ])
             ],
             clef: .Treble,
@@ -2623,64 +2583,6 @@ extension TestingViewModel {
         (Bar(
             chords: [
                 Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
-                    Note(
-                        pitch: .F,
-                        accidental: .Sharp,
-                        octave: .subContra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .A,
-                        accidental: .Sharp,
-                        octave: .subContra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ]),
-                Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
-                    Note(
-                        pitch: .G,
-                        accidental: .Sharp,
-                        octave: .contra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    ),
-                    Note(
-                        pitch: .C,
-                        accidental: nil,
-                        octave: .contra,
-                        duration: .quarter,
-                        isRest: false,
-                        isDotted: false,
-                        hasAccent: false
-                    )
-                ])
-            ],
-            clef: .Treble,
-            timeSignature: .custom(beats: 4, noteValue: 4),
-            repeat: nil,
-            doubleLine: false,
-            keySignature: .CMajor
-        ), [.True]), // R2SI NL
-        (Bar(
-            chords: [
-                Chord(notes: [
-                    quarterRest
-                ]),
-                Chord(notes: [
                     Note(
                         pitch: .A,
                         accidental: nil,
@@ -2722,6 +2624,9 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
+                ]),
+                Chord(notes: [
+                    quarterRest
                 ])
             ],
             clef: .Treble,
@@ -2729,12 +2634,9 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.False]), // R2SI WL
+        ), [.False]), // R2SI L
         (Bar(
             chords: [
-                Chord(notes: [
-                    quarterRest
-                ]),
                 Chord(notes: [
                     Note(
                         pitch: .C,
@@ -2777,6 +2679,9 @@ extension TestingViewModel {
                         isDotted: false,
                         hasAccent: false
                     )
+                ]),
+                Chord(notes: [
+                    quarterRest
                 ])
             ],
             clef: .Treble,
@@ -2784,6 +2689,1062 @@ extension TestingViewModel {
             repeat: nil,
             doubleLine: false,
             keySignature: .CMajor
-        ), [.True]) // R3SI IL
+        ), [.True]), // R3SI IL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: .Flat,
+                        octave: .oneLine,
+                        duration: .half,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .half,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .BFlatMajor
+        ), [.Tritone]), // MS2II 1
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: .Sharp,
+                        octave: .twoLine,
+                        duration: .half,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .C,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .half,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .GMajor
+        ), [.Perfect5th]), // MS2II 2
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .B,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .twoLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .E,
+                        accidental: .Flat,
+                        octave: .oneLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .B,
+                        accidental: .Flat,
+                        octave: .oneLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .GFlatMajor
+        ), [.Minor2nd]), // MS2SII 1
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: .Flat,
+                        octave: .oneLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .E,
+                        accidental: nil,
+                        octave: .twoLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .FMajor
+        ), [.Perfect5th]), // MS2SII 2
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .twoLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: nil,
+                        octave: .twoLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .DMajor
+        ), [.Major7th]), // MS2LII 1
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: .Sharp,
+                        octave: .twoLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .A,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .twoLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .A,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .EMajor
+        ), [.Minor6th]), // MS2LII 2
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: .Flat,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .twoLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .EFlatMajor
+        ), [.Tritone]), // MS2III 1
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .DMajor
+        ), [.Perfect5th]), // MS2III 2
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .twoLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: .Flat,
+                        octave: .twoLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: .Flat,
+                        octave: .oneLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .AFlatMajor
+        ), [.Major7th]), // MS2OM 1
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .twoLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: .Sharp,
+                        octave: .oneLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .oneLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .E,
+                        accidental: nil,
+                        octave: .twoLine,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .GMajor
+        ), [.Major2nd]), // MS2OM 2
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .half,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .F,
+                        accidental: .Sharp,
+                        octave: .contra,
+                        duration: .half,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), [.Tritone]), // MR2II L
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .half,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    ),
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .half,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    halfRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), [.Perfect5th]), // MR2II IL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: .Sharp,
+                        octave: .contra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), [.Minor3rd]), // MR2SII L
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: .Sharp,
+                        octave: .contra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), [.Minor2nd]), // MR2SII IL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .E,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), [.Minor7th]), // MR2LII L
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .B,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), [.Major7th]), // MR2LII IL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), [.Minor7th]), // MR2III L
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: .Sharp,
+                        octave: .contra,
+                        duration: .quarter,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    quarterRest
+                ])
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), [.Major3rd]), // MR2III IL
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .G,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .contra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), [.Perfect4th]), // MR2OM L
+        (Bar(
+            chords: [
+                Chord(notes: [
+                    Note(
+                        pitch: .D,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .A,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .F,
+                        accidental: nil,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+                Chord(notes: [
+                    Note(
+                        pitch: .C,
+                        accidental: .Sharp,
+                        octave: .subContra,
+                        duration: .eighth,
+                        isRest: false,
+                        isDotted: false,
+                        hasAccent: false
+                    )
+                ]),
+                Chord(notes: [
+                    eighthRest
+                ]),
+            ],
+            clef: .Treble,
+            timeSignature: .custom(beats: 4, noteValue: 4),
+            repeat: nil,
+            doubleLine: false,
+            keySignature: .CMajor
+        ), [.Minor7th]), // MR2OM IL
     ]
 }

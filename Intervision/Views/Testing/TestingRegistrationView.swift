@@ -43,6 +43,10 @@ struct TestingRegistrationView: View {
                 
                 HStack(spacing: spacing) {
                     TextEditor(text: $testingViewModel.testerId)
+                        #if os(macOS)
+                        .equivalentPadding(.top, 20)
+                        .equivalentPadding(.leading, 4)
+                        #endif
                         .equivalentFont(.title3)
                         .fontWeight(.semibold)
                         .frame(width: textFieldWidth, height: buttonHeight)
@@ -55,9 +59,22 @@ struct TestingRegistrationView: View {
                         .onTapGesture {
                             testerIdFieldFocused = true
                         }
+                        .overlay {
+                            if testingViewModel.testerId.isEmpty {
+                                HStack {
+                                    Text(" Example: 12345678-abcd-4ef0-9876-0123456789ab")
+                                        .equivalentFont(.title3)
+                                        .fontWeight(.semibold)
+                                        .opacity(0.5)
+                                    
+                                    Spacer()
+                                }
+                            }
+                        }
                     
                     Button {
                         withAnimation(.easeInOut) {
+                            testerIdFieldFocused = false
                             showTesterIdAlert.toggle()
                         }
                     } label: {
@@ -204,6 +221,8 @@ struct TestingRegistrationView: View {
                 
                 HStack(spacing: spacing) {
                     Button {
+                        testerIdFieldFocused = false
+                        
                         DispatchQueue.main.async {
                             testingViewModel.savePDF(named: "Participant_Information_Sheet")
                             
@@ -222,8 +241,10 @@ struct TestingRegistrationView: View {
                     .buttonStyle(PlainButtonStyle())
                     
                     Button {
+                        testerIdFieldFocused = false
+                        
                         DispatchQueue.main.async {
-                                testingViewModel.savePDF(named: "Consent_Form")
+                            testingViewModel.savePDF(named: "Consent_Form")
                             
                             withAnimation(.easeInOut) {
                                 testingViewModel.consentFormSaved = true
@@ -409,7 +430,7 @@ struct TestingRegistrationView: View {
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
-                    .equivalentPadding(padding: 50)
+                    .equivalentPadding(50)
                     .background(.ultraThickMaterial)
                     .cornerRadius(screenSizeViewModel.getEquivalentValue(20))
                     .cornerRadius(cornerRadius)
@@ -433,7 +454,7 @@ struct TestingRegistrationView: View {
             #endif
         }
         .frame(width: viewSize.width, height: viewSize.height)
-        .equivalentPadding(padding: 50)
+        .equivalentPadding(50)
         .background(
             RoundedRectangle(cornerRadius: screenSizeViewModel.getEquivalentValue(20))
                 .fill(Material.ultraThickMaterial)

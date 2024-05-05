@@ -78,6 +78,8 @@ class RollViewModel: ObservableObject {
         self.showZigZags = showZigZags
         self.selectedSegments = selectedSegments
         self.isSegmentHeld = isSegmentHeld
+        
+        calculateSegments()
     }
     
     func updateRowHeight(_ height: CGFloat) {

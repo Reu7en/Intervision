@@ -88,7 +88,7 @@ struct EquivalentPaddingModifier: ViewModifier {
     let padding: CGFloat
     
     func body(content: Content) -> some View {
-        content.padding(screenSizeViewModel.equivalentPadding( edges: edges, padding: padding))
+        content.padding(screenSizeViewModel.equivalentPadding(edges: edges, padding: padding))
     }
 }
 
@@ -104,7 +104,11 @@ struct EquivalentFontModifier: ViewModifier {
 }
 
 extension View {
-    func equivalentPadding(_ edges: Edge.Set = [.all], padding: CGFloat = 8) -> some View {
+    func equivalentPadding(_ padding: CGFloat = 8) -> some View {
+        self.modifier(EquivalentPaddingModifier(edges: [.all], padding: padding))
+    }
+    
+    func equivalentPadding(_ edges: Edge.Set = [.all], _ padding: CGFloat = 8) -> some View {
         self.modifier(EquivalentPaddingModifier(edges: edges, padding: padding))
     }
     

@@ -19,6 +19,7 @@ struct HomeView: View {
     @StateObject var testingViewModel: TestingViewModel
     
     @State var presentedView: PresentedView = .None
+    @State private var opacity = 0.0
     
     init() {
         let scoreManager = ScoreManager()
@@ -41,6 +42,12 @@ struct HomeView: View {
                 .environmentObject(screenSizeViewModel)
         default:
             HomePanel(scoreManager: scoreManager, presentedView: $presentedView, size: screenSizeViewModel.screenSize)
+                .opacity(opacity)
+                .onAppear {
+                    withAnimation(.easeInOut(duration: 1.0)) {
+                        opacity = 1.0
+                    }
+                }
         }
     }
 }
@@ -82,7 +89,7 @@ extension HomeView {
                             Image(systemName: "pencil")
                                 .equivalentFont(.title3)
                         }
-                        .equivalentPadding(.all, padding: 50)
+                        .equivalentPadding(.all, 50)
                     }
                     .disabled(true)
                     .buttonStyle(BorderedButtonStyle())
@@ -116,7 +123,7 @@ extension HomeView {
                             Image(systemName: "folder")
                                 .equivalentFont(.title3)
                         }
-                        .equivalentPadding(.all, padding: 50)
+                        .equivalentPadding(.all, 50)
                     }
                     .disabled(true)
                     .buttonStyle(BorderedButtonStyle())
@@ -137,7 +144,7 @@ extension HomeView {
                             Image(systemName: "graduationcap")
                                 .equivalentFont(.title3)
                         }
-                        .equivalentPadding(.all, padding: 50)
+                        .equivalentPadding(.all, 50)
                     }
                     .buttonStyle(BorderedButtonStyle())
                     .frame(width: size.width / 1.5)
@@ -153,7 +160,7 @@ extension HomeView {
             }
             .environmentObject(screenSizeViewModel)
             .frame(width: size.width, height: size.height)
-            .equivalentPadding(.all, padding: 50)
+            .equivalentPadding(.all, 50)
             .background(
                 RoundedRectangle(cornerRadius: 20)
                     .fill(Material.ultraThickMaterial)

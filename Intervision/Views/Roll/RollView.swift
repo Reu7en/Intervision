@@ -20,6 +20,7 @@ struct RollView: View {
     @State var showInspector: Bool = false
     @State var showPiano: Bool = true
     @State var showDynamics: Bool = false
+    @State var refresh = UUID()
     
     var body: some View {
         GeometryReader { geometry in
@@ -133,6 +134,7 @@ struct RollView: View {
                 rollViewModel.updateRowHeight(rowHeight)
                 rollViewModel.updateBarWidth(barWidth)
             }
+            .id(refresh)
             
             Spacer()
                 .overlay(alignment: .topLeading) {
@@ -187,6 +189,8 @@ struct RollView: View {
             if rollViewModel.partGroups.isEmpty {
                 rollViewModel.initialisePartGroups()
             }
+            
+            refresh = UUID()
       
             #if os(macOS)
             rollViewModel.setupEventMonitoring()

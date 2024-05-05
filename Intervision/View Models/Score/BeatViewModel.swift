@@ -61,6 +61,7 @@ class BeatViewModel: ObservableObject {
         
         self.restDurations = BeatViewModel.calculateRestDurations(beatNoteGrid: self.beatNoteGrid)
         self.accidentals = BeatViewModel.calculateAccidentals(beatNoteGrid: self.beatNoteGrid)
+        
     }
 }
 
@@ -102,10 +103,12 @@ extension BeatViewModel {
         var currentChordIndex = 0
         var currentBeamIndex = 0
         
-        guard !beatBeamGroupChords.isEmpty else { return (notePositions, restPositions, accidentalPositions) }
+        guard !beatNoteGrid.isEmpty else { return (notePositions, restPositions, accidentalPositions) }
+//        guard !beatBeamGroupChords.isEmpty else { return (notePositions, restPositions, accidentalPositions) } // If this is causing issues, enabling it means rests in solo group dont render
         
         for (columnIndex, column) in beatNoteGrid.enumerated() {
-            if currentChordIndex == beatBeamGroupChords[currentBeamIndex].count {
+//            if currentChordIndex == beatBeamGroupChords[currentBeamIndex].count { // Also disabled
+            if !beatBeamGroupChords.isEmpty, currentChordIndex == beatBeamGroupChords[currentBeamIndex].count {
                 currentBeamIndex += 1
                 currentChordIndex = 0
             }

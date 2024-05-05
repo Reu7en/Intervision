@@ -276,7 +276,7 @@ class IntervalLinesViewModel: ObservableObject {
                             
                             let startPoint = CGPoint(x: xPosition, y: yStartPosition)
                             let endPoint = CGPoint(x: xPosition, y: yEndPosition)
-                            let color = calculateColor(isHarmonic: true, segment1: segment1, segment2: segment2)
+                            let color = calculateHarmonicColor(segment1: segment1, segment2: segment2)
                             let inversionType = calculateInversionType(segment1: segment1, segment2: segment2)
                             
                             let line = Line(startPoint: startPoint, endPoint: endPoint, color: color, inversionType: inversionType)
@@ -301,10 +301,12 @@ class IntervalLinesViewModel: ObservableObject {
                 lines.append(Line(startPoint: groupLines[groupLines.count - 1].startPoint, endPoint: groupLines[groupLines.count - 1].endPoint, dotted: true, color: groupLines[groupLines.count - 1].color, inversionType: groupLines[groupLines.count - 1].inversionType))
                 
                 for line in lines {
-                    let offset = self.barWidth / 4
-                    
-                    line.startPoint.x += offset
-                    line.endPoint.x += offset
+                    if let first = segmentGroup.first {
+                        let offset = self.barWidth * (first.duration + first.durationPreceeding)
+                        
+                        line.startPoint.x += offset
+                        line.endPoint.x += offset
+                    }
                 }
             }
             
@@ -365,8 +367,8 @@ class IntervalLinesViewModel: ObservableObject {
                         
                         let startPoint = CGPoint(x: xStartPosition, y: yStartPosition)
                         let endPoint = CGPoint(x: xEndPosition, y: yEndPosition)
-                        let color = calculateColor(isHarmonic: false, segment1: segment1, segment2: segment2)
-                        let inversionType = calculateInversionType(segment1: segment1, segment2: segment2)
+                        let color = calculateMelodicColor(segment1: segment1, segment2: segment2)
+                        let inversionType = calculateMelodicInversionType(segment1: segment1, segment2: segment2)
                         
                         let line = Line(startPoint: startPoint, endPoint: endPoint, color: color, inversionType: inversionType)
                         
@@ -411,8 +413,8 @@ class IntervalLinesViewModel: ObservableObject {
                     
                     let startPoint = CGPoint(x: xStartPosition, y: yStartPosition)
                     let endPoint = CGPoint(x: xEndPosition, y: yEndPosition)
-                    let color = calculateColor(isHarmonic: false, segment1: trailingSegment, segment2: leadingSegment)
-                    let inversionType = calculateInversionType(segment1: trailingSegment, segment2: leadingSegment)
+                    let color = calculateMelodicColor(segment1: trailingSegment, segment2: leadingSegment)
+                    let inversionType = calculateMelodicInversionType(segment1: trailingSegment, segment2: leadingSegment)
                     
                     let line = Line(startPoint: startPoint, endPoint: endPoint, color: color, inversionType: inversionType)
                     
@@ -456,8 +458,8 @@ class IntervalLinesViewModel: ObservableObject {
                     
                     let startPoint = CGPoint(x: xStartPosition, y: yStartPosition)
                     let endPoint = CGPoint(x: xEndPosition, y: yEndPosition)
-                    let color = calculateColor(isHarmonic: false, segment1: trailingSegment, segment2: leadingSegment)
-                    let inversionType = calculateInversionType(segment1: trailingSegment, segment2: leadingSegment)
+                    let color = calculateMelodicColor(segment1: trailingSegment, segment2: leadingSegment)
+                    let inversionType = calculateMelodicInversionType(segment1: trailingSegment, segment2: leadingSegment)
                     
                     let line = Line(startPoint: startPoint, endPoint: endPoint, color: color, inversionType: inversionType)
                     
@@ -517,11 +519,11 @@ class IntervalLinesViewModel: ObservableObject {
         }
     }
     
-    func calculateColor(isHarmonic: Bool, segment1: Segment, segment2: Segment) -> Color {
+    func calculateHarmonicColor(segment1: Segment, segment2: Segment) -> Color {
         let distance = abs(segment1.rowIndex - segment2.rowIndex)
         
         if distance == 0 {
-            return (isHarmonic ? harmonicIntervalLineColors.last : melodicIntervalLineColors.last) ?? Color.clear
+            return harmonicIntervalLineColors.last ?? Color.clear
         }
         
         var index = (distance - 1) % 12
@@ -534,16 +536,34 @@ class IntervalLinesViewModel: ObservableObject {
             }
         }
         
-        if isHarmonic {
-            return harmonicIntervalLineColors.indices.contains(index) ? harmonicIntervalLineColors[index] : Color.clear
-        } else {
-            return melodicIntervalLineColors.indices.contains(index) ? melodicIntervalLineColors[index] : Color.clear
+        return harmonicIntervalLineColors.indices.contains(index) ? harmonicIntervalLineColors[index] : Color.clear
+    }
+    
+    func calculateMelodicColor(segment1: Segment, segment2: Segment) -> Color {
+        var index = (segment1.rowIndex - segment2.rowIndex).trueModulo(12) - 1
+        
+        if self.showInvertedIntervals {
+            if index > 5 {
+                index = 10 - index
+            }
         }
+        
+        return melodicIntervalLineColors.indices.contains(index) ? melodicIntervalLineColors[index] : Color.clear
     }
     
     func calculateInversionType(segment1: Segment, segment2: Segment) -> Line.InversionType {
         let distance = abs(segment1.rowIndex - segment2.rowIndex)
         let index = (distance - 1) % 12
+        
+        if index > 5 {
+            return .Inverted
+        } else {
+            return .None
+        }
+    }
+    
+    func calculateMelodicInversionType(segment1: Segment, segment2: Segment) -> Line.InversionType {
+        let index = (segment1.rowIndex - segment2.rowIndex).trueModulo(12) - 1
         
         if index == 0 || index == 11 {
             return .Neither

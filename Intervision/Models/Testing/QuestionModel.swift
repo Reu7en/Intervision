@@ -56,7 +56,12 @@ extension Question {
                 .ScoreThreeNoteInnerIntervalsIdentification,
                 .ScoreThreeNoteOuterIntervalIdentification,
                 .ScoreChordsAreInversions,
-                .ScoreTwoNoteIntervalsAreEqual:
+                .ScoreTwoNoteIntervalsAreEqual,
+                .ScoreMelodicIntervalIdentification,
+                .ScoreSmallestMelodicIntervalIdentification,
+                .ScoreLargestMelodicIntervalIdentification,
+                .ScoreMelodicIntervalInversionIdentification,
+                .ScoreMelodicMovementIdentification:
                 return true
             default:
                 return false

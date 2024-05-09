@@ -9,7 +9,7 @@ import SwiftUI
 
 struct QuestionView: View {
     
-    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -23,7 +23,7 @@ struct QuestionView: View {
     @State private var intervalLinesOpacity = 1.0
     
     var body: some View {
-        let viewSize = CGSize(width: screenSizeViewModel.screenSize.width / 1.05, height: screenSizeViewModel.screenSize.height / 1.05)
+        let viewSize = CGSize(width: screenSizeViewModel.viewSize.width / 1.05, height: screenSizeViewModel.viewSize.height / 1.05)
         let spacing = screenSizeViewModel.getEquivalentValue(8)
         let cornerRadius = screenSizeViewModel.getEquivalentValue(8)
         let backgroundCornerRadius = screenSizeViewModel.getEquivalentValue(20)
@@ -39,14 +39,14 @@ struct QuestionView: View {
                     if let questionData = testingViewModel.currentQuestionData,
                        let answers = questionData.2, answers.count == (question.type.isMultipartQuestion ? 2 : 1), !(questionData.0 == nil && questionData.1 == nil) {
                         Text("\(testingViewModel.practice ? "Practice Question" : "Question \(testingViewModel.currentQuestionIndex + 1)/\(40)")")
-                            .equivalentFont(.title3)
+                            .dynamicFont(.title3)
                             .fontWeight(.semibold)
-                            .equivalentPadding(.bottom)
+                            .dynamicPadding(.bottom)
                         
                         if let barViewModel = questionData.0 {
                             BarView(barViewModel: barViewModel)
                                 .frame(width: viewSize.width, height: barHeight / 1.25)
-                                .equivalentPadding(.all, 30)
+                                .dynamicPadding(.all, 30)
                                 .background(
                                     RoundedRectangle(cornerRadius: backgroundCornerRadius)
                                         .fill(Material.ultraThin)
@@ -149,7 +149,7 @@ struct QuestionView: View {
                                         Spacer()
                                         
                                         Text("Show Piano")
-                                            .equivalentFont(.title3)
+                                            .dynamicFont(.title3)
                                             .fontWeight(.semibold)
                                         
                                         Button {
@@ -164,7 +164,7 @@ struct QuestionView: View {
                                             }
                                         } label: {
                                             Image(systemName: "pianokeys")
-                                                .equivalentFont(.title)
+                                                .dynamicFont(.title)
                                                 .frame(width: inspectorWidth * 0.75, height: barHeight / 9)
                                                 .background(testingViewModel.showPiano ? Color.accentColor : Color.secondary)
                                                 .cornerRadius(cornerRadius)
@@ -172,7 +172,7 @@ struct QuestionView: View {
                                         .buttonStyle(PlainButtonStyle())
                                         
                                         Text("Background")
-                                            .equivalentFont(.title3)
+                                            .dynamicFont(.title3)
                                             .fontWeight(.semibold)
                                         
                                         ForEach(BarRowsView.ViewType.allCases, id: \.self) { viewType in
@@ -182,7 +182,7 @@ struct QuestionView: View {
                                                 }
                                             } label: {
                                                 Text(viewType.rawValue)
-                                                    .equivalentFont()
+                                                    .dynamicFont()
                                                     .fontWeight(.semibold)
                                                     .frame(width: inspectorWidth * 0.75, height: barHeight / 9)
                                                     .background(testingViewModel.rollRowsViewType == viewType ? Color.accentColor : Color.secondary)
@@ -197,7 +197,7 @@ struct QuestionView: View {
                                 }
                             }
                             .frame(height: barHeight)
-                            .equivalentPadding(.all, 30)
+                            .dynamicPadding(.all, 30)
                             .background(
                                 RoundedRectangle(cornerRadius: backgroundCornerRadius)
                                     .fill(Material.ultraThin)
@@ -248,7 +248,7 @@ struct QuestionView: View {
                                     }
                                 }
                                 .frame(width: viewSize.width, height: timerHeight)
-                                .equivalentPadding(.all, 30)
+                                .dynamicPadding(.all, 30)
                                 .background(
                                     RoundedRectangle(cornerRadius: backgroundCornerRadius)
                                         .fill(Material.ultraThin)
@@ -273,14 +273,14 @@ struct QuestionView: View {
                             NextQuestionButton(testingViewModel: testingViewModel)
                                 .frame(height: viewSize.height / 30)
                                 .disabled(!testingViewModel.questionMarked)
-                                .equivalentPadding()
+                                .dynamicPadding()
                                 .environmentObject(screenSizeViewModel)
                             
                             Spacer()
                         }
                         
                         Text(testingViewModel.answerTime >= testingViewModel.maximumAnswerTime ? "DNF" : "\(testingViewModel.answerTime, format: .number.rounded(increment: 0.01))")
-                            .equivalentFont(.title)
+                            .dynamicFont(.title)
                             .fontWeight(.bold)
                             .monospacedDigit()
                             .foregroundStyle(testingViewModel.answerTime >= testingViewModel.maximumAnswerTime ? Color.red : Color.primary)
@@ -288,13 +288,13 @@ struct QuestionView: View {
                         if testingViewModel.questionMarked {
                             NextQuestionButton(testingViewModel: testingViewModel)
                                 .frame(height: timerHeight)
-                                .equivalentPadding(.all, 30)
+                                .dynamicPadding(.all, 30)
                                 .disabled(!testingViewModel.questionMarked)
                                 .environmentObject(screenSizeViewModel)
                         } else {
                             AnswerTimerView(testingViewModel: testingViewModel)
                                 .frame(width: viewSize.width, height: timerHeight)
-                                .equivalentPadding(.all, 30)
+                                .dynamicPadding(.all, 30)
                                 .background(
                                     RoundedRectangle(cornerRadius: backgroundCornerRadius)
                                         .fill(Material.ultraThin)
@@ -312,11 +312,11 @@ struct QuestionView: View {
                         
                         VStack(spacing: spacing) {
                             Text(question.type.description[0])
-                                .equivalentFont(.title3)
+                                .dynamicFont(.title3)
                                 .fontWeight(.semibold)
                             
                             Text(question.type.description[1])
-                                .equivalentFont()
+                                .dynamicFont()
                                 .fontWeight(.semibold)
                             
                             HStack(spacing: spacing) {
@@ -331,7 +331,7 @@ struct QuestionView: View {
                                         }
                                     } label: {
                                         Text("\(answer.rawValue)")
-                                            .equivalentFont()
+                                            .dynamicFont()
                                             .fontWeight(.semibold)
                                             .frame(width: question.type.isBoolQuestion ? viewSize.width / 5 : (viewSize.width / 12) - (spacing) * (11 / 12), height: timerHeight * 1.5)
                                             .background {
@@ -356,7 +356,7 @@ struct QuestionView: View {
                             
                             if question.type.isMultipartQuestion {
                                 Text(question.type.description[2])
-                                    .equivalentFont()
+                                    .dynamicFont()
                                     .fontWeight(.semibold)
                                 
                                 HStack(spacing: spacing) {
@@ -371,7 +371,7 @@ struct QuestionView: View {
                                             }
                                         } label: {
                                             Text("\(answer.rawValue)")
-                                                .equivalentFont()
+                                                .dynamicFont()
                                                 .fontWeight(.semibold)
                                                 .frame(width: question.type.isBoolQuestion ? viewSize.width / 5 : (viewSize.width / 12) - (spacing) * (11 / 12), height: timerHeight * 1.5)
                                                 .background {
@@ -394,7 +394,7 @@ struct QuestionView: View {
                                 }
                             }
                         }
-                        .equivalentPadding(.all, 30)
+                        .dynamicPadding(.all, 30)
                         .background(
                             RoundedRectangle(cornerRadius: backgroundCornerRadius)
                                 .fill(Material.ultraThick)
@@ -434,8 +434,8 @@ struct QuestionView: View {
                     }
                 } label: {
                     Image(systemName: "xmark")
-                        .equivalentFont()
-                        .equivalentPadding()
+                        .dynamicFont()
+                        .dynamicPadding()
                 }
             }
         }
@@ -479,6 +479,6 @@ struct QuestionView: View {
 
 #Preview {
     QuestionView(testingViewModel: TestingViewModel())
-        .environmentObject(ScreenSizeViewModel())
+        .environmentObject(DynamicSizingViewModel())
         .frame(width: 800, height: 450)
 }

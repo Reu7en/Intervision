@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TestingRegistrationView: View {
     
-    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
     
     @StateObject var testingViewModel: TestingViewModel
     
@@ -21,13 +21,11 @@ struct TestingRegistrationView: View {
     @State private var showPracticeAlert = false
     @State private var showInvalidIdAlert = false
     @State private var showSaveFormsAlert = false
-    @State private var showRollBackgroundOverlay = false
-    @State private var overlayRollRowsViewType = BarRowsView.ViewType.Piano
     
     @FocusState private var testerIdFieldFocused: Bool
     
     var body: some View {
-        let viewSize = CGSize(width: screenSizeViewModel.screenSize.width / 1.1, height: screenSizeViewModel.screenSize.height / 1.1)
+        let viewSize = CGSize(width: screenSizeViewModel.viewSize.width / 1.1, height: screenSizeViewModel.viewSize.height / 1.1)
         let buttonHeight = screenSizeViewModel.getEquivalentValue(80)
         let spacing = screenSizeViewModel.getEquivalentValue(20)
         let questionMarkButtonWidth = viewSize.width / 10
@@ -38,17 +36,17 @@ struct TestingRegistrationView: View {
         ZStack {
             VStack(spacing: spacing) {
                 Text("Tester ID")
-                    .equivalentFont(.title2)
-                    .equivalentPadding()
+                    .dynamicFont(.title2)
+                    .dynamicPadding()
                     .fontWeight(.semibold)
                 
                 HStack(spacing: spacing) {
                     TextEditor(text: $testingViewModel.testerId)
                         #if os(macOS)
-                        .equivalentPadding(.top, 20)
-                        .equivalentPadding(.leading, 4)
+                        .dynamicPadding(.top, 16)
+                        .dynamicPadding(.leading, 4)
                         #endif
-                        .equivalentFont(.title3)
+                        .dynamicFont(.title3)
                         .fontWeight(.semibold)
                         .frame(width: textFieldWidth, height: buttonHeight)
                         .lineLimit(1)
@@ -64,13 +62,19 @@ struct TestingRegistrationView: View {
                             if testingViewModel.testerId.isEmpty {
                                 HStack {
                                     Text(" Example: 12345678-abcd-4ef0-9876-0123456789ab")
-                                        .equivalentFont(.title3)
+                                        .dynamicFont(.title3)
                                         .fontWeight(.semibold)
                                         .opacity(0.5)
                                     
                                     Spacer()
                                 }
                             }
+                        }
+                        .alert(isPresented: $showInvalidIdAlert) {
+                            Alert(
+                                title: Text("Your Tester ID is invalid!"),
+                                message: Text("Your Tester ID should be in UUID format, for example: 12345678-abcd-4ef0-9876-0123456789ab")
+                            )
                         }
                     
                     Button {
@@ -80,7 +84,7 @@ struct TestingRegistrationView: View {
                         }
                     } label: {
                         Image(systemName: "questionmark")
-                            .equivalentFont(.title3)
+                            .dynamicFont(.title3)
                             .fontWeight(.semibold)
                             .frame(width: questionMarkButtonWidth, height: buttonHeight)
                             .background(Color.accentColor)
@@ -96,12 +100,12 @@ struct TestingRegistrationView: View {
                 }
                 
                 Text("Experience")
-                    .equivalentFont(.title2)
-                    .equivalentPadding()
+                    .dynamicFont(.title2)
+                    .dynamicPadding()
                     .fontWeight(.semibold)
                 
                 Text("Performance")
-                    .equivalentFont()
+                    .dynamicFont()
                     .fontWeight(.semibold)
                 
                 HStack(spacing: spacing) {
@@ -113,7 +117,7 @@ struct TestingRegistrationView: View {
                             }
                         } label: {
                             Text(skillLevel.rawValue)
-                                .equivalentFont(.title3)
+                                .dynamicFont(.title3)
                                 .fontWeight(.semibold)
                                 .frame(width: skillsButtonWidth, height: buttonHeight)
                                 .background(skillLevel == testingViewModel.performerSkillLevel ? Color.accentColor : Color.secondary)
@@ -124,7 +128,7 @@ struct TestingRegistrationView: View {
                 }
                 
                 Text("Composition")
-                    .equivalentFont()
+                    .dynamicFont()
                     .fontWeight(.semibold)
                 
                 HStack(spacing: spacing) {
@@ -136,7 +140,7 @@ struct TestingRegistrationView: View {
                             }
                         } label: {
                             Text(skillLevel.rawValue)
-                                .equivalentFont(.title3)
+                                .dynamicFont(.title3)
                                 .fontWeight(.semibold)
                                 .frame(width: skillsButtonWidth, height: buttonHeight)
                                 .background(skillLevel == testingViewModel.composerSkillLevel ? Color.accentColor : Color.secondary)
@@ -147,7 +151,7 @@ struct TestingRegistrationView: View {
                 }
             
                 Text("Theory")
-                    .equivalentFont()
+                    .dynamicFont()
                     .fontWeight(.semibold)
                 
                 HStack(spacing: spacing) {
@@ -159,7 +163,7 @@ struct TestingRegistrationView: View {
                             }
                         } label: {
                             Text(skillLevel.rawValue)
-                                .equivalentFont(.title3)
+                                .dynamicFont(.title3)
                                 .fontWeight(.semibold)
                                 .frame(width: skillsButtonWidth, height: buttonHeight)
                                 .background(skillLevel == testingViewModel.theoristSkillLevel ? Color.accentColor : Color.secondary)
@@ -170,7 +174,7 @@ struct TestingRegistrationView: View {
                 }
                 
                 Text("Music Education")
-                    .equivalentFont()
+                    .dynamicFont()
                     .fontWeight(.semibold)
                 
                 HStack(spacing: spacing) {
@@ -182,7 +186,7 @@ struct TestingRegistrationView: View {
                             }
                         } label: {
                             Text(skillLevel.rawValue)
-                                .equivalentFont(.title3)
+                                .dynamicFont(.title3)
                                 .fontWeight(.semibold)
                                 .frame(width: skillsButtonWidth, height: buttonHeight)
                                 .background(skillLevel == testingViewModel.educatorSkillLevel ? Color.accentColor : Color.secondary)
@@ -193,7 +197,7 @@ struct TestingRegistrationView: View {
                 }
                 
                 Text("Software Development")
-                    .equivalentFont()
+                    .dynamicFont()
                     .fontWeight(.semibold)
                 
                 HStack(spacing: spacing) {
@@ -205,7 +209,7 @@ struct TestingRegistrationView: View {
                             }
                         } label: {
                             Text(skillLevel.rawValue)
-                                .equivalentFont(.title3)
+                                .dynamicFont(.title3)
                                 .fontWeight(.semibold)
                                 .frame(width: skillsButtonWidth, height: buttonHeight)
                                 .background(skillLevel == testingViewModel.developerSkillLevel ? Color.accentColor : Color.secondary)
@@ -216,8 +220,8 @@ struct TestingRegistrationView: View {
                 }
                 
                 Text("Forms")
-                    .equivalentFont(.title2)
-                    .equivalentPadding()
+                    .dynamicFont(.title2)
+                    .dynamicPadding()
                     .fontWeight(.semibold)
                 
                 HStack(spacing: spacing) {
@@ -233,7 +237,7 @@ struct TestingRegistrationView: View {
                         }
                     } label: {
                         Text("Participant Information")
-                            .equivalentFont(.title3)
+                            .dynamicFont(.title3)
                             .fontWeight(.semibold)
                             .frame(width: skillsButtonWidth, height: buttonHeight)
                             .background(testingViewModel.participantInformationSheetSaved ? Color.green : Color.red)
@@ -253,7 +257,7 @@ struct TestingRegistrationView: View {
                         }
                     } label: {
                         Text("Consent Form")
-                            .equivalentFont(.title3)
+                            .dynamicFont(.title3)
                             .fontWeight(.semibold)
                             .frame(width: skillsButtonWidth, height: buttonHeight)
                             .background(testingViewModel.consentFormSaved ? Color.green : Color.red)
@@ -281,7 +285,7 @@ struct TestingRegistrationView: View {
                     }
                 } label: {
                     Text("Start Test")
-                        .equivalentFont(.title2)
+                        .dynamicFont(.title2)
                         .fontWeight(.semibold)
                         .frame(width: skillsButtonWidth, height: buttonHeight * 1.5)
                         .background(Color.accentColor)
@@ -328,123 +332,12 @@ struct TestingRegistrationView: View {
                         Text("No")
                     }
                 }
-                .alert(isPresented: $showInvalidIdAlert) {
-                    Alert(
-                        title: Text("Your Tester ID is invalid!")
-                    )
-                }
                 .alert(isPresented: $showSaveFormsAlert) {
                     Alert(
                         title: Text("You need to save a copy of the participant information sheet and consent form before you can begin the test!")
                     )
                 }
             }
-//            .overlay {
-//                if showRollBackgroundOverlay {
-//                    VStack(spacing: spacing / 2) {
-//                        Text("You can change how the background of the piano roll looks to better help you identify different intervals")
-//                            .equivalentFont(.title)
-//                            .equivalentPadding(.bottom)
-//                            .fontWeight(.semibold)
-//                            .lineLimit(2)
-//                        
-//                        HStack(spacing: 0) {
-//                            let pianoKeysWidth = testingViewModel.showPiano ? viewSize.width / 6 : 0
-//                            let barRowsWidth = viewSize.width * 0.9 - pianoKeysWidth
-//                            
-//                            Spacer()
-//                            
-//                            PianoKeysView(
-//                                octaves: 1,
-//                                width: pianoKeysWidth, 
-//                                rowHeight: viewSize.height / 25,
-//                                showOctaveLabel: false,
-//                                fontSize: 0
-//                            )
-//                            .border(Color.black)
-//                            .transition(.move(edge: .leading))
-//                            
-//                            BarRowsView(
-//                                rows: 12,
-//                                rowWidth: barRowsWidth,
-//                                rowHeight: viewSize.height / 25,
-//                                beats: 1,
-//                                viewType: testingViewModel.rollRowsViewType,
-//                                image: false
-//                            )
-//                            .transition(.move(edge: .leading))
-//                            
-//                            Spacer()
-//                        }
-//                        .equivalentPadding(.bottom)
-//                        
-//                        HStack(spacing: spacing) {
-//                            ForEach(BarRowsView.ViewType.allCases, id: \.self) { viewType in
-//                                RoundedRectangle(cornerRadius: cornerRadius)
-//                                    .foregroundStyle(Color.clear)
-//                                    .frame(height: buttonHeight)
-//                                    .background(viewType == testingViewModel.rollRowsViewType ? Color.accentColor : Color.secondary)
-//                                    .cornerRadius(cornerRadius)
-//                                    .overlay {
-//                                        Text(viewType.rawValue)
-//                                            .equivalentFont(.title3)
-//                                    }
-//                                    .onTapGesture {
-//                                        withAnimation(.easeInOut) {
-//                                            testerIdFieldFocused = false
-//                                            testingViewModel.rollRowsViewType = viewType
-//                                        }
-//                                    }
-//                            }
-//                        }
-//                        .frame(width: viewSize.width * 0.9)
-//                        
-//                        Text("You can also show or hide the piano keys")
-//                            .equivalentPadding(.top)
-//                            .equivalentFont(.title)
-//                            .fontWeight(.semibold)
-//                        
-//                        Button {
-//                            withAnimation(.easeInOut) {
-//                                testingViewModel.showPiano.toggle()
-//                            }
-//                        } label: {
-//                            Image(systemName: "pianokeys.inverse")
-//                                .equivalentFont(.largeTitle)
-//                                .frame(width: buttonHeight * 2, height: buttonHeight)
-//                                .background(testingViewModel.showPiano ? Color.accentColor : Color.secondary)
-//                                .cornerRadius(cornerRadius)
-//                        }
-//                        .buttonStyle(PlainButtonStyle())
-//                        
-//                        Spacer()
-//                        
-//                        Text("These can both be changed at any time during the test")
-//                            .equivalentPadding(.top)
-//                            .equivalentFont(.title)
-//                            .fontWeight(.semibold)
-//                        
-//                        Spacer()
-//                        
-//                        Button {
-//                            withAnimation(.easeInOut) {
-//                                showRollBackgroundOverlay = false
-//                            }
-//                        } label: {
-//                            Text("OK")
-//                                .equivalentFont(.title2)
-//                                .frame(width: skillsButtonWidth, height: buttonHeight * 1.5)
-//                                .background(Color.accentColor)
-//                                .cornerRadius(cornerRadius)
-//                        }
-//                        .buttonStyle(PlainButtonStyle())
-//                    }
-//                    .equivalentPadding(50)
-//                    .background(.ultraThickMaterial)
-//                    .cornerRadius(screenSizeViewModel.getEquivalentValue(20))
-//                    .cornerRadius(cornerRadius)
-//                }
-//            }
             .overlay(alignment: .topLeading) {
                 Button {
                     withAnimation(.easeInOut) {
@@ -452,8 +345,8 @@ struct TestingRegistrationView: View {
                     }
                 } label: {
                     Image(systemName: "xmark")
-                        .equivalentFont()
-                        .equivalentPadding()
+                        .dynamicFont()
+                        .dynamicPadding()
                 }
             }
             #if os(macOS)
@@ -463,7 +356,7 @@ struct TestingRegistrationView: View {
             #endif
         }
         .frame(width: viewSize.width, height: viewSize.height)
-        .equivalentPadding(50)
+        .dynamicPadding(50)
         .background(
             RoundedRectangle(cornerRadius: screenSizeViewModel.getEquivalentValue(20))
                 .fill(Material.ultraThickMaterial)
@@ -491,6 +384,6 @@ struct TestingRegistrationView: View {
 
 #Preview {
     TestingRegistrationView(testingViewModel: TestingViewModel(), presentedHomeView: Binding.constant(.None))
-        .environmentObject(ScreenSizeViewModel())
+        .environmentObject(DynamicSizingViewModel())
         .frame(width: 1000, height: 1000)
 }

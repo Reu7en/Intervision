@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct IntervisionApp: App {
     
-    @StateObject var screenSizeViewModel = ScreenSizeViewModel()
+    @StateObject var screenSizeViewModel = DynamicSizingViewModel(referenceViewSize: CGSize(width: 2560, height: 1440))
     
     @State private var isKeyboardVisible = false
     
@@ -24,17 +24,17 @@ struct IntervisionApp: App {
             GeometryReader { geometry in
                 HomeView()
                     .environmentObject(screenSizeViewModel)
-                    .frame(width: screenSizeViewModel.screenSize.width, height: screenSizeViewModel.screenSize.height, alignment: .center)
+                    .frame(width: screenSizeViewModel.viewSize.width, height: screenSizeViewModel.viewSize.height, alignment: .center)
                     .onAppear {
                         #if os(iOS)
                         addKeyboardObservers()
                         #endif
                         
-                        screenSizeViewModel.screenSize = geometry.size
+                        screenSizeViewModel.viewSize = geometry.size
                     }
                     .onChange(of: geometry.size) {
                         if !isKeyboardVisible {
-                            screenSizeViewModel.screenSize = geometry.size
+                            screenSizeViewModel.viewSize = geometry.size
                         }
                     }
                     .ignoresSafeArea(.keyboard, edges: .all)

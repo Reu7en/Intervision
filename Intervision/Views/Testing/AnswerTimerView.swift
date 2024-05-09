@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AnswerTimerView: View {
     
-    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
     
     @StateObject var testingViewModel: TestingViewModel
     
@@ -34,5 +34,5 @@ struct AnswerTimerView: View {
 
 #Preview {
     AnswerTimerView(testingViewModel: TestingViewModel())
-        .environmentObject(ScreenSizeViewModel())
+        .environmentObject(DynamicSizingViewModel())
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TutorialView: View {
     
-    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
     
     @StateObject var testingViewModel: TestingViewModel
     
@@ -17,7 +17,7 @@ struct TutorialView: View {
     @State private var showPracticeAlert = false
     
     var body: some View {
-        let viewSize = CGSize(width: screenSizeViewModel.screenSize.width / 1.1, height: screenSizeViewModel.screenSize.height / 1.1)
+        let viewSize = CGSize(width: screenSizeViewModel.viewSize.width / 1.1, height: screenSizeViewModel.viewSize.height / 1.1)
         let spacing = screenSizeViewModel.getEquivalentValue(20)
         let buttonHeight = screenSizeViewModel.getEquivalentValue(80)
         let buttonWidth = (viewSize.width / 4) - (spacing * 3 / 4)
@@ -34,9 +34,9 @@ struct TutorialView: View {
                         .frame(width: viewSize.width / 1.5, height: viewSize.height / 1.5)
                     
                     Text("The test consists of 40 questions in total, of which there are 10 different types of questions being asked. 5 types of question ask you to identify harmonic qualities in a phrase, while the other 5 ask you to identify melodic qualities in a phrase.")
-                        .equivalentFont(.title2)
+                        .dynamicFont(.title2)
                         .fontWeight(.semibold)
-                        .equivalentPadding()
+                        .dynamicPadding()
                 case 1:
                     Image("Tutorial2")
                         .resizable()
@@ -45,9 +45,9 @@ struct TutorialView: View {
                         .frame(width: viewSize.width / 1.5, height: viewSize.height / 1.5)
                     
                     Text("For half of the questions you will be presented with a bar in standard notation which will always be treble clef.")
-                        .equivalentFont(.title2)
+                        .dynamicFont(.title2)
                         .fontWeight(.semibold)
-                        .equivalentPadding()
+                        .dynamicPadding()
                 case 2:
                     Image("Tutorial3")
                         .resizable()
@@ -56,9 +56,9 @@ struct TutorialView: View {
                         .frame(width: viewSize.width / 1.5, height: viewSize.height / 1.5)
                     
                     Text("For the other half of the questions you will be presented with a bar in a piano roll style view, which also has coloured lines to better help you identify different intervals.")
-                        .equivalentFont(.title2)
+                        .dynamicFont(.title2)
                         .fontWeight(.semibold)
-                        .equivalentPadding()
+                        .dynamicPadding()
                 case 3:
                     Image("Tutorial4")
                         .resizable()
@@ -67,9 +67,9 @@ struct TutorialView: View {
                         .frame(width: viewSize.width / 1.5, height: viewSize.height / 1.5)
                     
                     Text("The colours will always be the same and a colour key will be displayed below the piano roll, but half of these questions will also pair up the inversions of different intervals together with the same line colour and a zig-zag line to differentiate between them.")
-                        .equivalentFont(.title2)
+                        .dynamicFont(.title2)
                         .fontWeight(.semibold)
-                        .equivalentPadding()
+                        .dynamicPadding()
                 case 4:
                     Image("Tutorial5")
                         .resizable()
@@ -78,9 +78,9 @@ struct TutorialView: View {
                         .frame(width: viewSize.width / 1.5, height: viewSize.height / 1.5)
                     
                     Text("You can also show/hide some piano keys on the left hand side, as well as change the background style to better help you identify different intervals.")
-                        .equivalentFont(.title2)
+                        .dynamicFont(.title2)
                         .fontWeight(.semibold)
-                        .equivalentPadding()
+                        .dynamicPadding()
                 case 5:
                     Image("Tutorial6")
                         .resizable()
@@ -89,9 +89,9 @@ struct TutorialView: View {
                         .frame(width: viewSize.width / 1.5, height: viewSize.height / 1.5)
                     
                     Text("Each question times how long it takes for you to answer the question, as well as if you got it correct. The correct answer will be shown in green, and if you did not get the question correct your answer will be shown in red.")
-                        .equivalentFont(.title2)
+                        .dynamicFont(.title2)
                         .fontWeight(.semibold)
-                        .equivalentPadding()
+                        .dynamicPadding()
                 case 6:
                     Image("Tutorial7")
                         .resizable()
@@ -100,29 +100,29 @@ struct TutorialView: View {
                         .frame(width: viewSize.width / 1.5, height: viewSize.height / 1.5)
                     
                     Text("Before you start the test you can complete as many practice questions as you want which are all randomly generated.")
-                        .equivalentFont(.title2)
+                        .dynamicFont(.title2)
                         .fontWeight(.semibold)
-                        .equivalentPadding()
+                        .dynamicPadding()
                 case 7:
                     Spacer()
                     Spacer()
                     
                     Text("The test questions were orginally a randomly generated set of questions, but are the same for each test.")
-                        .equivalentFont(.title2)
+                        .dynamicFont(.title2)
                         .fontWeight(.semibold)
-                        .equivalentPadding()
+                        .dynamicPadding()
                     
                     Text("If you have completed the tests before and have entered your Tester ID, the test will be a set of random questions.")
-                        .equivalentFont(.title2)
+                        .dynamicFont(.title2)
                         .fontWeight(.semibold)
-                        .equivalentPadding()
+                        .dynamicPadding()
                     
                     Spacer()
                     
                     Text("Click the 'Start Test' button to begin, good luck!")
-                        .equivalentFont(.title)
+                        .dynamicFont(.title)
                         .fontWeight(.semibold)
-                        .equivalentPadding()
+                        .dynamicPadding()
                 default:
                     Text("")
                 }
@@ -136,7 +136,7 @@ struct TutorialView: View {
                         }
                     } label: {
                         Image(systemName: "arrow.left")
-                            .equivalentFont(.title)
+                            .dynamicFont(.title)
                             .fontWeight(.semibold)
                             .frame(width: buttonWidth / 2 - spacing / 2, height: buttonHeight)
                             .background(Color.secondary)
@@ -151,7 +151,7 @@ struct TutorialView: View {
                         }
                     } label: {
                         Image(systemName: "arrow.right")
-                            .equivalentFont(.title)
+                            .dynamicFont(.title)
                             .fontWeight(.semibold)
                             .frame(width: buttonWidth / 2 - spacing / 2, height: buttonHeight)
                             .background(Color.secondary)
@@ -167,7 +167,7 @@ struct TutorialView: View {
                     }
                 } label: {
                     Text("Start Test")
-                        .equivalentFont(.title2)
+                        .dynamicFont(.title2)
                         .fontWeight(.semibold)
                         .frame(width: buttonWidth, height: buttonHeight * 1.5)
                         .background(Color.accentColor)
@@ -202,11 +202,11 @@ struct TutorialView: View {
                 }
             } label: {
                 Image(systemName: "xmark")
-                    .equivalentFont()
-                    .equivalentPadding()
+                    .dynamicFont()
+                    .dynamicPadding()
             }
         }
-        .equivalentPadding(50)
+        .dynamicPadding(50)
         .background(
             RoundedRectangle(cornerRadius: screenSizeViewModel.getEquivalentValue(20))
                 .fill(Material.ultraThickMaterial)
@@ -226,5 +226,5 @@ struct TutorialView: View {
 
 #Preview {
     TutorialView(testingViewModel: TestingViewModel())
-        .environmentObject(ScreenSizeViewModel())
+        .environmentObject(DynamicSizingViewModel())
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RollView: View {
     
-    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
     
     @Binding var presentedView: HomeView.PresentedView
     
@@ -211,5 +211,5 @@ struct RollView: View {
 
 #Preview {
     RollView(presentedView: Binding.constant(.Roll), rollViewModel: RollViewModel(scoreManager: ScoreManager()))
-        .environmentObject(ScreenSizeViewModel())
+        .environmentObject(DynamicSizingViewModel())
 }

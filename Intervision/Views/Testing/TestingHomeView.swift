@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TestingHomeView: View {
     
-    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
     
     @StateObject var testingViewModel: TestingViewModel
     
@@ -37,5 +37,5 @@ struct TestingHomeView: View {
 
 #Preview {
     TestingHomeView(testingViewModel: TestingViewModel(), presentedHomeView: Binding.constant(.None))
-        .environmentObject(ScreenSizeViewModel())
+        .environmentObject(DynamicSizingViewModel())
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LineKeyView: View {
     
-    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
     
     let color: Color
     let label: String
@@ -19,7 +19,7 @@ struct LineKeyView: View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
                 Text(label)
-                    .equivalentFont()
+                    .dynamicFont()
                     .fontWeight(.semibold)
                 
                 if showZigZags {
@@ -50,5 +50,5 @@ struct LineKeyView: View {
 
 #Preview {
     LineKeyView(color: .clear, label: "", showZigZags: false)
-        .environmentObject(ScreenSizeViewModel())
+        .environmentObject(DynamicSizingViewModel())
 }

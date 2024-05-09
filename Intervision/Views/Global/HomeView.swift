@@ -10,7 +10,7 @@ import UniformTypeIdentifiers
 
 struct HomeView: View {
     
-    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
     
     @ObservedObject var scoreManager: ScoreManager
     
@@ -41,7 +41,7 @@ struct HomeView: View {
             TestingHomeView(testingViewModel: testingViewModel, presentedHomeView: $presentedView)
                 .environmentObject(screenSizeViewModel)
         default:
-            HomePanel(scoreManager: scoreManager, presentedView: $presentedView, size: screenSizeViewModel.screenSize)
+            HomePanel(scoreManager: scoreManager, presentedView: $presentedView, size: screenSizeViewModel.viewSize)
                 .opacity(opacity)
                 .onAppear {
                     withAnimation(.easeInOut(duration: 1.0)) {
@@ -55,7 +55,7 @@ struct HomeView: View {
 extension HomeView {
     struct HomePanel: View {
         
-        @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+        @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
 
         @StateObject var scoreManager: ScoreManager
         
@@ -73,7 +73,7 @@ extension HomeView {
                         .resizable()
                         .scaledToFit()
                         .frame(width: size.width / 2)
-                        .equivalentPadding()
+                        .dynamicPadding()
                     
                     Spacer()
                     
@@ -82,19 +82,19 @@ extension HomeView {
                     } label: {
                         HStack {
                             Text("New")
-                                .equivalentFont(.title2)
+                                .dynamicFont(.title2)
                             
                             Spacer()
                             
                             Image(systemName: "pencil")
-                                .equivalentFont(.title3)
+                                .dynamicFont(.title3)
                         }
-                        .equivalentPadding(.all, 50)
+                        .dynamicPadding(.all, 50)
                     }
                     .disabled(true)
                     .buttonStyle(BorderedButtonStyle())
                     .frame(width: size.width / 1.5)
-                    .equivalentPadding()
+                    .dynamicPadding()
                     
                     Button {
                     #if os(macOS)
@@ -116,19 +116,19 @@ extension HomeView {
                     } label: {
                         HStack {
                             Text("Open MusicXML")
-                                .equivalentFont(.title2)
+                                .dynamicFont(.title2)
                             
                             Spacer()
                             
                             Image(systemName: "folder")
-                                .equivalentFont(.title3)
+                                .dynamicFont(.title3)
                         }
-                        .equivalentPadding(.all, 50)
+                        .dynamicPadding(.all, 50)
                     }
                     .disabled(true)
                     .buttonStyle(BorderedButtonStyle())
                     .frame(width: size.width / 1.5)
-                    .equivalentPadding()
+                    .dynamicPadding()
                     
                     Button {
                         withAnimation(.easeInOut) {
@@ -137,30 +137,30 @@ extension HomeView {
                     } label: {
                         HStack {
                             Text("Testing")
-                                .equivalentFont(.title2)
+                                .dynamicFont(.title2)
                             
                             Spacer()
                             
                             Image(systemName: "graduationcap")
-                                .equivalentFont(.title3)
+                                .dynamicFont(.title3)
                         }
-                        .equivalentPadding(.all, 50)
+                        .dynamicPadding(.all, 50)
                     }
                     .buttonStyle(BorderedButtonStyle())
                     .frame(width: size.width / 1.5)
-                    .equivalentPadding()
+                    .dynamicPadding()
                     
                     Spacer()
                     
                     Text("[User Testing Build]")
-                        .equivalentFont(.title3)
-                        .equivalentPadding()
+                        .dynamicFont(.title3)
+                        .dynamicPadding()
                         .fontWeight(.semibold)
                 }
             }
             .environmentObject(screenSizeViewModel)
             .frame(width: size.width, height: size.height)
-            .equivalentPadding(.all, 50)
+            .dynamicPadding(.all, 50)
             .background(
                 RoundedRectangle(cornerRadius: 20)
                     .fill(Material.ultraThickMaterial)

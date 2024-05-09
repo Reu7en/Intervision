@@ -9,12 +9,12 @@ import SwiftUI
 
 struct CountdownTimerView: View {
     
-    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
     
     @StateObject var testingViewModel: TestingViewModel
     
     var body: some View {
-        let viewSize = screenSizeViewModel.screenSize
+        let viewSize = screenSizeViewModel.viewSize
         
         ZStack {
             Circle()
@@ -30,11 +30,11 @@ struct CountdownTimerView: View {
             
             if testingViewModel.countdown == 0 {
                 Image(systemName: "play.fill")
-                    .equivalentFont(.title)
+                    .dynamicFont(.title)
                     .fontWeight(.semibold)
             } else {
                 Text("\(testingViewModel.countdown)")
-                    .equivalentFont(.title)
+                    .dynamicFont(.title)
                     .fontWeight(.semibold)
             }
         }
@@ -51,12 +51,12 @@ struct CountdownTimerView: View {
                 let currentQuestionType = session.questions[testingViewModel.currentQuestionIndex].type
                 
                 Text("\(testingViewModel.practice ? "Practice Question" : "Question \(testingViewModel.currentQuestionIndex + 1)/\(40)")")
-                    .equivalentFont(.title)
+                    .dynamicFont(.title)
                     .fontWeight(.semibold)
                 
                 ForEach(currentQuestionType.description.filter( { $0 != "" } ), id: \.self) { description in
                     Text(description)
-                        .equivalentFont(.title2)
+                        .dynamicFont(.title2)
                         .fontWeight(.semibold)
                 }
             }
@@ -66,5 +66,5 @@ struct CountdownTimerView: View {
 
 #Preview {
     CountdownTimerView(testingViewModel: TestingViewModel())
-        .environmentObject(ScreenSizeViewModel())
+        .environmentObject(DynamicSizingViewModel())
 }

@@ -66,143 +66,6 @@
             endingLineNumber = "524"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d33511da"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "418"
-                  endingLineNumber = "418"
-                  offsetFromSymbolStart = "12884">
-               </Location>
-               <Location
-                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d33511bb"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "419"
-                  endingLineNumber = "419"
-                  offsetFromSymbolStart = "13388">
-               </Location>
-               <Location
-                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d33511bb"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "419"
-                  endingLineNumber = "419"
-                  offsetFromSymbolStart = "13340">
-               </Location>
-               <Location
-                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d3351008"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "432"
-                  endingLineNumber = "432"
-                  offsetFromSymbolStart = "13572">
-               </Location>
-               <Location
-                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d3356df8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "448"
-                  endingLineNumber = "448"
-                  offsetFromSymbolStart = "13572">
-               </Location>
-               <Location
-                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d3356dba"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "450"
-                  endingLineNumber = "450"
-                  offsetFromSymbolStart = "13572">
-               </Location>
-               <Location
-                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d335121f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "447"
-                  endingLineNumber = "447"
-                  offsetFromSymbolStart = "13572">
-               </Location>
-               <Location
-                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d33568b1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "489"
-                  endingLineNumber = "489"
-                  offsetFromSymbolStart = "17588">
-               </Location>
-               <Location
-                  uuid = "F0649F7D-EA63-4A5A-864E-37FBC7A5E9D7 - 7b739345d33568b1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "489"
-                  endingLineNumber = "489"
-                  offsetFromSymbolStart = "17772">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -219,38 +82,6 @@
             endingLineNumber = "277"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "B2FF68B8-BD75-4EC4-8C54-B94C1B9FBE57 - 7b739345d335088a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "242"
-                  endingLineNumber = "242"
-                  offsetFromSymbolStart = "2456">
-               </Location>
-               <Location
-                  uuid = "B2FF68B8-BD75-4EC4-8C54-B94C1B9FBE57 - 7b739345d335046a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "274"
-                  endingLineNumber = "274"
-                  offsetFromSymbolStart = "2908">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -267,38 +98,6 @@
             endingLineNumber = "338"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "FE7D3B21-BB56-4778-BB8C-A834AFEE5B2B - 7b739345d33500af"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "303"
-                  endingLineNumber = "303"
-                  offsetFromSymbolStart = "5196">
-               </Location>
-               <Location
-                  uuid = "FE7D3B21-BB56-4778-BB8C-A834AFEE5B2B - 7b739345d3351d70"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "328"
-                  endingLineNumber = "328"
-                  offsetFromSymbolStart = "5196">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -315,38 +114,6 @@
             endingLineNumber = "362"
             landmarkName = "updateBar(barToUpdate:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "A5161167-406E-4C0E-B7FA-CA7377516D7E - 7b739345d3351d97"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "327"
-                  endingLineNumber = "327"
-                  offsetFromSymbolStart = "6540">
-               </Location>
-               <Location
-                  uuid = "A5161167-406E-4C0E-B7FA-CA7377516D7E - 7b739345d3351e58"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.RollViewModel.updateBar(barToUpdate: Intervision.Bar) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Roll/RollViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "352"
-                  endingLineNumber = "352"
-                  offsetFromSymbolStart = "6540">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -427,38 +194,6 @@
             endingLineNumber = "1169"
             landmarkName = "randomlyGenerateQuestionData(question:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "82FC89D4-D6A2-40E3-B8CB-192147F6E9ED - e378c4938ad48948"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.TestingViewModel.randomlyGenerateQuestionData(question: Swift.Optional&lt;Intervision.Question&gt;) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Testing/TestingViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "847"
-                  endingLineNumber = "847"
-                  offsetFromSymbolStart = "38732">
-               </Location>
-               <Location
-                  uuid = "82FC89D4-D6A2-40E3-B8CB-192147F6E9ED - e378c4938ad48b1e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.TestingViewModel.randomlyGenerateQuestionData(question: Swift.Optional&lt;Intervision.Question&gt;) -&gt; ()"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Testing/TestingViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "861"
-                  endingLineNumber = "861"
-                  offsetFromSymbolStart = "39584">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -475,38 +210,6 @@
             endingLineNumber = "26"
             landmarkName = "body"
             landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "FCAD1FD1-072E-4E38-A449-6F0A88067B37 - 2fb0c0113cc62a97"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Text, Swift.Optional&lt;Swift.Optional&lt;SwiftUI.TupleView&lt;(SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, &lt;&lt;opaque return type of SwiftUI.View.background&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(_: &#x3c4;_1_0, alignment: SwiftUI.Alignment) -&gt; some&gt;&gt;.0, SwiftUI.Spacer)&gt;&gt;, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, SwiftUI.Text, SwiftUI.Spacer)&gt;&gt;)&gt;&gt;&gt;, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, SwiftUI.Text, SwiftUI.Spacer)&gt;&gt;, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, SwiftUI.Text, SwiftUI.Spacer)&gt;&gt;, SwiftUI.Spacer, Intervision.NextQuestionButton)&gt; in closure #1 (SwiftUI.GeometryProxy) -&gt; SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Text, Swift.Optional&lt;Swift.Optional&lt;SwiftUI.TupleView&lt;(SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, &lt;&lt;opaque return type of SwiftUI.View.background&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(_: &#x3c4;_1_0, alignment: SwiftUI.Alignment) -&gt; some&gt;&gt;.0, SwiftUI.Spacer)&gt;&gt;, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, SwiftUI.Text, SwiftUI.Spacer)&gt;&gt;)&gt;&gt;&gt;, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, SwiftUI.Text, SwiftUI.Spacer)&gt;&gt;, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, SwiftUI.Text, SwiftUI.Spacer)&gt;&gt;, SwiftUI.Spacer, Intervision.NextQuestionButton)&gt;&gt; in Intervision.ScoreTwoNoteIntervalsAreEqualView.body.getter : some"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/Views/Testing/Questions/ScoreTwoNoteIntervalsAreEqualView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27"
-                  offsetFromSymbolStart = "2280">
-               </Location>
-               <Location
-                  uuid = "FCAD1FD1-072E-4E38-A449-6F0A88067B37 - f3b9032330267146"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Spacer, &lt;&lt;opaque return type of SwiftUI.View.background&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(_: &#x3c4;_1_0, alignment: SwiftUI.Alignment) -&gt; some&gt;&gt;.0, SwiftUI.Spacer)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Text, Swift.Optional&lt;Swift.Optional&lt;SwiftUI.TupleView&lt;(SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, &lt;&lt;opaque return type of SwiftUI.View.background&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(_: &#x3c4;_1_0, alignment: SwiftUI.Alignment) -&gt; some&gt;&gt;.0, SwiftUI.Spacer)&gt;&gt;, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, SwiftUI.Text, SwiftUI.Spacer)&gt;&gt;)&gt;&gt;&gt;, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, SwiftUI.Text, SwiftUI.Spacer)&gt;&gt;, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, SwiftUI.Text, SwiftUI.Spacer)&gt;&gt;, SwiftUI.Spacer, Intervision.NextQuestionButton)&gt; in closure #1 (SwiftUI.GeometryProxy) -&gt; SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Text, Swift.Optional&lt;Swift.Optional&lt;SwiftUI.TupleView&lt;(SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, &lt;&lt;opaque return type of SwiftUI.View.background&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(_: &#x3c4;_1_0, alignment: SwiftUI.Alignment) -&gt; some&gt;&gt;.0, SwiftUI.Spacer)&gt;&gt;, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, SwiftUI.Text, SwiftUI.Spacer)&gt;&gt;)&gt;&gt;&gt;, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, SwiftUI.Text, SwiftUI.Spacer)&gt;&gt;, SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Spacer, SwiftUI.Text, SwiftUI.Spacer)&gt;&gt;, SwiftUI.Spacer, Intervision.NextQuestionButton)&gt;&gt; in Intervision.ScoreTwoNoteIntervalsAreEqualView.body.getter : some"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/Views/Testing/Questions/ScoreTwoNoteIntervalsAreEqualView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "28"
-                  endingLineNumber = "28"
-                  offsetFromSymbolStart = "848">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -523,38 +226,6 @@
             endingLineNumber = "33"
             landmarkName = "body"
             landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "D287A01F-5205-48C5-8368-BC77EE149DC1 - 8aa29e7ac9abb05"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (SwiftUI.GeometryProxy) -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.overlay&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(alignment: SwiftUI.Alignment, content: () -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.overlay&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(alignment: SwiftUI.Alignment, content: () -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0)&gt; in Intervision.RollView.body.getter : some"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/Views/Roll/RollView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "31"
-                  endingLineNumber = "31"
-                  offsetFromSymbolStart = "2764">
-               </Location>
-               <Location
-                  uuid = "D287A01F-5205-48C5-8368-BC77EE149DC1 - ec257e5cfbd5194b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.frame(width: Swift.Optional&lt;CoreGraphics.CGFloat&gt;, height: Swift.Optional&lt;CoreGraphics.CGFloat&gt;, alignment: SwiftUI.Alignment) -&gt; some&gt;&gt;.0 in closure #1 (SwiftUI.GeometryProxy) -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.overlay&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(alignment: SwiftUI.Alignment, content: () -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.overlay&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(alignment: SwiftUI.Alignment, content: () -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0)&gt; in Intervision.RollView.body.getter : some"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/Views/Roll/RollView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "32"
-                  endingLineNumber = "32"
-                  offsetFromSymbolStart = "852">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -571,38 +242,6 @@
             endingLineNumber = "64"
             landmarkName = "init(noteGrid:barGeometry:beatGeometry:beamGroupChords:middleStaveNote:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "3A08FF90-E5F5-44EB-AB8D-358A866EC720 - 57184cdb7f12158e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.BeatViewModel.init(noteGrid: Swift.Array&lt;Swift.Array&lt;Swift.Optional&lt;Swift.Array&lt;(Intervision.Note, Swift.Optional&lt;Intervision.Note.Accidental&gt;)&gt;&gt;&gt;&gt;, barGeometry: SwiftUI.GeometryProxy, beatGeometry: SwiftUI.GeometryProxy, beamGroupChords: Swift.Array&lt;Swift.Array&lt;Intervision.Chord&gt;&gt;, middleStaveNote: Swift.Optional&lt;Intervision.Note&gt;) -&gt; Intervision.BeatViewModel"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Score/BeatViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "64"
-                  endingLineNumber = "64"
-                  offsetFromSymbolStart = "1764">
-               </Location>
-               <Location
-                  uuid = "3A08FF90-E5F5-44EB-AB8D-358A866EC720 - 57184cdb7f1215d1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Intervision.BeatViewModel.init(noteGrid: Swift.Array&lt;Swift.Array&lt;Swift.Optional&lt;Swift.Array&lt;(Intervision.Note, Swift.Optional&lt;Intervision.Note.Accidental&gt;)&gt;&gt;&gt;&gt;, barGeometry: SwiftUI.GeometryProxy, beatGeometry: SwiftUI.GeometryProxy, beamGroupChords: Swift.Array&lt;Swift.Array&lt;Intervision.Chord&gt;&gt;, middleStaveNote: Swift.Optional&lt;Intervision.Note&gt;) -&gt; Intervision.BeatViewModel"
-                  moduleName = "Intervision"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/reuben/swift/Intervision/Intervision/Intervision/View%20Models/Score/BeatViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "65"
-                  endingLineNumber = "65"
-                  offsetFromSymbolStart = "1764">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

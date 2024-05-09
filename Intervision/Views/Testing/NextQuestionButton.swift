@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NextQuestionButton: View {
     
-    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
     
     @StateObject var testingViewModel: TestingViewModel
     
@@ -34,9 +34,9 @@ struct NextQuestionButton: View {
             }
         } label: {
             Image(systemName: testingViewModel.isLastQuestion && !testingViewModel.practice ? "flag.checkered" : "arrow.right")
-                .equivalentFont(.largeTitle)
-                .equivalentPadding()
-                .equivalentPadding(.horizontal, 50)
+                .dynamicFont(.largeTitle)
+                .dynamicPadding()
+                .dynamicPadding(.horizontal, 50)
         }
         .buttonStyle(BorderedButtonStyle())
     }
@@ -44,5 +44,5 @@ struct NextQuestionButton: View {
 
 #Preview {
     NextQuestionButton(testingViewModel: TestingViewModel())
-        .environmentObject(ScreenSizeViewModel())
+        .environmentObject(DynamicSizingViewModel())
 }

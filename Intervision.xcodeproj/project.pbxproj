@@ -42,7 +42,7 @@
 		1B231FF72B8A6C2B003AB714 /* RollBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FF62B8A6C2B003AB714 /* RollBarView.swift */; };
 		1B231FFB2B8E10B9003AB714 /* RollInspectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FFA2B8E10B8003AB714 /* RollInspectorView.swift */; };
 		1B2A23B92BE3E38E000577BF /* GlobalDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2A23B82BE3E38E000577BF /* GlobalDataService.swift */; };
-		1B2A23BE2BE3F1C8000577BF /* ScreenSizeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2A23BD2BE3F1C8000577BF /* ScreenSizeViewModel.swift */; };
+		1B2A23BE2BE3F1C8000577BF /* DynamicSizingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2A23BD2BE3F1C8000577BF /* DynamicSizingViewModel.swift */; };
 		1B2A23D82BE40886000577BF /* TestLoad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBC978A2B76A3C7001C953C /* TestLoad.swift */; };
 		1B2A23D92BE40886000577BF /* EmptyRollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44AF2B92899400C0E12C /* EmptyRollView.swift */; };
 		1B2A23DA2BE40886000577BF /* RollInspectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B231FFA2B8E10B8003AB714 /* RollInspectorView.swift */; };
@@ -88,7 +88,7 @@
 		1B2A24022BE40886000577BF /* LineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44B72B96AE8C00C0E12C /* LineModel.swift */; };
 		1B2A24042BE40886000577BF /* RollBarHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44B42B928A8400C0E12C /* RollBarHeader.swift */; };
 		1B2A24052BE40886000577BF /* PianoKeysHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44AC2B92892800C0E12C /* PianoKeysHeader.swift */; };
-		1B2A24062BE40886000577BF /* ScreenSizeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2A23BD2BE3F1C8000577BF /* ScreenSizeViewModel.swift */; };
+		1B2A24062BE40886000577BF /* DynamicSizingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2A23BD2BE3F1C8000577BF /* DynamicSizingViewModel.swift */; };
 		1B2A24072BE40886000577BF /* CountdownTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D902BDD245E00F21E39 /* CountdownTimerView.swift */; };
 		1B2A24082BE40886000577BF /* ScoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBF21A22B9FFB160097D5A3 /* ScoreManager.swift */; };
 		1B2A24092BE40886000577BF /* BarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B561F7A2B793216001860E5 /* BarViewModel.swift */; };
@@ -193,7 +193,7 @@
 		1B231FF62B8A6C2B003AB714 /* RollBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollBarView.swift; sourceTree = "<group>"; };
 		1B231FFA2B8E10B8003AB714 /* RollInspectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollInspectorView.swift; sourceTree = "<group>"; };
 		1B2A23B82BE3E38E000577BF /* GlobalDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalDataService.swift; sourceTree = "<group>"; };
-		1B2A23BD2BE3F1C8000577BF /* ScreenSizeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenSizeViewModel.swift; sourceTree = "<group>"; };
+		1B2A23BD2BE3F1C8000577BF /* DynamicSizingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicSizingViewModel.swift; sourceTree = "<group>"; };
 		1B2A24242BE40886000577BF /* Intervision iPad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Intervision iPad.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B2A24252BE40886000577BF /* IntervisioniPad.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = IntervisioniPad.plist; path = /Users/reuben/swift/Intervision/Intervision/IntervisioniPad.plist; sourceTree = "<absolute>"; };
 		1B370D862BDC3E6B00F21E39 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
@@ -400,7 +400,7 @@
 		1B2A23BC2BE3F1BB000577BF /* Global */ = {
 			isa = PBXGroup;
 			children = (
-				1B2A23BD2BE3F1C8000577BF /* ScreenSizeViewModel.swift */,
+				1B2A23BD2BE3F1C8000577BF /* DynamicSizingViewModel.swift */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -605,7 +605,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1520;
-				LastUpgradeCheck = 1520;
+				LastUpgradeCheck = 1530;
 				TargetAttributes = {
 					1B97BEC52B71C167007D0BE5 = {
 						CreatedOnToolsVersion = 15.2;
@@ -720,7 +720,7 @@
 				1B2A24022BE40886000577BF /* LineModel.swift in Sources */,
 				1B2A24042BE40886000577BF /* RollBarHeader.swift in Sources */,
 				1B2A24052BE40886000577BF /* PianoKeysHeader.swift in Sources */,
-				1B2A24062BE40886000577BF /* ScreenSizeViewModel.swift in Sources */,
+				1B2A24062BE40886000577BF /* DynamicSizingViewModel.swift in Sources */,
 				1B2A24072BE40886000577BF /* CountdownTimerView.swift in Sources */,
 				1B2A24082BE40886000577BF /* ScoreManager.swift in Sources */,
 				1B2A24092BE40886000577BF /* BarViewModel.swift in Sources */,
@@ -791,7 +791,7 @@
 				1B0E44B82B96AE8C00C0E12C /* LineModel.swift in Sources */,
 				1B0E44B52B928A8400C0E12C /* RollBarHeader.swift in Sources */,
 				1B0E44AD2B92892800C0E12C /* PianoKeysHeader.swift in Sources */,
-				1B2A23BE2BE3F1C8000577BF /* ScreenSizeViewModel.swift in Sources */,
+				1B2A23BE2BE3F1C8000577BF /* DynamicSizingViewModel.swift in Sources */,
 				1B370D912BDD245E00F21E39 /* CountdownTimerView.swift in Sources */,
 				1BBF21A32B9FFB160097D5A3 /* ScoreManager.swift in Sources */,
 				1B561F7B2B793216001860E5 /* BarViewModel.swift in Sources */,
@@ -823,7 +823,8 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Intervision/Preview Content\"";
 				DEVELOPMENT_TEAM = WAFD9G7398;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -864,7 +865,8 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Intervision/Preview Content\"";
 				DEVELOPMENT_TEAM = WAFD9G7398;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -930,6 +932,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -994,6 +997,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1025,7 +1029,8 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Intervision/Preview Content\"";
 				DEVELOPMENT_TEAM = WAFD9G7398;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1061,7 +1066,8 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Intervision/Preview Content\"";
 				DEVELOPMENT_TEAM = WAFD9G7398;
 				ENABLE_HARDENED_RUNTIME = YES;

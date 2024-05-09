@@ -15,7 +15,7 @@ import UIKit
 
 struct IntervalLinesView: View {
     
-    @EnvironmentObject var screenSizeViewModel: ScreenSizeViewModel
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
     
     @StateObject var intervalLinesViewModel: IntervalLinesViewModel
     
@@ -149,5 +149,5 @@ extension Color {
 
 #Preview {
     IntervalLinesView(intervalLinesViewModel: IntervalLinesViewModel(segments: [], parts: [], groups: [], harmonicIntervalLinesType: .none, showMelodicIntervalLines: false, barIndex: 0, barWidth: 0, rowWidth: 0, rowHeight: 0, harmonicIntervalLineColors: [], melodicIntervalLineColors: [], viewableMelodicLines: [], showInvertedIntervals: false, showZigZags: false, testing: false))
-        .environmentObject(ScreenSizeViewModel())
+        .environmentObject(DynamicSizingViewModel())
 }

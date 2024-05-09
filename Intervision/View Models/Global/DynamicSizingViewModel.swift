@@ -13,11 +13,13 @@ class DynamicSizingViewModel: ObservableObject {
     @Published var viewSize: CGSize
     
     let referenceViewSize: CGSize
+    let referencePaddingAmount: CGFloat
     let referenceFontSize: CGFloat
     
     init (
         viewSize: CGSize = .zero,
         referenceViewSize: CGSize = CGSize(width: 1920, height: 1080),
+        referencePaddingAmount: CGFloat = 8,
         referenceFontSize: CGFloat = 32
     ) {
         self.viewSize = viewSize
@@ -28,6 +30,8 @@ class DynamicSizingViewModel: ObservableObject {
             self.referenceViewSize = referenceViewSize
         }
         
+        self.referencePaddingAmount = referencePaddingAmount
+        
         if referenceFontSize == .zero {
             self.referenceFontSize = 32 // Fallback to prevent divide-by-zero errors
         } else {
@@ -35,24 +39,24 @@ class DynamicSizingViewModel: ObservableObject {
         }
     }
     
-    func getEquivalentPadding(for edges: Edge.Set, padding: CGFloat) -> EdgeInsets {
+    func getEquivalentPadding(for edges: Edge.Set, padding: CGFloat?) -> EdgeInsets {
         guard self.referenceViewSize != .zero,
               self.referenceViewSize.width != .zero,
-              self.referenceViewSize.height != .zero 
+              self.referenceViewSize.height != .zero
         else {
             return EdgeInsets(
-                top: edges.contains(.top) ? padding : 0,
-                leading: edges.contains(.leading) ? padding : 0,
-                bottom: edges.contains(.bottom) ? padding : 0,
-                trailing: edges.contains(.trailing) ? padding : 0
+                top: edges.contains(.top) ? padding ?? self.referencePaddingAmount : 0,
+                leading: edges.contains(.leading) ? padding ?? self.referencePaddingAmount : 0,
+                bottom: edges.contains(.bottom) ? padding ?? self.referencePaddingAmount : 0,
+                trailing: edges.contains(.trailing) ? padding ?? self.referencePaddingAmount : 0
             )
         }
         
         let relativeWidth = self.viewSize.width / self.referenceViewSize.width
         let relativeHeight = self.viewSize.height / self.referenceViewSize.height
         
-        let horizontalPadding = max(1, abs(padding * relativeWidth))
-        let verticalPadding = max(1, abs(padding * relativeHeight))
+        let horizontalPadding = max(1, abs((padding ?? self.referencePaddingAmount) * relativeWidth))
+        let verticalPadding = max(1, abs((padding ?? self.referencePaddingAmount) * relativeHeight))
         
         switch edges {
         case .all:
@@ -74,13 +78,13 @@ class DynamicSizingViewModel: ObservableObject {
         }
     }
     
-    func getEquivalentFontSize(for font: Font) -> Font {
+    func getEquivalentFontSize(for font: Font?, for size: CGFloat?) -> Font {
         guard self.referenceViewSize != .zero,
               self.referenceViewSize.width != .zero,
               self.referenceViewSize.height != .zero,
-              self.referenceFontSize != .zero 
+              self.referenceFontSize != .zero
         else {
-            return font
+            return font ?? .system(size: size ?? self.referenceFontSize)
         }
         
         let relativeWidth = self.viewSize.width / self.referenceViewSize.width
@@ -88,23 +92,29 @@ class DynamicSizingViewModel: ObservableObject {
         
         let scaleFactor = max(1 / self.referenceFontSize, min(relativeWidth, relativeHeight))
         
-        switch font {
-        case .largeTitle:
-            return Font.system(size: self.referenceFontSize * 2.000 * scaleFactor)
-        case .title:
-            return Font.system(size: self.referenceFontSize * 1.500 * scaleFactor)
-        case .title2:
-            return Font.system(size: self.referenceFontSize * 1.250 * scaleFactor)
-        case .title3:
-            return Font.system(size: self.referenceFontSize * 1.125 * scaleFactor)
-        case .body:
-            return Font.system(size: self.referenceFontSize * 1.000 * scaleFactor)
-        case .caption:
-            return Font.system(size: self.referenceFontSize * 0.875 * scaleFactor)
-        case .caption2:
-            return Font.system(size: self.referenceFontSize * 0.750 * scaleFactor)
-        default:
-            return Font.system(size: self.referenceFontSize * 1.000 * scaleFactor)
+        if let font = font {
+            switch font {
+            case .largeTitle:
+                return Font.system(size: self.referenceFontSize * 2.000 * scaleFactor)
+            case .title:
+                return Font.system(size: self.referenceFontSize * 1.500 * scaleFactor)
+            case .title2:
+                return Font.system(size: self.referenceFontSize * 1.250 * scaleFactor)
+            case .title3:
+                return Font.system(size: self.referenceFontSize * 1.125 * scaleFactor)
+            case .body:
+                return Font.system(size: self.referenceFontSize * 1.000 * scaleFactor)
+            case .caption:
+                return Font.system(size: self.referenceFontSize * 0.875 * scaleFactor)
+            case .caption2:
+                return Font.system(size: self.referenceFontSize * 0.750 * scaleFactor)
+            default:
+                return Font.system(size: self.referenceFontSize * 1.000 * scaleFactor)
+            }
+        } else if let size = size {
+            return Font.system(size: size * scaleFactor)
+        } else {
+            return .system(size: self.referenceFontSize)
         }
     }
     
@@ -123,7 +133,7 @@ struct DynamicPaddingModifier: ViewModifier {
     @EnvironmentObject var dynamicSizingViewModel: DynamicSizingViewModel
     
     let edges: Edge.Set
-    let padding: CGFloat
+    let padding: CGFloat?
     
     func body(content: Content) -> some View {
         content
@@ -135,24 +145,37 @@ struct DynamicFontModifier: ViewModifier {
     
     @EnvironmentObject var dynamicSizingViewModel: DynamicSizingViewModel
     
-    let font: Font
+    let font: Font?
+    let size: CGFloat?
     
     func body(content: Content) -> some View {
         content
-            .font(dynamicSizingViewModel.getEquivalentFontSize(for: font))
+            .font(dynamicSizingViewModel.getEquivalentFontSize(for: font, for: size))
     }
 }
 
 extension View {
-    func dynamicPadding(_ padding: CGFloat = 8) -> some View {
+    func dynamicPadding() -> some View {
+        self.modifier(DynamicPaddingModifier(edges: [.all], padding: nil))
+    }
+    
+    func dynamicPadding(_ padding: CGFloat?) -> some View {
         self.modifier(DynamicPaddingModifier(edges: [.all], padding: padding))
     }
     
-    func dynamicPadding(_ edges: Edge.Set = [.all], _ padding: CGFloat = 8) -> some View {
+    func dynamicPadding(_ edges: Edge.Set) -> some View {
+        self.modifier(DynamicPaddingModifier(edges: edges, padding: nil))
+    }
+    
+    func dynamicPadding(_ edges: Edge.Set, _ padding: CGFloat?) -> some View {
         self.modifier(DynamicPaddingModifier(edges: edges, padding: padding))
     }
     
     func dynamicFont(_ font: Font = .body) -> some View {
-        self.modifier(DynamicFontModifier(font: font))
+        self.modifier(DynamicFontModifier(font: font, size: nil))
+    }
+    
+    func dynamicFont(_ size: CGFloat?) -> some View {
+        self.modifier(DynamicFontModifier(font: nil, size: size))
     }
 }

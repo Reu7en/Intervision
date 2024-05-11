@@ -829,37 +829,30 @@ struct MusicXMLDataService {
     }
     
     static func readXML(_ filePath: String) async -> Score? {
-        let score = Score(title: "", composer: "", parts: [])
+        guard let content = readFile(filePath) else {
+            return nil
+        }
         
-        DispatchQueue.main.async {
-            Task {
-                guard let content = readFile(filePath) else {
-                    return
-                }
-                
-                var lines = getLines(content)
-                
-                guard isPartwise(&lines) else {
-                    return
-                }
-                
-                let title: String? = getTitle(&lines)
-                let composer: String? = getComposer(&lines)
-                var partData: [Part]? = getParts(&lines)
-                var partContents = extractContentsBetweenTags(&lines, startTag: "<part id=", endTag: "</part")
-                
-                if !(partContents.isEmpty) {
-                    for i in 0..<(partData?.count ?? 0) {
-                        let bars: [[Bar]] = getBars(&partContents[i])
-                        partData?[i].bars = bars
-                    }
-                }
-                
-                score.title = title
-                score.composer = composer
-                score.parts = purgePercussion(parts: score.parts)
+        var lines = getLines(content)
+        
+        guard isPartwise(&lines) else {
+            return nil
+        }
+        
+        let title: String? = getTitle(&lines)
+        let composer: String? = getComposer(&lines)
+        var partData: [Part]? = getParts(&lines)
+        var partContents = extractContentsBetweenTags(&lines, startTag: "<part id=", endTag: "</part")
+        
+        if !(partContents.isEmpty) {
+            for i in 0..<(partData?.count ?? 0) {
+                let bars: [[Bar]] = getBars(&partContents[i])
+                partData?[i].bars = bars
             }
         }
+        
+        let score = Score(title: title, composer: composer, parts: partData)
+        score.parts = purgePercussion(parts: score.parts)
         
         return score
     }

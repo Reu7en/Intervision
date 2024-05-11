@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Score: Identifiable, Equatable {
+class Score: Identifiable, Equatable, ObservableObject {
     
     init(title: String? = nil, composer: String? = nil, parts: [Part]? = nil, id: UUID = UUID()) {
         self.title = title

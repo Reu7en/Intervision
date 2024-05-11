@@ -12,7 +12,7 @@ struct HomeView: View {
     
     @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
     
-    @ObservedObject var scoreManager: ScoreManager
+    @StateObject var scoreManager: ScoreManager
     
     @StateObject var scoreViewModel: ScoreViewModel
     @StateObject var rollViewModel: RollViewModel
@@ -27,7 +27,7 @@ struct HomeView: View {
         _scoreViewModel = StateObject(wrappedValue: ScoreViewModel(scoreManager: scoreManager))
         _rollViewModel = StateObject(wrappedValue: RollViewModel(scoreManager: scoreManager))
         _testingViewModel = StateObject(wrappedValue: TestingViewModel())
-        _scoreManager = ObservedObject(wrappedValue: scoreManager)
+        _scoreManager = StateObject(wrappedValue: scoreManager)
     }
     
     var body: some View {
@@ -40,6 +40,8 @@ struct HomeView: View {
         case .Testing:
             TestingHomeView(testingViewModel: testingViewModel, presentedHomeView: $presentedView)
                 .environmentObject(screenSizeViewModel)
+        case .Loading:
+            ProgressView()
         default:
             HomePanel(scoreManager: scoreManager, presentedView: $presentedView, size: screenSizeViewModel.viewSize)
                 .opacity(opacity)
@@ -91,7 +93,7 @@ extension HomeView {
                         }
                         .dynamicPadding(.all, 50)
                     }
-                    .disabled(true)
+//                    .disabled(true)
                     .buttonStyle(BorderedButtonStyle())
                     .frame(width: size.width / 1.5)
                     .dynamicPadding()
@@ -107,8 +109,15 @@ extension HomeView {
                         if panel.runModal() == .OK {
                             if let fileURL = panel.urls.first {
                                 Task {
-                                    scoreManager.score = await MusicXMLDataService.readXML(fileURL.standardizedFileURL.path)
-                                    presentedView = .Roll
+                                    withAnimation(.easeInOut) {
+                                        presentedView = .Loading
+                                    }
+                                    
+                                    await scoreManager.score = MusicXMLDataService.readXML(fileURL.standardizedFileURL.path)
+                                    
+                                    withAnimation(.easeInOut) {
+                                        presentedView = .Score
+                                    }
                                 }
                             }
                         }
@@ -125,7 +134,7 @@ extension HomeView {
                         }
                         .dynamicPadding(.all, 50)
                     }
-                    .disabled(true)
+//                    .disabled(true)
                     .buttonStyle(BorderedButtonStyle())
                     .frame(width: size.width / 1.5)
                     .dynamicPadding()
@@ -183,6 +192,7 @@ extension HomeView {
         case Score
         case Roll
         case Testing
+        case Loading
         case None
     }
 }

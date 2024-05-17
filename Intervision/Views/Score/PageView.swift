@@ -9,9 +9,11 @@ import SwiftUI
 
 struct PageView: View {
     
-    let geometry: GeometryProxy
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
+    
     @Binding var zoomLevel: CGFloat
     
+    let geometry: GeometryProxy
     let bars: [[(Bar, Int, Bool, Bool, Bool, Bool, String)]]
     let showScoreInformation: Bool
     let scoreTitle: String
@@ -30,27 +32,38 @@ struct PageView: View {
                 if showScoreInformation {
                     VStack {
                         Text("\(scoreTitle)")
-                            .font(.largeTitle)
+                            .dynamicFont(.title)
                             .fontWeight(.bold)
                             .foregroundStyle(Color.black)
                         
                         Text("\(scoreComposer)")
-                            .font(.title)
+                            .dynamicFont(.title2)
                             .fontWeight(.bold)
                             .foregroundStyle(Color.black)
                     }
                 }
                 
                 ForEach(0..<bars.count, id: \.self) { lineIndex in
+                    let pageWidth = width * 0.9
+                    
                     HStack(spacing: 0) {
                         ForEach(0..<bars[lineIndex].count, id: \.self) { barIndex in
                             let bar = bars[lineIndex][barIndex]
+                            
+                            if bar.5 {
+                                Text("\(bar.6)")
+                                    .dynamicFont(12)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.black)
+                                    .dynamicPadding(.horizontal)
+                                    .frame(width: pageWidth / 10)
+                            }
                             
                             BarView(
                                 barViewModel: BarViewModel(
                                     bar: bar.0,
                                     gaps: 4,
-                                    ledgerLines: 4,
+                                    ledgerLines: 5,
                                     showClef: bar.2,
                                     showKey: bar.3,
                                     showTime: bar.4,
@@ -62,11 +75,13 @@ struct PageView: View {
                                 if bar.1 != -1 {
                                     Text("\(bar.1)")
                                         .foregroundStyle(Color.black)
+                                        .dynamicFont(12)
                                 }
                             }
+                            .environmentObject(screenSizeViewModel)
                         }
                     }
-                    .frame(width: width * 0.9)
+                    .frame(width: pageWidth)
                     .frame(maxHeight: height / 5)
                 }
                 
@@ -75,12 +90,13 @@ struct PageView: View {
             .frame(height: height * 0.9)
         }
         .frame(width: width, height: height)
-        .padding()
+        .dynamicPadding()
     }
 }
 
 #Preview {
     GeometryReader { geometry in
-        PageView(geometry: geometry, zoomLevel: Binding.constant(1.0), bars: [], showScoreInformation: false, scoreTitle: "", scoreComposer: "")
+        PageView(zoomLevel: Binding.constant(1.0), geometry: geometry, bars: [], showScoreInformation: false, scoreTitle: "", scoreComposer: "")
+            .environmentObject(DynamicSizingViewModel())
     }
 }

@@ -8,6 +8,33 @@
 import Foundation
 
 class Note: Identifiable, Equatable {
+    var pitch: Pitch?
+    var accidental: Accidental?
+    var octave: Octave?
+    var octaveShift: OctaveShift?
+    var duration: Duration
+    var timeModification: TimeModification?
+    var changeDynamic: ChangeDynamic?
+    var tie: Tie?
+    var slur: Slur?
+    var isRest: Bool
+    var isDotted: Bool
+    var hasAccent: Bool
+
+    // Identifiable
+    var id = UUID()
+    
+    // Equatable - checks for equal relevant properties rather than id
+    static func == (lhs: Note, rhs: Note) -> Bool {
+        return lhs.pitch == rhs.pitch &&
+               lhs.accidental == rhs.accidental &&
+               lhs.octave == rhs.octave &&
+               lhs.octaveShift == rhs.octaveShift && 
+               lhs.duration == rhs.duration &&
+               lhs.timeModification == rhs.timeModification &&
+               lhs.isRest == rhs.isRest &&
+               lhs.isDotted == rhs.isDotted
+    }
     
     init(
         pitch: Pitch? = nil,
@@ -37,33 +64,6 @@ class Note: Identifiable, Equatable {
         self.isDotted = isDotted
         self.hasAccent = hasAccent
         self.id = id
-    }
-    
-    var pitch: Pitch?
-    var accidental: Accidental?
-    var octave: Octave?
-    var octaveShift: OctaveShift?
-    var duration: Duration
-    var timeModification: TimeModification?
-    var changeDynamic: ChangeDynamic?
-    var tie: Tie?
-    var slur: Slur?
-    var isRest: Bool
-    var isDotted: Bool
-    var hasAccent: Bool
-
-    // Identifiable
-    var id = UUID()
-    
-    // Equatable - checks for equal relevant properties rather than id
-    static func == (lhs: Note, rhs: Note) -> Bool {
-        return lhs.pitch == rhs.pitch &&
-               lhs.accidental == rhs.accidental &&
-               lhs.octave == rhs.octave &&
-               lhs.duration == rhs.duration &&
-               lhs.timeModification == rhs.timeModification &&
-               lhs.isRest == rhs.isRest &&
-               lhs.isDotted == rhs.isDotted
     }
 }
 
@@ -130,11 +130,11 @@ extension Note {
         case fourLine = 7
         case fiveLine = 8
         
-        var next: Octave? {
+        var nextOctave: Octave? {
             Octave(rawValue: self.rawValue + 1)
         }
 
-        var prev: Octave? {
+        var previousOctave: Octave? {
             Octave(rawValue: self.rawValue - 1)
         }
     }
@@ -184,6 +184,7 @@ extension Note {
     enum Slur {
         case Start
         case Stop
+        case Both
     }
     
     enum OctaveShift {
@@ -194,7 +195,7 @@ extension Note {
 
 extension Note {
     func increaseOctave(applyOctaveShift: Bool = true) {
-        if let nextOctave = octave?.next {
+        if let nextOctave = octave?.nextOctave {
             octave = nextOctave
             
             if applyOctaveShift {
@@ -204,7 +205,7 @@ extension Note {
     }
 
     func decreaseOctave(applyOctaveShift: Bool = true) {
-        if let prevOctave = octave?.prev {
+        if let prevOctave = octave?.previousOctave {
             octave = prevOctave
             
             if applyOctaveShift {

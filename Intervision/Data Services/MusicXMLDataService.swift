@@ -10,14 +10,15 @@ import Foundation
 struct MusicXMLDataService {
     static func readFile(_ filePath: String) -> String? {
         guard let file = FileManager.default.contents(atPath: filePath),
-              let contentString = String(data: file, encoding: .utf8) else {
+              let contentString = String(data: file, encoding: .utf8) 
+        else {
             return nil
         }
         
         return contentString
     }
     
-    static func getLines(_ contentString: String) -> [String] {
+    static func getLines(_ contentString: inout String) -> [String] {
         let lines = contentString.components(separatedBy: "\n")
         
         let trimmedLines = lines.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
@@ -777,6 +778,7 @@ struct MusicXMLDataService {
             if line.contains(startTag) {
                 isInsideTag = true
                 currentContents = []
+                
                 continue
             }
 
@@ -785,6 +787,7 @@ struct MusicXMLDataService {
                     extractedContents.append(currentContents)
                     isInsideTag = false
                 }
+                
                 continue
             }
 
@@ -798,11 +801,13 @@ struct MusicXMLDataService {
     
     static func extractContent(fromTag tagString: String) -> String? {
         guard let startRange = tagString.range(of: ">"),
-              let endRange = tagString.range(of: "</", options: .backwards, range: startRange.upperBound..<tagString.endIndex) else {
+              let endRange = tagString.range(of: "</", options: .backwards, range: startRange.upperBound..<tagString.endIndex) 
+        else {
             return nil
         }
         
         let content = String(tagString[startRange.upperBound..<endRange.lowerBound])
+        
         return content.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
     
@@ -811,7 +816,8 @@ struct MusicXMLDataService {
         
         guard let regex = try? NSRegularExpression(pattern: pattern, options: []),
               let match = regex.firstMatch(in: tagString, options: [], range: NSRange(location: 0, length: tagString.utf16.count)),
-              let range = Range(match.range, in: tagString) else {
+              let range = Range(match.range, in: tagString) 
+        else {
             return nil
         }
         
@@ -819,11 +825,11 @@ struct MusicXMLDataService {
     }
     
     static func readXML(_ filePath: String) async -> Score? {
-        guard let content = readFile(filePath) else {
+        guard var content = readFile(filePath) else {
             return nil
         }
         
-        var lines = getLines(content)
+        var lines = getLines(&content)
         
         guard isPartwise(&lines) else {
             return nil
@@ -831,7 +837,7 @@ struct MusicXMLDataService {
         
         let title: String? = getTitle(&lines)
         let composer: String? = getComposer(&lines)
-        var partData: [Part]? = getParts(&lines)
+        let partData: [Part]? = getParts(&lines)
         var partContents = extractContentsBetweenTags(&lines, startTag: "<part id=", endTag: "</part")
         
         if !(partContents.isEmpty) {
@@ -842,6 +848,7 @@ struct MusicXMLDataService {
         }
         
         let score = Score(title: title, composer: composer, parts: partData)
+        
         score.parts = purgePercussion(parts: score.parts)
         
         return score

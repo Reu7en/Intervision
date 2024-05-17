@@ -9,11 +9,13 @@ import SwiftUI
 
 struct ScoreView: View {
     
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
+    
     @Binding var presentedView: HomeView.PresentedView
     
     @StateObject var scoreViewModel: ScoreViewModel
     
-    @State private var zoomLevel: CGFloat = 0.75
+    @State private var zoomLevel: CGFloat = 0.9
     @State private var showInspector: Bool = false
     
     var body: some View {
@@ -23,8 +25,8 @@ struct ScoreView: View {
                     LazyHStack(spacing: 0) {
                         ForEach(0..<pages.count, id: \.self) { pageIndex in
                             PageView(
-                                geometry: geometry,
                                 zoomLevel: $zoomLevel,
+                                geometry: geometry,
                                 bars: pages[pageIndex],
                                 showScoreInformation: pageIndex == 0,
                                 scoreTitle: scoreViewModel.scoreManager.score?.title ?? "",
@@ -46,11 +48,6 @@ struct ScoreView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .padding(.trailing)
                 .padding(.top, 5)
-                .onChange(of: presentedView) { newValue, _ in
-                    withAnimation(.easeInOut) {
-                        presentedView = newValue
-                    }
-                }
             }
         }
     }
@@ -58,4 +55,5 @@ struct ScoreView: View {
 
 #Preview {
     ScoreView(presentedView: Binding.constant(.Score), scoreViewModel: ScoreViewModel(scoreManager: ScoreManager()))
+        .environmentObject(DynamicSizingViewModel())
 }

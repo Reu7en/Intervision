@@ -29,7 +29,7 @@ struct RollView: View {
             let barWidth = round(geometry.size.width / 3 * widthScale)
             let rowHeight = round(geometry.size.height / CGFloat(rows / 2) * heightScale)
             let headerHeight = geometry.size.height / 30
-            let inspectorWidth = geometry.size.width / 8
+            let inspectorWidth = geometry.size.width / 7
             
             HStack(spacing: 0) {
                 HStack(spacing: 0) {
@@ -95,6 +95,7 @@ struct RollView: View {
                                                         headerHeight: headerHeight,
                                                         geometry: geometry
                                                     )
+                                                    .environmentObject(screenSizeViewModel)
                                                 }
                                             }
                                             .frame(width: rowWidth)
@@ -112,7 +113,7 @@ struct RollView: View {
                                                 width: pianoKeysWidth,
                                                 rowHeight: rowHeight,
                                                 showOctaveLabel: true,
-                                                fontSize: 12
+                                                fontSize: screenSizeViewModel.getEquivalentValue(12)
                                             )
                                             .id(UUID())
                                         } header: {
@@ -178,8 +179,6 @@ struct RollView: View {
             #if os(macOS)
             rollViewModel.setupEventMonitoring()
             #endif
-            
-            print(rollViewModel.scoreManager.score == nil)
         }
         .onChange(of: rollViewModel.scoreManager.score) {
             if rollViewModel.parts == nil {

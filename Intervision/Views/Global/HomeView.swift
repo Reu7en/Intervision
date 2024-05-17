@@ -34,9 +34,12 @@ struct HomeView: View {
         switch presentedView {
         case .Score:
             ScoreView(presentedView: $presentedView, scoreViewModel: scoreViewModel)
+                .environmentObject(screenSizeViewModel)
+                .transition(.move(edge: .trailing))
         case .Roll:
             RollView(presentedView: $presentedView, rollViewModel: rollViewModel)
                 .environmentObject(screenSizeViewModel)
+                .transition(.move(edge: .leading))
         case .Testing:
             TestingHomeView(testingViewModel: testingViewModel, presentedHomeView: $presentedView)
                 .environmentObject(screenSizeViewModel)
@@ -80,25 +83,6 @@ extension HomeView {
                     Spacer()
                     
                     Button {
-                        
-                    } label: {
-                        HStack {
-                            Text("New")
-                                .dynamicFont(.title2)
-                            
-                            Spacer()
-                            
-                            Image(systemName: "pencil")
-                                .dynamicFont(.title3)
-                        }
-                        .dynamicPadding(.all, 50)
-                    }
-//                    .disabled(true)
-                    .buttonStyle(BorderedButtonStyle())
-                    .frame(width: size.width / 1.5)
-                    .dynamicPadding()
-                    
-                    Button {
                     #if os(macOS)
                         let panel = NSOpenPanel()
                         
@@ -116,7 +100,7 @@ extension HomeView {
                                     await scoreManager.score = MusicXMLDataService.readXML(fileURL.standardizedFileURL.path)
                                     
                                     withAnimation(.easeInOut) {
-                                        presentedView = .Score
+                                        presentedView = .Roll
                                     }
                                 }
                             }
@@ -161,8 +145,8 @@ extension HomeView {
                     
                     Spacer()
                     
-                    Text("[User Testing Build]")
-                        .dynamicFont(.title3)
+                    Text("Intervision")
+                        .dynamicFont(.largeTitle)
                         .dynamicPadding()
                         .fontWeight(.semibold)
                 }

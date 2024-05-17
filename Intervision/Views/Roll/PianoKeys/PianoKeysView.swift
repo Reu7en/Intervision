@@ -39,7 +39,7 @@ struct PianoKeysView: View {
                                     HStack(spacing: 0) {
                                         Spacer()
                                         
-                                        Text("C\(octaves - octaveIndex)")
+                                        Text("C\(octaves - octaveIndex - 1)")
                                             .foregroundStyle(Color.gray)
                                             .padding(.horizontal, width / 20)
                                             .font(.system(size: fontSize))

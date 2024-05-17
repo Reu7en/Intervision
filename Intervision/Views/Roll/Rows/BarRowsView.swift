@@ -1,10 +1,3 @@
-//
-//  BarRowsView.swift
-//  Intervision
-//
-//  Created by Reuben on 01/03/2024.
-//
-
 import SwiftUI
 
 #if os(macOS)
@@ -60,7 +53,7 @@ struct BarRowsView: View {
         image.lockFocus()
         
         for rowIndex in 0..<rows {
-            let rect = CGRect(x: 0, y: rowHeight - CGFloat(rowIndex) * rowHeight, width: rowWidth, height: rowHeight)
+            let rect = CGRect(x: 0, y: imageSize.height - CGFloat(rowIndex + 1) * rowHeight, width: rowWidth, height: rowHeight)
             let fillColor = NSColor(cgColor: fillColor(for: rowIndex).cgColor ?? CGColor(red: 0, green: 0, blue: 0, alpha: 0.125)) ?? NSColor.black.withAlphaComponent(0.125)
             
             fillColor.setFill()
@@ -76,7 +69,7 @@ struct BarRowsView: View {
             let xPosition = CGFloat(beatIndex) * (rowWidth / CGFloat(beats))
             let path = NSBezierPath()
             path.move(to: CGPoint(x: xPosition, y: 0))
-            path.line(to: CGPoint(x: xPosition, y: rowHeight * CGFloat(rows)))
+            path.line(to: CGPoint(x: xPosition, y: imageSize.height))
             NSColor.black.withAlphaComponent(0.25).setStroke()
             path.stroke()
         }
@@ -100,7 +93,7 @@ struct BarRowsView: View {
         let renderer = UIGraphicsImageRenderer(size: imageSize)
         let image = renderer.image { context in
             for rowIndex in 0..<rows {
-                let rect = CGRect(x: 0, y: rowHeight - CGFloat(rowIndex) * rowHeight, width: rowWidth, height: rowHeight)
+                let rect = CGRect(x: 0, y: CGFloat(rowIndex) * rowHeight, width: rowWidth, height: rowHeight)
                 let fillColor = fillColor(for: rowIndex).cgColor ?? UIColor.black.withAlphaComponent(0.125).cgColor
                 context.cgContext.setFillColor(fillColor)
                 context.fill(rect)
@@ -115,7 +108,7 @@ struct BarRowsView: View {
                 let xPosition = CGFloat(beatIndex) * (rowWidth / CGFloat(beats))
                 let path = UIBezierPath()
                 path.move(to: CGPoint(x: xPosition, y: 0))
-                path.addLine(to: CGPoint(x: xPosition, y: rowHeight * CGFloat(rows)))
+                path.addLine(to: CGPoint(x: xPosition, y: imageSize.height))
                 UIColor.black.withAlphaComponent(0.25).setStroke()
                 path.stroke()
             }

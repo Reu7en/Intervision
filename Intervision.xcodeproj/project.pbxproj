@@ -432,7 +432,6 @@
 				1B97BED82B71C4C9007D0BE5 /* Views */,
 				1B97BEDA2B71C4D6007D0BE5 /* View Models */,
 				1B97BEE32B71C8EA007D0BE5 /* Data Services */,
-				1B97BEE42B71C909007D0BE5 /* Styles */,
 				1B97BEC92B71C167007D0BE5 /* IntervisionApp.swift */,
 				1BEF42642BE6C32A00C4D70C /* AppDelegate.swift */,
 				1B97BECD2B71C168007D0BE5 /* Assets.xcassets */,
@@ -499,13 +498,6 @@
 				1B2A23B82BE3E38E000577BF /* GlobalDataService.swift */,
 			);
 			path = "Data Services";
-			sourceTree = "<group>";
-		};
-		1B97BEE42B71C909007D0BE5 /* Styles */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Styles;
 			sourceTree = "<group>";
 		};
 		1B97BEEB2B7279C3007D0BE5 /* Score */ = {

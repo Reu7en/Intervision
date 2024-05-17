@@ -12,8 +12,9 @@ struct EmptyRollView: View {
     let geometry: GeometryProxy
     
     var body: some View {
-        Spacer()
-            .frame(width: geometry.size.width)
+        GeometryReader { geometry in
+            Spacer()
+        }
     }
 }
 

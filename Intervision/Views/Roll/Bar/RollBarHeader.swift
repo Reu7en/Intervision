@@ -9,6 +9,8 @@ import SwiftUI
 
 struct RollBarHeader: View {
     
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
+    
     let barIndex: Int
     let headerHeight: CGFloat
     let geometry: GeometryProxy
@@ -20,6 +22,7 @@ struct RollBarHeader: View {
             .overlay {
                 HStack(spacing: 0) {
                     Text("\(barIndex + 1)")
+                        .dynamicFont(16)
                         .foregroundStyle(Color.gray)
                         .padding(.horizontal, geometry.size.width / 200)
                     
@@ -32,5 +35,6 @@ struct RollBarHeader: View {
 #Preview {
     GeometryReader { geometry in
         RollBarHeader(barIndex: 0, headerHeight: 0, geometry: geometry)
+            .environmentObject(DynamicSizingViewModel())
     }
 }

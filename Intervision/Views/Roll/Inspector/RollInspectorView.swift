@@ -9,6 +9,8 @@ import SwiftUI
 
 struct RollInspectorView: View {
     
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
+    
     @StateObject var rollViewModel: RollViewModel
     
     @Binding var presentedView: HomeView.PresentedView
@@ -38,15 +40,15 @@ struct RollInspectorView: View {
                 VStack(alignment: .leading, spacing: spacing) {
                     HStack {
                         Text("View Type")
-                            .font(.title2)
+                            .dynamicFont()
                             .fontWeight(.bold)
                         
                         Spacer()
                     }
                     
                     HStack {
-                        Picker("", selection: $presentedView) {
-                            ForEach(HomeView.PresentedView.allCases.filter({ $0 != .None }), id: \.self) { type in
+                        Picker("", selection: $presentedView.animation(.easeInOut)) {
+                            ForEach(HomeView.PresentedView.allCases.filter({ $0 != .None && $0 != .Testing && $0 != .Loading }), id: \.self) { type in
                                 Text("\(type.rawValue.capitalized)").tag(type)
                             }
                         }
@@ -64,7 +66,7 @@ struct RollInspectorView: View {
                 VStack(alignment: .leading, spacing: spacing) {
                     HStack {
                         Text("Scale")
-                            .font(.title2)
+                            .dynamicFont()
                             .fontWeight(.bold)
                         
                         Spacer()
@@ -96,7 +98,7 @@ struct RollInspectorView: View {
                                 }
                             )
                         )
-                        .font(.title2)
+                        .dynamicFont()
                         .fontWeight(.bold)
                         .toggleStyle(RightSwitchToggleStyle())
                         
@@ -112,7 +114,7 @@ struct RollInspectorView: View {
                         HStack {
                             if isEditingGroupTitle && initialGroupTitle == groupTitle {
                                 TextField("Group Name", text: $editedGroupName)
-                                    .font(.title2)
+                                    .dynamicFont()
                                     .focused($isFocused)
                                     #if os(macOS)
                                     .onExitCommand {
@@ -136,7 +138,7 @@ struct RollInspectorView: View {
                             } else {
                                 HStack {
                                     Text(groupTitle)
-                                        .font(.title2)
+                                        .dynamicFont()
                                         .fontWeight(.bold)
                                         .onTapGesture(count: 2) {
                                             withAnimation(.easeInOut) {
@@ -228,7 +230,7 @@ struct RollInspectorView: View {
                     HStack(alignment: .center) {
                         if showAddGroupTextField {
                             TextField("New Group Name", text: $newGroupName)
-                                .font(.title2)
+                                .dynamicFont()
                                 .focused($addFieldIsFocused)
                                 #if os(macOS)
                                 .onExitCommand {
@@ -294,7 +296,7 @@ struct RollInspectorView: View {
                                     }
                                 )
                             )
-                            .font(.title2)
+                            .dynamicFont()
                             .fontWeight(.bold)
                             .toggleStyle(RightSwitchToggleStyle())
                             
@@ -304,7 +306,7 @@ struct RollInspectorView: View {
                         if rollViewModel.showInvertedIntervals {
                             HStack {
                                 Toggle("Show Zig-Zags Lines", isOn: $rollViewModel.showZigZags.animation(.easeInOut))
-                                    .font(.title2)
+                                    .dynamicFont()
                                     .fontWeight(.bold)
                                     .toggleStyle(RightSwitchToggleStyle())
                                 
@@ -320,7 +322,7 @@ struct RollInspectorView: View {
                 VStack(alignment: .leading, spacing: spacing) {
                     HStack {
                         Text("Show Harmonic Intervals")
-                            .font(.title2)
+                            .dynamicFont()
                             .fontWeight(.bold)
                         
                         Spacer()
@@ -342,7 +344,7 @@ struct RollInspectorView: View {
                     if rollViewModel.harmonicIntervalLinesType != .none {
                         HStack {
                             Text("Harmonic Lines Key")
-                                .font(.title2)
+                                .dynamicFont()
                                 .fontWeight(.bold)
                             
                             Spacer()
@@ -402,7 +404,7 @@ struct RollInspectorView: View {
                                 }
                             )
                         )
-                        .font(.title2)
+                        .dynamicFont()
                         .fontWeight(.bold)
                         .toggleStyle(RightSwitchToggleStyle())
                         
@@ -441,7 +443,7 @@ struct RollInspectorView: View {
                         
                         HStack {
                             Text("Melodic Lines Key")
-                                .font(.title2)
+                                .dynamicFont()
                                 .fontWeight(.bold)
                             
                             Spacer()
@@ -509,4 +511,5 @@ struct RightSwitchToggleStyle: ToggleStyle {
 #Preview {
     RollInspectorView(rollViewModel: RollViewModel(scoreManager: ScoreManager()), presentedView: Binding.constant(.Roll), widthScale: Binding.constant(1), heightScale: Binding.constant(1), showDynamics: Binding.constant(true), parts: [])
         .frame(width: 500)
+        .environmentObject(DynamicSizingViewModel())
 }

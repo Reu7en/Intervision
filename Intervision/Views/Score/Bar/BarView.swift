@@ -9,19 +9,13 @@ import SwiftUI
 
 struct BarView: View {
     
+    @EnvironmentObject var screenSizeViewModel: DynamicSizingViewModel
+    
     @StateObject var barViewModel: BarViewModel
     
     var body: some View {
         GeometryReader { wholeGeometry in
             HStack(spacing: 0) {
-                if barViewModel.showName {
-                    Text("\(barViewModel.partName)")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.black)
-                        .padding(.horizontal, wholeGeometry.size.width / 50)
-                }
-                
                 GeometryReader { geometry in
                     ZStack {
                         let staveThickness = geometry.size.height / 100
@@ -103,4 +97,5 @@ struct BarView: View {
 
 #Preview {
     BarView(barViewModel: BarViewModel(bar: Bar(chords: [], clef: .Treble, timeSignature: .common, repeat: nil, doubleLine: false, keySignature: .CMajor)))
+        .environmentObject(DynamicSizingViewModel())
 }

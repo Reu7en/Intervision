@@ -174,8 +174,8 @@
             filePath = "Intervision/View Models/Score/BarViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "432"
-            endingLineNumber = "432"
+            startingLineNumber = "431"
+            endingLineNumber = "431"
             landmarkName = "calculateNoteGrid(gaps:ledgerLines:rows:lowestGapNote:splitChords:bar:)"
             landmarkType = "7">
          </BreakpointContent>

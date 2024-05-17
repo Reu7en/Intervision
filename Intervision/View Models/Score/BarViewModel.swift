@@ -247,7 +247,6 @@ extension BarViewModel {
                             
                             currentTimeModificationGroup.append(chord)
                         } else {
-                            
                             if !currentTimeModificationGroup.isEmpty {
                                 currentBeamGroup.append(currentTimeModificationGroup)
                                 currentTimeModificationGroup = []

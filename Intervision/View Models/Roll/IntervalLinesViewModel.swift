@@ -540,7 +540,13 @@ class IntervalLinesViewModel: ObservableObject {
     }
     
     func calculateMelodicColor(segment1: Segment, segment2: Segment) -> Color {
-        var index = (segment1.rowIndex - segment2.rowIndex).trueModulo(12) - 1
+        var index = 0
+        
+        if testing {
+            index = (segment1.rowIndex - segment2.rowIndex).trueModulo(12) - 1
+        } else {
+            index = abs(segment1.rowIndex - segment2.rowIndex) % 12 - 1
+        }
         
         if self.showInvertedIntervals {
             if index > 5 {

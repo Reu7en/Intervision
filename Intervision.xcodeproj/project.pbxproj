@@ -12,7 +12,6 @@
 		1B0B523A2BB75BC400225A11 /* Canon_in_D.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B52392BB75BC400225A11 /* Canon_in_D.musicxml */; };
 		1B0B523C2BB75EF800225A11 /* Flight_of_the_Bumblebee.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B523B2BB75EF800225A11 /* Flight_of_the_Bumblebee.musicxml */; };
 		1B0B523E2BB75F6500225A11 /* Fur_Elise.musicxml in Resources */ = {isa = PBXBuildFile; fileRef = 1B0B523D2BB75F6500225A11 /* Fur_Elise.musicxml */; };
-		1B0B52402BB7877800225A11 /* RollBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B523F2BB7877800225A11 /* RollBarViewModel.swift */; };
 		1B0B52422BBC4CBA00225A11 /* AccidentalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B52412BBC4CBA00225A11 /* AccidentalView.swift */; };
 		1B0B52492BC1657400225A11 /* LinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B52482BC1657400225A11 /* LinesView.swift */; };
 		1B0B524B2BC165D600225A11 /* LinesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B524A2BC165D600225A11 /* LinesViewModel.swift */; };
@@ -58,7 +57,6 @@
 		1B2A23E52BE40886000577BF /* ClefView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9435A42B856D5900B57DA7 /* ClefView.swift */; };
 		1B2A23E62BE40886000577BF /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B370D862BDC3E6B00F21E39 /* TutorialView.swift */; };
 		1B2A23E72BE40886000577BF /* LinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B52482BC1657400225A11 /* LinesView.swift */; };
-		1B2A23E82BE40886000577BF /* RollBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B523F2BB7877800225A11 /* RollBarViewModel.swift */; };
 		1B2A23E92BE40886000577BF /* ScoreModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEDB2B71C58E007D0BE5 /* ScoreModel.swift */; };
 		1B2A23EA2BE40886000577BF /* RollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0E44B12B928A1600C0E12C /* RollView.swift */; };
 		1B2A23EB2BE40886000577BF /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B97BEE92B726CC1007D0BE5 /* ScoreView.swift */; };
@@ -161,7 +159,6 @@
 		1B0B52392BB75BC400225A11 /* Canon_in_D.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Canon_in_D.musicxml; sourceTree = "<group>"; };
 		1B0B523B2BB75EF800225A11 /* Flight_of_the_Bumblebee.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Flight_of_the_Bumblebee.musicxml; sourceTree = "<group>"; };
 		1B0B523D2BB75F6500225A11 /* Fur_Elise.musicxml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Fur_Elise.musicxml; sourceTree = "<group>"; };
-		1B0B523F2BB7877800225A11 /* RollBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollBarViewModel.swift; sourceTree = "<group>"; };
 		1B0B52412BBC4CBA00225A11 /* AccidentalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccidentalView.swift; sourceTree = "<group>"; };
 		1B0B52482BC1657400225A11 /* LinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinesView.swift; sourceTree = "<group>"; };
 		1B0B524A2BC165D600225A11 /* LinesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinesViewModel.swift; sourceTree = "<group>"; };
@@ -271,7 +268,6 @@
 			children = (
 				1B231FF42B8A5FB9003AB714 /* RollViewModel.swift */,
 				1B0E449F2B92516500C0E12C /* IntervalLinesViewModel.swift */,
-				1B0B523F2BB7877800225A11 /* RollBarViewModel.swift */,
 			);
 			path = Roll;
 			sourceTree = "<group>";
@@ -661,7 +657,6 @@
 				1B2A23E52BE40886000577BF /* ClefView.swift in Sources */,
 				1B2A23E62BE40886000577BF /* TutorialView.swift in Sources */,
 				1B2A23E72BE40886000577BF /* LinesView.swift in Sources */,
-				1B2A23E82BE40886000577BF /* RollBarViewModel.swift in Sources */,
 				1B2A23E92BE40886000577BF /* ScoreModel.swift in Sources */,
 				1B2A23EA2BE40886000577BF /* RollView.swift in Sources */,
 				1B2A23EB2BE40886000577BF /* ScoreView.swift in Sources */,
@@ -731,7 +726,6 @@
 				1B9435A52B856D5900B57DA7 /* ClefView.swift in Sources */,
 				1B370D872BDC3E6B00F21E39 /* TutorialView.swift in Sources */,
 				1B0B52492BC1657400225A11 /* LinesView.swift in Sources */,
-				1B0B52402BB7877800225A11 /* RollBarViewModel.swift in Sources */,
 				1B97BEDC2B71C58E007D0BE5 /* ScoreModel.swift in Sources */,
 				1B0E44B22B928A1600C0E12C /* RollView.swift in Sources */,
 				1B97BEEA2B726CC1007D0BE5 /* ScoreView.swift in Sources */,

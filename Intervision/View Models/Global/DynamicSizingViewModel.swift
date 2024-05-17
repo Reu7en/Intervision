@@ -16,7 +16,7 @@ class DynamicSizingViewModel: ObservableObject {
     let referencePaddingAmount: CGFloat
     let referenceFontSize: CGFloat
     
-    init (
+    init(
         viewSize: CGSize = .zero,
         referenceViewSize: CGSize = CGSize(width: 1920, height: 1080),
         referencePaddingAmount: CGFloat = 8,
@@ -44,12 +44,7 @@ class DynamicSizingViewModel: ObservableObject {
               self.referenceViewSize.width != .zero,
               self.referenceViewSize.height != .zero
         else {
-            return EdgeInsets(
-                top: edges.contains(.top) ? padding ?? self.referencePaddingAmount : 0,
-                leading: edges.contains(.leading) ? padding ?? self.referencePaddingAmount : 0,
-                bottom: edges.contains(.bottom) ? padding ?? self.referencePaddingAmount : 0,
-                trailing: edges.contains(.trailing) ? padding ?? self.referencePaddingAmount : 0
-            )
+            return EdgeInsets()
         }
         
         let relativeWidth = self.viewSize.width / self.referenceViewSize.width
@@ -90,7 +85,7 @@ class DynamicSizingViewModel: ObservableObject {
         let relativeWidth = self.viewSize.width / self.referenceViewSize.width
         let relativeHeight = self.viewSize.height / self.referenceViewSize.height
         
-        let scaleFactor = max(1 / self.referenceFontSize, min(relativeWidth, relativeHeight))
+        let scaleFactor = max(1 / (size ?? self.referenceFontSize), min(relativeWidth, relativeHeight))
         
         if let font = font {
             switch font {

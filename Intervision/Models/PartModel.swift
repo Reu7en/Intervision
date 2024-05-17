@@ -7,9 +7,8 @@
 
 import Foundation
 
-struct Part: Identifiable, Equatable {
+class Part: Identifiable, Equatable {
     var name: String?
-    var identifier: String?
     var bars: [[Bar]]
     
     // Identifiable
@@ -18,6 +17,16 @@ struct Part: Identifiable, Equatable {
     // Equatable
     static func == (lhs: Part, rhs: Part) -> Bool {
         lhs.id == rhs.id
+    }
+    
+    init(
+        name: String? = nil,
+        bars: [[Bar]],
+        id: UUID = UUID()
+    ) {
+        self.name = name
+        self.bars = bars
+        self.id = id
     }
 }
 

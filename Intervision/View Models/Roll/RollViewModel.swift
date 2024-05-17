@@ -456,13 +456,13 @@ class RollViewModel: ObservableObject {
                                                         newChords = [Chord(notes: [])]
                                                     }
                                                     
-                                                    newChords[0].notes.append((Note(pitch: pitch, accidental: accidental, octave: octave, octaveShift: nil, duration: duration, timeModification: segment.0.note?.timeModification, changeDynamic: segment.0.note?.changeDynamic, graceNotes: nil, tie: segment.1, slur: nil, isRest: false, isDotted: false, hasAccent: segment.0.note?.hasAccent ?? false, id: UUID())))
+                                                    newChords[0].notes.append((Note(pitch: pitch, accidental: accidental, octave: octave, octaveShift: nil, duration: duration, timeModification: segment.0.note?.timeModification, changeDynamic: segment.0.note?.changeDynamic, tie: segment.1, slur: nil, isRest: false, isDotted: false, hasAccent: segment.0.note?.hasAccent ?? false, id: UUID())))
                                                 } else if let duration = Note.Duration(rawValue: segment.0.duration / 1.5) {
                                                     if newChords.isEmpty {
                                                         newChords = [Chord(notes: [])]
                                                     }
                                                     
-                                                    newChords[0].notes.append((Note(pitch: pitch, accidental: accidental, octave: octave, octaveShift: nil, duration: duration, timeModification: segment.0.note?.timeModification, changeDynamic: segment.0.note?.changeDynamic, graceNotes: nil, tie: segment.1, slur: nil, isRest: false, isDotted: true, hasAccent: segment.0.note?.hasAccent ?? false, id: UUID())))
+                                                    newChords[0].notes.append((Note(pitch: pitch, accidental: accidental, octave: octave, octaveShift: nil, duration: duration, timeModification: segment.0.note?.timeModification, changeDynamic: segment.0.note?.changeDynamic, tie: segment.1, slur: nil, isRest: false, isDotted: true, hasAccent: segment.0.note?.hasAccent ?? false, id: UUID())))
                                                 } else {
                                                     var timeLeft = segment.0.duration
                                                     var durations: [(Note.Duration, Bool)] = []
@@ -509,7 +509,7 @@ class RollViewModel: ObservableObject {
                                                     for (durationIndex, duration) in durations.enumerated() {
                                                         let tie = durationIndex == 0 ? Note.Tie.Start : durationIndex == durations.count - 1 ? Note.Tie.Stop : Note.Tie.Both
                                                         
-                                                        newChords[durationIndex].notes.append(Note(pitch: pitch, accidental: accidental, octave: octave, octaveShift: nil, duration: duration.0, timeModification: segment.0.note?.timeModification, changeDynamic: segment.0.note?.changeDynamic, graceNotes: nil, tie: tie, slur: nil, isRest: false, isDotted: duration.1, hasAccent: segment.0.note?.hasAccent ?? false, id: UUID()))
+                                                        newChords[durationIndex].notes.append(Note(pitch: pitch, accidental: accidental, octave: octave, octaveShift: nil, duration: duration.0, timeModification: segment.0.note?.timeModification, changeDynamic: segment.0.note?.changeDynamic, tie: tie, slur: nil, isRest: false, isDotted: duration.1, hasAccent: segment.0.note?.hasAccent ?? false, id: UUID()))
                                                     }
                                                 }
                                             }

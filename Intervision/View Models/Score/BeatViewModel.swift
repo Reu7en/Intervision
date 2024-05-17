@@ -10,15 +10,15 @@ import SwiftUI
 
 class BeatViewModel: ObservableObject {
     
-    let beatNoteGrid: [[[(Note, Note.Accidental?)]?]]
+    var beatNoteGrid: [[[(Note, Note.Accidental?)]?]]
     let barGeometry: GeometryProxy
     let beatGeometry: GeometryProxy
-    let beatBeamGroupChords: [[Chord]]
+    var beatBeamGroupChords: [[Chord]]
     let middleStaveNote: Note?
     
     let noteSize: CGFloat
-    let beamDirections: [Direction]
-    let notePositions: [[(CGPoint, Int)]]
+    var beamDirections: [Direction]
+    var notePositions: [[(CGPoint, Int)]]
     let restPositions: [CGPoint]
     let accidentalPositions: [(CGPoint, Int)]
     let groupPositions: [[[(CGPoint, Int)]]]
@@ -30,7 +30,7 @@ class BeatViewModel: ObservableObject {
     
     init
     (
-        noteGrid: [[[(Note, Note.Accidental?)]?]],
+        noteGrid: inout [[[(Note, Note.Accidental?)]?]],
         barGeometry: GeometryProxy,
         beatGeometry: GeometryProxy,
         beamGroupChords: [[Chord]],
@@ -42,25 +42,25 @@ class BeatViewModel: ObservableObject {
         self.beatBeamGroupChords = beamGroupChords
         self.middleStaveNote = middleStaveNote
         
-        self.noteSize = BeatViewModel.calculateNoteSize(beatGeometry: self.beatGeometry, beatNoteGrid: self.beatNoteGrid)
-        self.beamDirections = BeatViewModel.calculateDirections(beatBeamGroupChords: self.beatBeamGroupChords, middleStaveNote: self.middleStaveNote)
+        self.noteSize = BeatViewModel.calculateNoteSize(beatGeometry: self.beatGeometry, beatNoteGrid: &self.beatNoteGrid)
+        self.beamDirections = BeatViewModel.calculateDirections(beatBeamGroupChords: &self.beatBeamGroupChords, middleStaveNote: self.middleStaveNote)
         
-        let positions = BeatViewModel.calculatePositions(beatGeometry: self.beatGeometry, beatNoteGrid: self.beatNoteGrid, beatBeamGroupChords: self.beatBeamGroupChords, beamDirections: self.beamDirections)
+        let positions = BeatViewModel.calculatePositions(beatGeometry: self.beatGeometry, beatNoteGrid: &self.beatNoteGrid, beatBeamGroupChords: &self.beatBeamGroupChords, beamDirections: &self.beamDirections)
         
         self.notePositions = positions.0
         self.restPositions = positions.1
         self.accidentalPositions = positions.2
         
-        self.groupPositions = BeatViewModel.calculateGroupPositions(beatBeamGroupChords: self.beatBeamGroupChords, notePositions: self.notePositions)
-        self.isHollow = BeatViewModel.calculateIsHollow(beatNoteGrid: self.beatNoteGrid)
+        self.groupPositions = BeatViewModel.calculateGroupPositions(beatBeamGroupChords: &self.beatBeamGroupChords, notePositions: &self.notePositions)
+        self.isHollow = BeatViewModel.calculateIsHollow(beatNoteGrid: &self.beatNoteGrid)
         
-        let isDotted = BeatViewModel.calculateIsDotted(beatNoteGrid: self.beatNoteGrid)
+        let isDotted = BeatViewModel.calculateIsDotted(beatNoteGrid: &self.beatNoteGrid)
         
         self.noteIsDotted = isDotted.0
         self.restIsDotted = isDotted.1
         
-        self.restDurations = BeatViewModel.calculateRestDurations(beatNoteGrid: self.beatNoteGrid)
-        self.accidentals = BeatViewModel.calculateAccidentals(beatNoteGrid: self.beatNoteGrid)
+        self.restDurations = BeatViewModel.calculateRestDurations(beatNoteGrid: &self.beatNoteGrid)
+        self.accidentals = BeatViewModel.calculateAccidentals(beatNoteGrid: &self.beatNoteGrid)
         
     }
 }
@@ -72,11 +72,11 @@ extension BeatViewModel {
 }
 
 extension BeatViewModel {
-    private static func calculateNoteSize(beatGeometry: GeometryProxy, beatNoteGrid: [[[(Note, Note.Accidental?)]?]]) -> CGFloat {
+    private static func calculateNoteSize(beatGeometry: GeometryProxy, beatNoteGrid: inout [[[(Note, Note.Accidental?)]?]]) -> CGFloat {
         return 2 * (beatGeometry.size.height / CGFloat(beatNoteGrid[0].count - 1))
     }
     
-    private static func calculateDirections(beatBeamGroupChords: [[Chord]], middleStaveNote: Note?) -> [Direction] {
+    private static func calculateDirections(beatBeamGroupChords: inout [[Chord]], middleStaveNote: Note?) -> [Direction] {
         var directions: [Direction] = []
         
         for chordGroup in beatBeamGroupChords {
@@ -95,7 +95,7 @@ extension BeatViewModel {
         return directions
     }
     
-    private static func calculatePositions(beatGeometry: GeometryProxy, beatNoteGrid: [[[(Note, Note.Accidental?)]?]], beatBeamGroupChords: [[Chord]], beamDirections: [Direction]) -> ([[(CGPoint, Int)]], [CGPoint], [(CGPoint, Int)]) {
+    private static func calculatePositions(beatGeometry: GeometryProxy, beatNoteGrid: inout [[[(Note, Note.Accidental?)]?]], beatBeamGroupChords: inout [[Chord]], beamDirections: inout [Direction]) -> ([[(CGPoint, Int)]], [CGPoint], [(CGPoint, Int)]) {
         var notePositions: [[(CGPoint, Int)]] = []
         var restPositions: [CGPoint] = []
         var accidentalPositions: [(CGPoint, Int)] = []
@@ -185,7 +185,7 @@ extension BeatViewModel {
         return (notePositions, restPositions, accidentalPositions)
     }
     
-    private static func calculateGroupPositions(beatBeamGroupChords: [[Chord]], notePositions: [[(CGPoint, Int)]]) -> [[[(CGPoint, Int)]]] {
+    private static func calculateGroupPositions(beatBeamGroupChords: inout [[Chord]], notePositions: inout [[(CGPoint, Int)]]) -> [[[(CGPoint, Int)]]] {
         guard !notePositions.isEmpty else { return [] }
         var groupPositions: [[[(CGPoint, Int)]]] = []
         var currentIndex = 0
@@ -204,7 +204,7 @@ extension BeatViewModel {
         return groupPositions
     }
     
-    private static func calculateIsHollow(beatNoteGrid: [[[(Note, Note.Accidental?)]?]]) -> [Bool] {
+    private static func calculateIsHollow(beatNoteGrid: inout [[[(Note, Note.Accidental?)]?]]) -> [Bool] {
         var isHollow: [Bool] = []
         
         for column in beatNoteGrid {
@@ -226,7 +226,7 @@ extension BeatViewModel {
         return isHollow
     }
     
-    private static func calculateIsDotted(beatNoteGrid: [[[(Note, Note.Accidental?)]?]]) -> ([Bool], [Bool]) {
+    private static func calculateIsDotted(beatNoteGrid: inout [[[(Note, Note.Accidental?)]?]]) -> ([Bool], [Bool]) {
         var noteIsDotted: [Bool] = []
         var restIsDotted: [Bool] = []
         
@@ -253,7 +253,7 @@ extension BeatViewModel {
         return (noteIsDotted, restIsDotted)
     }
     
-    private static func calculateAccidentals(beatNoteGrid: [[[(Note, Note.Accidental?)]?]]) -> [Note.Accidental] {
+    private static func calculateAccidentals(beatNoteGrid: inout [[[(Note, Note.Accidental?)]?]]) -> [Note.Accidental] {
         var accidentals: [Note.Accidental] = []
         
         for column in beatNoteGrid {
@@ -271,7 +271,7 @@ extension BeatViewModel {
         return accidentals
     }
     
-    private static func calculateRestDurations(beatNoteGrid: [[[(Note, Note.Accidental?)]?]]) -> [Note.Duration] {
+    private static func calculateRestDurations(beatNoteGrid: inout [[[(Note, Note.Accidental?)]?]]) -> [Note.Duration] {
         var restDurations: [Note.Duration] = []
 
         for column in beatNoteGrid {

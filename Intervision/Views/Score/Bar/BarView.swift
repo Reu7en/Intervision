@@ -79,7 +79,7 @@ struct BarView: View {
                                             GeometryReader { beatGeometry in
                                                 BeatView(
                                                     beatViewModel: BeatViewModel(
-                                                        noteGrid: barViewModel.noteGrid[beatIndex],
+                                                        noteGrid: &barViewModel.noteGrid[beatIndex],
                                                         barGeometry: geometry,
                                                         beatGeometry: beatGeometry,
                                                         beamGroupChords: barViewModel.beamGroupChords[beatIndex],

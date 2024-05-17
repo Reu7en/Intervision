@@ -25,9 +25,9 @@ class BarViewModel: ObservableObject {
     let isBarRest: Bool
     let lowestGapNote: Note?
     let middleStaveNote: Note?
-    let splitChords: [[Chord]]
+    var splitChords: [[Chord]]
     let beamGroupChords: [[[Chord]]]
-    let noteGrid: [[[[(Note, Note.Accidental?)]?]]]
+    var noteGrid: [[[[(Note, Note.Accidental?)]?]]]
     
     init
     (
@@ -52,12 +52,12 @@ class BarViewModel: ObservableObject {
         self.rows = BarViewModel.calculateRows(gaps: self.gaps, ledgerLines: self.ledgerLines)
         self.beats = BarViewModel.calculateBeats(timeSignature: self.bar.timeSignature)
         self.beatValue = BarViewModel.calculateBeatValue(timeSignature: self.bar.timeSignature)
-        self.isBarRest = BarViewModel.calculateIsBarRest(chords: self.bar.chords)
+        self.isBarRest = BarViewModel.calculateIsBarRest(chords: &self.bar.chords)
         self.lowestGapNote = BarViewModel.calculateLowestGapNote(clef: self.bar.clef)
         self.middleStaveNote = BarViewModel.calculateMiddleStaveNote(lowestGapNote: self.lowestGapNote, gaps: self.gaps)
-        self.splitChords = BarViewModel.calculateSplitChords(beatValue: self.beatValue, chords: self.bar.chords)
-        self.beamGroupChords = BarViewModel.calculateBeamGroupChords(beatValue: self.beatValue, splitChords: self.splitChords)
-        self.noteGrid = BarViewModel.calculateNoteGrid(gaps: self.gaps, ledgerLines: self.ledgerLines, rows: self.rows, lowestGapNote: self.lowestGapNote, splitChords: self.splitChords, bar: self.bar)
+        self.splitChords = BarViewModel.calculateSplitChords(beatValue: self.beatValue, chords: &self.bar.chords)
+        self.beamGroupChords = BarViewModel.calculateBeamGroupChords(beatValue: self.beatValue, splitChords: &splitChords)
+        self.noteGrid = BarViewModel.calculateNoteGrid(gaps: self.gaps, ledgerLines: self.ledgerLines, rows: self.rows, lowestGapNote: self.lowestGapNote, splitChords: &splitChords, bar: self.bar)
     }
 }
 
@@ -89,7 +89,7 @@ extension BarViewModel {
         }
     }
     
-    private static func calculateIsBarRest(chords: [Chord]) -> Bool {
+    private static func calculateIsBarRest(chords: inout [Chord]) -> Bool {
         if chords.isEmpty {
             return true
         }
@@ -167,7 +167,7 @@ extension BarViewModel {
         return middleStaveNote
     }
     
-    private static func calculateSplitChords(beatValue: Double, chords: [Chord]) -> [[Chord]] {
+    private static func calculateSplitChords(beatValue: Double, chords: inout [Chord]) -> [[Chord]] {
         var splitChords: [[Chord]] = []
         var timeLeft: Double = beatValue
         var timeModificationTimeLeft: Double = 0
@@ -216,7 +216,7 @@ extension BarViewModel {
         return splitChords
     }
     
-    private static func calculateBeamGroupChords(beatValue: Double, splitChords: [[Chord]]) -> [[[Chord]]] {
+    private static func calculateBeamGroupChords(beatValue: Double, splitChords: inout [[Chord]]) -> [[[Chord]]] {
         var beamGroupChords: [[[Chord]]] = []
         
         for chordGroup in splitChords {
@@ -228,7 +228,7 @@ extension BarViewModel {
                 if let firstNote = chord.notes.first {
                     if firstNote.isRest {
                         if !currentStandardGroup.isEmpty {
-                            let splitStandardGroups = BarViewModel.splitStandardGroup(currentStandardGroup)
+                            let splitStandardGroups = BarViewModel.splitStandardGroup(&currentStandardGroup)
                             
                             for standardGroup in splitStandardGroups {
                                 if !standardGroup.isEmpty {
@@ -269,7 +269,7 @@ extension BarViewModel {
             }
             
             if !currentStandardGroup.isEmpty {
-                let splitStandardGroups = splitStandardGroup(currentStandardGroup)
+                let splitStandardGroups = splitStandardGroup(&currentStandardGroup)
                 
                 for standardGroup in splitStandardGroups {
                     if !standardGroup.isEmpty {
@@ -288,7 +288,7 @@ extension BarViewModel {
         return beamGroupChords
     }
     
-    private static func splitStandardGroup(_ group: [Chord]) -> [[Chord]] {
+    private static func splitStandardGroup(_ group: inout [Chord]) -> [[Chord]] {
         if group.count <= 4 {
             return [group]
         }
@@ -337,7 +337,7 @@ extension BarViewModel {
         return groups
     }
     
-    private static func calculateNoteGrid(gaps: Int, ledgerLines: Int, rows: Int, lowestGapNote: Note?, splitChords: [[Chord]], bar: Bar) -> [[[[(Note, Note.Accidental?)]?]]] {
+    private static func calculateNoteGrid(gaps: Int, ledgerLines: Int, rows: Int, lowestGapNote: Note?, splitChords: inout [[Chord]], bar: Bar) -> [[[[(Note, Note.Accidental?)]?]]] {
         var noteGrid: [[[[(Note, Note.Accidental?)]?]]] = []
         var seenTones: [String: Note.Accidental?] = [:]
         let lowestGapIndex = (ledgerLines * 2) + (gaps * 2)

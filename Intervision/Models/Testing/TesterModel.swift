@@ -9,9 +9,14 @@ import Foundation
 
 struct Tester: Identifiable, Codable {
     let skills: [Skill]
+    
+    // Identifiable
     let id: UUID
 
-    init(skills: [Skill], id: UUID) {
+    init(
+        skills: [Skill],
+        id: UUID = UUID()
+    ) {
         self.skills = skills
         self.id = id
     }

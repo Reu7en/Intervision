@@ -8,14 +8,6 @@
 import Foundation
 
 class Score: Identifiable, Equatable, ObservableObject {
-    
-    init(title: String? = nil, composer: String? = nil, parts: [Part]? = nil, id: UUID = UUID()) {
-        self.title = title
-        self.composer = composer
-        self.parts = parts
-        self.id = id
-    }
-    
     var title: String?
     var composer: String?
     var parts: [Part]?
@@ -26,6 +18,18 @@ class Score: Identifiable, Equatable, ObservableObject {
     // Equatable
     static func == (lhs: Score, rhs: Score) -> Bool {
         lhs.id == rhs.id
+    }
+    
+    init(
+        title: String? = nil,
+        composer: String? = nil,
+        parts: [Part]? = nil,
+        id: UUID = UUID()
+    ) {
+        self.title = title
+        self.composer = composer
+        self.parts = parts
+        self.id = id
     }
 }
 

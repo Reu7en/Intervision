@@ -17,7 +17,6 @@ class Note: Identifiable, Equatable {
         duration: Duration,
         timeModification: TimeModification? = nil,
         changeDynamic: ChangeDynamic? = nil,
-        graceNotes: [Grace]? = nil,
         tie: Tie? = nil,
         slur: Slur? = nil,
         isRest: Bool,
@@ -32,7 +31,6 @@ class Note: Identifiable, Equatable {
         self.duration = duration
         self.timeModification = timeModification
         self.changeDynamic = changeDynamic
-        self.graceNotes = graceNotes
         self.tie = tie
         self.slur = slur
         self.isRest = isRest
@@ -48,7 +46,6 @@ class Note: Identifiable, Equatable {
     var duration: Duration
     var timeModification: TimeModification?
     var changeDynamic: ChangeDynamic?
-    var graceNotes: [Grace]?
     var tie: Tie?
     var slur: Slur?
     var isRest: Bool

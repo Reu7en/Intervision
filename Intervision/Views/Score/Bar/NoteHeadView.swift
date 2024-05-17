@@ -26,23 +26,13 @@ struct NoteHeadView: View {
     
     var body: some View {
         ZStack {
-            Circle()
-                .fill(Color.black)
-                .reverseMask {
-                    Circle()
-                        .scale(isHollow ? 0.7 : 0)
-                }
-            
-            Circle()
-                .fill(Color.black)
-                .clipShape(
-                    Rectangle()
-                        .offset(y: -size / 2)
-                )
-                .reverseMask {
-                    Circle()
-                        .scale(isHollow ? 0.7 : 0)
-                }
+            if isHollow {
+                Circle()
+                    .stroke(.black, lineWidth: size / 5)
+            } else {
+                Circle()
+                    .fill(Color.black)
+            }
             
             if isDotted {
                 Circle()

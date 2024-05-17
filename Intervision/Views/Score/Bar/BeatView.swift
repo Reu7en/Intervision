@@ -64,9 +64,3 @@ struct BeatView: View {
         }
     }
 }
-
-#Preview {
-    GeometryReader { geometry in
-        BeatView(beatViewModel: BeatViewModel(noteGrid: [], barGeometry: geometry, beatGeometry: geometry, beamGroupChords: [], middleStaveNote: nil))
-    }
-}

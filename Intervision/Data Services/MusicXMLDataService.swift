@@ -59,16 +59,9 @@ struct MusicXMLDataService {
     
     static func getParts(_ lines: inout [String]) -> [Part]? {
         var parts: [Part] = [Part]()
-        var partIds: [String] = [String]()
         var partNames: [String] = [String]()
         
         for line in lines {
-            if line.contains("<score-part id") {
-                if let id = extractFirstAttributeValue(fromTag: line) {
-                    partIds.append(id)
-                }
-            }
-            
             if line.contains("<part-name") {
                 if let name = extractContent(fromTag: line) {
                     partNames.append(name)
@@ -76,10 +69,8 @@ struct MusicXMLDataService {
             }
         }
         
-        if !(partIds.count == partNames.count) { return nil }
-        
-        for i in 0..<partIds.count {
-            parts.append(Part(name: partNames[i], identifier: partIds[i], bars: [[Bar]]()))
+        for i in 0..<partNames.count {
+            parts.append(Part(name: partNames[i], bars: [[Bar]]()))
         }
         
         return parts
@@ -733,7 +724,6 @@ struct MusicXMLDataService {
                         duration: d,
                         timeModification: timeModification,
                         changeDynamic: changeDynamic,
-                        graceNotes: nil,
                         tie: tie,
                         slur: slur,
                         isRest: isRest,

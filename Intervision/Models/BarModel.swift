@@ -26,7 +26,18 @@ class Bar: Identifiable, Equatable {
         lhs.id == rhs.id
     }
     
-    init(chords: [Chord], tempo: Tempo? = nil, clef: Clef, timeSignature: TimeSignature, repeat: Repeat?, doubleLine: Bool, volta: Int? = nil, keySignature: KeySignature, dynamics: [Dynamic]? = nil, id: UUID = UUID()) {
+    init(
+        chords: [Chord],
+        tempo: Tempo? = nil,
+        clef: Clef,
+        timeSignature: TimeSignature,
+        repeat: Repeat? = nil,
+        doubleLine: Bool,
+        volta: Int? = nil,
+        keySignature: KeySignature,
+        dynamics: [Dynamic]? = nil,
+        id: UUID = UUID()
+    ) {
         self.chords = chords
         self.tempo = tempo
         self.clef = clef

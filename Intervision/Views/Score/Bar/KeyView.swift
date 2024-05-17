@@ -45,6 +45,6 @@ struct KeyView: View {
 }
 
 #Preview {
-    KeyView(key: .CSharpMajor, gapHeight: 50, gaps: 4, middleStaveNote: Note(pitch: .B, accidental: nil, octave: nil, octaveShift: nil, duration: .bar, timeModification: nil, changeDynamic: nil, graceNotes: nil, tie: nil, slur: nil, isRest: true, isDotted: false, hasAccent: false, id: UUID()))
+    KeyView(key: .CSharpMajor, gapHeight: 50, gaps: 4, middleStaveNote: Note(pitch: .B, accidental: nil, octave: nil, octaveShift: nil, duration: .bar, timeModification: nil, changeDynamic: nil, tie: nil, slur: nil, isRest: true, isDotted: false, hasAccent: false, id: UUID()))
         .frame(width: 1000, height: 500)
 }
